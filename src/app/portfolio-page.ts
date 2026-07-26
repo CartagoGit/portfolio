@@ -13,12 +13,10 @@ import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   CAPABILITIES,
-  HERO_PANELS,
   LANGUAGES,
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
 } from '../domain/portfolio/portfolio.data';
-import { nextHeroPanelTransition } from '../core/portfolio/motion/portfolio-motion';
 import { PortfolioFooterComponent } from '../shared/portfolio/ui/portfolio-footer/portfolio-footer.component';
 import { CommandPaletteComponent } from '../shared/portfolio/ui/command-palette/command-palette.component';
 import { TechnologyMarqueeComponent } from '../features/portfolio/home/technology-marquee/technology-marquee.component';
@@ -32,13 +30,13 @@ import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledg
 import { LabPageComponent } from '../features/portfolio/lab/lab-page.component';
 import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
 import { EarthGlobeComponent } from '../features/portfolio/home/earth-globe/earth-globe.component';
+import { HeroMonitorFacade } from '../features/portfolio/home/hero-monitor/hero-monitor.facade';
 import type {
   CapabilityId,
   ChartType,
   HeroEffect,
   HeroPalette,
   HeroPanelId,
-  HeroPanelTransition,
   Locale,
   PortfolioPageId,
 } from '../domain/portfolio/portfolio.types';
@@ -72,7 +70,7 @@ export class PortfolioPage implements OnDestroy {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly platformId = inject(PLATFORM_ID);
-  private heroPanelTimer?: number;
+  protected readonly hero = new HeroMonitorFacade();
 
   protected readonly locale = signal<Locale>('en');
   protected readonly page = signal<PortfolioPageId>('home');
@@ -84,20 +82,20 @@ export class PortfolioPage implements OnDestroy {
   protected readonly activeCapability = signal<CapabilityId>('product');
   protected readonly commandOpen = signal(false);
   protected readonly formSent = signal(false);
-  protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
-  protected readonly heroChartType = signal<ChartType>('bars');
-  protected readonly heroEffect = signal<HeroEffect>('idle');
-  protected readonly heroPanelTransition = signal<HeroPanelTransition>('slide');
-  protected readonly heroPanelChanging = signal(false);
-  protected readonly heroPalette = signal<HeroPalette>('ocean');
-  protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
+  protected readonly activeHeroPanel = this.hero.activePanel;
+  protected readonly heroChartType = this.hero.chartType;
+  protected readonly heroEffect = this.hero.effect;
+  protected readonly heroPanelTransition = this.hero.panelTransition;
+  protected readonly heroPanelChanging = this.hero.panelChanging;
+  protected readonly heroPalette = this.hero.palette;
+  protected readonly heroChartBars = this.hero.chartBars;
   protected readonly earthDepth = signal<
     'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'
   >('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly publicLinks = PUBLIC_LINKS;
-  protected readonly heroPanels = HERO_PANELS;
+  protected readonly heroPanels = this.hero.panels;
   protected readonly technologyMarquee = TECHNOLOGY_MARQUEE;
   protected readonly languages = LANGUAGES;
 
@@ -107,14 +105,8 @@ export class PortfolioPage implements OnDestroy {
     () =>
       this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
   );
-  protected readonly selectedHeroPanel = computed(() =>
-    this.heroPanels.find(({ id }) => id === this.activeHeroPanel()),
-  );
-  protected readonly heroChartPath = computed(() => {
-    const bars = this.heroChartBars();
-    const points = bars.map((bar, index) => `${index * 90},${118 - bar}`);
-    return `M${points[0]} C30,${118 - bars[0]} 58,${118 - bars[1]} ${points[1]} S148,${118 - bars[2]} ${points[2]} S238,${118 - bars[3]} ${points[3]} S328,${118 - bars[4]} ${points[4]}`;
-  });
+  protected readonly selectedHeroPanel = this.hero.selectedPanel;
+  protected readonly heroChartPath = this.hero.chartPath;
 
   protected readonly copy = computed(() =>
     this.locale() === 'en'
@@ -207,66 +199,39 @@ export class PortfolioPage implements OnDestroy {
   }
 
   protected setHeroPanel(panel: HeroPanelId): void {
-    if (this.activeHeroPanel() === panel) return;
-    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
-    this.heroPanelTransition.set(nextHeroPanelTransition(this.heroPanelTransition()));
-    this.heroEffect.set('idle');
-    this.heroPanelChanging.set(true);
-    this.activeHeroPanel.set(null);
-    this.heroPanelTimer = window.setTimeout(() => {
-      this.heroPanelTimer = undefined;
-      this.activeHeroPanel.set(panel);
-      requestAnimationFrame(() => this.heroPanelChanging.set(false));
-    }, 24);
+    this.hero.selectPanel(panel);
   }
 
   protected clearHeroPanel(): void {
-    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
-    this.heroPanelTimer = undefined;
-    this.heroPanelChanging.set(false);
-    this.activeHeroPanel.set(null);
-    this.heroEffect.set('idle');
+    this.hero.clearPanel();
   }
 
   protected setHeroChart(type: ChartType): void {
-    this.heroChartType.set(type);
-    this.randomizeHeroChart();
+    this.hero.setChart(type);
   }
 
   protected randomizeHeroChart(): void {
-    this.heroChartBars.set(
-      Array.from({ length: 5 }, (_, index) => Math.round(28 + Math.random() * 62 + index * 1.5)),
-    );
+    this.hero.randomizeChart();
   }
 
   protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
-    this.heroEffect.set('idle');
-    window.setTimeout(() => this.heroEffect.set(effect), 24);
+    this.hero.setEffect(effect);
   }
 
   protected setHeroPalette(palette: HeroPalette): void {
-    this.heroPalette.set(palette);
-    this.randomizeHeroChart();
+    this.hero.setPalette(palette);
   }
 
   protected setHeroTemperature(): void {
-    this.heroPalette.set('heat');
-    this.randomizeHeroChart();
+    this.hero.setTemperature();
   }
 
   protected chartBarGradient(value: number): string {
-    if (this.heroPalette() === 'heat') {
-      if (value >= 80) return 'linear-gradient(to top, #ff4d4d, #ffcf4a)';
-      if (value >= 60) return 'linear-gradient(to top, #ff9f1c, #ffe16b)';
-      if (value >= 42) return 'linear-gradient(to top, #24b6ff, #74e5ff)';
-      return 'linear-gradient(to top, #2856a6, #48b8ff)';
-    }
-    if (this.heroPalette() === 'lime') return 'linear-gradient(to top, #256c5d, #d8ff78)';
-    return 'linear-gradient(to top, #1678ff, #32c8ff)';
+    return this.hero.gradient(value);
   }
 
   ngOnDestroy(): void {
-    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
+    this.hero.destroy();
   }
 
   protected showEarthInFront(): void {
