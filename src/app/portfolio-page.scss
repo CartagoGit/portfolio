@@ -5147,6 +5147,9 @@ h3 {
     inset 0 0 0 1px #e9fcff,
     0 0 24px #28bbff99;
 }
+.monitor-banner-link.is-disabled {
+  cursor: default;
+}
 .earth-motion-control span,
 .earth-motion-control small {
   display: none;

@@ -92,6 +92,7 @@ export class PortfolioPage implements OnDestroy {
   protected readonly earthDepth = signal<
     'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'
   >('behind');
+  protected readonly earthBlocksMonitor = computed(() => this.earthDepth() !== 'behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly publicLinks = PUBLIC_LINKS;
@@ -247,6 +248,12 @@ export class PortfolioPage implements OnDestroy {
   protected onEarthControlClick(event: MouseEvent): void {
     event.stopPropagation();
     this.showEarthInFront();
+  }
+
+  protected guardMonitorBanner(event: MouseEvent): void {
+    if (!this.earthBlocksMonitor()) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   protected returnEarthBehind(event?: MouseEvent): void {

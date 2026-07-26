@@ -102,6 +102,10 @@
                 href="https://github.com/CartagoGit"
                 target="_blank"
                 rel="noreferrer"
+                [attr.aria-disabled]="earthBlocksMonitor()"
+                [attr.tabindex]="earthBlocksMonitor() ? -1 : null"
+                [class.is-disabled]="earthBlocksMonitor()"
+                (click)="guardMonitorBanner($event)"
                 aria-label="Open CartagoGit on GitHub"
               >
                 <img
