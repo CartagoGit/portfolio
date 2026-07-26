@@ -56,7 +56,7 @@ const fragmentShader = `
 /** Draws a true spherical projection at the display resolution using WebGL. */
 export function renderEarthFrame(
   canvas: HTMLCanvasElement,
-  image: HTMLImageElement,
+  image: HTMLCanvasElement,
   frame: EarthFrame,
 ): void {
   const program = getProgram(canvas, image);
@@ -77,7 +77,7 @@ export function renderEarthFrame(
   context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
 }
 
-function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobeProgram | null {
+function getProgram(canvas: HTMLCanvasElement, image: HTMLCanvasElement): GlobeProgram | null {
   const cached = programs.get(canvas);
   if (cached !== undefined) return cached;
 
@@ -122,9 +122,9 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
   context.activeTexture(context.TEXTURE0);
   context.bindTexture(context.TEXTURE_2D, texture);
   context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, true);
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
+  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR_MIPMAP_LINEAR);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
+  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.REPEAT);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
   context.texImage2D(
     context.TEXTURE_2D,
@@ -134,6 +134,15 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
     context.UNSIGNED_BYTE,
     image,
   );
+  context.generateMipmap(context.TEXTURE_2D);
+  const anisotropy = context.getExtension('EXT_texture_filter_anisotropic');
+  if (anisotropy) {
+    context.texParameterf(
+      context.TEXTURE_2D,
+      anisotropy.TEXTURE_MAX_ANISOTROPY_EXT,
+      context.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT),
+    );
+  }
   context.uniform1i(context.getUniformLocation(program, 'earthTexture'), 0);
 
   const renderer = { context, program, texture, angle, axis };

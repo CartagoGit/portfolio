@@ -1,4 +1,6 @@
-$entrance-ease: cubic-bezier(.16, .94, .25, 1);
+@use './tokens' as tokens;
+
+$entrance-ease: tokens.$ease-emphasized;
 
 /// Marks elements animated with opacity/transform as composited layers.
 /// Keep this narrow: persistent will-change on large layout containers is costly.
@@ -8,6 +10,8 @@ $entrance-ease: cubic-bezier(.16, .94, .25, 1);
 }
 
 /// Shared transition for elements that leave without layout work.
-@mixin opacity-transform-transition($duration: .24s) {
-  transition: opacity $duration ease, transform $duration $entrance-ease;
+@mixin opacity-transform-transition($duration: tokens.$motion-base) {
+  transition:
+    opacity $duration ease,
+    transform $duration $entrance-ease;
 }

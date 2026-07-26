@@ -1,0 +1,7 @@
+// Shared visual vocabulary. Component SCSS should consume these tokens instead
+// of introducing one-off durations, easing curves or colour values.
+$motion-fast: 160ms;
+$motion-base: 260ms;
+$motion-slow: 480ms;
+$ease-emphasized: cubic-bezier(0.16, 0.94, 0.25, 1);
+$ease-standard: cubic-bezier(0.2, 0.9, 0.2, 1);
