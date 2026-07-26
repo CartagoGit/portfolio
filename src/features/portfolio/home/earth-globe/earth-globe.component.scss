@@ -12,6 +12,6 @@
   transition: opacity 0.65s ease;
   will-change: opacity;
 }
-:host-context(.hero-composition:hover) .earth-canvas {
+.earth-canvas.is-active {
   opacity: 1;
 }

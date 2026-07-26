@@ -6,6 +6,7 @@ import {
   inject,
   input,
   PLATFORM_ID,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { renderEarthFrame } from '../../../../core/portfolio/rendering/earth-globe-renderer';
@@ -28,6 +29,7 @@ export class EarthGlobeComponent implements OnDestroy {
   private angle = 0;
   private loading = false;
   private spinning = false;
+  readonly active = signal(false);
   private readonly motion = {
     speed: 0.00016,
     targetSpeed: 0.00016,
@@ -45,11 +47,13 @@ export class EarthGlobeComponent implements OnDestroy {
   start(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     this.spinning = true;
+    this.active.set(true);
     this.prepare();
     if (this.texture && this.frame === undefined) this.animate(performance.now());
   }
   stop(): void {
     this.spinning = false;
+    this.active.set(false);
     if (this.frame !== undefined) cancelAnimationFrame(this.frame);
     this.frame = undefined;
     this.lastAt = undefined;
