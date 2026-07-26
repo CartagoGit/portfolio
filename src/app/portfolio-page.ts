@@ -81,7 +81,7 @@ export class PortfolioPage {
   protected readonly heroEffect = signal<HeroEffect>('idle');
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
-  protected readonly earthSpinning = signal(true);
+  protected readonly earthSpinning = signal(false);
   protected readonly earthDepth = signal<'behind' | 'front' | 'returning'>('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
