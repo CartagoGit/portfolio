@@ -36,6 +36,20 @@ app.use(
 );
 
 /**
+ * Keep the locale server-aware. A saved cookie wins; otherwise Accept-Language
+ * chooses Spanish or English before Angular renders the route.
+ */
+app.use((req, res, next) => {
+  const match = req.path.match(/^\/(en|es)(\/.*)?$/);
+  if (!match) return next();
+  const stored = req.headers.cookie?.match(/(?:^|;\s*)cartago_locale=(en|es)/)?.[1];
+  const accepted = req.headers['accept-language']?.toLowerCase().startsWith('es') ? 'es' : 'en';
+  const preferred = stored ?? accepted;
+  if (preferred !== match[1]) return res.redirect(302, `/${preferred}${match[2] ?? ''}`);
+  return next();
+});
+
+/**
  * Handle all other requests by rendering the Angular application.
  */
 app.use((req, res, next) => {

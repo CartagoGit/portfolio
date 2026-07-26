@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, computed, HostListener, inject, signal } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, computed, HostListener, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -38,6 +38,7 @@ export class PortfolioPage {
   private readonly document = inject(DOCUMENT);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
+  private readonly platformId = inject(PLATFORM_ID);
 
   protected readonly locale = signal<Locale>('en');
   protected readonly page = signal<PortfolioPageId>('home');
@@ -57,12 +58,12 @@ export class PortfolioPage {
   protected readonly draggedStep = signal<PlaygroundStep | null>(null);
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
   protected readonly activeHeroPanel = signal<HeroPanelId>('overview');
-  protected readonly heroLayers = signal(['Components', 'State', 'A11y', 'Testing', 'Performance', 'Mobile']);
+  protected readonly heroLayers = signal(['Angular 22', 'TypeScript', 'Ionic', 'Capacitor', 'MCP Vertex', 'Testing']);
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string }[] = [
-    { id: 'overview', label: 'Overview', metric: '98%', detail: 'Workflow clarity' },
-    { id: 'workflows', label: 'Flows', metric: '24', detail: 'Reusable patterns' },
-    { id: 'quality', label: 'Quality', metric: 'A11Y', detail: 'Built into the UI' },
-    { id: 'mobile', label: 'Mobile', metric: '2x', detail: 'Web + Android delivery' },
+    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture' },
+    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer' },
+    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y' },
+    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android' },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },
@@ -142,7 +143,7 @@ export class PortfolioPage {
   });
 
   constructor() {
-    this.lightMode.set(this.document.documentElement.dataset['theme'] === 'light');
+    this.lightMode.set(this.document.documentElement.getAttribute('data-theme') === 'light');
     this.route.paramMap.subscribe((params) => {
       const locale = params.get('locale') === 'es' ? 'es' : 'en';
       this.locale.set(locale);
@@ -154,12 +155,13 @@ export class PortfolioPage {
       this.page.set(page === 'work' || page === 'lab' || page === 'approach' || page === 'knowledge' || page === 'docker' || page === 'demos' || page === 'contact' ? page : 'home');
       this.updateSeo();
     });
+    this.applyPreferredLocale();
   }
 
   protected setTheme(): void {
     const next = !this.lightMode();
     this.lightMode.set(next);
-    this.document.documentElement.dataset['theme'] = next ? 'light' : 'dark';
+    this.document.documentElement.setAttribute('data-theme', next ? 'light' : 'dark');
   }
 
   @HostListener('window:scroll')
@@ -169,6 +171,7 @@ export class PortfolioPage {
 
   protected selectLocale(locale: Locale): void {
     this.localeMenuOpen.set(false);
+    this.persistLocale(locale);
     void this.router.navigate(this.routeFor(this.page(), locale));
   }
 
@@ -279,6 +282,24 @@ export class PortfolioPage {
       : 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.';
     this.title.setTitle(`Cartago · ${labels[section]}`);
     this.meta.updateTag({ name: 'description', content: description });
+  }
+
+  private applyPreferredLocale(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    let saved: string | null = null;
+    try { saved = localStorage.getItem('cartago-locale'); } catch { /* Storage can be blocked. */ }
+    const cookieLocale = this.document.cookie.match(/(?:^|; )cartago_locale=([^;]+)/)?.[1];
+    const candidate = saved ?? cookieLocale ?? navigator.languages.find((language) => language.startsWith('es') || language.startsWith('en'))?.slice(0, 2) ?? 'en';
+    const locale: Locale = candidate === 'es' ? 'es' : 'en';
+    if (locale !== this.locale()) {
+      queueMicrotask(() => void this.router.navigate(this.routeFor(this.page(), locale)));
+    }
+  }
+
+  private persistLocale(locale: Locale): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    try { localStorage.setItem('cartago-locale', locale); } catch { /* Cookie remains a server-readable fallback. */ }
+    this.document.cookie = `cartago_locale=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
   }
 
   protected closeMenu(): void { this.menuOpen.set(false); }
