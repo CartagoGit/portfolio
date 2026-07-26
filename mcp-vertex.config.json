@@ -44,7 +44,8 @@
           "src/features/portfolio/approach/approach-page.component.html",
           "src/features/portfolio/work/work-page.component.html",
           "src/features/portfolio/knowledge/knowledge-page.component.html",
-          "src/features/portfolio/lab/lab-page.component.html"
+          "src/features/portfolio/lab/lab-page.component.html",
+          "src/features/portfolio/home/earth-globe/earth-globe.component.html"
         ],
         "forbiddenTerms": ["Beateam", "Mazinger", "MDM Platform", "Gestion de Tarifas"]
       }

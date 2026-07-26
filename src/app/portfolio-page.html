@@ -72,7 +72,7 @@
             [class.earth-behind-ready]="earthDepth() === 'behind-ready'"
             aria-hidden="true"
           >
-            <app-earth-globe #earth />
+            <app-earth-globe #earth [depth]="earthDepth()" />
           </div>
           <div class="orb orb-two"></div>
           <div

@@ -56,3 +56,6 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
 - 2026-07-26: Approach, Work, Knowledge and Lab are isolated feature components. Their templates,
   styles and tests no longer belong to the route shell; the portfolio-content audit now reads
   every extracted public page.
+- 2026-07-26: The Earth canvas lifecycle is isolated under the Home feature. Its renderer remains
+  a core adapter and the feature owns texture preparation, motion interpolation and animation
+  cleanup.

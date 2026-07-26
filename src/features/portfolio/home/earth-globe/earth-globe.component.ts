@@ -1,7 +1,15 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import type { ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { renderEarthFrame } from '../../../../core/portfolio/rendering/earth-globe-renderer';
+import type { EarthDepth } from '../../../../domain/portfolio/portfolio.types';
 
 @Component({
   selector: 'app-earth-globe',
@@ -10,6 +18,7 @@ import { renderEarthFrame } from '../../../../core/portfolio/rendering/earth-glo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EarthGlobeComponent implements OnDestroy {
+  readonly depth = input.required<EarthDepth>();
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private canvas?: HTMLCanvasElement;
@@ -101,7 +110,7 @@ export class EarthGlobeComponent implements OnDestroy {
         axisX: this.motion.axisX,
         axisY: this.motion.axisY,
         axisZ: this.motion.axisZ,
-        foreground: false,
+        foreground: ['front-ready', 'front', 'out-front'].includes(this.depth()),
       });
     this.frame = requestAnimationFrame((time) => this.animate(time));
   }
