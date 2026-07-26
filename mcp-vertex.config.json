@@ -33,7 +33,7 @@
 			}
 		},
 		"portfolio-content": {
-			"path": "tools/mcp-vertex/portfolio-content/src/index.ts",
+			"path": "plugins/portfolio-content/src/index.ts",
 			"prefix": "portfolio",
 			"options": {
 				"contentPaths": [
@@ -51,9 +51,23 @@
 				],
 				"forbiddenTerms": [
 					"Beateam",
+					"Beateamer",
+					"Beateams",
+					"Beateam Group",
+					"Beateam Spain",
+					"Beateam App",
+					"BeateamApp",
+					"BeateamGroup",
+					"BeateamSpain",
+					"beateam.es",
+					"beateam.io",
+					"beateam.com",
 					"Mazinger",
 					"MDM Platform",
 					"Gestion de Tarifas"
+				],
+				"perSeRoots": [
+					"beateam"
 				],
 				"locale": "en"
 			}
