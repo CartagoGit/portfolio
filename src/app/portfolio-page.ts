@@ -81,6 +81,7 @@ export class PortfolioPage {
   protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly heroEffect = signal<HeroEffect>('idle');
   protected readonly heroPanelTransition = signal<HeroPanelTransition>('slide');
+  protected readonly heroPanelTransitionKey = signal(0);
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
@@ -254,6 +255,7 @@ export class PortfolioPage {
     const availableTransitions: HeroPanelTransition[] = ['slide', 'flip', 'scan', 'zoom'];
     const nextTransitions = availableTransitions.filter((transition) => transition !== currentTransition);
     this.heroPanelTransition.set(nextTransitions[Math.floor(Math.random() * nextTransitions.length)]);
+    this.heroPanelTransitionKey.update((key) => key + 1);
     this.heroEffect.set('idle');
     this.activeHeroPanel.set(panel);
   }
