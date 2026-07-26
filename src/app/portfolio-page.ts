@@ -82,7 +82,7 @@ export class PortfolioPage {
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
-  protected readonly earthDepth = signal<'behind' | 'front' | 'returning'>('behind');
+  protected readonly earthDepth = signal<'behind' | 'leaping-front' | 'front' | 'returning'>('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly socialIcons = { github: siGithub, npm: siNpm };
@@ -367,7 +367,10 @@ export class PortfolioPage {
 
   protected showEarthInFront(): void {
     if (this.earthDepth() !== 'behind') return;
-    this.earthDepth.set('front');
+    this.earthDepth.set('leaping-front');
+    window.setTimeout(() => {
+      if (this.earthDepth() === 'leaping-front') this.earthDepth.set('front');
+    }, 220);
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -377,11 +380,13 @@ export class PortfolioPage {
   }
 
   protected returnEarthBehind(event?: MouseEvent): void {
-    if (this.earthDepth() !== 'front') return;
+    if (this.earthDepth() !== 'front' && this.earthDepth() !== 'leaping-front') return;
     const target = event?.target as HTMLElement | null | undefined;
     if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
-    window.setTimeout(() => this.earthDepth.set('behind'), 420);
+    window.setTimeout(() => {
+      if (this.earthDepth() === 'returning') this.earthDepth.set('behind');
+    }, 240);
   }
 
   private renderEarth(): void {

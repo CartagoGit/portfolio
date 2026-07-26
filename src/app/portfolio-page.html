@@ -55,7 +55,7 @@
     </div>
 
     <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies" (mouseenter)="startEarthSpin()" (mouseleave)="stopEarthSpin()" (pointerdown)="returnEarthBehind($event)">
-      <div class="orb orb-one" [class.earth-active]="earthSpinning()" [class.earth-front]="earthDepth() === 'front'" [class.earth-returning]="earthDepth() === 'returning'" aria-hidden="true"><canvas #earthCanvas class="earth-canvas"></canvas></div><div class="orb orb-two"></div>
+      <div class="orb orb-one" [class.earth-active]="earthSpinning()" [class.earth-leaping]="earthDepth() === 'leaping-front'" [class.earth-front]="earthDepth() === 'front'" [class.earth-returning]="earthDepth() === 'returning'" aria-hidden="true"><canvas #earthCanvas class="earth-canvas"></canvas></div><div class="orb orb-two"></div>
       <div class="interface-shell" [attr.data-chart]="heroChartType()" (mouseleave)="returnEarthBehind()" (pointerdown)="returnEarthBehind($event)" (click)="returnEarthBehind($event)">
         <div class="monitor-chrome" aria-hidden="true"><span></span><span></span><span></span><i></i><b>cartago.system</b></div>
         <div class="monitor-header"><button class="earth-motion-control" type="button" [attr.aria-pressed]="earthDepth() === 'front'" (click)="onEarthControlClick($event)" aria-label="Change the Earth's rotation"></button><a class="monitor-banner-link" href="https://github.com/CartagoGit" target="_blank" rel="noreferrer" aria-label="Open CartagoGit on GitHub"><img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" /></a></div>
