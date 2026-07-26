@@ -45,6 +45,17 @@ export interface PublicLink {
   color?: string;
 }
 
+export interface PortfolioCopy {
+  navWork: string;
+  navLab: string;
+  navAbout: string;
+  availability: string;
+  viewWork: string;
+  contact: string;
+  role: string;
+  intro: string;
+}
+
 export interface LanguageOption {
   id: Locale;
   label: string;

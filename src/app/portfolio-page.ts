@@ -27,6 +27,7 @@ import { nextHeroPanelTransition } from './portfolio/core/motion/portfolio-motio
 import { PortfolioFooterComponent } from './portfolio/shared/ui/portfolio-footer/portfolio-footer.component';
 import { CommandPaletteComponent } from './portfolio/shared/ui/command-palette/command-palette.component';
 import { TechnologyMarqueeComponent } from './portfolio/features/home/technology-marquee/technology-marquee.component';
+import { PortfolioHeaderComponent } from './portfolio/shared/ui/portfolio-header/portfolio-header.component';
 import type {
   CapabilityId,
   ChartType,
@@ -46,6 +47,7 @@ import type {
     RouterLink,
     PortfolioFooterComponent,
     CommandPaletteComponent,
+    PortfolioHeaderComponent,
     TechnologyMarqueeComponent,
   ],
   templateUrl: './portfolio-page.html',

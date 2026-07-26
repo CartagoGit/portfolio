@@ -1,7 +1,23 @@
 <main class="portfolio" [class.light-mode]="lightMode()">
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <header class="site-header" [class.scrolled]="scrolled()">
+  <app-portfolio-header
+    [locale]="locale()"
+    [page]="page()"
+    [copy]="copy()"
+    [languages]="languages"
+    [menuOpen]="menuOpen()"
+    [localeMenuOpen]="localeMenuOpen()"
+    [localeMenuClosing]="localeMenuClosing()"
+    [lightMode]="lightMode()"
+    [scrolled]="scrolled()"
+    (navigate)="setTransition($event)"
+    (menuToggle)="toggleMenu()"
+    (localeToggle)="toggleLocaleMenu()"
+    (localeSelect)="selectLocale($event)"
+    (themeToggle)="setTheme()"
+  />
+  <header class="site-header" hidden>
     <a
       class="brand"
       [routerLink]="routeFor('home')"
