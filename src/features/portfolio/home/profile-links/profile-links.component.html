@@ -1,0 +1,14 @@
+<nav class="profile-links" aria-label="Public profiles and featured projects">
+  @for (link of links(); track link.href) {
+    <a [href]="link.href" target="_blank" rel="noreferrer">
+      @if (link.imageSrc) {
+        <img [src]="link.imageSrc" alt="" />
+      } @else {
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" />
+        </svg>
+      }
+      <span>{{ link.label }}</span>
+    </a>
+  }
+</nav>

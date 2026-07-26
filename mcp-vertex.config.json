@@ -4,7 +4,10 @@
   "docsDir": "docs/mcp-vertex",
   "plugins": {
     "proposals": {
-      "prefix": "work"
+      "prefix": "work",
+      "options": {
+        "validationCommand": "bun run mcp:check && bun run check && bun run build && bun run test"
+      }
     },
     "memory": {
       "prefix": "memory"

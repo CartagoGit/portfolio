@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    padding: 0.38rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    font: 0.58rem 'DM Mono';
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+  a:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+  }
+  svg,
+  img {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    object-fit: contain;
+  }
+}
