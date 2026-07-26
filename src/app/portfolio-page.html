@@ -58,19 +58,21 @@
       <div class="orb orb-one" [class.earth-active]="earthSpinning()" aria-hidden="true"><canvas #earthCanvas class="earth-canvas"></canvas></div><div class="orb orb-two"></div>
       <div class="interface-shell" [attr.data-chart]="heroChartType()">
         <div class="monitor-chrome" aria-hidden="true"><span></span><span></span><span></span><i></i><b>cartago.system</b></div>
-        <div class="monitor-header"><div class="monitor-selector" aria-label="Core technologies">@for (panel of heroPanels; track panel.id) { <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg><span>{{ panel.label }}</span></button> }</div><img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" /></div>
+        <div class="monitor-header"><img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" /></div>
         <div class="interface-body">
-          <div class="interface-canvas">
-            <div class="canvas-heading"><span><i></i>CartagoNova / system telemetry</span><small>LIVE</small></div>
-            <div class="hero-chart-switcher" aria-label="Dashboard chart type">
+          <div class="monitor-selector" aria-label="Core technologies">@for (panel of heroPanels; track panel.id) { <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg><span>{{ panel.label }}</span></button> }</div>
+          <div class="interface-canvas" [class.technology-open]="selectedHeroPanel()">
+            <section class="dashboard-view" [class.panel-hidden]="selectedHeroPanel()">
+              <div class="canvas-heading"><span><i></i>CartagoNova / system telemetry</span><small>LIVE</small></div>
+              <div class="hero-chart-switcher" aria-label="Dashboard chart type">
               <button type="button" [class.active]="heroChartType() === 'bars'" (click)="setHeroChart('bars')">Velocity</button><button type="button" [class.active]="heroChartType() === 'line'" (click)="setHeroChart('line')">Signals</button><button type="button" [class.active]="heroChartType() === 'area'" (click)="setHeroChart('area')">Coverage</button>
-            </div>
+              </div>
+              <p class="dashboard-caption">Choose a technology on the left to see its role. These controls change the visualisation only.</p>
+              <div class="chart-workspace"><div class="canvas-chart" [attr.data-chart]="heroChartType()">@for (bar of heroChartBars(); track $index) { <span [style.height.%]="bar"></span> }<svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Portfolio dashboard chart"><path d="M0 97 C28 80, 55 90, 83 67 S136 72, 167 49 S224 64, 253 33 S308 42, 360 12" /></svg><em>product signal / 2026</em></div><div class="chart-symbols" aria-label="Randomise chart values"><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh signal">⌁</button><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh metrics">◌</button><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh state">✦</button></div></div>
+            </section>
             @if (selectedHeroPanel(); as selectedPanel) {
-              <div class="technology-caption"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedPanel.iconPath" [attr.fill]="selectedPanel.color" /></svg><p><b>{{ selectedPanel.label }}</b>{{ selectedPanel.detail }}</p><button type="button" (click)="clearHeroPanel()" aria-label="Clear selected technology">×</button></div>
-            } @else {
-              <p class="dashboard-caption">Choose a technology on the right to see its role. These controls change the visualisation only.</p>
+              <article class="technology-detail" [attr.data-effect]="heroEffect()"><div><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedPanel.iconPath" [attr.fill]="selectedPanel.color" /></svg><h3>{{ selectedPanel.label }}</h3><p>{{ selectedPanel.detail }}</p></div><div class="effect-controls" aria-label="Technology description effects"><button type="button" (click)="setHeroEffect('shake')" aria-label="Shake">≈</button><button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">⌘</button><button type="button" (click)="setHeroEffect('float')" aria-label="Float">↟</button></div><button class="detail-retry" type="button" (click)="clearHeroPanel()">Retry ↻</button></article>
             }
-            <div class="canvas-chart" [attr.data-chart]="heroChartType()"><span></span><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Portfolio dashboard chart"><path d="M0 97 C28 80, 55 90, 83 67 S136 72, 167 49 S224 64, 253 33 S308 42, 360 12" /></svg><em>product signal / 2026</em></div>
           </div>
         </div>
       </div>

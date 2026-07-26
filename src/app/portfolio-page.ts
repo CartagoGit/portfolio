@@ -11,6 +11,7 @@ type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems
 type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 type TelemetryId = 'product' | 'quality' | 'delivery';
 type ChartType = 'bars' | 'line' | 'area';
+type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float';
 
 interface Capability {
   id: CapabilityId;
@@ -65,6 +66,8 @@ export class PortfolioPage {
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
+  protected readonly heroEffect = signal<HeroEffect>('idle');
+  protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
@@ -226,14 +229,26 @@ export class PortfolioPage {
 
   protected setHeroPanel(panel: HeroPanelId): void {
     this.activeHeroPanel.set(panel);
+    this.heroEffect.set('idle');
   }
 
   protected clearHeroPanel(): void {
     this.activeHeroPanel.set(null);
+    this.heroEffect.set('idle');
   }
 
   protected setHeroChart(type: ChartType): void {
     this.heroChartType.set(type);
+    this.randomizeHeroChart();
+  }
+
+  protected randomizeHeroChart(): void {
+    this.heroChartBars.set(Array.from({ length: 5 }, (_, index) => Math.round(28 + Math.random() * 62 + index * 1.5)));
+  }
+
+  protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
+    this.heroEffect.set('idle');
+    queueMicrotask(() => this.heroEffect.set(effect));
   }
 
   protected startEarthSpin(): void {
