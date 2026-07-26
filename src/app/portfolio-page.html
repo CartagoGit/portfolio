@@ -28,41 +28,12 @@
 				id="main-content"
 				class="hero"
 				aria-labelledby="hero-title">
-				<div class="hero-copy">
-					<p class="eyebrow">
-						<span></span>
-						CartagoNova / personal frontend systems
-					</p>
-					<h1 id="hero-title">
-						Mario Cabrero
-						<br />
-						<em>Volarich</em>
-					</h1>
-					<p class="hero-signature">
-						Cartago / CartagoNova · frontend product engineer
-					</p>
-					<p class="hero-role">{{ copy().role }}</p>
-					<p class="hero-intro">{{ copy().intro }}</p>
-					<div class="hero-actions">
-						<a
-							class="button button-primary"
-							[routerLink]="routeFor('demos')"
-							(click)="setTransition('demos')">
-							{{ copy().viewWork }}
-							<span aria-hidden="true">↘</span>
-						</a>
-						<a
-							class="button button-quiet"
-							[routerLink]="routeFor('contact')"
-							(click)="setTransition('contact')">
-							{{ copy().contact }}
-							<span aria-hidden="true">→</span>
-						</a>
-					</div>
-					<app-technology-marquee
-						[technologies]="technologyMarquee" />
-					<app-profile-links [links]="publicLinks" />
-				</div>
+				<app-home-intro
+					[copy]="copy()"
+					[locale]="locale()"
+					[technologies]="technologyMarquee"
+					[links]="publicLinks"
+					(navigate)="setTransition($event)" />
 
 				<div
 					class="hero-composition"

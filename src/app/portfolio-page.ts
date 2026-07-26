@@ -10,7 +10,7 @@ import {
 	signal,
 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
 	CAPABILITIES,
 	LANGUAGES,
@@ -19,12 +19,10 @@ import {
 } from '../domain/portfolio.data';
 import { PortfolioFooterComponent } from '../shared/ui/portfolio-footer/portfolio-footer.component';
 import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
-import { TechnologyMarqueeComponent } from '../features/home/technology-marquee/technology-marquee.component';
 import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfolio-header.component';
 import { ContactPageComponent } from '../features/contact/contact-page.component';
 import { DockerPageComponent } from '../features/docker/docker-page.component';
 import { DemosPageComponent } from '../features/demos/demos-page.component';
-import { ProfileLinksComponent } from '../features/home/profile-links/profile-links.component';
 import { ApproachPageComponent } from '../features/approach/approach-page.component';
 import { KnowledgePageComponent } from '../features/knowledge/knowledge-page.component';
 import { LabPageComponent } from '../features/lab/lab-page.component';
@@ -32,6 +30,7 @@ import { WorkPageComponent } from '../features/work/work-page.component';
 import { EarthGlobeComponent } from '../features/home/earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../features/home/earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from '../features/home/hero-monitor/hero-monitor.facade';
+import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
 import type {
 	CapabilityId,
 	ChartType,
@@ -45,20 +44,18 @@ import type {
 @Component({
 	selector: 'app-portfolio-page',
 	imports: [
-		RouterLink,
 		PortfolioFooterComponent,
 		CommandPaletteComponent,
 		PortfolioHeaderComponent,
 		ContactPageComponent,
 		DockerPageComponent,
 		DemosPageComponent,
-		ProfileLinksComponent,
 		ApproachPageComponent,
 		KnowledgePageComponent,
 		LabPageComponent,
 		WorkPageComponent,
 		EarthGlobeComponent,
-		TechnologyMarqueeComponent,
+		HomeIntroComponent,
 	],
 	templateUrl: './portfolio-page.html',
 	styleUrl: './portfolio-page.scss',
