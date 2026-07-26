@@ -738,55 +738,7 @@
     }
 
     @if (page() === 'contact') {
-      <section id="main-content" class="contact section" aria-labelledby="contact-title">
-        <div class="contact-image">
-          <!-- TODO(image): replace with a professional portrait of Mario, preferably editorial, dark-background, vertical 4:5. --><img
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85"
-            alt="Temporary portrait placeholder to be replaced with a professional photo of Mario"
-          />
-        </div>
-        <div class="contact-copy">
-          <p class="eyebrow">05 / Contact</p>
-          <h2 id="contact-title">Have a frontend problem worth <em>solving?</em></h2>
-          <p>
-            I work on Angular product interfaces, mobile delivery, frontend architecture and
-            TypeScript tooling.
-          </p>
-          <div class="contact-links">
-            <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"
-              >GitHub <span>↗</span></a
-            ><a
-              href="https://www.linkedin.com/in/mario-cabrero-volarich"
-              target="_blank"
-              rel="noreferrer"
-              >LinkedIn <span>↗</span></a
-            ><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"
-              >Docker Hub <span>↗</span></a
-            >
-          </div>
-          <form (submit)="submitContact($event)" aria-label="Contact form">
-            <label
-              >Your email
-              <input
-                type="email"
-                autocomplete="email"
-                placeholder="you@company.com"
-                required /></label
-            ><label
-              >What are you building?
-              <textarea rows="3" placeholder="A few useful details…" required></textarea></label
-            ><button class="button button-primary" type="submit">
-              Send an introduction <span>↗</span>
-            </button>
-            @if (formSent()) {
-              <p class="form-feedback" role="status">
-                Thanks — this demo validates the interaction. Connect it to your preferred email or
-                form service before launch.
-              </p>
-            }
-          </form>
-        </div>
-      </section>
+      <app-contact-page [sent]="formSent()" (submitted)="formSent.set(true)" />
     }
   </div>
 
