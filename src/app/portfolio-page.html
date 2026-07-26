@@ -57,30 +57,30 @@
     </div>
 
     <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies">
-      <div class="orb orb-one"></div><div class="orb orb-two"></div>
+      <div class="orb orb-one"><img src="/images/cartagonova-earth.png" alt="" /></div><div class="orb orb-two"></div>
       <div class="interface-shell" [attr.data-panel]="activeHeroPanel()">
-        <img class="hero-banner" src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/banner-03-neon.png" alt="CartagoNova banner" />
+        <img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" />
         <div class="interface-topbar"><span></span><span></span><span></span><i></i></div>
         <div class="interface-body">
           <div class="interface-sidebar" aria-label="Portfolio dashboard sections">
             @for (panel of heroPanels; track panel.id) {
-              <button type="button" [class.active]="activeHeroPanel() === panel.id && !showHeroChart()" (click)="setHeroPanel(panel.id)"><svg viewBox="0 0 24 24" [style.fill]="panel.color" aria-hidden="true"><path [attr.d]="panel.iconPath" /></svg><span>{{ panel.label }}</span></button>
+              <button type="button" [class.active]="activeHeroPanel() === panel.id && !showHeroChart()" (click)="setHeroPanel(panel.id)"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg><span>{{ panel.label }}</span></button>
             }
           </div>
           <div class="interface-canvas">
-            <div class="canvas-heading"><span><svg class="panel-icon" viewBox="0 0 24 24" [style.fill]="selectedHeroPanel().color" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg>{{ showHeroChart() ? 'CartagoNova core stack' : selectedHeroPanel().label }}</span><button type="button" (click)="showHeroOverview()" aria-label="Show core stack overview">↻</button></div>
+            <div class="canvas-heading"><span><svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" [attr.fill]="selectedHeroPanel().color" /></svg>{{ showHeroChart() ? 'CartagoNova core stack' : selectedHeroPanel().label }}</span><button type="button" (click)="showHeroOverview()" aria-label="Show core stack overview">↻</button></div>
             @if (showHeroChart()) {
               <div class="canvas-cards">@for (panel of heroPanels; track panel.id) { <button type="button" (click)="setHeroPanel(panel.id)"><b [style.color]="panel.color">{{ panel.metric }}</b><small>{{ panel.label }}</small></button> }</div>
               <div class="canvas-chart"><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Core technology overview"><path d="M0 99 C34 89, 55 51, 93 70 S143 42, 185 54 S245 11, 284 37 S329 31, 360 8" /></svg></div>
             } @else {
-              <article class="technology-explainer"><svg viewBox="0 0 24 24" [style.fill]="selectedHeroPanel().color" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg><h3>{{ selectedHeroPanel().label }}</h3><p>{{ selectedHeroPanel().detail }}</p><button type="button" (click)="showHeroOverview()">Back to core stack</button></article>
+              <article class="technology-explainer"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" [attr.fill]="selectedHeroPanel().color" /></svg><h3>{{ selectedHeroPanel().label }}</h3><p>{{ selectedHeroPanel().detail }}</p><button type="button" (click)="showHeroOverview()">Back to core stack</button></article>
             }
           </div>
         </div>
       </div>
       <div class="layer-list">
-        @for (layer of heroLayers(); track layer; let index = $index) {
-          <button type="button" [style.--i]="index" (click)="setHeroPanel(index % 2 ? 'quality' : 'workflows')">{{ layer }}</button>
+        @for (panel of heroPanels; track panel.id; let index = $index) {
+          <button type="button" [class.active]="activeHeroPanel() === panel.id && !showHeroChart()" [style.--i]="index" (click)="setHeroPanel(panel.id)"><svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg>{{ panel.label }}</button>
         }
       </div>
       <p class="hero-note">Built with explicit state,<br />progressive enhancement and care.</p>
@@ -143,7 +143,7 @@
   }
 
   @if (page() === 'knowledge') {
-  <section id="main-content" class="knowledge section" aria-labelledby="knowledge-title"><div class="section-heading"><p class="eyebrow">Knowledge system</p><h2 id="knowledge-title">Languages are tools.<br /><em>Judgement connects them.</em></h2><p>Hover a tile to see where each part of the stack is useful in a product.</p></div><div class="knowledge-grid"><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M20 3 35 12v17L20 37 5 29V12z"/></svg><span>Frontend</span><b>Angular · TypeScript · SCSS</b><p>Signals, SSR, responsive interfaces and accessible UI for real workflows.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33"/></svg><span>Mobile</span><b>Ionic · Capacitor · Android</b><p>One product system carried from web to touch-first releases.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16"/></svg><span>Quality</span><b>Vitest · Playwright · A11y</b><p>Tests, semantics and performance budgets that expose risk early.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M8 10h24v20H8zM14 16h12M14 22h7"/></svg><span>Tooling</span><b>Node.js · MCP · Docker</b><p>CLIs, containers and typed agent workflows for repeatable delivery.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="M20 6v28M6 20h28"/></svg><span>Systems</span><b>CDK · Storybook · Tokens</b><p>Reusable primitives that make a visual language scale without flattening it.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z"/></svg><span>Backend edges</span><b>NestJS · APIs · GPT</b><p>Clear integration boundaries when a frontend needs a dependable service layer.</p></article></div></section>
+  <section id="main-content" class="knowledge section" aria-labelledby="knowledge-title"><div class="section-heading"><p class="eyebrow">Knowledge system</p><h2 id="knowledge-title">Languages are tools.<br /><em>Judgement connects them.</em></h2><p>Hover a tile to see where each part of the stack is useful in a product.</p></div><div class="knowledge-grid"><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M20 3 35 12v17L20 37 5 29V12z"/></svg><span>Frontend</span><b>Angular · TypeScript · SCSS</b><p>Signals, SSR, responsive interfaces and accessible UI for real workflows.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33"/></svg><span>Mobile</span><b>Ionic · Capacitor · Android</b><p>One product system carried from web to touch-first releases.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16"/></svg><span>Quality</span><b>Vitest · Accessibility · Performance</b><p>Tests, semantics and performance budgets that expose risk early.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M8 10h24v20H8zM14 16h12M14 22h7"/></svg><span>Tooling</span><b>Node.js · MCP · Docker</b><p>CLIs, containers and typed agent workflows for repeatable delivery.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="M20 6v28M6 20h28"/></svg><span>Systems</span><b>CDK · Storybook · Tokens</b><p>Reusable primitives that make a visual language scale without flattening it.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z"/></svg><span>Backend edges</span><b>NestJS · APIs · GPT</b><p>Clear integration boundaries when a frontend needs a dependable service layer.</p></article></div></section>
   }
 
   @if (page() === 'docker') {

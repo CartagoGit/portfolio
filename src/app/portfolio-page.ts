@@ -62,7 +62,6 @@ export class PortfolioPage {
   protected readonly showHeroChart = signal(true);
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
-  protected readonly heroLayers = signal(['Angular', 'TypeScript', 'Ionic', 'Capacitor', 'Vitest', 'Playwright']);
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
     { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#dd0031' },
     { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
@@ -93,7 +92,7 @@ export class PortfolioPage {
     {
       id: 'quality', eyebrow: '04 / Testing & quality', title: 'Confidence is a feature.',
       detail: 'A focused testing pyramid, semantic HTML and performance budgets keep product work reliable as it grows.',
-      tools: ['Vitest', 'Playwright', 'A11y'], proof: 'Unit → integration → end-to-end',
+      tools: ['Vitest', 'Accessibility', 'Performance'], proof: 'Unit → integration → dependable releases',
     },
     {
       id: 'systems', eyebrow: '05 / Design systems', title: 'Consistent, not repetitive.',
