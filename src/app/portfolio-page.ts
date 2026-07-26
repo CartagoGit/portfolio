@@ -22,11 +22,11 @@ export class PortfolioPage implements OnDestroy {
   private readonly meta = inject(Meta);
   private readonly platformId = inject(PLATFORM_ID);
   private earthCanvas?: HTMLCanvasElement;
-  private earthTexture?: ImageData;
+  private earthTexture?: HTMLImageElement;
   private earthFrame?: number;
   private earthLastFrameAt?: number;
   private earthLastRenderAt?: number;
-  private readonly earthRenderInterval = 1000 / 30;
+  private readonly earthRenderInterval = 1000 / 60;
   private heroPanelTimer?: number;
   private earthAngle = 0;
   private readonly earthMotion = {
@@ -258,13 +258,7 @@ export class PortfolioPage implements OnDestroy {
     const texture = new Image();
     texture.src = '/images/cartagonova-earth-texture-hd.png';
     texture.onload = () => {
-      const source = this.document.createElement('canvas');
-      source.width = 1774;
-      source.height = 887;
-      const context = source.getContext('2d', { willReadFrequently: true });
-      if (!context) return;
-      context.drawImage(texture, 0, 0, source.width, source.height);
-      this.earthTexture = context.getImageData(0, 0, source.width, source.height);
+      this.earthTexture = texture;
       this.earthLoading = false;
       if (this.earthSpinning() && this.earthFrame === undefined) {
         this.earthLastFrameAt = undefined;
