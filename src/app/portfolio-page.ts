@@ -82,7 +82,7 @@ export class PortfolioPage {
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
-  protected readonly earthDepth = signal<'behind' | 'front' | 'returning'>('behind');
+  protected readonly earthDepth = signal<'behind' | 'crossing-front' | 'front' | 'returning' | 'settling-behind'>('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly socialIcons = { github: siGithub, npm: siNpm };
@@ -368,7 +368,8 @@ export class PortfolioPage {
   protected bringEarthForward(): void {
     if (this.earthDepth() !== 'behind') return;
     this.changeEarthMotion();
-    this.earthDepth.set('front');
+    this.earthDepth.set('crossing-front');
+    window.setTimeout(() => this.earthDepth.set('front'), 280);
   }
 
   protected returnEarthBehind(event: MouseEvent): void {
@@ -376,7 +377,8 @@ export class PortfolioPage {
     const target = event.target as HTMLElement | null;
     if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
-    window.setTimeout(() => this.earthDepth.set('behind'), 620);
+    window.setTimeout(() => this.earthDepth.set('settling-behind'), 280);
+    window.setTimeout(() => this.earthDepth.set('behind'), 590);
   }
 
   private renderEarth(): void {
