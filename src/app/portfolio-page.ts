@@ -33,6 +33,7 @@ import { ApproachPageComponent } from '../features/portfolio/approach/approach-p
 import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledge-page.component';
 import { LabPageComponent } from '../features/portfolio/lab/lab-page.component';
 import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
+import { EarthGlobeComponent } from '../features/portfolio/home/earth-globe/earth-globe.component';
 import type {
   CapabilityId,
   ChartType,
@@ -59,6 +60,7 @@ import type {
     KnowledgePageComponent,
     LabPageComponent,
     WorkPageComponent,
+    EarthGlobeComponent,
     TechnologyMarqueeComponent,
   ],
   templateUrl: './portfolio-page.html',

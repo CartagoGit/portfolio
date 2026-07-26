@@ -11,6 +11,8 @@ export type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | '
 export type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 export type HeroPalette = 'ocean' | 'heat' | 'lime';
 export type HeroPanelTransition = 'slide' | 'flip' | 'scan';
+export type EarthDepth =
+  'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready';
 
 export interface Capability {
   id: CapabilityId;
