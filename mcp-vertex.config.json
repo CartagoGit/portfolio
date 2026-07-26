@@ -1,0 +1,41 @@
+{
+  "$schema": "../mcp-vertex/packages/core/schema/mcp-vertex.config.schema.json",
+  "cacheDir": ".cache/mcp-vertex",
+  "docsDir": "docs/mcp-vertex",
+  "plugins": {
+    "proposals": {
+      "prefix": "work"
+    },
+    "memory": {
+      "prefix": "memory"
+    },
+    "git": {
+      "prefix": "git"
+    },
+    "search": {
+      "prefix": "search",
+      "options": {
+        "roots": ["src", "docs", "README.md"],
+        "maxResults": 24
+      }
+    },
+    "quality": {
+      "prefix": "quality"
+    },
+    "docs": {
+      "prefix": "docs",
+      "options": {
+        "roots": ["README.md", "docs"],
+        "maxResults": 50
+      }
+    },
+    "portfolio-content": {
+      "path": "tools/mcp-vertex/portfolio-content.mjs",
+      "prefix": "portfolio",
+      "options": {
+        "contentPath": "src/app/portfolio-page.html",
+        "forbiddenTerms": ["Beateam", "Mazinger", "MDM Platform", "Gestion de Tarifas"]
+      }
+    }
+  }
+}
