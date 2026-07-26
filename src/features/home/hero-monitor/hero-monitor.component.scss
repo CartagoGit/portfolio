@@ -914,6 +914,11 @@ app-hero-monitor .hero-composition {
 	animation: none !important;
 	opacity: 1;
 	scale: 1.14;
+	pointer-events: auto;
+	cursor: grab;
+}
+.orb-one.earth-front:active {
+	cursor: grabbing;
 }
 .orb-one.earth-out-front {
 	z-index: 5;

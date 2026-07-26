@@ -3,6 +3,7 @@ import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	HostListener,
 	inject,
 	input,
 	PLATFORM_ID,
@@ -29,6 +30,12 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	private angle = 0;
 	private loading = false;
 	private spinning = false;
+	private drag?: {
+		pointerId: number;
+		x: number;
+		y: number;
+		at: number;
+	};
 	readonly active = signal(false);
 	private readonly motion = {
 		speed: 0.00016,
@@ -74,6 +81,73 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.motion.targetAxisZ = -0.68 + Math.random() * 1.36;
 		this.start();
 	}
+
+	@HostListener('pointerdown', ['$event'])
+	protected beginDrag(event: PointerEvent): void {
+		if (!this.isInteractive()) return;
+		event.preventDefault();
+		event.stopPropagation();
+		this.drag = {
+			pointerId: event.pointerId,
+			x: event.clientX,
+			y: event.clientY,
+			at: event.timeStamp,
+		};
+		const host = event.currentTarget;
+		if (host instanceof HTMLElement)
+			host.setPointerCapture(event.pointerId);
+		this.start();
+	}
+
+	@HostListener('pointermove', ['$event'])
+	protected rotateFromDrag(event: PointerEvent): void {
+		if (!this.drag || event.pointerId !== this.drag.pointerId) return;
+		event.preventDefault();
+		event.stopPropagation();
+		const deltaX = event.clientX - this.drag.x;
+		const deltaY = event.clientY - this.drag.y;
+		const distance = Math.hypot(deltaX, deltaY);
+		if (distance < 0.5) return;
+		const elapsed = Math.max(8, event.timeStamp - this.drag.at);
+		const dominant =
+			Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
+		const direction = Math.sign(dominant) || 1;
+		const intensity = Math.min(
+			0.0028,
+			Math.max(0.00018, (distance / elapsed) * 0.012)
+		);
+		this.motion.targetSpeed = direction * intensity;
+		this.motion.targetAxisX = this.clamp(-deltaY / distance, -0.88, 0.88);
+		this.motion.targetAxisY = this.clamp(deltaX / distance, -0.96, 0.96);
+		this.motion.targetAxisZ = this.clamp(
+			(deltaX + deltaY) / distance / 2,
+			-0.62,
+			0.62
+		);
+		this.drag = {
+			pointerId: event.pointerId,
+			x: event.clientX,
+			y: event.clientY,
+			at: event.timeStamp,
+		};
+		this.start();
+	}
+
+	@HostListener('pointerup', ['$event'])
+	@HostListener('pointercancel', ['$event'])
+	protected endDrag(event: PointerEvent): void {
+		if (!this.drag || event.pointerId !== this.drag.pointerId) return;
+		event.preventDefault();
+		event.stopPropagation();
+		const host = event.currentTarget;
+		if (
+			host instanceof HTMLElement &&
+			host.hasPointerCapture(event.pointerId)
+		)
+			host.releasePointerCapture(event.pointerId);
+		this.drag = undefined;
+	}
+
 	ngOnDestroy(): void {
 		this.stop();
 	}
@@ -137,5 +211,13 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 				),
 			});
 		this.frame = requestAnimationFrame((time) => this.animate(time));
+	}
+
+	private isInteractive(): boolean {
+		return isPlatformBrowser(this.platformId) && this.depth() === 'front';
+	}
+
+	private clamp(value: number, min: number, max: number): number {
+		return Math.min(max, Math.max(min, value));
 	}
 }

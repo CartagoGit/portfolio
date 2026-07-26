@@ -3,6 +3,8 @@
 	z-index: 1;
 	inset: 0;
 	display: block;
+	touch-action: none;
+	user-select: none;
 }
 .earth-globe-layer {
 	position: absolute;
