@@ -370,7 +370,7 @@ export class PortfolioPage {
     this.earthDepth.set('leaping-front');
     window.setTimeout(() => {
       if (this.earthDepth() === 'leaping-front') this.earthDepth.set('front');
-    }, 220);
+    }, 280);
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -386,7 +386,7 @@ export class PortfolioPage {
     this.earthDepth.set('returning');
     window.setTimeout(() => {
       if (this.earthDepth() === 'returning') this.earthDepth.set('behind');
-    }, 240);
+    }, 290);
   }
 
   private renderEarth(): void {
