@@ -58,8 +58,8 @@ export class PortfolioPage {
   protected readonly playgroundRuns = signal(0);
   protected readonly draggedStep = signal<PlaygroundStep | null>(null);
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
-  protected readonly activeHeroPanel = signal<HeroPanelId>('overview');
-  protected readonly showHeroChart = signal(true);
+  protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
+  protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
@@ -110,7 +110,7 @@ export class PortfolioPage {
     () => this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
   );
   protected readonly selectedHeroPanel = computed(
-    () => this.heroPanels.find(({ id }) => id === this.activeHeroPanel()) ?? this.heroPanels[0],
+    () => this.heroPanels.find(({ id }) => id === this.activeHeroPanel()),
   );
 
   protected readonly playgroundSteps: readonly { id: PlaygroundStep; label: string; hint: string }[] = [
@@ -204,11 +204,14 @@ export class PortfolioPage {
 
   protected setHeroPanel(panel: HeroPanelId): void {
     this.activeHeroPanel.set(panel);
-    this.showHeroChart.set(false);
   }
 
-  protected showHeroOverview(): void {
-    this.showHeroChart.set(true);
+  protected clearHeroPanel(): void {
+    this.activeHeroPanel.set(null);
+  }
+
+  protected setHeroChart(type: ChartType): void {
+    this.heroChartType.set(type);
   }
 
   protected setTelemetry(metric: TelemetryId): void {
