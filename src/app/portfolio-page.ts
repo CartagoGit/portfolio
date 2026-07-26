@@ -301,9 +301,9 @@ export class PortfolioPage {
     const axisX = .13;
     const axisY = -.95;
     const axisZ = .28;
-    const angle = elapsed * .00023;
-    const cosine = Math.cos(-angle);
-    const sine = Math.sin(-angle);
+    const angle = elapsed * .00016;
+    const cosine = Math.cos(angle);
+    const sine = Math.sin(angle);
     const textureWidth = texture.width;
     const textureHeight = texture.height;
     for (let py = 0; py < size; py += 1) {
@@ -322,7 +322,7 @@ export class PortfolioPage {
         const rotatedY = y * cosine + crossY * sine + axisY * dot * (1 - cosine);
         const rotatedZ = z * cosine + crossZ * sine + axisZ * dot * (1 - cosine);
         const longitude = Math.atan2(rotatedX, rotatedZ);
-        const latitude = Math.asin(Math.max(-1, Math.min(1, rotatedY)));
+        const latitude = Math.asin(Math.max(-1, Math.min(1, -rotatedY)));
         const sourceX = Math.floor(((longitude / (Math.PI * 2) + .5) % 1) * textureWidth);
         const sourceY = Math.max(0, Math.min(textureHeight - 1, Math.floor((.5 - latitude / Math.PI) * textureHeight)));
         const sourceIndex = (sourceY * textureWidth + sourceX) * 4;
