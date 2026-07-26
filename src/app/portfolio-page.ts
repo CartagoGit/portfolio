@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	HostListener,
+	ViewEncapsulation,
 } from '@angular/core';
 import { ContactPageComponent } from '../features/contact/contact-page.component';
 import { DockerPageComponent } from '../features/docker/docker-page.component';
@@ -36,6 +37,9 @@ import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfoli
 	templateUrl: './portfolio-page.html',
 	styleUrl: './portfolio-page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	// The legacy shell sheet still contains composition primitives used by the
+	// extracted monitor. Keep it global until every primitive has moved.
+	encapsulation: ViewEncapsulation.None,
 })
 export class PortfolioPage {
 	protected readonly shell = new PortfolioShellFacade();
