@@ -33,7 +33,12 @@
       "path": "tools/mcp-vertex/portfolio-content.mjs",
       "prefix": "portfolio",
       "options": {
-        "contentPath": "src/app/portfolio-page.html",
+        "contentPaths": [
+          "src/app/portfolio-page.html",
+          "src/features/portfolio/contact/contact-page.component.html",
+          "src/features/portfolio/docker/docker-page.component.html",
+          "src/features/portfolio/demos/demos-page.component.html"
+        ],
         "forbiddenTerms": ["Beateam", "Mazinger", "MDM Platform", "Gestion de Tarifas"]
       }
     }

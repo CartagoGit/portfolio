@@ -4,7 +4,7 @@ import { definePlugin } from '@mcp-vertex/core/public';
 import { z } from 'zod';
 
 const OptionsSchema = z.object({
-  contentPath: z.string().default('src/app/portfolio-page.html'),
+  contentPaths: z.array(z.string()).default(['src/app/portfolio-page.html']),
   forbiddenTerms: z.array(z.string()).default([]),
 });
 
@@ -56,7 +56,7 @@ export default definePlugin({
   optionsSchema: OptionsSchema,
   register(ctx) {
     const options = OptionsSchema.parse(ctx.options ?? {});
-    const contentPath = ctx.workspace.resolve(options.contentPath);
+    const contentPaths = options.contentPaths.map((contentPath) => ctx.workspace.resolve(contentPath));
 
     return {
       tools: [
@@ -70,12 +70,13 @@ export default definePlugin({
                 inputSchema: z.object({}),
               },
               async () => {
-                const content = await readFile(contentPath, 'utf8');
-                const imageTodos = [...content.matchAll(/TODO\(image\):\s*([^\n-]+)/g)].map((match) => match[1].trim());
-                const privateMatches = options.forbiddenTerms.filter((term) => content.toLowerCase().includes(term.toLowerCase()));
+                const documents = await Promise.all(contentPaths.map(async (contentPath) => ({ contentPath, content: await readFile(contentPath, 'utf8') })));
+                const imageTodos = documents.flatMap(({ contentPath, content }) => [...content.matchAll(/TODO\(image\):\s*([^\n-]+)/g)].map((match) => ({ contentPath, request: match[1].trim() })));
+                const publicContent = documents.map(({ content }) => content).join('\n').toLowerCase();
+                const privateMatches = options.forbiddenTerms.filter((term) => publicContent.includes(term.toLowerCase()));
                 const report = {
                   ok: privateMatches.length === 0,
-                  contentPath: options.contentPath,
+                  contentPaths: options.contentPaths,
                   imageTodos,
                   privateMatches,
                   nextAction: privateMatches.length === 0
