@@ -2,13 +2,13 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, computed, HostListener, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { siAngular, siCapacitor, siIonic, siTypescript, siVitest } from 'simple-icons';
+import { siAngular, siBun, siCapacitor, siDocker, siIonic, siTypescript, siVitest } from 'simple-icons';
 
 type Locale = 'en' | 'es';
 type PortfolioPageId = 'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
 type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
 type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
-type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile';
+type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 type TelemetryId = 'product' | 'quality' | 'delivery';
 type ChartType = 'bars' | 'line' | 'area';
 
@@ -67,6 +67,8 @@ export class PortfolioPage {
     { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
     { id: 'quality', label: 'Vitest', metric: 'VT', detail: 'Fast unit and integration testing that keeps frontend behaviour dependable.', iconPath: siVitest.path, color: '#fcc72b' },
     { id: 'mobile', label: 'Ionic + Capacitor', metric: 'MOB', detail: 'A shared product system delivered to web and native mobile surfaces.', iconPath: siIonic.path || siCapacitor.path, color: '#3880ff' },
+    { id: 'tooling', label: 'Bun', metric: 'BUN', detail: 'A fast JavaScript runtime and toolkit used to keep local feedback loops short.', iconPath: siBun.path, color: '#f9f1e8' },
+    { id: 'delivery', label: 'Docker', metric: 'CTR', detail: 'Containerised delivery for reproducible environments and public image distribution.', iconPath: siDocker.path, color: '#2496ed' },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },
