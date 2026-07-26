@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { Locale, PortfolioPageId } from '../../portfolio.types';
+import type { Locale, PortfolioPageId } from '../../../domain/portfolio.types';
 
 @Component({
   selector: 'app-command-palette',

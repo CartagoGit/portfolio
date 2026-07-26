@@ -21,11 +21,11 @@ import {
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
   TELEMETRY,
-} from './portfolio/portfolio.data';
-import { renderEarthFrame } from './portfolio/earth-globe-renderer';
-import { nextHeroPanelTransition } from './portfolio/portfolio-motion';
-import { PortfolioFooterComponent } from './portfolio/components/portfolio-footer/portfolio-footer.component';
-import { CommandPaletteComponent } from './portfolio/components/command-palette/command-palette.component';
+} from './portfolio/domain/portfolio.data';
+import { renderEarthFrame } from './portfolio/core/rendering/earth-globe-renderer';
+import { nextHeroPanelTransition } from './portfolio/core/motion/portfolio-motion';
+import { PortfolioFooterComponent } from './portfolio/shared/ui/portfolio-footer/portfolio-footer.component';
+import { CommandPaletteComponent } from './portfolio/shared/ui/command-palette/command-palette.component';
 import type {
   CapabilityId,
   ChartType,
@@ -37,7 +37,7 @@ import type {
   PlaygroundStep,
   PortfolioPageId,
   TelemetryId,
-} from './portfolio/portfolio.types';
+} from './portfolio/domain/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-page',
