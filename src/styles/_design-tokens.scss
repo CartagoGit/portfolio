@@ -23,9 +23,10 @@ $portfolio-tokens-dark: (
 	'--blue': #1678ff,
 	'--ice': #9aeaff,
 	'--lime': #b9ef73,
-	'--neon':
+	'--neon': (
 		0 0 12px color-mix(in srgb, #1678ff 80%, transparent),
 		0 0 32px color-mix(in srgb, #32c8ff 28%, transparent),
+	),
 );
 
 // ---------------------------------------------------------------------------
@@ -42,9 +43,10 @@ $portfolio-tokens-light: (
 	'--blue': #0863e6,
 	'--ice': #155dc1,
 	'--lime': #527b10,
-	'--neon':
+	'--neon': (
 		0 0 12px color-mix(in srgb, #0863e6 35%, transparent),
 		0 0 28px color-mix(in srgb, #0078bc 17%, transparent),
+	),
 );
 
 /// Emits one CSS custom-property declaration per entry of the map.
