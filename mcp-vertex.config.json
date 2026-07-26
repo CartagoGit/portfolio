@@ -45,6 +45,8 @@
 					"src/features/work/work-page.component.html",
 					"src/features/knowledge/knowledge-page.component.html",
 					"src/features/lab/lab-page.component.html",
+					"src/features/home/home-intro/home-intro.component.html",
+					"src/features/home/hero-monitor/hero-monitor.component.html",
 					"src/features/home/earth-globe/earth-globe.component.html"
 				],
 				"forbiddenTerms": [

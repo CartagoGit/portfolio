@@ -13,13 +13,13 @@ closureGate:
 
 ## Outcome
 
-The route shell in `src/app` only coordinates route, locale, theme and page state. Every public page belongs to a feature with its own HTML, SCSS, TypeScript and spec. Shared UI is reusable, domain data is immutable, core is framework-agnostic and SCSS follows tokens plus BEM blocks.
+The route shell in `src/app` only composes route views. Every public page belongs to a feature with its own HTML, SCSS, TypeScript and spec. Shared UI is reusable, domain data is immutable, core separates pure logic from explicit platform adapters, and SCSS follows tokens plus BEM blocks.
 
 ## Architecture decisions
 
 - `src/app`: bootstrap, providers, routes and page shell only.
 - `src/domain`: immutable public portfolio contracts and content.
-- `src/core`: renderer, pure state transitions and browser adapters.
+- `src/core`: renderer, pure state transitions and explicit browser/platform adapters.
 - `src/shared`: reusable UI and presentation utilities.
 - `src/features`: independently testable portfolio screens.
 - `src/styles`: tokens, motion, theme and BEM primitives. Feature styles own their blocks; the shell has no feature selectors after closure.
@@ -62,3 +62,6 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
 - 2026-07-26: The Home introduction and interactive monitor now delegate from the route shell.
   The monitor owns its state facades, Earth depth behaviour, template, tests and visual layer;
   moving its stylesheet removed the root CSS budget warning without weakening the configured limit.
+- 2026-07-26: The route shell now only composes features. Locale persistence, navigation
+  direction, theme and SEO coordination are isolated in `core/platform`, while page-local
+  interactions remain inside their corresponding features.
