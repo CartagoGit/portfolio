@@ -398,7 +398,7 @@ export class PortfolioPage {
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
     const deviceScale = Math.min(window.devicePixelRatio || 1, 1.75);
-    const inFront = this.earthDepth() === 'front' || this.earthDepth() === 'out-front';
+    const inFront = this.earthDepth() === 'front-ready' || this.earthDepth() === 'front' || this.earthDepth() === 'out-front';
     const size = Math.min(768, Math.max(360, Math.round((canvas.clientWidth || 300) * deviceScale * (inFront ? 1.14 : 1))));
     if (canvas.width !== size || canvas.height !== size) {
       canvas.width = size;
