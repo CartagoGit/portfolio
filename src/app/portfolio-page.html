@@ -1,6 +1,6 @@
 <main
 	class="portfolio"
-	[class.light-mode]="lightMode()">
+	[class.light-mode]="shell.lightMode()">
 	<a
 		class="skip-link"
 		href="#main-content">
@@ -8,72 +8,72 @@
 	</a>
 
 	<app-portfolio-header
-		[locale]="locale()"
-		[page]="page()"
-		[copy]="copy()"
-		[languages]="languages"
-		[menuOpen]="menuOpen()"
-		[localeMenuOpen]="localeMenuOpen()"
-		[localeMenuClosing]="localeMenuClosing()"
-		[lightMode]="lightMode()"
-		[scrolled]="scrolled()"
-		(navigate)="setTransition($event)"
-		(menuToggle)="toggleMenu()"
-		(localeToggle)="toggleLocaleMenu()"
-		(localeSelect)="selectLocale($event)"
-		(themeToggle)="setTheme()" />
+		[locale]="shell.locale()"
+		[page]="shell.page()"
+		[copy]="shell.copy()"
+		[languages]="shell.languages"
+		[menuOpen]="shell.menuOpen()"
+		[localeMenuOpen]="shell.localeMenuOpen()"
+		[localeMenuClosing]="shell.localeMenuClosing()"
+		[lightMode]="shell.lightMode()"
+		[scrolled]="shell.scrolled()"
+		(navigate)="shell.setTransition($event)"
+		(menuToggle)="shell.toggleMenu()"
+		(localeToggle)="shell.toggleLocaleMenu()"
+		(localeSelect)="shell.selectLocale($event)"
+		(themeToggle)="shell.setTheme()" />
 	<div class="route-stage">
-		@if (page() === 'home') {
+		@if (shell.page() === 'home') {
 			<section
 				id="main-content"
 				class="hero"
 				aria-labelledby="hero-title">
 				<app-home-intro
-					[copy]="copy()"
-					[locale]="locale()"
-					[technologies]="technologyMarquee"
-					[links]="publicLinks"
-					(navigate)="setTransition($event)" />
+					[copy]="shell.copy()"
+					[locale]="shell.locale()"
+					[technologies]="shell.technologyMarquee"
+					[links]="shell.publicLinks"
+					(navigate)="shell.setTransition($event)" />
 				<app-hero-monitor />
 			</section>
 		}
 
-		@if (page() === 'work') {
+		@if (shell.page() === 'work') {
 			<app-work-page />
 		}
 
-		@if (page() === 'approach') {
+		@if (shell.page() === 'approach') {
 			<app-approach-page />
 		}
 
-		@if (page() === 'knowledge') {
+		@if (shell.page() === 'knowledge') {
 			<app-knowledge-page />
 		}
 
-		@if (page() === 'docker') {
+		@if (shell.page() === 'docker') {
 			<app-docker-page />
 		}
 
-		@if (page() === 'demos') {
+		@if (shell.page() === 'demos') {
 			<app-demos-page />
 		}
 
-		@if (page() === 'lab') {
-			<app-lab-page (commandRequested)="commandOpen.set(true)" />
+		@if (shell.page() === 'lab') {
+			<app-lab-page (commandRequested)="shell.commandOpen.set(true)" />
 		}
 
-		@if (page() === 'contact') {
+		@if (shell.page() === 'contact') {
 			<app-contact-page />
 		}
 	</div>
 
 	<app-portfolio-footer
-		[locale]="locale()"
-		[links]="publicLinks" />
+		[locale]="shell.locale()"
+		[links]="shell.publicLinks" />
 
 	<app-command-palette
-		[open]="commandOpen()"
-		[locale]="locale()"
-		(close)="commandOpen.set(false)"
-		(navigate)="setTransition($event)" />
+		[open]="shell.commandOpen()"
+		[locale]="shell.locale()"
+		(close)="shell.commandOpen.set(false)"
+		(navigate)="shell.setTransition($event)" />
 </main>
