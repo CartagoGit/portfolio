@@ -365,16 +365,25 @@ export class PortfolioPage {
     if (!this.earthSpinning()) this.startEarthSpin();
   }
 
-  protected bringEarthForward(): void {
+  protected showEarthInFront(): void {
     if (this.earthDepth() !== 'behind') return;
-    this.changeEarthMotion();
     this.earthDepth.set('crossing-front');
     window.setTimeout(() => this.earthDepth.set('front'), 280);
   }
 
-  protected returnEarthBehind(event: MouseEvent): void {
+  protected onEarthControlClick(event: MouseEvent): void {
+    event.stopPropagation();
+    this.changeEarthMotion();
+    this.showEarthInFront();
+  }
+
+  protected returnEarthBehind(event?: MouseEvent): void {
+    if (this.earthDepth() === 'crossing-front') {
+      this.earthDepth.set('behind');
+      return;
+    }
     if (this.earthDepth() !== 'front') return;
-    const target = event.target as HTMLElement | null;
+    const target = event?.target as HTMLElement | null | undefined;
     if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
     window.setTimeout(() => this.earthDepth.set('settling-behind'), 280);
