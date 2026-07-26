@@ -21,7 +21,7 @@
 	<div
 		class="interface-shell"
 		[attr.data-chart]="chartType()"
-		(mouseleave)="returnEarthBehind()"
+		(mouseleave)="returnEarthBehind($event)"
 		(pointerdown)="returnEarthBehind($event)"
 		(click)="returnEarthBehind($event)">
 		<div
