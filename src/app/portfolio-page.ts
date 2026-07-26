@@ -29,6 +29,7 @@ import { CommandPaletteComponent } from './portfolio/shared/ui/command-palette/c
 import { TechnologyMarqueeComponent } from './portfolio/features/home/technology-marquee/technology-marquee.component';
 import { PortfolioHeaderComponent } from './portfolio/shared/ui/portfolio-header/portfolio-header.component';
 import { ContactPageComponent } from './portfolio/features/contact/contact-page.component';
+import { DockerPageComponent } from './portfolio/features/docker/docker-page.component';
 import type {
   CapabilityId,
   ChartType,
@@ -50,6 +51,7 @@ import type {
     CommandPaletteComponent,
     PortfolioHeaderComponent,
     ContactPageComponent,
+    DockerPageComponent,
     TechnologyMarqueeComponent,
   ],
   templateUrl: './portfolio-page.html',
