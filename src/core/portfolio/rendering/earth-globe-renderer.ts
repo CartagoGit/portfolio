@@ -59,15 +59,18 @@ export function renderEarthFrame(
   image: HTMLCanvasElement,
   frame: EarthFrame,
 ): void {
-  const program = getProgram(canvas, image);
-  if (!program) return;
-
   const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
   const size = Math.min(1024, Math.max(320, Math.round((canvas.clientWidth || 300) * deviceScale)));
   if (canvas.width !== size || canvas.height !== size) {
     canvas.width = size;
     canvas.height = size;
+    // Resizing a canvas resets its WebGL state, so the GPU program and texture
+    // must be created only after the final drawing buffer size is known.
+    programs.delete(canvas);
   }
+
+  const program = getProgram(canvas, image);
+  if (!program) return;
 
   const { context } = program;
   context.viewport(0, 0, size, size);
