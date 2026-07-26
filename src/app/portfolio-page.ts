@@ -10,7 +10,7 @@ type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
 type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
 type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 type TelemetryId = 'product' | 'quality' | 'delivery';
-type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse';
+type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
 type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 type HeroPalette = 'ocean' | 'heat' | 'lime';
 
@@ -74,8 +74,8 @@ export class PortfolioPage {
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly socialIcons = { github: siGithub, npm: siNpm };
-  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
-    { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#ffffff' },
+  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string; iconAsset?: string }[] = [
+    { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#ff2d95', iconAsset: '/icons/angular.svg' },
     { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
     { id: 'quality', label: 'Vitest', metric: 'VT', detail: 'Fast unit and integration testing that keeps frontend behaviour dependable.', iconPath: siVitest.path, color: '#fcc72b' },
     { id: 'mobile', label: 'Ionic + Capacitor', metric: 'MOB', detail: 'A shared product system delivered to web and native mobile surfaces.', iconPath: siIonic.path || siCapacitor.path, color: '#3880ff' },
@@ -83,7 +83,7 @@ export class PortfolioPage {
     { id: 'delivery', label: 'Docker', metric: 'CTR', detail: 'Containerised delivery for reproducible environments and public image distribution.', iconPath: siDocker.path, color: '#2496ed' },
   ];
   protected readonly technologyMarquee: readonly { label: string; iconPath: string; color: string }[] = [
-    { label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' }, { label: 'Angular', iconPath: siAngular.path, color: '#ffffff' }, { label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' }, { label: 'Ionic', iconPath: siIonic.path, color: '#3880ff' }, { label: 'Capacitor', iconPath: siCapacitor.path, color: '#119eff' }, { label: 'Angular Material', iconPath: siMaterialdesign.path, color: '#757575' }, { label: 'Sass', iconPath: siSass.path, color: '#cc6699' },
+    { label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' }, { label: 'Angular', iconPath: siAngular.path, color: '#ff2d95' }, { label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' }, { label: 'Ionic', iconPath: siIonic.path, color: '#3880ff' }, { label: 'Capacitor', iconPath: siCapacitor.path, color: '#119eff' }, { label: 'Angular Material', iconPath: siMaterialdesign.path, color: '#757575' }, { label: 'Sass', iconPath: siSass.path, color: '#cc6699' },
     { label: 'Bun', iconPath: siBun.path, color: '#f9f1e1' }, { label: 'Node.js', iconPath: siNodedotjs.path, color: '#339933' }, { label: 'NestJS', iconPath: siNestjs.path, color: '#e0234e' }, { label: 'npm', iconPath: siNpm.path, color: '#cb3837' }, { label: 'Docker', iconPath: siDocker.path, color: '#2496ed' }, { label: 'Git', iconPath: siGit.path, color: '#f05032' }, { label: 'GitLab CI', iconPath: siGitlab.path, color: '#fc6d26' }, { label: 'Vitest', iconPath: siVitest.path, color: '#6e9f18' }, { label: 'Jest', iconPath: siJest.path, color: '#c21325' }, { label: 'GitHub Actions', iconPath: siGithubactions.path, color: '#2088ff' },
     { label: 'Vue', iconPath: siVuedotjs.path, color: '#4fc08d' }, { label: 'React', iconPath: siReact.path, color: '#61dafb' }, { label: 'Electron', iconPath: siElectron.path, color: '#47848f' }, { label: 'Tailwind CSS', iconPath: siTailwindcss.path, color: '#06b6d4' }, { label: 'PrimeNG', iconPath: siPrimeng.path, color: '#dd0031' }, { label: 'Storybook', iconPath: siStorybook.path, color: '#ff4785' }, { label: 'Vite', iconPath: siVite.path, color: '#646cff' }, { label: 'Nx', iconPath: siNx.path, color: '#143055' },
     { label: 'MongoDB', iconPath: siMongodb.path, color: '#47a248' }, { label: 'Mongoose', iconPath: siMongoose.path, color: '#880000' }, { label: 'Prisma', iconPath: siPrisma.path, color: '#2d3748' }, { label: 'Zod', iconPath: siZod.path, color: '#3e67b1' }, { label: 'Firebase', iconPath: siFirebase.path, color: '#dd2c00' }, { label: 'Linux', iconPath: siLinux.path, color: '#fcc624' }, { label: 'Kotlin', iconPath: siKotlin.path, color: '#7f52ff' },
@@ -262,6 +262,22 @@ export class PortfolioPage {
   protected setHeroPalette(palette: HeroPalette): void {
     this.heroPalette.set(palette);
     this.randomizeHeroChart();
+  }
+
+  protected setHeroTemperature(): void {
+    this.heroPalette.set('heat');
+    this.randomizeHeroChart();
+  }
+
+  protected chartBarGradient(value: number): string {
+    if (this.heroPalette() === 'heat') {
+      if (value >= 80) return 'linear-gradient(to top, #ff4d4d, #ffcf4a)';
+      if (value >= 60) return 'linear-gradient(to top, #ff9f1c, #ffe16b)';
+      if (value >= 42) return 'linear-gradient(to top, #24b6ff, #74e5ff)';
+      return 'linear-gradient(to top, #2856a6, #48b8ff)';
+    }
+    if (this.heroPalette() === 'lime') return 'linear-gradient(to top, #256c5d, #d8ff78)';
+    return 'linear-gradient(to top, #1678ff, #32c8ff)';
   }
 
   protected startEarthSpin(): void {
