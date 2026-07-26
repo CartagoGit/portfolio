@@ -30,6 +30,7 @@ import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledg
 import { LabPageComponent } from '../features/portfolio/lab/lab-page.component';
 import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
 import { EarthGlobeComponent } from '../features/portfolio/home/earth-globe/earth-globe.component';
+import { EarthDepthFacade } from '../features/portfolio/home/earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from '../features/portfolio/home/hero-monitor/hero-monitor.facade';
 import type {
   CapabilityId,
@@ -71,6 +72,7 @@ export class PortfolioPage implements OnDestroy {
   private readonly meta = inject(Meta);
   private readonly platformId = inject(PLATFORM_ID);
   protected readonly hero = new HeroMonitorFacade();
+  protected readonly earth = new EarthDepthFacade();
 
   protected readonly locale = signal<Locale>('en');
   protected readonly page = signal<PortfolioPageId>('home');
@@ -89,10 +91,8 @@ export class PortfolioPage implements OnDestroy {
   protected readonly heroPanelChanging = this.hero.panelChanging;
   protected readonly heroPalette = this.hero.palette;
   protected readonly heroChartBars = this.hero.chartBars;
-  protected readonly earthDepth = signal<
-    'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'
-  >('behind');
-  protected readonly earthBlocksMonitor = computed(() => this.earthDepth() !== 'behind');
+  protected readonly earthDepth = this.earth.state;
+  protected readonly earthBlocksMonitor = this.earth.blocksMonitor;
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly publicLinks = PUBLIC_LINKS;
@@ -236,13 +236,7 @@ export class PortfolioPage implements OnDestroy {
   }
 
   protected showEarthInFront(): void {
-    if (this.earthDepth() !== 'behind') return;
-    this.earthDepth.set('out-behind');
-    window.setTimeout(() => {
-      if (this.earthDepth() !== 'out-behind') return;
-      this.earthDepth.set('front-ready');
-      requestAnimationFrame(() => this.earthDepth.set('front'));
-    }, 140);
+    this.earth.showInFront();
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -257,15 +251,7 @@ export class PortfolioPage implements OnDestroy {
   }
 
   protected returnEarthBehind(event?: MouseEvent): void {
-    if (this.earthDepth() !== 'front') return;
-    const target = event?.target as HTMLElement | null | undefined;
-    if (target?.closest('.earth-motion-control')) return;
-    this.earthDepth.set('out-front');
-    window.setTimeout(() => {
-      if (this.earthDepth() !== 'out-front') return;
-      this.earthDepth.set('behind-ready');
-      requestAnimationFrame(() => this.earthDepth.set('behind'));
-    }, 140);
+    this.earth.returnBehind(event?.target);
   }
 
   protected hitNeonTarget(index: number): void {
