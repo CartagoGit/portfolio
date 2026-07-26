@@ -13,7 +13,7 @@ type TelemetryId = 'product' | 'quality' | 'delivery';
 type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
 type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 type HeroPalette = 'ocean' | 'heat' | 'lime';
-type HeroPanelTransition = 'slide' | 'flip' | 'scan' | 'zoom';
+type HeroPanelTransition = 'slide' | 'flip' | 'scan';
 
 interface Capability {
   id: CapabilityId;
@@ -252,7 +252,7 @@ export class PortfolioPage {
   protected setHeroPanel(panel: HeroPanelId): void {
     if (this.activeHeroPanel() === panel) return;
     const currentTransition = this.heroPanelTransition();
-    const availableTransitions: HeroPanelTransition[] = ['slide', 'flip', 'scan', 'zoom'];
+    const availableTransitions: HeroPanelTransition[] = ['slide', 'flip', 'scan'];
     const nextTransitions = availableTransitions.filter((transition) => transition !== currentTransition);
     this.heroPanelTransition.set(nextTransitions[Math.floor(Math.random() * nextTransitions.length)]);
     this.heroEffect.set('idle');
@@ -260,7 +260,7 @@ export class PortfolioPage {
     this.activeHeroPanel.set(null);
     window.setTimeout(() => {
       this.activeHeroPanel.set(panel);
-      this.heroPanelChanging.set(false);
+      requestAnimationFrame(() => this.heroPanelChanging.set(false));
     }, 24);
   }
 
