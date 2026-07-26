@@ -5,7 +5,7 @@ import type {
   Locale,
   PortfolioCopy,
   PortfolioPageId,
-} from '../../../../domain/portfolio/portfolio.types';
+} from '../../../domain/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-header',

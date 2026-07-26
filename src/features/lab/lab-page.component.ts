@@ -1,10 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
-import { PLAYGROUND_STEPS, TELEMETRY } from '../../../domain/portfolio/portfolio.data';
-import type {
-  ChartType,
-  PlaygroundStep,
-  TelemetryId,
-} from '../../../domain/portfolio/portfolio.types';
+import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/portfolio.data';
+import type { ChartType, PlaygroundStep, TelemetryId } from '../../domain/portfolio.types';
 
 @Component({
   selector: 'app-lab-page',

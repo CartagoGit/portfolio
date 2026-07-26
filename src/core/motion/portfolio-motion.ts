@@ -1,4 +1,4 @@
-import type { HeroPanelTransition } from '../../../domain/portfolio/portfolio.types';
+import type { HeroPanelTransition } from '../../domain/portfolio.types';
 
 export const HERO_PANEL_TRANSITIONS: readonly HeroPanelTransition[] = ['slide', 'flip', 'scan'];
 

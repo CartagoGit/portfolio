@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { Technology } from '../../../../domain/portfolio/portfolio.types';
+import type { Technology } from '../../../domain/portfolio.types';
 
 @Component({
   selector: 'app-technology-marquee',

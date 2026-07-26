@@ -16,22 +16,22 @@ import {
   LANGUAGES,
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
-} from '../domain/portfolio/portfolio.data';
-import { PortfolioFooterComponent } from '../shared/portfolio/ui/portfolio-footer/portfolio-footer.component';
-import { CommandPaletteComponent } from '../shared/portfolio/ui/command-palette/command-palette.component';
-import { TechnologyMarqueeComponent } from '../features/portfolio/home/technology-marquee/technology-marquee.component';
-import { PortfolioHeaderComponent } from '../shared/portfolio/ui/portfolio-header/portfolio-header.component';
-import { ContactPageComponent } from '../features/portfolio/contact/contact-page.component';
-import { DockerPageComponent } from '../features/portfolio/docker/docker-page.component';
-import { DemosPageComponent } from '../features/portfolio/demos/demos-page.component';
-import { ProfileLinksComponent } from '../features/portfolio/home/profile-links/profile-links.component';
-import { ApproachPageComponent } from '../features/portfolio/approach/approach-page.component';
-import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledge-page.component';
-import { LabPageComponent } from '../features/portfolio/lab/lab-page.component';
-import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
-import { EarthGlobeComponent } from '../features/portfolio/home/earth-globe/earth-globe.component';
-import { EarthDepthFacade } from '../features/portfolio/home/earth-globe/earth-depth.facade';
-import { HeroMonitorFacade } from '../features/portfolio/home/hero-monitor/hero-monitor.facade';
+} from '../domain/portfolio.data';
+import { PortfolioFooterComponent } from '../shared/ui/portfolio-footer/portfolio-footer.component';
+import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
+import { TechnologyMarqueeComponent } from '../features/home/technology-marquee/technology-marquee.component';
+import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfolio-header.component';
+import { ContactPageComponent } from '../features/contact/contact-page.component';
+import { DockerPageComponent } from '../features/docker/docker-page.component';
+import { DemosPageComponent } from '../features/demos/demos-page.component';
+import { ProfileLinksComponent } from '../features/home/profile-links/profile-links.component';
+import { ApproachPageComponent } from '../features/approach/approach-page.component';
+import { KnowledgePageComponent } from '../features/knowledge/knowledge-page.component';
+import { LabPageComponent } from '../features/lab/lab-page.component';
+import { WorkPageComponent } from '../features/work/work-page.component';
+import { EarthGlobeComponent } from '../features/home/earth-globe/earth-globe.component';
+import { EarthDepthFacade } from '../features/home/earth-globe/earth-depth.facade';
+import { HeroMonitorFacade } from '../features/home/hero-monitor/hero-monitor.facade';
 import type {
   CapabilityId,
   ChartType,
@@ -40,7 +40,7 @@ import type {
   HeroPanelId,
   Locale,
   PortfolioPageId,
-} from '../domain/portfolio/portfolio.types';
+} from '../domain/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-page',

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import type { Capability, CapabilityId } from '../../../domain/portfolio/portfolio.types';
+import type { Capability, CapabilityId } from '../../domain/portfolio.types';
 
 @Component({
   selector: 'app-approach-page',

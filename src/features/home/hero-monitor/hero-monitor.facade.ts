@@ -1,13 +1,13 @@
 import { computed, signal } from '@angular/core';
-import { nextHeroPanelTransition } from '../../../../core/portfolio/motion/portfolio-motion';
-import { HERO_PANELS } from '../../../../domain/portfolio/portfolio.data';
+import { nextHeroPanelTransition } from '../../../core/motion/portfolio-motion';
+import { HERO_PANELS } from '../../../domain/portfolio.data';
 import type {
   ChartType,
   HeroEffect,
   HeroPalette,
   HeroPanelId,
   HeroPanelTransition,
-} from '../../../../domain/portfolio/portfolio.types';
+} from '../../../domain/portfolio.types';
 
 export class HeroMonitorFacade {
   readonly panels = HERO_PANELS;

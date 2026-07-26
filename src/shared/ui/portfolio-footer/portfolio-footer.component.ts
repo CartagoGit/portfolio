@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { Locale, PublicLink } from '../../../../domain/portfolio/portfolio.types';
+import type { Locale, PublicLink } from '../../../domain/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-footer',

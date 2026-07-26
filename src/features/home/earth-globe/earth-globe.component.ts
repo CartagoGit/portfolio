@@ -9,8 +9,8 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { renderEarthFrame } from '../../../../core/portfolio/rendering/earth-globe-renderer';
-import type { EarthDepth } from '../../../../domain/portfolio/portfolio.types';
+import { renderEarthFrame } from '../../../core/rendering/earth-globe-renderer';
+import type { EarthDepth } from '../../../domain/portfolio.types';
 
 @Component({
   selector: 'app-earth-globe',
