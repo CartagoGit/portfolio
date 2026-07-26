@@ -9,7 +9,8 @@
   width: min(100%, 480px);
   max-width: 100%;
   margin: 1.15rem 0 0.7rem;
-  overflow: visible;
+  padding: 1.45rem 1.3rem 0.55rem;
+  overflow: hidden;
   user-select: none;
 
   &::before,
@@ -36,7 +37,7 @@
     align-items: center;
     gap: 0.8rem;
     min-width: max-content;
-    padding: 0 1.3rem 0.1rem;
+    padding: 0 0.05rem 0.1rem;
     animation: technology-marquee-scroll 82s linear infinite;
   }
   &:hover &__track {
