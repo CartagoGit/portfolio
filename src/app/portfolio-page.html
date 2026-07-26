@@ -41,9 +41,9 @@
   @if (page() === 'home') {
   <section id="main-content" class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eyebrow"><span></span>{{ copy().availability }}</p>
-      <h1 id="hero-title">Frontend systems<br /><em>built for</em><br />real work.</h1>
-      <p class="hero-signature">Mario Cabrero Volarich · Frontend product engineer</p>
+      <p class="eyebrow"><span></span>CartagoNova / personal frontend systems</p>
+      <h1 id="hero-title">Mario Cabrero<br /><em>Volarich</em></h1>
+      <p class="hero-signature">Cartago / CartagoNova · frontend product engineer</p>
       <p class="hero-role">{{ copy().role }}</p>
       <p class="hero-intro">{{ copy().intro }}</p>
       <div class="hero-actions">
@@ -67,12 +67,13 @@
             }
           </div>
           <div class="interface-canvas">
-            <div class="canvas-heading"><span>{{ activeHeroPanel() }} / CartagoGit stack</span><button type="button" (click)="setHeroPanel('overview')" aria-label="Return to Angular products">↻</button></div>
+            <div class="canvas-heading"><span><img [src]="selectedHeroPanel().icon" alt="" />{{ selectedHeroPanel().label }}</span><button type="button" (click)="setHeroPanel('overview')" aria-label="Return to Angular products">↻</button></div>
             <div class="canvas-cards">
               @for (panel of heroPanels.slice(0, 3); track panel.id) {
                 <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><b>{{ panel.metric }}</b><small>{{ panel.detail }}</small></button>
               }
             </div>
+            <p class="canvas-description">{{ selectedHeroPanel().detail }}</p>
             <div class="canvas-chart"><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Interactive performance chart"><path [class.workflows]="activeHeroPanel() === 'workflows'" [class.quality]="activeHeroPanel() === 'quality'" [class.mobile]="activeHeroPanel() === 'mobile'" d="M0 99 C34 89, 55 51, 93 70 S143 42, 185 54 S245 11, 284 37 S329 31, 360 8" /></svg></div>
           </div>
         </div>

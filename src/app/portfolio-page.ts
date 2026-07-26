@@ -61,11 +61,11 @@ export class PortfolioPage {
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly heroLayers = signal(['Angular 22', 'TypeScript', 'Ionic', 'Capacitor', 'MCP Vertex', 'Testing']);
-  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string }[] = [
-    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture' },
-    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer' },
-    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y' },
-    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android' },
+  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; icon: string }[] = [
+    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/angular.svg' },
+    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/typescript.svg' },
+    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/playwright.svg' },
+    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/ionic.svg' },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },
@@ -107,6 +107,9 @@ export class PortfolioPage {
 
   protected readonly selectedCapability = computed(
     () => this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
+  );
+  protected readonly selectedHeroPanel = computed(
+    () => this.heroPanels.find(({ id }) => id === this.activeHeroPanel()) ?? this.heroPanels[0],
   );
 
   protected readonly playgroundSteps: readonly { id: PlaygroundStep; label: string; hint: string }[] = [
