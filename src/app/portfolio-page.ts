@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import type { ElementRef, OnDestroy } from '@angular/core';
+import type { OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +8,6 @@ import {
   inject,
   PLATFORM_ID,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -19,8 +18,8 @@ import {
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
 } from '../domain/portfolio/portfolio.data';
-import { renderEarthFrame } from '../core/portfolio/rendering/earth-globe-renderer';
 import { nextHeroPanelTransition } from '../core/portfolio/motion/portfolio-motion';
+import { renderEarthFrame } from '../core/portfolio/rendering/earth-globe-renderer';
 import { PortfolioFooterComponent } from '../shared/portfolio/ui/portfolio-footer/portfolio-footer.component';
 import { CommandPaletteComponent } from '../shared/portfolio/ui/command-palette/command-palette.component';
 import { TechnologyMarqueeComponent } from '../features/portfolio/home/technology-marquee/technology-marquee.component';
@@ -187,12 +186,6 @@ export class PortfolioPage implements OnDestroy {
       this.updateSeo();
     });
     this.applyPreferredLocale();
-  }
-
-  @ViewChild('earthCanvas')
-  set earthCanvasRef(canvas: ElementRef<HTMLCanvasElement> | undefined) {
-    this.earthCanvas = canvas?.nativeElement;
-    if (this.earthCanvas) this.prepareEarthTexture();
   }
 
   protected setTheme(): void {
@@ -399,7 +392,6 @@ export class PortfolioPage implements OnDestroy {
 
   protected onEarthControlClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.changeEarthMotion();
     this.showEarthInFront();
   }
 
