@@ -247,9 +247,9 @@ export class PortfolioPage {
   }
 
   protected setHeroPanel(panel: HeroPanelId): void {
-    this.activeHeroPanel.set(null);
+    if (this.activeHeroPanel() === panel) return;
     this.heroEffect.set('idle');
-    window.setTimeout(() => this.activeHeroPanel.set(panel), 24);
+    this.activeHeroPanel.set(panel);
   }
 
   protected clearHeroPanel(): void {
@@ -315,7 +315,7 @@ export class PortfolioPage {
     if (!isPlatformBrowser(this.platformId) || this.earthTexture || this.earthLoading) return;
     this.earthLoading = true;
     const texture = new Image();
-    texture.src = '/images/cartagonova-earth-texture.png';
+    texture.src = '/images/cartagonova-earth-texture-hd.png';
     texture.onload = () => {
       const source = this.document.createElement('canvas');
       source.width = 1774;
