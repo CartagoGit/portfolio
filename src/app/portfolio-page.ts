@@ -29,6 +29,7 @@ import { TechnologyMarqueeComponent } from '../features/portfolio/home/technolog
 import { PortfolioHeaderComponent } from '../shared/portfolio/ui/portfolio-header/portfolio-header.component';
 import { ContactPageComponent } from '../features/portfolio/contact/contact-page.component';
 import { DockerPageComponent } from '../features/portfolio/docker/docker-page.component';
+import { DemosPageComponent } from '../features/portfolio/demos/demos-page.component';
 import type {
   CapabilityId,
   ChartType,
@@ -51,6 +52,7 @@ import type {
     PortfolioHeaderComponent,
     ContactPageComponent,
     DockerPageComponent,
+    DemosPageComponent,
     TechnologyMarqueeComponent,
   ],
   templateUrl: './portfolio-page.html',

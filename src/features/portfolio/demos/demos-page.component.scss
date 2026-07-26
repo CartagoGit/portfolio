@@ -1,0 +1,122 @@
+:host {
+  display: block;
+}
+.demos-page {
+  width: min(1180px, calc(100% - 3rem));
+  margin: auto;
+  padding: 2rem 0 5rem;
+  &__heading > p {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  &__heading > p:first-child,
+  .demos-page__game > div > p:first-child {
+    color: var(--cyan);
+    font: 0.65rem 'DM Mono';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  h2 {
+    margin: 0.6rem 0 1rem;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    line-height: 0.9;
+  }
+  h2 em {
+    color: var(--cyan);
+    font-style: normal;
+  }
+  &__links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+  &__links a {
+    display: grid;
+    gap: 0.65rem;
+    min-height: 180px;
+    padding: 1.2rem;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      transform 0.25s,
+      border-color 0.25s;
+  }
+  &__links a:hover {
+    border-color: var(--cyan);
+    transform: translateY(-6px);
+  }
+  &__links span,
+  &__links i {
+    color: var(--cyan);
+    font: 0.6rem 'DM Mono';
+    font-style: normal;
+  }
+  &__links p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  &__game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: clamp(1.3rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  &__game h3 {
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    margin: 0.5rem 0;
+  }
+  &__game p {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  &__game > b {
+    font-size: 2.4rem;
+  }
+  &__game small {
+    font: 0.6rem 'DM Mono';
+    color: var(--muted);
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+  }
+  &__grid button {
+    aspect-ratio: 1;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    transition:
+      transform 0.2s,
+      border-color 0.2s;
+  }
+  &__grid button:hover {
+    transform: scale(1.06);
+  }
+  &__grid .is-target {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px #32c8ff66;
+  }
+  &__grid .is-target i {
+    display: block;
+    width: 38%;
+    height: 38%;
+    margin: auto;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 20px var(--cyan);
+  }
+}
+@media (max-width: 760px) {
+  .demos-page {
+    width: min(100% - 1.7rem, 560px);
+    &__links,
+    &__game {
+      grid-template-columns: 1fr;
+    }
+  }
+}
