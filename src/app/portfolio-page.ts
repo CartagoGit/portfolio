@@ -19,7 +19,6 @@ import {
   TECHNOLOGY_MARQUEE,
 } from '../domain/portfolio/portfolio.data';
 import { nextHeroPanelTransition } from '../core/portfolio/motion/portfolio-motion';
-import { renderEarthFrame } from '../core/portfolio/rendering/earth-globe-renderer';
 import { PortfolioFooterComponent } from '../shared/portfolio/ui/portfolio-footer/portfolio-footer.component';
 import { CommandPaletteComponent } from '../shared/portfolio/ui/command-palette/command-palette.component';
 import { TechnologyMarqueeComponent } from '../features/portfolio/home/technology-marquee/technology-marquee.component';
@@ -73,25 +72,7 @@ export class PortfolioPage implements OnDestroy {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly platformId = inject(PLATFORM_ID);
-  private earthCanvas?: HTMLCanvasElement;
-  private earthTexture?: HTMLCanvasElement;
-  private earthFrame?: number;
-  private earthLastFrameAt?: number;
-  private earthLastRenderAt?: number;
-  private readonly earthRenderInterval = 1000 / 60;
   private heroPanelTimer?: number;
-  private earthAngle = 0;
-  private readonly earthMotion = {
-    speed: 0.00016,
-    targetSpeed: 0.00016,
-    axisX: 0.13,
-    axisY: -0.95,
-    axisZ: 0.28,
-    targetAxisX: 0.13,
-    targetAxisY: -0.95,
-    targetAxisZ: 0.28,
-  };
-  private earthLoading = false;
 
   protected readonly locale = signal<Locale>('en');
   protected readonly page = signal<PortfolioPageId>('home');
@@ -110,7 +91,6 @@ export class PortfolioPage implements OnDestroy {
   protected readonly heroPanelChanging = signal(false);
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
-  protected readonly earthSpinning = signal(false);
   protected readonly earthDepth = signal<
     'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'
   >('behind');
@@ -285,99 +265,8 @@ export class PortfolioPage implements OnDestroy {
     return 'linear-gradient(to top, #1678ff, #32c8ff)';
   }
 
-  protected startEarthSpin(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    this.earthSpinning.set(true);
-    this.prepareEarthTexture();
-    if (this.earthTexture && this.earthFrame === undefined) {
-      this.earthLastFrameAt = undefined;
-      this.earthLastRenderAt = undefined;
-      this.animateEarth(performance.now());
-    }
-  }
-
-  protected stopEarthSpin(): void {
-    this.earthSpinning.set(false);
-    if (this.earthFrame !== undefined) {
-      cancelAnimationFrame(this.earthFrame);
-      this.earthFrame = undefined;
-    }
-    this.earthLastFrameAt = undefined;
-    this.earthLastRenderAt = undefined;
-  }
-
-  private prepareEarthTexture(): void {
-    if (!isPlatformBrowser(this.platformId) || this.earthTexture || this.earthLoading) return;
-    this.earthLoading = true;
-    const texture = new Image();
-    texture.src = '/images/cartagonova-earth-texture-hd.png';
-    texture.onload = () => {
-      const source = this.document.createElement('canvas');
-      source.width = 2048;
-      source.height = 1024;
-      const context = source.getContext('2d');
-      if (!context) return;
-      context.imageSmoothingEnabled = true;
-      context.imageSmoothingQuality = 'high';
-      context.drawImage(texture, 0, 0, source.width, source.height);
-      this.earthTexture = source;
-      this.earthLoading = false;
-      if (this.earthSpinning() && this.earthFrame === undefined) {
-        this.earthLastFrameAt = undefined;
-        this.earthLastRenderAt = undefined;
-        this.animateEarth(performance.now());
-      }
-    };
-    texture.onerror = () => {
-      this.earthLoading = false;
-    };
-  }
-
-  private animateEarth(now: number): void {
-    if (!this.earthSpinning()) {
-      this.earthFrame = undefined;
-      return;
-    }
-    const previous = this.earthLastFrameAt ?? now;
-    const delta = Math.min(48, now - previous);
-    this.earthLastFrameAt = now;
-    const blend = 1 - Math.exp(-delta / 620);
-    this.earthMotion.speed += (this.earthMotion.targetSpeed - this.earthMotion.speed) * blend;
-    this.earthMotion.axisX += (this.earthMotion.targetAxisX - this.earthMotion.axisX) * blend;
-    this.earthMotion.axisY += (this.earthMotion.targetAxisY - this.earthMotion.axisY) * blend;
-    this.earthMotion.axisZ += (this.earthMotion.targetAxisZ - this.earthMotion.axisZ) * blend;
-    const axisLength = Math.hypot(
-      this.earthMotion.axisX,
-      this.earthMotion.axisY,
-      this.earthMotion.axisZ,
-    );
-    this.earthMotion.axisX /= axisLength;
-    this.earthMotion.axisY /= axisLength;
-    this.earthMotion.axisZ /= axisLength;
-    this.earthAngle += this.earthMotion.speed * delta;
-    if (
-      this.earthLastRenderAt === undefined ||
-      now - this.earthLastRenderAt >= this.earthRenderInterval
-    ) {
-      this.earthLastRenderAt = now;
-      this.renderEarth();
-    }
-    this.earthFrame = requestAnimationFrame((time) => this.animateEarth(time));
-  }
-
   ngOnDestroy(): void {
-    this.stopEarthSpin();
     if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
-  }
-
-  protected changeEarthMotion(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    const direction = this.earthMotion.targetSpeed >= 0 ? -1 : 1;
-    this.earthMotion.targetSpeed = direction * (0.00014 + Math.random() * 0.00032);
-    this.earthMotion.targetAxisX = -0.78 + Math.random() * 1.56;
-    this.earthMotion.targetAxisY = -0.84 + Math.random() * 1.68;
-    this.earthMotion.targetAxisZ = -0.68 + Math.random() * 1.36;
-    if (!this.earthSpinning()) this.startEarthSpin();
   }
 
   protected showEarthInFront(): void {
@@ -405,24 +294,6 @@ export class PortfolioPage implements OnDestroy {
       this.earthDepth.set('behind-ready');
       requestAnimationFrame(() => this.earthDepth.set('behind'));
     }, 140);
-  }
-
-  private renderEarth(): void {
-    const canvas = this.earthCanvas;
-    const texture = this.earthTexture;
-    if (!canvas || !texture) return;
-    const inFront =
-      this.earthDepth() === 'front-ready' ||
-      this.earthDepth() === 'front' ||
-      this.earthDepth() === 'out-front';
-    const { axisX, axisY, axisZ } = this.earthMotion;
-    renderEarthFrame(canvas, texture, {
-      angle: this.earthAngle,
-      axisX,
-      axisY,
-      axisZ,
-      foreground: inFront,
-    });
   }
 
   protected hitNeonTarget(index: number): void {
