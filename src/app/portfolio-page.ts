@@ -2,7 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, computed, ElementRef, HostListener, inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { siAngular, siBun, siCapacitor, siDocker, siIonic, siTypescript, siVitest } from 'simple-icons';
+import { siAngular, siBun, siCapacitor, siClaude, siDocker, siElectron, siEslint, siFirebase, siGit, siGithub, siGithubactions, siGithubcopilot, siGitlab, siIonic, siJest, siKotlin, siLinux, siMaterialdesign, siMinimax, siModelcontextprotocol, siMongodb, siMongoose, siNestjs, siNodedotjs, siNpm, siNx, siOpencode, siPrettier, siPrimeng, siPrisma, siReact, siReactivex, siSass, siStorybook, siTailwindcss, siTypescript, siVite, siVitest, siVuedotjs, siX, siZod } from 'simple-icons';
 
 type Locale = 'en' | 'es';
 type PortfolioPageId = 'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
@@ -68,6 +68,7 @@ export class PortfolioPage {
   protected readonly earthSpinning = signal(false);
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
+  protected readonly socialIcons = { github: siGithub, npm: siNpm };
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
     { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#dd0031' },
     { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
@@ -75,6 +76,13 @@ export class PortfolioPage {
     { id: 'mobile', label: 'Ionic + Capacitor', metric: 'MOB', detail: 'A shared product system delivered to web and native mobile surfaces.', iconPath: siIonic.path || siCapacitor.path, color: '#3880ff' },
     { id: 'tooling', label: 'Bun', metric: 'BUN', detail: 'A fast JavaScript runtime and toolkit used to keep local feedback loops short.', iconPath: siBun.path, color: '#f9f1e8' },
     { id: 'delivery', label: 'Docker', metric: 'CTR', detail: 'Containerised delivery for reproducible environments and public image distribution.', iconPath: siDocker.path, color: '#2496ed' },
+  ];
+  protected readonly technologyMarquee: readonly { label: string; iconPath: string; color: string }[] = [
+    { label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' }, { label: 'Angular', iconPath: siAngular.path, color: '#dd0031' }, { label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' }, { label: 'Ionic', iconPath: siIonic.path, color: '#3880ff' }, { label: 'Capacitor', iconPath: siCapacitor.path, color: '#119eff' }, { label: 'Angular Material', iconPath: siMaterialdesign.path, color: '#757575' }, { label: 'Sass', iconPath: siSass.path, color: '#cc6699' },
+    { label: 'Bun', iconPath: siBun.path, color: '#f9f1e1' }, { label: 'Node.js', iconPath: siNodedotjs.path, color: '#339933' }, { label: 'NestJS', iconPath: siNestjs.path, color: '#e0234e' }, { label: 'npm', iconPath: siNpm.path, color: '#cb3837' }, { label: 'Docker', iconPath: siDocker.path, color: '#2496ed' }, { label: 'Git', iconPath: siGit.path, color: '#f05032' }, { label: 'GitLab CI', iconPath: siGitlab.path, color: '#fc6d26' }, { label: 'Vitest', iconPath: siVitest.path, color: '#6e9f18' }, { label: 'Jest', iconPath: siJest.path, color: '#c21325' }, { label: 'GitHub Actions', iconPath: siGithubactions.path, color: '#2088ff' },
+    { label: 'Vue', iconPath: siVuedotjs.path, color: '#4fc08d' }, { label: 'React', iconPath: siReact.path, color: '#61dafb' }, { label: 'Electron', iconPath: siElectron.path, color: '#47848f' }, { label: 'Tailwind CSS', iconPath: siTailwindcss.path, color: '#06b6d4' }, { label: 'PrimeNG', iconPath: siPrimeng.path, color: '#dd0031' }, { label: 'Storybook', iconPath: siStorybook.path, color: '#ff4785' }, { label: 'Vite', iconPath: siVite.path, color: '#646cff' }, { label: 'Nx', iconPath: siNx.path, color: '#143055' },
+    { label: 'MongoDB', iconPath: siMongodb.path, color: '#47a248' }, { label: 'Mongoose', iconPath: siMongoose.path, color: '#880000' }, { label: 'Prisma', iconPath: siPrisma.path, color: '#2d3748' }, { label: 'Zod', iconPath: siZod.path, color: '#3e67b1' }, { label: 'Firebase', iconPath: siFirebase.path, color: '#dd2c00' }, { label: 'Linux', iconPath: siLinux.path, color: '#fcc624' }, { label: 'Kotlin', iconPath: siKotlin.path, color: '#7f52ff' },
+    { label: 'Claude', iconPath: siClaude.path, color: '#d97757' }, { label: 'MiniMax', iconPath: siMinimax.path, color: '#e8e8e8' }, { label: 'Grok', iconPath: siX.path, color: '#e8e8e8' }, { label: 'OpenCode', iconPath: siOpencode.path, color: '#e8e8e8' }, { label: 'GitHub Copilot', iconPath: siGithubcopilot.path, color: '#ffffff' }, { label: 'Model Context Protocol', iconPath: siModelcontextprotocol.path, color: '#ffffff' }, { label: 'ESLint', iconPath: siEslint.path, color: '#4b32c3' }, { label: 'Prettier', iconPath: siPrettier.path, color: '#f7b93e' }, { label: 'GitHub', iconPath: siGithub.path, color: '#ffffff' },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },
@@ -146,12 +154,12 @@ export class PortfolioPage {
 
   protected readonly copy = computed(() => this.locale() === 'en' ? {
     navWork: 'Selected work', navLab: 'Frontend lab', navAbout: 'Approach',
-    availability: 'Available for thoughtful product work', viewWork: 'View selected work', contact: 'Start a conversation',
+    availability: 'Available for thoughtful product work', viewWork: 'View examples', contact: 'Start a conversation',
     role: 'Frontend engineer building operational web and mobile products.',
     intro: 'I combine product-focused frontend development with TypeScript architecture, testing and developer tooling.',
   } : {
     navWork: 'Trabajo seleccionado', navLab: 'Laboratorio', navAbout: 'Enfoque',
-    availability: 'Disponible para proyectos de producto', viewWork: 'Ver trabajo seleccionado', contact: 'Hablemos',
+    availability: 'Disponible para proyectos de producto', viewWork: 'Ver ejemplos', contact: 'Hablemos',
     role: 'Frontend engineer que construye productos web y móviles operacionales.',
     intro: 'Combino desarrollo frontend orientado a producto con arquitectura TypeScript, testing y tooling para developers.',
   });
@@ -290,9 +298,9 @@ export class PortfolioPage {
     if (!context) return;
     const output = context.createImageData(size, size);
     const radius = size / 2;
-    const axisX = .38;
-    const axisY = -.52;
-    const axisZ = .76;
+    const axisX = .13;
+    const axisY = -.95;
+    const axisZ = .28;
     const angle = elapsed * .00023;
     const cosine = Math.cos(-angle);
     const sine = Math.sin(-angle);
