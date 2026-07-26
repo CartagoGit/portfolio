@@ -103,6 +103,11 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	protected returnEarthBehind(event?: MouseEvent): void {
+		if (this.isEarthTarget(event?.relatedTarget)) return;
 		this.earth.returnBehind(event?.target);
+	}
+
+	private isEarthTarget(target: EventTarget | null | undefined): boolean {
+		return target instanceof Element && target.closest('.orb-one') !== null;
 	}
 }
