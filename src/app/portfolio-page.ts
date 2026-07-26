@@ -24,6 +24,7 @@ import {
 } from './portfolio/portfolio.data';
 import { renderEarthFrame } from './portfolio/earth-globe-renderer';
 import { nextHeroPanelTransition } from './portfolio/portfolio-motion';
+import { PortfolioFooterComponent } from './portfolio/components/portfolio-footer/portfolio-footer.component';
 import type {
   CapabilityId,
   ChartType,
@@ -39,7 +40,7 @@ import type {
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [RouterLink],
+  imports: [RouterLink, PortfolioFooterComponent],
   templateUrl: './portfolio-page.html',
   styleUrl: './portfolio-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -121,8 +121,14 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLCanvasElement): GlobeP
   context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
   context.activeTexture(context.TEXTURE0);
   context.bindTexture(context.TEXTURE_2D, texture);
-  context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, true);
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR_MIPMAP_LINEAR);
+  // The shader maps texture V=0 to the screen's north pole, so source rows
+  // must stay in their original top-to-bottom order.
+  context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
+  context.texParameteri(
+    context.TEXTURE_2D,
+    context.TEXTURE_MIN_FILTER,
+    context.LINEAR_MIPMAP_LINEAR,
+  );
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.REPEAT);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);

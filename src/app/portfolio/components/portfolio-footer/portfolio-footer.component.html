@@ -1,0 +1,21 @@
+<footer class="portfolio-footer">
+  <a class="portfolio-footer__brand" [routerLink]="['/', locale()]">
+    <span class="portfolio-footer__mark">C.</span><span>Cartago</span>
+  </a>
+  <p class="portfolio-footer__copyright">© 2026 Mario Cabrero Volarich.</p>
+  <nav class="portfolio-footer__links" aria-label="Public links">
+    @for (link of links(); track link.href) {
+      <a class="portfolio-footer__link" [href]="link.href" target="_blank" rel="noreferrer">
+        @if (link.imageSrc) {
+          <img class="portfolio-footer__icon" [src]="link.imageSrc" alt="" />
+        } @else {
+          <svg class="portfolio-footer__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" />
+          </svg>
+        }
+        <span>{{ link.label }}</span>
+      </a>
+    }
+  </nav>
+  <a class="portfolio-footer__top" href="#main-content">Back to top ↑</a>
+</footer>

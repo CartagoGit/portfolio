@@ -4173,6 +4173,9 @@ h3 {
   flex: 0 0 auto;
   padding: 0.65rem 0 0.85rem;
 }
+.portfolio:has(.hero) > app-portfolio-footer {
+  flex: 0 0 auto;
+}
 .interface-shell {
   justify-self: end;
   margin-left: auto;
