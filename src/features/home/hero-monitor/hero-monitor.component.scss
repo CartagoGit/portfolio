@@ -1,3 +1,1085 @@
-:host {
+@use '../../../styles/motion';
+
+app-hero-monitor {
 	display: contents;
+}
+/* Interactive monitor states: technology rail, telemetry dashboard and animated detail panel. */
+.interface-shell {
+	width: min(calc(100% - 76px), 600px);
+	aspect-ratio: 16 / 10;
+	transform: perspective(1500px) rotateY(-26deg) rotateX(7deg)
+		rotateZ(-1.5deg);
+	transform-origin: center right;
+}
+.hero-composition:hover .interface-shell {
+	width: min(calc(100% - 76px), 600px);
+	transform: perspective(1500px) rotateY(0) rotateX(0) rotateZ(0) scale(1.045);
+}
+.monitor-header {
+	display: block;
+	height: 112px;
+	margin: 0 -0.8rem 0.65rem;
+	background: #07111d;
+}
+.monitor-header > .hero-banner {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	object-position: center;
+	background: #07111d;
+}
+.interface-body {
+	display: grid;
+	grid-template-columns: 104px minmax(0, 1fr);
+	gap: 0;
+	flex: 1;
+	min-height: 0;
+}
+.monitor-selector {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 5px;
+	background: color-mix(in srgb, var(--surface-2) 94%, #07111d);
+	border-right: 1px solid var(--line);
+}
+.monitor-selector button {
+	min-height: 0;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 0.38rem;
+	text-align: left;
+	padding: 0.25rem 0.35rem;
+}
+.monitor-selector button span {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font: 0.46rem 'DM Mono';
+	color: var(--muted);
+}
+.monitor-selector .core-icon {
+	width: 13px;
+	height: 13px;
+	flex: none;
+}
+.monitor-selector button.active span,
+.monitor-selector button:hover span {
+	color: var(--ink);
+}
+.interface-canvas {
+	position: relative;
+	min-width: 0;
+	overflow: hidden;
+	padding-left: 0.65rem;
+}
+.dashboard-view {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	transition:
+		opacity 0.28s ease,
+		transform 0.36s cubic-bezier(0.2, 0.9, 0.2, 1),
+		filter 0.3s ease;
+}
+.dashboard-view.panel-hidden {
+	opacity: 0;
+	transform: translateX(-14px) scale(0.97);
+	filter: blur(3px);
+	pointer-events: none;
+}
+.dashboard-view .dashboard-caption {
+	margin: 0.1rem 0 0.45rem;
+	min-height: 0;
+	color: var(--muted);
+	font-size: 0.58rem;
+}
+.chart-workspace {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 30px;
+	gap: 0.35rem;
+	flex: 1;
+	min-height: 0;
+}
+.chart-workspace .canvas-chart {
+	min-height: 0;
+	height: 100%;
+}
+.chart-symbols {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+.chart-symbols button,
+.effect-controls button {
+	display: grid;
+	place-items: center;
+	min-height: 0;
+	flex: 1;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	background: var(--surface-2);
+	color: var(--cyan);
+	font: 0.72rem 'DM Mono';
+}
+.chart-symbols button:hover,
+.effect-controls button:hover {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 12%, transparent);
+	transform: scale(1.05);
+}
+.technology-detail {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 32px;
+	grid-template-rows: 1fr auto;
+	gap: 0.6rem;
+	padding: 0.65rem 0.1rem 0.15rem 0.65rem;
+	color: #f3f8ff;
+	background: linear-gradient(145deg, #0a1930e8, #07101ee8);
+}
+.technology-detail > div:first-child {
+	align-self: center;
+}
+.technology-detail .core-icon {
+	width: 36px;
+	height: 36px;
+	filter: none;
+}
+.technology-detail h3 {
+	margin: 0.35rem 0;
+	font-size: 1.25rem;
+	color: #fff;
+	letter-spacing: -0.04em;
+}
+.technology-detail p {
+	margin: 0;
+	max-width: 280px;
+	color: #e0ecfa;
+	font-size: 0.69rem;
+	line-height: 1.55;
+}
+.effect-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+.detail-retry {
+	grid-column: 1/-1;
+	justify-self: end;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: transparent;
+	color: #fff;
+	padding: 0.35rem 0.5rem;
+	font: 0.56rem 'DM Mono';
+}
+.detail-retry:hover {
+	border-color: var(--cyan);
+	color: var(--cyan);
+	transform: translateX(-2px);
+}
+.technology-detail[data-effect='shake'] > div:first-child {
+	animation: technology-shake 0.5s ease;
+}
+.technology-detail[data-effect='glitch'] > div:first-child {
+	animation: technology-glitch 0.55s steps(2, end);
+}
+.technology-detail[data-effect='float'] > div:first-child {
+	animation: technology-float 0.8s ease-in-out;
+}
+@keyframes technology-shake {
+	20%,
+	60% {
+		transform: translateX(-7px);
+	}
+	40%,
+	80% {
+		transform: translateX(7px);
+	}
+}
+@keyframes technology-glitch {
+	20% {
+		transform: translate(5px, -2px);
+		filter: hue-rotate(80deg);
+	}
+	50% {
+		transform: translate(-4px, 2px);
+		filter: contrast(1.8);
+	}
+	70% {
+		transform: translate(3px, 0);
+	}
+}
+@keyframes technology-float {
+	50% {
+		transform: translateY(-9px) scale(1.02);
+		filter: drop-shadow(0 10px 10px #36caff55);
+	}
+}
+@media (max-width: 900px) {
+	.interface-shell {
+		width: calc(100% - 1.7rem);
+		transform: perspective(1200px) rotateY(-13deg) rotateX(5deg);
+	}
+	.hero-composition:hover .interface-shell {
+		width: calc(100% - 1.7rem);
+		transform: perspective(1200px) rotateY(0) rotateX(0) scale(1.01);
+	}
+	.monitor-header {
+		height: 76px;
+	}
+	.interface-body {
+		grid-template-columns: 82px minmax(0, 1fr);
+	}
+	.monitor-selector button span {
+		font-size: 0.4rem;
+	}
+	.monitor-selector .core-icon {
+		width: 11px;
+		height: 11px;
+	}
+	.technology-detail {
+		padding: 0.4rem 0.05rem 0.1rem 0.4rem;
+	}
+	.technology-detail h3 {
+		font-size: 1rem;
+	}
+	.technology-detail p {
+		font-size: 0.58rem;
+	}
+	.technology-detail .core-icon {
+		width: 27px;
+		height: 27px;
+	}
+}
+/* Retain crisp UI while the larger monitor rotates into its frontal state. */
+.interface-shell {
+	width: min(calc(100% - 12px), 660px);
+	backdrop-filter: none;
+	transform: perspective(1600px) rotateY(-30deg) rotateX(8deg)
+		rotateZ(-1.5deg);
+	will-change: transform;
+}
+.hero-composition:hover .interface-shell {
+	width: min(calc(100% - 12px), 660px);
+	transform: perspective(1600px) rotateY(0) rotateX(0) rotateZ(0);
+	box-shadow:
+		0 34px 90px #0008,
+		var(--neon);
+}
+.interface-canvas {
+	padding: 0.8rem 1rem 1rem;
+}
+.canvas-chart path {
+	transition:
+		d 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+		stroke 0.35s ease,
+		transform 0.4s ease;
+}
+.technology-detail {
+	padding: 1rem 1rem 0.65rem;
+	color: #fff;
+}
+.technology-detail p {
+	color: #f1f7ff;
+	font-size: 0.75rem;
+	line-height: 1.65;
+}
+.technology-detail h3 {
+	font-size: 1.45rem;
+}
+.technology-detail .core-icon {
+	width: 42px;
+	height: 42px;
+}
+.technology-detail > div:first-child {
+	padding-right: 0.35rem;
+}
+.technology-detail[data-effect='shake'] > div:first-child,
+.technology-detail[data-effect='glitch'] > div:first-child,
+.technology-detail[data-effect='float'] > div:first-child {
+	transform-origin: center;
+}
+.technology-token:hover,
+.technology-token:focus-visible {
+	width: var(--label-width);
+	gap: 0.62rem;
+}
+.technology-token:hover svg,
+.technology-token:focus-visible svg {
+	transform: scale(1.12);
+}
+.technology-token:hover b,
+.technology-token:focus-visible b {
+	max-width: 190px;
+	opacity: 1;
+	transform: translateX(0);
+}
+.technology-token:focus:not(:focus-visible) {
+	width: 27px;
+	gap: 0;
+	filter: drop-shadow(0 4px 7px #0000);
+}
+.technology-token:focus:not(:focus-visible) b {
+	max-width: 0;
+	opacity: 0;
+	transform: translateX(-7px);
+}
+@media (max-width: 900px) {
+	.interface-shell {
+		width: calc(100% - 1.7rem);
+		transform: perspective(1200px) rotateY(-18deg) rotateX(6deg);
+	}
+	.hero-composition:hover .interface-shell {
+		width: calc(100% - 1.7rem);
+		transform: perspective(1200px) rotateY(0) rotateX(0);
+	}
+	.interface-canvas {
+		padding: 0.5rem 0.65rem 0.65rem;
+	}
+	.technology-detail {
+		padding: 0.65rem;
+	}
+	.technology-detail p {
+		font-size: 0.62rem;
+	}
+	.technology-detail h3 {
+		font-size: 1.1rem;
+	}
+}
+/* Wider frontal monitor and value-based chart palettes. */
+.interface-shell {
+	width: min(calc(100% - 70px), 620px);
+}
+.hero-composition:hover .interface-shell {
+	width: min(calc(100% + 130px), 780px);
+	transform: perspective(1600px) rotateY(0) rotateX(0) rotateZ(0);
+}
+.monitor-banner-link {
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+.monitor-banner-link:hover .hero-banner {
+	filter: brightness(1.1) saturate(1.12);
+}
+.canvas-chart {
+	--chart-low: #1678ff;
+	--chart-high: #32c8ff;
+}
+.canvas-chart[data-palette='heat'] {
+	--chart-low: #7f1d1d;
+	--chart-high: #ffcf4a;
+}
+.canvas-chart[data-palette='lime'] {
+	--chart-low: #256c5d;
+	--chart-high: #d8ff78;
+}
+.canvas-chart > span {
+	background: linear-gradient(to top, var(--chart-low), var(--chart-high));
+	transition:
+		height 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+		background 0.4s ease,
+		transform 0.4s ease;
+}
+.canvas-chart path {
+	stroke: var(--chart-high) !important;
+}
+.canvas-chart[data-chart='dots'] span {
+	width: 13px;
+	min-height: 13px;
+	border-radius: 50%;
+	background: var(--chart-high);
+	box-shadow: 0 0 10px color-mix(in srgb, var(--chart-high) 55%, transparent);
+}
+.canvas-chart[data-chart='dots'] svg {
+	display: none;
+}
+.canvas-chart[data-chart='pulse'] {
+	background:
+		radial-gradient(
+			circle at 50% 100%,
+			color-mix(in srgb, var(--chart-high) 26%, transparent),
+			transparent 58%
+		),
+		repeating-linear-gradient(
+			to bottom,
+			transparent 0 31px,
+			color-mix(in srgb, var(--line) 70%, transparent) 32px
+		),
+		var(--surface);
+}
+.canvas-chart[data-chart='pulse'] span {
+	border-radius: 999px;
+	animation: chart-pulse 1.7s ease-in-out infinite;
+}
+.canvas-chart[data-chart='pulse'] span:nth-child(2) {
+	animation-delay: 0.15s;
+}
+.canvas-chart[data-chart='pulse'] span:nth-child(3) {
+	animation-delay: 0.3s;
+}
+.canvas-chart[data-chart='pulse'] span:nth-child(4) {
+	animation-delay: 0.45s;
+}
+.canvas-chart[data-chart='pulse'] span:nth-child(5) {
+	animation-delay: 0.6s;
+}
+.canvas-chart[data-chart='pulse'] svg {
+	display: none;
+}
+@keyframes chart-pulse {
+	50% {
+		filter: brightness(1.45);
+		transform: scaleY(0.92);
+		transform-origin: bottom;
+	}
+}
+.palette-controls {
+	grid-column: 1/-1;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.35rem;
+}
+.palette-controls button {
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: var(--surface-2);
+	color: #e8f4ff;
+	padding: 0.34rem 0.25rem;
+	font: 0.52rem 'DM Mono';
+}
+.palette-controls button:first-child {
+	background: linear-gradient(135deg, #1678ff, #32c8ff);
+}
+.palette-controls button:nth-child(2) {
+	background: linear-gradient(135deg, #7f1d1d, #ffcf4a);
+}
+.palette-controls button:last-child {
+	background: linear-gradient(135deg, #256c5d, #d8ff78);
+	color: #06101d;
+}
+.palette-controls button.active {
+	box-shadow:
+		0 0 0 1px #fff,
+		0 0 14px var(--cyan);
+	transform: translateY(-2px);
+}
+.technology-detail[data-effect='spectrum'] > div:first-child {
+	animation: technology-spectrum 1.1s ease-in-out;
+}
+@keyframes technology-spectrum {
+	0%,
+	100% {
+		filter: hue-rotate(0deg);
+	}
+	50% {
+		filter: hue-rotate(170deg) saturate(1.8);
+	}
+}
+@media (max-width: 900px) {
+	.interface-shell {
+		width: calc(100% - 1.7rem);
+	}
+	.hero-composition:hover .interface-shell {
+		width: calc(100% - 1.7rem);
+	}
+	.hero-chart-switcher {
+		flex-wrap: wrap;
+	}
+	.hero-chart-switcher button {
+		flex: 1 1 auto;
+	}
+	.palette-controls button {
+		font-size: 0.45rem;
+	}
+}
+/* Expanded monitor controls scale with the frontal state; technology swaps use a deliberate 3D wipe. */
+.temperature-toggle {
+	color: #fff0a6 !important;
+	background: linear-gradient(135deg, #7f1d1d, #ffcf4a) !important;
+}
+.hero-composition:hover .monitor-selector {
+	padding: 8px;
+}
+.hero-composition:hover .monitor-selector button {
+	padding: 0.42rem 0.5rem;
+	gap: 0.5rem;
+}
+.hero-composition:hover .monitor-selector button span {
+	font-size: 0.56rem;
+}
+.hero-composition:hover .monitor-selector .core-icon {
+	width: 18px;
+	height: 18px;
+}
+.monitor-selector,
+.monitor-selector button,
+.monitor-selector button span,
+.monitor-selector .core-icon {
+	transition:
+		padding 0.4s ease,
+		gap 0.4s ease,
+		font-size 0.4s ease,
+		width 0.4s ease,
+		height 0.4s ease,
+		transform 0.3s ease;
+}
+.technology-detail::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		110deg,
+		transparent 15%,
+		#5be3ff45 45%,
+		transparent 72%
+	);
+	transform: translateX(-115%);
+	animation: technology-sweep 0.68s 0.08s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	pointer-events: none;
+}
+.technology-detail > div,
+.technology-detail .effect-controls,
+.technology-detail .palette-controls {
+	position: relative;
+	z-index: 1;
+}
+@keyframes technology-sweep {
+	to {
+		transform: translateX(115%);
+	}
+}
+@media (max-width: 900px) {
+	.hero-composition:hover .monitor-selector {
+		padding: 5px;
+	}
+	.hero-composition:hover .monitor-selector button {
+		padding: 0.25rem 0.3rem;
+	}
+	.hero-composition:hover .monitor-selector button span {
+		font-size: 0.43rem;
+	}
+	.hero-composition:hover .monitor-selector .core-icon {
+		width: 13px;
+		height: 13px;
+	}
+}
+/* Full-width chart type rail and an explicit temperature icon in the metric controls. */
+.monitor-selector img.core-icon,
+.technology-detail img.core-icon {
+	object-fit: contain;
+	filter: none;
+}
+.hero-chart-switcher {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
+	width: 100%;
+	gap: 0.32rem;
+}
+.hero-chart-switcher button {
+	width: 100%;
+	padding: 0.36rem 0.28rem;
+}
+.chart-symbols .temperature-icon {
+	background: conic-gradient(
+		from 210deg,
+		#2461b3,
+		#35cfff,
+		#ffe16b,
+		#ff4d4d,
+		#2461b3
+	);
+	color: #fff;
+	border-color: #ffe16b;
+}
+.chart-symbols .temperature-icon.active {
+	box-shadow:
+		0 0 0 1px #fff,
+		0 0 15px #ffb84d;
+}
+.canvas-chart[data-chart='wave'] svg {
+	display: block;
+}
+.canvas-chart[data-chart='wave'] span {
+	height: 3px !important;
+	opacity: 0.16;
+}
+.canvas-chart[data-chart='wave'] path {
+	stroke-dasharray: 9 7;
+	animation: wave-travel 1.8s linear infinite;
+}
+.canvas-chart[data-chart='grid'] {
+	background:
+		linear-gradient(
+			135deg,
+			color-mix(in srgb, var(--chart-high) 16%, transparent),
+			transparent
+		),
+		repeating-linear-gradient(
+			0deg,
+			var(--line) 0 1px,
+			transparent 1px 24px
+		),
+		repeating-linear-gradient(
+			90deg,
+			var(--line) 0 1px,
+			transparent 1px 24px
+		),
+		var(--surface);
+}
+.canvas-chart[data-chart='grid'] span {
+	width: 15px;
+	min-height: 15px;
+	border-radius: 3px;
+}
+.canvas-chart[data-chart='grid'] svg {
+	display: none;
+}
+@keyframes wave-travel {
+	to {
+		stroke-dashoffset: -64;
+	}
+}
+@media (max-width: 900px) {
+	.hero-chart-switcher {
+		grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+		gap: 0.22rem;
+	}
+	.hero-chart-switcher button {
+		font-size: 0.44rem;
+		padding: 0.28rem 0.14rem;
+	}
+}
+
+/* The monitor keeps one physical size: depth is communicated only through its 3D axis. */
+.interface-shell,
+.hero-composition:hover .interface-shell {
+	width: min(calc(100% + 130px), 780px);
+	transition:
+		transform 0.68s cubic-bezier(0.16, 0.94, 0.25, 1),
+		box-shadow 0.4s ease;
+	transform-origin: center right;
+}
+.interface-shell {
+	transform: perspective(1600px) rotateY(-30deg) rotateX(8deg)
+		rotateZ(-1.5deg);
+}
+.hero-composition:hover .interface-shell {
+	transform: perspective(1600px) rotateY(0) rotateX(0) rotateZ(0);
+	box-shadow:
+		0 34px 90px #0008,
+		var(--neon);
+}
+
+/* Header: a square orbital control and the native-ratio CartagoNova banner. */
+.monitor-header {
+	display: grid;
+	grid-template-columns: clamp(78px, 13vw, 150px) minmax(0, 1fr);
+	align-items: center;
+	height: auto;
+	margin: 0 -0.8rem 0.65rem;
+	overflow: hidden;
+	background: #07111d;
+	border-top: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+.earth-motion-control {
+	width: 100%;
+	aspect-ratio: 1;
+	display: grid;
+	place-content: center;
+	gap: 0.2rem;
+	align-self: center;
+	border: 0;
+	border-right: 1px solid var(--line);
+	background: radial-gradient(circle at 35% 30%, #174d83, #07111d 67%);
+	color: #8eeaff;
+	font-family: 'DM Mono', monospace;
+	cursor: pointer;
+}
+.earth-motion-control span {
+	font-size: 1.55rem;
+	line-height: 1;
+	text-shadow: 0 0 13px #44dfff;
+}
+.earth-motion-control small {
+	font-size: 0.49rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+.earth-motion-control:hover,
+.earth-motion-control:focus-visible {
+	background: radial-gradient(circle at 35% 30%, #2477af, #07111d 70%);
+	color: #fff;
+	box-shadow:
+		inset 0 0 0 1px #6eeaff,
+		0 0 18px #28bbff66;
+	transform: none;
+}
+.earth-motion-control:active span {
+	transform: rotate(140deg);
+	transition: transform 0.55s cubic-bezier(0.16, 0.94, 0.25, 1);
+}
+.monitor-banner-link {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 2036 / 597;
+	overflow: hidden;
+	background: #07111d;
+}
+.monitor-header .monitor-banner-link .hero-banner {
+	position: relative;
+	inset: auto;
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	margin: 0;
+	object-fit: cover;
+	object-position: center;
+	opacity: 1;
+	mix-blend-mode: normal;
+	border: 0;
+	filter: none;
+	transform: none;
+}
+.monitor-banner-link:hover .hero-banner {
+	filter: brightness(1.1) saturate(1.12);
+	transform: none;
+}
+
+@media (max-width: 900px) {
+	.interface-shell,
+	.hero-composition:hover .interface-shell {
+		width: calc(100% - 1.7rem);
+		transform-origin: center right;
+	}
+	.interface-shell {
+		transform: perspective(1200px) rotateY(-18deg) rotateX(6deg);
+	}
+	.hero-composition:hover .interface-shell {
+		transform: perspective(1200px) rotateY(0) rotateX(0);
+	}
+	.monitor-header {
+		grid-template-columns: 82px minmax(0, 1fr);
+	}
+	.earth-motion-control span {
+		font-size: 1.2rem;
+	}
+	.earth-motion-control small {
+		font-size: 0.42rem;
+	}
+}
+
+/* The square control is the Earth button; the large globe itself remains outside the monitor. */
+.orb-one {
+	pointer-events: none;
+	cursor: default;
+}
+.earth-motion-control {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	background:
+		radial-gradient(
+			circle at 32% 28%,
+			transparent 18%,
+			#00142a1c 48%,
+			#000814bb 100%
+		),
+		url('/images/cartagonova-earth-texture-hd.png') center / auto 100%
+			no-repeat,
+		#09234a;
+	color: transparent;
+}
+.earth-motion-control::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: radial-gradient(
+		circle at 31% 27%,
+		#c5f7ff33 0 8%,
+		transparent 25%,
+		#00152d20 55%,
+		#000814a8 100%
+	);
+	pointer-events: none;
+}
+.earth-motion-control:hover,
+.earth-motion-control:focus-visible {
+	background:
+		radial-gradient(
+			circle at 32% 28%,
+			transparent 18%,
+			#00142a1c 48%,
+			#000814bb 100%
+		),
+		url('/images/cartagonova-earth-texture-hd.png') 58% center / auto 108%
+			no-repeat,
+		#09234a;
+	box-shadow:
+		inset 0 0 0 1px #6eeaff,
+		0 0 18px #28bbff66;
+}
+.earth-motion-control[aria-pressed='true'] {
+	box-shadow:
+		inset 0 0 0 1px #e9fcff,
+		0 0 24px #28bbff99;
+}
+.monitor-banner-link.is-disabled {
+	cursor: default;
+}
+.earth-motion-control span,
+.earth-motion-control small {
+	display: none;
+}
+
+/* Keep the globe control stable and give both monitor rails the same exact width. */
+.earth-motion-control:hover,
+.earth-motion-control:focus-visible {
+	background:
+		radial-gradient(
+			circle at 32% 28%,
+			transparent 18%,
+			#00142a1c 48%,
+			#000814bb 100%
+		),
+		url('/images/cartagonova-earth-texture-hd.png') center / auto 100%
+			no-repeat,
+		#09234a;
+}
+.monitor-header,
+.interface-body {
+	--earth-control-width: clamp(78px, 13vw, 150px);
+}
+.monitor-header {
+	grid-template-columns: var(--earth-control-width) minmax(0, 1fr);
+}
+.interface-body {
+	grid-template-columns: var(--earth-control-width) minmax(0, 1fr);
+}
+.monitor-selector {
+	width: auto;
+}
+.monitor-selector button {
+	width: 100%;
+}
+.monitor-selector button span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Fade through depth without positional movement: lock translation and animate scale only. */
+.orb-one {
+	animation: none !important;
+	opacity: 1;
+	transform: none !important;
+	translate: none !important;
+	scale: 1;
+	transform-origin: center center;
+	transition:
+		opacity 0.2s ease,
+		scale 0.26s cubic-bezier(0.16, 0.94, 0.25, 1);
+	will-change: opacity, scale;
+}
+.orb-one.earth-out-behind {
+	z-index: 1;
+	animation: none !important;
+	opacity: 0;
+	scale: 0.92;
+}
+.orb-one.earth-front-ready {
+	z-index: 5;
+	animation: none !important;
+	opacity: 0;
+	scale: 0.92;
+}
+.orb-one.earth-front {
+	z-index: 5;
+	animation: none !important;
+	opacity: 1;
+	scale: 1.14;
+}
+.orb-one.earth-out-front {
+	z-index: 5;
+	animation: none !important;
+	opacity: 0;
+	scale: 0.92;
+}
+.orb-one.earth-behind-ready {
+	z-index: 1;
+	animation: none !important;
+	opacity: 0;
+	scale: 0.92;
+}
+
+/* Dashboard is never exposed while a technology card is being replaced. */
+.dashboard-view {
+	@include motion.composited(opacity, transform);
+	@include motion.opacity-transform-transition(0.22s);
+}
+
+.dashboard-view.panel-hidden {
+	filter: none;
+	transform: translate3d(-10px, 0, 0) scale(0.985);
+}
+
+.dashboard-view.swap-hidden {
+	visibility: hidden !important;
+	opacity: 0 !important;
+	transition: none !important;
+}
+
+/* Three deliberately different transitions, alternated without repetition. */
+.technology-detail {
+	@include motion.composited(transform, opacity);
+}
+
+.technology-detail[data-transition='slide'] {
+	animation: technology-slide-in 0.42s motion.$entrance-ease both !important;
+}
+.technology-detail[data-transition='flip'] {
+	animation: technology-flip-in 0.48s motion.$entrance-ease both !important;
+}
+.technology-detail[data-transition='scan'] {
+	animation: technology-scan-in 0.44s motion.$entrance-ease both !important;
+}
+.technology-detail[data-transition='slide']::before {
+	background: linear-gradient(90deg, transparent, #39d7ff77, transparent);
+}
+.technology-detail[data-transition='flip']::before {
+	background: linear-gradient(90deg, transparent, #9f7dff66, transparent);
+}
+.technology-detail[data-transition='scan']::before {
+	background: linear-gradient(90deg, transparent, #d9ff78aa, transparent);
+}
+@keyframes technology-slide-in {
+	from {
+		opacity: 0;
+		transform: translate3d(38px, 0, 0);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes technology-flip-in {
+	from {
+		opacity: 0;
+		transform: perspective(720px) rotateY(-52deg) translate3d(20px, 0, 0);
+	}
+	to {
+		opacity: 1;
+		transform: perspective(720px) rotateY(0) translate3d(0, 0, 0);
+	}
+}
+@keyframes technology-scan-in {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 18px, 0) scale(0.985);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+}
+
+// Technology effects are intentionally vivid: each control demonstrates a
+// different compositor-friendly interaction without triggering layout.
+.technology-detail[data-effect='shake'] > div:first-child {
+	animation: technology-impact 680ms cubic-bezier(0.18, 0.82, 0.2, 1) both;
+}
+
+.technology-detail[data-effect='glitch'] > div:first-child {
+	animation: technology-glitch-burst 780ms steps(2, end) both;
+}
+
+.technology-detail[data-effect='float'] > div:first-child {
+	animation: technology-orbit 1100ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.technology-detail[data-effect='spectrum'] {
+	animation: technology-spectrum-burst 900ms ease both;
+}
+
+@keyframes technology-impact {
+	0% {
+		opacity: 0.35;
+		transform: scale(0.86) translate3d(18px, 0, 0);
+	}
+	18% {
+		opacity: 1;
+		transform: scale(1.08) translate3d(-12px, 0, 0);
+	}
+	38% {
+		transform: scale(0.97) translate3d(8px, 0, 0);
+	}
+	62% {
+		transform: scale(1.03) translate3d(-4px, 0, 0);
+	}
+	100% {
+		transform: scale(1) translate3d(0, 0, 0);
+	}
+}
+
+@keyframes technology-glitch-burst {
+	0%,
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+	14% {
+		opacity: 0.2;
+		transform: translate3d(-12px, 3px, 0) skewX(-12deg);
+	}
+	29% {
+		opacity: 1;
+		transform: translate3d(10px, -2px, 0) skewX(9deg);
+	}
+	46% {
+		opacity: 0.55;
+		transform: translate3d(-6px, 1px, 0) skewX(-5deg);
+	}
+	64% {
+		opacity: 1;
+		transform: translate3d(4px, 0, 0);
+	}
+}
+
+@keyframes technology-orbit {
+	0% {
+		opacity: 0.2;
+		transform: translate3d(28px, 14px, 0) rotate(-5deg) scale(0.82);
+	}
+	48% {
+		opacity: 1;
+		transform: translate3d(-10px, -14px, 0) rotate(3deg) scale(1.06);
+	}
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0) rotate(0) scale(1);
+	}
+}
+
+@keyframes technology-spectrum-burst {
+	0% {
+		filter: hue-rotate(0deg) saturate(1);
+		transform: scale(0.96);
+	}
+	45% {
+		filter: hue-rotate(150deg) saturate(1.8);
+		transform: scale(1.025);
+	}
+	100% {
+		filter: hue-rotate(360deg) saturate(1);
+		transform: scale(1);
+	}
 }

@@ -1,5 +1,9 @@
 import type { OnDestroy } from '@angular/core';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	ViewEncapsulation,
+} from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
@@ -15,6 +19,7 @@ import type {
 	templateUrl: './hero-monitor.component.html',
 	styleUrl: './hero-monitor.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	encapsulation: ViewEncapsulation.None,
 })
 export class HeroMonitorComponent implements OnDestroy {
 	protected readonly hero = new HeroMonitorFacade();
