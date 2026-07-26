@@ -1,11 +1,41 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  inject,
+  OnDestroy,
+  PLATFORM_ID,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CAPABILITIES, HERO_PANELS, LANGUAGES, PLAYGROUND_STEPS, SOCIAL_ICONS, TECHNOLOGY_MARQUEE, TELEMETRY } from './portfolio/portfolio.data';
+import {
+  CAPABILITIES,
+  HERO_PANELS,
+  LANGUAGES,
+  PLAYGROUND_STEPS,
+  PUBLIC_LINKS,
+  TECHNOLOGY_MARQUEE,
+  TELEMETRY,
+} from './portfolio/portfolio.data';
 import { renderEarthFrame } from './portfolio/earth-globe-renderer';
 import { nextHeroPanelTransition } from './portfolio/portfolio-motion';
-import type { CapabilityId, ChartType, HeroEffect, HeroPalette, HeroPanelId, HeroPanelTransition, Locale, PlaygroundStep, PortfolioPageId, TelemetryId } from './portfolio/portfolio.types';
+import type {
+  CapabilityId,
+  ChartType,
+  HeroEffect,
+  HeroPalette,
+  HeroPanelId,
+  HeroPanelTransition,
+  Locale,
+  PlaygroundStep,
+  PortfolioPageId,
+  TelemetryId,
+} from './portfolio/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -30,14 +60,14 @@ export class PortfolioPage implements OnDestroy {
   private heroPanelTimer?: number;
   private earthAngle = 0;
   private readonly earthMotion = {
-    speed: .00016,
-    targetSpeed: .00016,
-    axisX: .13,
-    axisY: -.95,
-    axisZ: .28,
-    targetAxisX: .13,
-    targetAxisY: -.95,
-    targetAxisZ: .28,
+    speed: 0.00016,
+    targetSpeed: 0.00016,
+    axisX: 0.13,
+    axisY: -0.95,
+    axisZ: 0.28,
+    targetAxisX: 0.13,
+    targetAxisY: -0.95,
+    targetAxisZ: 0.28,
   };
   private earthLoading = false;
 
@@ -57,7 +87,12 @@ export class PortfolioPage implements OnDestroy {
   protected readonly playgroundProgress = signal(0);
   protected readonly playgroundRuns = signal(0);
   protected readonly draggedStep = signal<PlaygroundStep | null>(null);
-  protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
+  protected readonly playgroundOrder = signal<PlaygroundStep[]>([
+    'build',
+    'discover',
+    'verify',
+    'model',
+  ]);
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly heroEffect = signal<HeroEffect>('idle');
@@ -66,10 +101,12 @@ export class PortfolioPage implements OnDestroy {
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
-  protected readonly earthDepth = signal<'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'>('behind');
+  protected readonly earthDepth = signal<
+    'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'
+  >('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
-  protected readonly socialIcons = SOCIAL_ICONS;
+  protected readonly publicLinks = PUBLIC_LINKS;
   protected readonly heroPanels = HERO_PANELS;
   protected readonly technologyMarquee = TECHNOLOGY_MARQUEE;
   protected readonly languages = LANGUAGES;
@@ -77,10 +114,11 @@ export class PortfolioPage implements OnDestroy {
   protected readonly capabilities = CAPABILITIES;
 
   protected readonly selectedCapability = computed(
-    () => this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
+    () =>
+      this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
   );
-  protected readonly selectedHeroPanel = computed(
-    () => this.heroPanels.find(({ id }) => id === this.activeHeroPanel()),
+  protected readonly selectedHeroPanel = computed(() =>
+    this.heroPanels.find(({ id }) => id === this.activeHeroPanel()),
   );
   protected readonly heroChartPath = computed(() => {
     const bars = this.heroChartBars();
@@ -90,29 +128,44 @@ export class PortfolioPage implements OnDestroy {
 
   protected readonly playgroundSteps = PLAYGROUND_STEPS;
   protected readonly playgroundMessage = computed(() => {
-    if (this.playgroundComplete()) return 'Loop complete — the product workflow is in a deliberate order.';
+    if (this.playgroundComplete())
+      return 'Loop complete — the product workflow is in a deliberate order.';
     return 'Drag the steps into the order in which a product should be shipped.';
   });
-  protected readonly playgroundComplete = computed(() => this.playgroundOrder().every(
-    (step, index) => step === this.playgroundSteps[index].id,
-  ));
+  protected readonly playgroundComplete = computed(() =>
+    this.playgroundOrder().every((step, index) => step === this.playgroundSteps[index].id),
+  );
 
   protected readonly telemetry = TELEMETRY;
   protected readonly selectedTelemetry = computed(
     () => this.telemetry.find(({ id }) => id === this.activeTelemetry()) ?? this.telemetry[0],
   );
 
-  protected readonly copy = computed(() => this.locale() === 'en' ? {
-    navWork: 'Selected work', navLab: 'Frontend lab', navAbout: 'Approach',
-    availability: 'Available for thoughtful product work', viewWork: 'View examples', contact: 'Start a conversation',
-    role: 'Frontend engineer building operational web and mobile products.',
-    intro: 'I combine product-focused frontend development with TypeScript architecture, testing and developer tooling.',
-  } : {
-    navWork: 'Trabajo seleccionado', navLab: 'Laboratorio', navAbout: 'Enfoque',
-    availability: 'Disponible para proyectos de producto', viewWork: 'Ver ejemplos', contact: 'Hablemos',
-    role: 'Frontend engineer que construye productos web y móviles operacionales.',
-    intro: 'Combino desarrollo frontend orientado a producto con arquitectura TypeScript, testing y tooling para developers.',
-  });
+  protected readonly copy = computed(() =>
+    this.locale() === 'en'
+      ? {
+          navWork: 'Selected work',
+          navLab: 'Frontend lab',
+          navAbout: 'Approach',
+          availability: 'Available for thoughtful product work',
+          viewWork: 'View examples',
+          contact: 'Start a conversation',
+          role: 'Frontend engineer building operational web and mobile products.',
+          intro:
+            'I combine product-focused frontend development with TypeScript architecture, testing and developer tooling.',
+        }
+      : {
+          navWork: 'Trabajo seleccionado',
+          navLab: 'Laboratorio',
+          navAbout: 'Enfoque',
+          availability: 'Disponible para proyectos de producto',
+          viewWork: 'Ver ejemplos',
+          contact: 'Hablemos',
+          role: 'Frontend engineer que construye productos web y móviles operacionales.',
+          intro:
+            'Combino desarrollo frontend orientado a producto con arquitectura TypeScript, testing y tooling para developers.',
+        },
+  );
 
   constructor() {
     this.lightMode.set(this.document.documentElement.getAttribute('data-theme') === 'light');
@@ -124,7 +177,17 @@ export class PortfolioPage implements OnDestroy {
     });
     this.route.data.subscribe((data) => {
       const page = data['page'];
-      this.page.set(page === 'work' || page === 'lab' || page === 'approach' || page === 'knowledge' || page === 'docker' || page === 'demos' || page === 'contact' ? page : 'home');
+      this.page.set(
+        page === 'work' ||
+          page === 'lab' ||
+          page === 'approach' ||
+          page === 'knowledge' ||
+          page === 'docker' ||
+          page === 'demos' ||
+          page === 'contact'
+          ? page
+          : 'home',
+      );
       this.updateSeo();
     });
     this.applyPreferredLocale();
@@ -202,7 +265,9 @@ export class PortfolioPage implements OnDestroy {
   }
 
   protected randomizeHeroChart(): void {
-    this.heroChartBars.set(Array.from({ length: 5 }, (_, index) => Math.round(28 + Math.random() * 62 + index * 1.5)));
+    this.heroChartBars.set(
+      Array.from({ length: 5 }, (_, index) => Math.round(28 + Math.random() * 62 + index * 1.5)),
+    );
   }
 
   protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
@@ -266,7 +331,9 @@ export class PortfolioPage implements OnDestroy {
         this.animateEarth(performance.now());
       }
     };
-    texture.onerror = () => { this.earthLoading = false; };
+    texture.onerror = () => {
+      this.earthLoading = false;
+    };
   }
 
   private animateEarth(now: number): void {
@@ -282,12 +349,19 @@ export class PortfolioPage implements OnDestroy {
     this.earthMotion.axisX += (this.earthMotion.targetAxisX - this.earthMotion.axisX) * blend;
     this.earthMotion.axisY += (this.earthMotion.targetAxisY - this.earthMotion.axisY) * blend;
     this.earthMotion.axisZ += (this.earthMotion.targetAxisZ - this.earthMotion.axisZ) * blend;
-    const axisLength = Math.hypot(this.earthMotion.axisX, this.earthMotion.axisY, this.earthMotion.axisZ);
+    const axisLength = Math.hypot(
+      this.earthMotion.axisX,
+      this.earthMotion.axisY,
+      this.earthMotion.axisZ,
+    );
     this.earthMotion.axisX /= axisLength;
     this.earthMotion.axisY /= axisLength;
     this.earthMotion.axisZ /= axisLength;
     this.earthAngle += this.earthMotion.speed * delta;
-    if (this.earthLastRenderAt === undefined || now - this.earthLastRenderAt >= this.earthRenderInterval) {
+    if (
+      this.earthLastRenderAt === undefined ||
+      now - this.earthLastRenderAt >= this.earthRenderInterval
+    ) {
       this.earthLastRenderAt = now;
       this.renderEarth();
     }
@@ -302,10 +376,10 @@ export class PortfolioPage implements OnDestroy {
   protected changeEarthMotion(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     const direction = this.earthMotion.targetSpeed >= 0 ? -1 : 1;
-    this.earthMotion.targetSpeed = direction * (.00014 + Math.random() * .00032);
-    this.earthMotion.targetAxisX = -.78 + Math.random() * 1.56;
-    this.earthMotion.targetAxisY = -.84 + Math.random() * 1.68;
-    this.earthMotion.targetAxisZ = -.68 + Math.random() * 1.36;
+    this.earthMotion.targetSpeed = direction * (0.00014 + Math.random() * 0.00032);
+    this.earthMotion.targetAxisX = -0.78 + Math.random() * 1.56;
+    this.earthMotion.targetAxisY = -0.84 + Math.random() * 1.68;
+    this.earthMotion.targetAxisZ = -0.68 + Math.random() * 1.36;
     if (!this.earthSpinning()) this.startEarthSpin();
   }
 
@@ -341,9 +415,18 @@ export class PortfolioPage implements OnDestroy {
     const canvas = this.earthCanvas;
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
-    const inFront = this.earthDepth() === 'front-ready' || this.earthDepth() === 'front' || this.earthDepth() === 'out-front';
+    const inFront =
+      this.earthDepth() === 'front-ready' ||
+      this.earthDepth() === 'front' ||
+      this.earthDepth() === 'out-front';
     const { axisX, axisY, axisZ } = this.earthMotion;
-    renderEarthFrame(canvas, texture, { angle: this.earthAngle, axisX, axisY, axisZ, foreground: inFront });
+    renderEarthFrame(canvas, texture, {
+      angle: this.earthAngle,
+      axisX,
+      axisY,
+      axisZ,
+      foreground: inFront,
+    });
   }
 
   protected setTelemetry(metric: TelemetryId): void {
@@ -417,7 +500,16 @@ export class PortfolioPage implements OnDestroy {
   }
 
   protected setTransition(target: PortfolioPageId): void {
-    const order: PortfolioPageId[] = ['home', 'work', 'lab', 'approach', 'knowledge', 'docker', 'demos', 'contact'];
+    const order: PortfolioPageId[] = [
+      'home',
+      'work',
+      'lab',
+      'approach',
+      'knowledge',
+      'docker',
+      'demos',
+      'contact',
+    ];
     const direction = order.indexOf(target) >= order.indexOf(this.page()) ? 'forward' : 'backward';
     this.document.documentElement.dataset['transitionDirection'] = direction;
     this.menuOpen.set(false);
@@ -428,8 +520,26 @@ export class PortfolioPage implements OnDestroy {
     const section = this.page();
     const spanish = this.locale() === 'es';
     const labels: Record<PortfolioPageId, string> = spanish
-      ? { home: 'Frontend product engineer', work: 'Proyectos destacados', lab: 'Laboratorio frontend', approach: 'Enfoque', knowledge: 'Conocimientos', docker: 'Docker', demos: 'Demos', contact: 'Contacto' }
-      : { home: 'Frontend product engineer', work: 'Pinned projects', lab: 'Frontend lab', approach: 'Approach', knowledge: 'Knowledge', docker: 'Docker', demos: 'Demos', contact: 'Contact' };
+      ? {
+          home: 'Frontend product engineer',
+          work: 'Proyectos destacados',
+          lab: 'Laboratorio frontend',
+          approach: 'Enfoque',
+          knowledge: 'Conocimientos',
+          docker: 'Docker',
+          demos: 'Demos',
+          contact: 'Contacto',
+        }
+      : {
+          home: 'Frontend product engineer',
+          work: 'Pinned projects',
+          lab: 'Frontend lab',
+          approach: 'Approach',
+          knowledge: 'Knowledge',
+          docker: 'Docker',
+          demos: 'Demos',
+          contact: 'Contact',
+        };
     const description = spanish
       ? 'Portfolio de Mario Cabrero Volarich: frontend de producto, Angular, TypeScript, móvil y tooling.'
       : 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.';
@@ -440,9 +550,19 @@ export class PortfolioPage implements OnDestroy {
   private applyPreferredLocale(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     let saved: string | null = null;
-    try { saved = localStorage.getItem('cartago-locale'); } catch { /* Storage can be blocked. */ }
+    try {
+      saved = localStorage.getItem('cartago-locale');
+    } catch {
+      /* Storage can be blocked. */
+    }
     const cookieLocale = this.document.cookie.match(/(?:^|; )cartago_locale=([^;]+)/)?.[1];
-    const candidate = saved ?? cookieLocale ?? navigator.languages.find((language) => language.startsWith('es') || language.startsWith('en'))?.slice(0, 2) ?? 'en';
+    const candidate =
+      saved ??
+      cookieLocale ??
+      navigator.languages
+        .find((language) => language.startsWith('es') || language.startsWith('en'))
+        ?.slice(0, 2) ??
+      'en';
     const locale: Locale = candidate === 'es' ? 'es' : 'en';
     if (locale !== this.locale()) {
       queueMicrotask(() => void this.router.navigate(this.routeFor(this.page(), locale)));
@@ -451,9 +571,15 @@ export class PortfolioPage implements OnDestroy {
 
   private persistLocale(locale: Locale): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    try { localStorage.setItem('cartago-locale', locale); } catch { /* Cookie remains a server-readable fallback. */ }
+    try {
+      localStorage.setItem('cartago-locale', locale);
+    } catch {
+      /* Cookie remains a server-readable fallback. */
+    }
     this.document.cookie = `cartago_locale=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
   }
 
-  protected closeMenu(): void { this.menuOpen.set(false); }
+  protected closeMenu(): void {
+    this.menuOpen.set(false);
+  }
 }

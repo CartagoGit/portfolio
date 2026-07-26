@@ -2,192 +2,977 @@
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="site-header" [class.scrolled]="scrolled()">
-    <a class="brand" [routerLink]="routeFor('home')" (click)="setTransition('home')" aria-label="Cartago home">
+    <a
+      class="brand"
+      [routerLink]="routeFor('home')"
+      (click)="setTransition('home')"
+      aria-label="Cartago home"
+    >
       <!-- TODO(logo): replace this temporary C mark with the approved Cartago logo variant. -->
       <span class="brand-mark">C.</span><span>Cartago</span>
     </a>
-    <button class="menu-toggle" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-controls="site-navigation">
+    <button
+      class="menu-toggle"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="site-navigation"
+    >
       <span></span><span></span><span></span><span class="sr-only">Toggle navigation</span>
     </button>
     <nav id="site-navigation" [class.open]="menuOpen()" aria-label="Main navigation">
-      <a [routerLink]="routeFor('work')" [class.active]="page() === 'work'" (click)="setTransition('work')">{{ copy().navWork }}</a>
-      <a [routerLink]="routeFor('lab')" [class.active]="page() === 'lab'" (click)="setTransition('lab')">{{ copy().navLab }}</a>
-      <a [routerLink]="routeFor('approach')" [class.active]="page() === 'approach'" (click)="setTransition('approach')">{{ copy().navAbout }}</a>
-      <a [routerLink]="routeFor('knowledge')" [class.active]="page() === 'knowledge'" (click)="setTransition('knowledge')">Knowledge</a>
-      <a [routerLink]="routeFor('docker')" [class.active]="page() === 'docker'" (click)="setTransition('docker')">Docker</a>
-      <a [routerLink]="routeFor('demos')" [class.active]="page() === 'demos'" (click)="setTransition('demos')">Demos</a>
-      <a [routerLink]="routeFor('contact')" [class.active]="page() === 'contact'" (click)="setTransition('contact')">{{ copy().contact }}</a>
+      <a
+        [routerLink]="routeFor('work')"
+        [class.active]="page() === 'work'"
+        (click)="setTransition('work')"
+        >{{ copy().navWork }}</a
+      >
+      <a
+        [routerLink]="routeFor('lab')"
+        [class.active]="page() === 'lab'"
+        (click)="setTransition('lab')"
+        >{{ copy().navLab }}</a
+      >
+      <a
+        [routerLink]="routeFor('approach')"
+        [class.active]="page() === 'approach'"
+        (click)="setTransition('approach')"
+        >{{ copy().navAbout }}</a
+      >
+      <a
+        [routerLink]="routeFor('knowledge')"
+        [class.active]="page() === 'knowledge'"
+        (click)="setTransition('knowledge')"
+        >Knowledge</a
+      >
+      <a
+        [routerLink]="routeFor('docker')"
+        [class.active]="page() === 'docker'"
+        (click)="setTransition('docker')"
+        >Docker</a
+      >
+      <a
+        [routerLink]="routeFor('demos')"
+        [class.active]="page() === 'demos'"
+        (click)="setTransition('demos')"
+        >Demos</a
+      >
+      <a
+        [routerLink]="routeFor('contact')"
+        [class.active]="page() === 'contact'"
+        (click)="setTransition('contact')"
+        >{{ copy().contact }}</a
+      >
     </nav>
     <div class="header-actions">
       <div class="locale-picker">
-        <button class="locale" type="button" (click)="toggleLocaleMenu()" [attr.aria-expanded]="localeMenuOpen()" aria-haspopup="listbox" aria-label="Select language">
-          <img class="flag-icon" [src]="locale() === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'" width="24" height="16" alt="" /><span>{{ locale().toUpperCase() }}</span><i aria-hidden="true">⌄</i>
+        <button
+          class="locale"
+          type="button"
+          (click)="toggleLocaleMenu()"
+          [attr.aria-expanded]="localeMenuOpen()"
+          aria-haspopup="listbox"
+          aria-label="Select language"
+        >
+          <img
+            class="flag-icon"
+            [src]="locale() === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'"
+            width="24"
+            height="16"
+            alt=""
+          /><span>{{ locale().toUpperCase() }}</span
+          ><i aria-hidden="true">⌄</i>
         </button>
         @if (localeMenuOpen() || localeMenuClosing()) {
-          <div class="locale-menu" [class.closing]="localeMenuClosing()" role="listbox" aria-label="Available languages">
+          <div
+            class="locale-menu"
+            [class.closing]="localeMenuClosing()"
+            role="listbox"
+            aria-label="Available languages"
+          >
             @for (language of languages; track language.id) {
-              <button type="button" role="option" [attr.aria-selected]="locale() === language.id" (click)="selectLocale(language.id)"><img class="flag-icon" [src]="language.id === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'" width="24" height="16" alt="" /><span>{{ language.label }}<small>{{ language.detail }}</small></span>@if (locale() === language.id) { <b aria-label="Current language">✓</b> }</button>
+              <button
+                type="button"
+                role="option"
+                [attr.aria-selected]="locale() === language.id"
+                (click)="selectLocale(language.id)"
+              >
+                <img
+                  class="flag-icon"
+                  [src]="language.id === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'"
+                  width="24"
+                  height="16"
+                  alt=""
+                /><span
+                  >{{ language.label }}<small>{{ language.detail }}</small></span
+                >
+                @if (locale() === language.id) {
+                  <b aria-label="Current language">✓</b>
+                }
+              </button>
             }
           </div>
         }
       </div>
-      <button class="theme-switch" type="button" (click)="setTheme()" [attr.aria-pressed]="lightMode()" aria-label="Toggle colour theme">
+      <button
+        class="theme-switch"
+        type="button"
+        (click)="setTheme()"
+        [attr.aria-pressed]="lightMode()"
+        aria-label="Toggle colour theme"
+      >
         <span aria-hidden="true">{{ lightMode() ? '☼' : '◐' }}</span>
       </button>
     </div>
   </header>
 
   <div class="route-stage">
-  @if (page() === 'home') {
-  <section id="main-content" class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="eyebrow"><span></span>CartagoNova / personal frontend systems</p>
-      <h1 id="hero-title">Mario Cabrero<br /><em>Volarich</em></h1>
-      <p class="hero-signature">Cartago / CartagoNova · frontend product engineer</p>
-      <p class="hero-role">{{ copy().role }}</p>
-      <p class="hero-intro">{{ copy().intro }}</p>
-      <div class="hero-actions">
-        <a class="button button-primary" [routerLink]="routeFor('demos')" (click)="setTransition('demos')">{{ copy().viewWork }} <span aria-hidden="true">↘</span></a>
-        <a class="button button-quiet" [routerLink]="routeFor('contact')" (click)="setTransition('contact')">{{ copy().contact }} <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="technology-marquee" aria-label="Technology index from the CartagoGit profile"><div class="technology-track">@for (technology of technologyMarquee; track technology.label) { <span class="technology-token" tabindex="0" [style.--label-width.px]="technology.label.length * 8 + 44"><svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg><b>{{ technology.label }}</b></span> }</div><div class="technology-track" aria-hidden="true">@for (technology of technologyMarquee; track technology.label) { <span class="technology-token" tabindex="-1" [style.--label-width.px]="technology.label.length * 8 + 44"><svg viewBox="0 0 24 24"><path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg><b>{{ technology.label }}</b></span> }</div></div>
-      <div class="hero-socials" aria-label="Public profiles and featured projects"><a href="https://www.linkedin.com/in/mario-cabrero-volarich" target="_blank" rel="noreferrer"><i class="linkedin-icon"><img src="/icons/linkedin-profile-badge.svg" alt="" /></i><span>LinkedIn</span></a><a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="socialIcons.github.path" fill="currentColor" /></svg><span>GitHub</span></a><a href="https://www.npmjs.com/~cartago-git" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="socialIcons.npm.path" fill="#cb3837" /></svg><span>npm</span></a><a href="https://github.com/CartagoGit/mcp-vertex" target="_blank" rel="noreferrer"><img src="/icons/mcp-vertex.svg" alt="" /><span>MCP Vertex</span></a><a href="https://github.com/CartagoGit/quickmodel" target="_blank" rel="noreferrer"><img src="/icons/quickmodel.png" alt="" /><span>QuickModel</span></a></div>
-    </div>
-
-    <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies" (mouseenter)="startEarthSpin()" (mouseleave)="stopEarthSpin()" (pointerdown)="returnEarthBehind($event)">
-      <div class="orb orb-one" [class.earth-active]="earthSpinning()" [class.earth-out-behind]="earthDepth() === 'out-behind'" [class.earth-front-ready]="earthDepth() === 'front-ready'" [class.earth-front]="earthDepth() === 'front'" [class.earth-out-front]="earthDepth() === 'out-front'" [class.earth-behind-ready]="earthDepth() === 'behind-ready'" aria-hidden="true"><canvas #earthCanvas class="earth-canvas"></canvas></div><div class="orb orb-two"></div>
-      <div class="interface-shell" [attr.data-chart]="heroChartType()" (mouseleave)="returnEarthBehind()" (pointerdown)="returnEarthBehind($event)" (click)="returnEarthBehind($event)">
-        <div class="monitor-chrome" aria-hidden="true"><span></span><span></span><span></span><i></i><b>cartago.system</b></div>
-        <div class="monitor-header"><button class="earth-motion-control" type="button" [attr.aria-pressed]="earthDepth() === 'front'" (click)="onEarthControlClick($event)" aria-label="Change the Earth's rotation"></button><a class="monitor-banner-link" href="https://github.com/CartagoGit" target="_blank" rel="noreferrer" aria-label="Open CartagoGit on GitHub"><img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" /></a></div>
-        <div class="interface-body">
-          <div class="monitor-selector" aria-label="Core technologies">@for (panel of heroPanels; track panel.id) { <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)">@if (panel.iconAsset) { <img class="core-icon" [src]="panel.iconAsset" alt="" /> } @else { <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg> }<span>{{ panel.label }}</span></button> }</div>
-          <div class="interface-canvas" [class.technology-open]="selectedHeroPanel()">
-            <section class="dashboard-view" [class.panel-hidden]="selectedHeroPanel() || heroPanelChanging()" [class.swap-hidden]="heroPanelChanging()">
-              <div class="canvas-heading"><span><i></i>CartagoNova / system telemetry</span><small>LIVE</small></div>
-              <div class="hero-chart-switcher" aria-label="Dashboard chart type">
-              <button type="button" [class.active]="heroChartType() === 'bars'" (click)="setHeroChart('bars')">Velocity</button><button type="button" [class.active]="heroChartType() === 'line'" (click)="setHeroChart('line')">Signals</button><button type="button" [class.active]="heroChartType() === 'area'" (click)="setHeroChart('area')">Coverage</button><button type="button" [class.active]="heroChartType() === 'dots'" (click)="setHeroChart('dots')">Dots</button><button type="button" [class.active]="heroChartType() === 'pulse'" (click)="setHeroChart('pulse')">Pulse</button><button type="button" [class.active]="heroChartType() === 'wave'" (click)="setHeroChart('wave')">Wave</button><button type="button" [class.active]="heroChartType() === 'grid'" (click)="setHeroChart('grid')">Grid</button>
-              </div>
-              <p class="dashboard-caption">Choose a technology on the left to see its role. These controls change the visualisation only.</p>
-              <div class="chart-workspace"><div class="canvas-chart" [attr.data-chart]="heroChartType()" [attr.data-palette]="heroPalette()">@for (bar of heroChartBars(); track $index) { <span [style.height.%]="bar" [style.background]="chartBarGradient(bar)"></span> }<svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Portfolio dashboard chart"><path [attr.d]="heroChartPath()" /></svg><em>product signal / 2026</em></div><div class="chart-symbols" aria-label="Randomise chart values"><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh signal">⌁</button><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh metrics">◌</button><button type="button" (click)="randomizeHeroChart()" aria-label="Refresh state">✦</button><button class="temperature-icon" type="button" [class.active]="heroPalette() === 'heat'" (click)="setHeroTemperature()" aria-label="Random temperature colours">◉</button></div></div>
-            </section>
-            @if (selectedHeroPanel(); as selectedPanel) {
-              <article class="technology-detail" [attr.data-effect]="heroEffect()" [attr.data-transition]="heroPanelTransition()"><div>@if (selectedPanel.iconAsset) { <img class="core-icon" [src]="selectedPanel.iconAsset" alt="" /> } @else { <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedPanel.iconPath" [attr.fill]="selectedPanel.color" /></svg> }<h3>{{ selectedPanel.label }}</h3><p>{{ selectedPanel.detail }}</p></div><div class="effect-controls" aria-label="Technology description effects"><button type="button" (click)="setHeroEffect('shake')" aria-label="Shake">≈</button><button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">⌘</button><button type="button" (click)="setHeroEffect('float')" aria-label="Float">↟</button><button type="button" (click)="setHeroEffect('spectrum')" aria-label="Spectrum">◈</button></div><button class="detail-retry" type="button" (click)="clearHeroPanel()">Retry ↻</button></article>
+    @if (page() === 'home') {
+      <section id="main-content" class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span>CartagoNova / personal frontend systems</p>
+          <h1 id="hero-title">Mario Cabrero<br /><em>Volarich</em></h1>
+          <p class="hero-signature">Cartago / CartagoNova · frontend product engineer</p>
+          <p class="hero-role">{{ copy().role }}</p>
+          <p class="hero-intro">{{ copy().intro }}</p>
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              [routerLink]="routeFor('demos')"
+              (click)="setTransition('demos')"
+              >{{ copy().viewWork }} <span aria-hidden="true">↘</span></a
+            >
+            <a
+              class="button button-quiet"
+              [routerLink]="routeFor('contact')"
+              (click)="setTransition('contact')"
+              >{{ copy().contact }} <span aria-hidden="true">→</span></a
+            >
+          </div>
+          <div class="technology-marquee" aria-label="Technology index from the CartagoGit profile">
+            <div class="technology-track">
+              @for (technology of technologyMarquee; track technology.label) {
+                <span
+                  class="technology-token"
+                  tabindex="0"
+                  [style.--label-width.px]="technology.label.length * 8 + 44"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg
+                  ><b>{{ technology.label }}</b></span
+                >
+              }
+            </div>
+            <div class="technology-track" aria-hidden="true">
+              @for (technology of technologyMarquee; track technology.label) {
+                <span
+                  class="technology-token"
+                  tabindex="-1"
+                  [style.--label-width.px]="technology.label.length * 8 + 44"
+                  ><svg viewBox="0 0 24 24">
+                    <path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg
+                  ><b>{{ technology.label }}</b></span
+                >
+              }
+            </div>
+          </div>
+          <div class="hero-socials" aria-label="Public profiles and featured projects">
+            @for (link of publicLinks; track link.href) {
+              <a [href]="link.href" target="_blank" rel="noreferrer">
+                @if (link.imageSrc) {
+                  <img [src]="link.imageSrc" alt="" />
+                } @else {
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" />
+                  </svg>
+                }
+                <span>{{ link.label }}</span></a
+              >
             }
           </div>
         </div>
-      </div>
-      <p class="hero-note">Built with explicit state,<br />progressive enhancement and care.</p>
-    </div>
-  </section>
 
-  }
-
-  @if (page() === 'work') {
-  <section id="main-content" class="work section" aria-labelledby="work-title">
-    <div class="section-heading"><p class="eyebrow">01 / Selected work</p><h2 id="work-title">Pinned work, not<br />filler examples.</h2><p>Open-source projects that best represent the technical focus.</p></div>
-    <div class="case-grid">
-      <a class="case-card case-deathblitz" href="https://github.com/CartagoGit/mcp-vertex" target="_blank" rel="noreferrer" aria-label="Open MCP Vertex repository">
-        <img class="project-icon" src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/mcp-vertex.svg" alt="MCP Vertex" />
-        <div class="mcp-visual" aria-hidden="true"><span>MCP</span><i></i><i></i><i></i><b>vertex</b></div>
-        <p class="case-number">01 — Agent infrastructure</p>
-        <div class="case-content"><span class="case-label">Pinned project</span><h3>MCP Vertex</h3><p>An extensible MCP server core and plugin system for structured, repeatable agent workflows.</p><ul><li>Typed contracts</li><li>Plugin architecture</li><li>CLI tooling</li></ul><span class="case-link">Explore repository <span>↗</span></span></div>
-      </a>
-      <a class="case-card case-zoneless" href="https://github.com/CartagoGit/quickmodel" target="_blank" rel="noreferrer" aria-label="Open QuickModel repository">
-        <img class="project-icon" src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/quickmodel.png" alt="QuickModel" />
-        <div class="zoneless-visual" aria-hidden="true"><div class="cal-screen"><small>ARCHITECTURE STATE</small><strong>42<span>.00</span></strong><div><i>signals</i><i>zoneless</i><i>tested</i></div></div><div class="signal-path"></div></div>
-        <p class="case-number">02 — TypeScript architecture</p>
-        <div class="case-content"><span class="case-label">Pinned project</span><h3>QuickModel</h3><p>A TypeScript modelling and serialization library focused on explicit contracts and dependable data boundaries.</p><ul><li>Type-safe models</li><li>Serialization</li><li>Developer experience</li></ul><span class="case-link">Explore repository <span>↗</span></span></div>
-      </a>
-      <article class="case-card case-vertex">
-        <div class="keyer-visual" aria-hidden="true"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><code>$ keyer status<br /><b>●</b> encrypted workspace<br /><i>ready for delivery</i></code><em>npm / typescript</em></div>
-        <p class="case-number">03 — Developer tooling</p>
-        <div class="case-content"><span class="case-label">Pinned project</span><h3>Keyer</h3><p>A published TypeScript CLI and library for managing secrets and configuration workflows with a cleaner developer experience.</p><ul><li>CLI design</li><li>Node.js tooling</li><li>Published package</li></ul><div class="keyer-actions"><a href="https://github.com/CartagoGit/Keyer" target="_blank" rel="noreferrer">Repository ↗</a><a href="https://www.npmjs.com/package/@cartago-git/keyer" target="_blank" rel="noreferrer">View on npm ↗</a></div></div>
-      </article>
-    </div>
-    <div class="secondary-work"><p>Also pinned</p><a href="https://github.com/CartagoGit/print-cv" target="_blank" rel="noreferrer">Print CV <span>Vue, validation and E2E · repository</span> ↗</a><a href="https://github.com/CartagoGit/zoneless-calculator" target="_blank" rel="noreferrer">Zoneless Calculator <span>Angular signals and tests · repository</span> ↗</a><a href="https://github.com/CartagoGit/NestGpt" target="_blank" rel="noreferrer">NestGpt <span>NestJS and GPT integration · repository</span> ↗</a></div>
-    <section class="home-directory public-directory" aria-labelledby="directory-title">
-      <div><p class="eyebrow">Public surface</p><h2 id="directory-title">Code, packages<br /><em>and demos.</em></h2><p>Direct public links grouped separately from the pinned repositories above.</p></div>
-      <div class="directory-grid">
-        <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"><span>01 / CODE</span><b>GitHub profile</b><small>Repositories, pinned work and contribution history.</small><i>↗</i></a><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"><span>02 / SHIP</span><b>Docker Hub</b><small>Public container images and delivery context.</small><i>↗</i></a><a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"><span>03 / DEMO</span><b>DeathBlitz</b><small>Public interactive product experiment.</small><i>↗</i></a><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"><span>04 / PLAY</span><b>Cartago Tetris</b><small>Keyboard interaction and game-loop state.</small><i>↗</i></a>
-      </div>
-    </section>
-  </section>
-
-  }
-
-  @if (page() === 'approach') {
-  <section id="main-content" class="capabilities section" aria-labelledby="capabilities-title">
-    <div class="section-heading"><p class="eyebrow">02 / Capabilities</p><h2 id="capabilities-title">A system, not a<br />technology list.</h2><p>Choose an area to see how it appears in the work.</p></div>
-    <div class="capability-layout">
-      <div class="capability-tabs" role="tablist" aria-label="Engineering capabilities">
-        @for (capability of capabilities; track capability.id; let index = $index) {
-          <button type="button" role="tab" [attr.aria-selected]="activeCapability() === capability.id" [class.active]="activeCapability() === capability.id" (click)="setCapability(capability.id)"><span>0{{ index + 1 }}</span>{{ capability.eyebrow.split(' / ')[1] }}<i>↘</i></button>
-        }
-      </div>
-      <article class="capability-detail" role="tabpanel">
-        <p class="eyebrow">{{ selectedCapability().eyebrow }}</p><h3>{{ selectedCapability().title }}</h3><p>{{ selectedCapability().detail }}</p>
-        <div class="tool-pills">@for (tool of selectedCapability().tools; track tool) { <span>{{ tool }}</span> }</div>
-        <footer><span class="pulse"></span>{{ selectedCapability().proof }}</footer>
-      </article>
-    </div>
-  </section>
-
-  <section class="operational section"><div><p class="eyebrow">04 / Professional experience</p><h2>Complex workflows,<br />quietly delivered.</h2></div><div class="operational-copy"><p>I build repeated-use business interfaces where roles, long-lived rules and complex forms need to remain understandable. I can discuss the patterns and decisions without exposing client code, data or product details.</p><ul><li>Role-dependent actions and permissions</li><li>Web and Android delivery</li><li>Resilient forms and progressive validation</li><li>Architecture and testing practices that scale</li></ul></div></section>
-  }
-
-  @if (page() === 'knowledge') {
-  <section id="main-content" class="knowledge section" aria-labelledby="knowledge-title"><div class="section-heading"><p class="eyebrow">Knowledge system</p><h2 id="knowledge-title">Languages are tools.<br /><em>Judgement connects them.</em></h2><p>Hover a tile to see where each part of the stack is useful in a product.</p></div><div class="knowledge-grid"><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M20 3 35 12v17L20 37 5 29V12z"/></svg><span>Frontend</span><b>Angular · TypeScript · SCSS</b><p>Signals, SSR, responsive interfaces and accessible UI for real workflows.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33"/></svg><span>Mobile</span><b>Ionic · Capacitor · Android</b><p>One product system carried from web to touch-first releases.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16"/></svg><span>Quality</span><b>Vitest · Accessibility · Performance</b><p>Tests, semantics and performance budgets that expose risk early.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M8 10h24v20H8zM14 16h12M14 22h7"/></svg><span>Tooling</span><b>Node.js · MCP · Docker</b><p>CLIs, containers and typed agent workflows for repeatable delivery.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="M20 6v28M6 20h28"/></svg><span>Systems</span><b>CDK · Storybook · Tokens</b><p>Reusable primitives that make a visual language scale without flattening it.</p></article><article><svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z"/></svg><span>Backend edges</span><b>NestJS · APIs · GPT</b><p>Clear integration boundaries when a frontend needs a dependable service layer.</p></article></div></section>
-  }
-
-  @if (page() === 'docker') {
-  <section id="main-content" class="docker-page section" aria-labelledby="docker-title"><div class="section-heading"><p class="eyebrow">Container delivery</p><h2 id="docker-title">Build it.<br /><em>Ship it.</em></h2><p>Public container work belongs beside the frontend, because delivery is part of the product experience.</p></div><a class="docker-terminal" href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"><span>Docker Hub / cartagodocker</span><code>$ docker pull cartagodocker/&lt;image&gt;<br /><b>●</b> public images available<br /><i>Open Docker Hub ↗</i></code><div><em>Angular</em><em>Node</em><em>Delivery</em></div></a></section>
-  }
-
-  @if (page() === 'demos') {
-  <section id="main-content" class="demos-page section" aria-labelledby="demos-title"><div class="section-heading"><p class="eyebrow">Public experiments</p><h2 id="demos-title">Interaction you can<br /><em>actually try.</em></h2><p>Small public demos are kept distinct from the featured engineering projects.</p></div><div class="demo-links"><a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"><span>01</span><b>DeathBlitz</b><p>Stateful product interaction and persistent progression.</p><i>Open demo ↗</i></a><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"><span>02</span><b>Cartago Tetris</b><p>Keyboard interaction, game loop and responsive board state.</p><i>Open demo ↗</i></a><a href="https://cartago-snake.netlify.app/" target="_blank" rel="noreferrer"><span>03</span><b>Cartago Snake</b><p>Real-time movement, collision handling and state updates.</p><i>Open demo ↗</i></a><a href="https://cartago-minesweeper.netlify.app/" target="_blank" rel="noreferrer"><span>04</span><b>Minesweeper</b><p>Grid interaction, timers and information hierarchy.</p><i>Open demo ↗</i></a></div><section class="neon-game" aria-labelledby="neon-game-title"><div><p class="eyebrow">Tiny pointless game</p><h3 id="neon-game-title">Catch the neon signal.</h3><p>Pure interaction design: the target moves on each successful hit.</p><b>{{ neonScore() }} <small>signals caught</small></b></div><div class="neon-grid" aria-label="Neon signal game">@for (cell of [0,1,2,3,4,5,6,7,8]; track cell) { <button type="button" [class.target]="neonTarget() === cell" (click)="hitNeonTarget(cell)" [attr.aria-label]="neonTarget() === cell ? 'Catch signal' : 'Empty signal node'"><i></i></button> }</div></section></section>
-  }
-
-  @if (page() === 'lab') {
-  <section id="main-content" class="lab section" aria-labelledby="lab-title">
-    <div class="section-heading"><p class="eyebrow">03 / Frontend lab</p><h2 id="lab-title">Product telemetry,<br />not UI filler.</h2><p>Switch the perspective to see how KPIs, visual hierarchy and state changes can explain a product decision.</p></div>
-    <div class="lab-toolbar"><div role="group" aria-label="Choose a dashboard perspective">@for (metric of telemetry; track metric.id) { <button [class.active]="activeTelemetry() === metric.id" (click)="setTelemetry(metric.id)">{{ metric.label }}</button> }</div><button class="command-button" type="button" (click)="commandOpen.set(true)"><kbd>⌘</kbd><kbd>K</kbd> Command palette</button></div>
-    <div class="chart-switcher" role="group" aria-label="Choose a chart representation"><span>Visualise as</span><button [class.active]="chartType() === 'bars'" (click)="setChartType('bars')">Bars</button><button [class.active]="chartType() === 'line'" (click)="setChartType('line')">Line</button><button [class.active]="chartType() === 'area'" (click)="setChartType('area')">Area</button></div>
-    <section class="telemetry-dashboard" [attr.data-metric]="activeTelemetry()" [attr.data-chart]="chartType()" aria-live="polite">
-      <article class="telemetry-summary"><span>{{ selectedTelemetry().label }}</span><b>{{ selectedTelemetry().value }}</b><small>{{ selectedTelemetry().valueLabel }}</small><p>{{ selectedTelemetry().note }}</p></article>
-      <article class="telemetry-chart"><header><div><span>8-week trend</span><b>{{ selectedTelemetry().title }}</b></div><i>LIVE</i></header><div class="bar-chart" aria-label="Metric trend chart">@for (bar of selectedTelemetry().bars; track $index) { <span [style.--bar]="bar + '%'" [attr.aria-label]="bar + ' percent'"></span> }<svg viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true"><path d="M0 145 C38 132, 54 116, 88 122 S136 76, 172 93 S220 75, 254 63 S302 70, 336 35 S375 40,400 16" /></svg></div><footer><span>Week 01</span><span>Week 08</span></footer></article>
-      <div class="telemetry-kpis">@for (kpi of selectedTelemetry().kpis; track kpi[1]) { <article><b>{{ kpi[0] }}</b><span>{{ kpi[1] }}</span><i>↗</i></article> }</div>
-    </section>
-    <section class="playground" aria-labelledby="playground-title">
-      <div class="playground-copy"><p class="eyebrow">04 / Interactive</p><h3 id="playground-title">Arrange the product loop.</h3><p>Drag each stage into a deliberate order. The board validates the complete workflow, rather than rewarding a sequence of clicks.</p><p class="playground-status" aria-live="polite"><span></span>{{ playgroundMessage() }}</p></div>
-      <div class="playground-board" [class.complete]="playgroundComplete()">
-        <div class="playground-track" aria-hidden="true"><i [style.--progress]="playgroundComplete() ? 4 : 0"></i></div>
-        <div class="playground-steps">
-          @for (step of playgroundOrder(); track step; let index = $index) {
-            <button type="button" draggable="true" [class.done]="playgroundComplete()" [class.dragging]="draggedStep() === step" (dragstart)="startDrag(step)" (dragend)="draggedStep.set(null)" (dragover)="$event.preventDefault()" (drop)="dropStep(step)"><span>0{{ index + 1 }}</span><b>{{ playgroundStep(step).label }}</b><small>{{ playgroundStep(step).hint }}</small><i aria-hidden="true">⠿</i></button>
-          }
+        <div
+          class="hero-composition"
+          aria-label="Interactive representation of Mario's core frontend technologies"
+          (mouseenter)="startEarthSpin()"
+          (mouseleave)="stopEarthSpin()"
+          (pointerdown)="returnEarthBehind($event)"
+        >
+          <div
+            class="orb orb-one"
+            [class.earth-active]="earthSpinning()"
+            [class.earth-out-behind]="earthDepth() === 'out-behind'"
+            [class.earth-front-ready]="earthDepth() === 'front-ready'"
+            [class.earth-front]="earthDepth() === 'front'"
+            [class.earth-out-front]="earthDepth() === 'out-front'"
+            [class.earth-behind-ready]="earthDepth() === 'behind-ready'"
+            aria-hidden="true"
+          >
+            <canvas #earthCanvas class="earth-canvas"></canvas>
+          </div>
+          <div class="orb orb-two"></div>
+          <div
+            class="interface-shell"
+            [attr.data-chart]="heroChartType()"
+            (mouseleave)="returnEarthBehind()"
+            (pointerdown)="returnEarthBehind($event)"
+            (click)="returnEarthBehind($event)"
+          >
+            <div class="monitor-chrome" aria-hidden="true">
+              <span></span><span></span><span></span><i></i><b>cartago.system</b>
+            </div>
+            <div class="monitor-header">
+              <button
+                class="earth-motion-control"
+                type="button"
+                [attr.aria-pressed]="earthDepth() === 'front'"
+                (click)="onEarthControlClick($event)"
+                aria-label="Change the Earth's rotation"
+              ></button
+              ><a
+                class="monitor-banner-link"
+                href="https://github.com/CartagoGit"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open CartagoGit on GitHub"
+                ><img
+                  class="hero-banner"
+                  src="/images/cartagonova-banner-03-neon.png"
+                  alt="CartagoNova banner"
+              /></a>
+            </div>
+            <div class="interface-body">
+              <div class="monitor-selector" aria-label="Core technologies">
+                @for (panel of heroPanels; track panel.id) {
+                  <button
+                    type="button"
+                    [class.active]="activeHeroPanel() === panel.id"
+                    (click)="setHeroPanel(panel.id)"
+                  >
+                    @if (panel.iconAsset) {
+                      <img class="core-icon" [src]="panel.iconAsset" alt="" />
+                    } @else {
+                      <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path [attr.d]="panel.iconPath" [attr.fill]="panel.color" />
+                      </svg>
+                    }
+                    <span>{{ panel.label }}</span>
+                  </button>
+                }
+              </div>
+              <div class="interface-canvas" [class.technology-open]="selectedHeroPanel()">
+                <section
+                  class="dashboard-view"
+                  [class.panel-hidden]="selectedHeroPanel() || heroPanelChanging()"
+                  [class.swap-hidden]="heroPanelChanging()"
+                >
+                  <div class="canvas-heading">
+                    <span><i></i>CartagoNova / system telemetry</span><small>LIVE</small>
+                  </div>
+                  <div class="hero-chart-switcher" aria-label="Dashboard chart type">
+                    <button
+                      type="button"
+                      [class.active]="heroChartType() === 'bars'"
+                      (click)="setHeroChart('bars')"
+                    >
+                      Velocity</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'line'"
+                      (click)="setHeroChart('line')"
+                    >
+                      Signals</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'area'"
+                      (click)="setHeroChart('area')"
+                    >
+                      Coverage</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'dots'"
+                      (click)="setHeroChart('dots')"
+                    >
+                      Dots</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'pulse'"
+                      (click)="setHeroChart('pulse')"
+                    >
+                      Pulse</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'wave'"
+                      (click)="setHeroChart('wave')"
+                    >
+                      Wave</button
+                    ><button
+                      type="button"
+                      [class.active]="heroChartType() === 'grid'"
+                      (click)="setHeroChart('grid')"
+                    >
+                      Grid
+                    </button>
+                  </div>
+                  <p class="dashboard-caption">
+                    Choose a technology on the left to see its role. These controls change the
+                    visualisation only.
+                  </p>
+                  <div class="chart-workspace">
+                    <div
+                      class="canvas-chart"
+                      [attr.data-chart]="heroChartType()"
+                      [attr.data-palette]="heroPalette()"
+                    >
+                      @for (bar of heroChartBars(); track $index) {
+                        <span
+                          [style.height.%]="bar"
+                          [style.background]="chartBarGradient(bar)"
+                        ></span>
+                      }
+                      <svg
+                        viewBox="0 0 360 120"
+                        preserveAspectRatio="none"
+                        aria-label="Portfolio dashboard chart"
+                      >
+                        <path [attr.d]="heroChartPath()" /></svg
+                      ><em>product signal / 2026</em>
+                    </div>
+                    <div class="chart-symbols" aria-label="Randomise chart values">
+                      <button
+                        type="button"
+                        (click)="randomizeHeroChart()"
+                        aria-label="Refresh signal"
+                      >
+                        ⌁</button
+                      ><button
+                        type="button"
+                        (click)="randomizeHeroChart()"
+                        aria-label="Refresh metrics"
+                      >
+                        ◌</button
+                      ><button
+                        type="button"
+                        (click)="randomizeHeroChart()"
+                        aria-label="Refresh state"
+                      >
+                        ✦</button
+                      ><button
+                        class="temperature-icon"
+                        type="button"
+                        [class.active]="heroPalette() === 'heat'"
+                        (click)="setHeroTemperature()"
+                        aria-label="Random temperature colours"
+                      >
+                        ◉
+                      </button>
+                    </div>
+                  </div>
+                </section>
+                @if (selectedHeroPanel(); as selectedPanel) {
+                  <article
+                    class="technology-detail"
+                    [attr.data-effect]="heroEffect()"
+                    [attr.data-transition]="heroPanelTransition()"
+                  >
+                    <div>
+                      @if (selectedPanel.iconAsset) {
+                        <img class="core-icon" [src]="selectedPanel.iconAsset" alt="" />
+                      } @else {
+                        <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            [attr.d]="selectedPanel.iconPath"
+                            [attr.fill]="selectedPanel.color"
+                          />
+                        </svg>
+                      }
+                      <h3>{{ selectedPanel.label }}</h3>
+                      <p>{{ selectedPanel.detail }}</p>
+                    </div>
+                    <div class="effect-controls" aria-label="Technology description effects">
+                      <button type="button" (click)="setHeroEffect('shake')" aria-label="Shake">
+                        ≈</button
+                      ><button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">
+                        ⌘</button
+                      ><button type="button" (click)="setHeroEffect('float')" aria-label="Float">
+                        ↟</button
+                      ><button
+                        type="button"
+                        (click)="setHeroEffect('spectrum')"
+                        aria-label="Spectrum"
+                      >
+                        ◈
+                      </button>
+                    </div>
+                    <button class="detail-retry" type="button" (click)="clearHeroPanel()">
+                      Retry ↻
+                    </button>
+                  </article>
+                }
+              </div>
+            </div>
+          </div>
+          <p class="hero-note">Built with explicit state,<br />progressive enhancement and care.</p>
         </div>
-        <footer><span>{{ playgroundRuns() }} completed {{ playgroundRuns() === 1 ? 'loop' : 'loops' }}</span><button type="button" (click)="resetPlayground()">Reset <i aria-hidden="true">↻</i></button></footer>
-      </div>
-    </section>
-    <p class="motion-note">Motion is optional. This page respects <code>prefers-reduced-motion</code> and remains fully usable without it.</p>
-  </section>
-  }
+      </section>
+    }
 
-  @if (page() === 'contact') {
-  <section id="main-content" class="contact section" aria-labelledby="contact-title">
-    <div class="contact-image"><!-- TODO(image): replace with a professional portrait of Mario, preferably editorial, dark-background, vertical 4:5. --><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85" alt="Temporary portrait placeholder to be replaced with a professional photo of Mario" /></div>
-    <div class="contact-copy"><p class="eyebrow">05 / Contact</p><h2 id="contact-title">Have a frontend problem worth <em>solving?</em></h2><p>I work on Angular product interfaces, mobile delivery, frontend architecture and TypeScript tooling.</p><div class="contact-links"><a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer">GitHub <span>↗</span></a><a href="https://www.linkedin.com/in/mario-cabrero-volarich" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer">Docker Hub <span>↗</span></a></div>
-      <form (submit)="submitContact($event)" aria-label="Contact form"><label>Your email <input type="email" autocomplete="email" placeholder="you@company.com" required /></label><label>What are you building? <textarea rows="3" placeholder="A few useful details…" required></textarea></label><button class="button button-primary" type="submit">Send an introduction <span>↗</span></button>@if (formSent()) { <p class="form-feedback" role="status">Thanks — this demo validates the interaction. Connect it to your preferred email or form service before launch.</p> }</form>
-    </div>
-  </section>
-  }
+    @if (page() === 'work') {
+      <section id="main-content" class="work section" aria-labelledby="work-title">
+        <div class="section-heading">
+          <p class="eyebrow">01 / Selected work</p>
+          <h2 id="work-title">Pinned work, not<br />filler examples.</h2>
+          <p>Open-source projects that best represent the technical focus.</p>
+        </div>
+        <div class="case-grid">
+          <a
+            class="case-card case-deathblitz"
+            href="https://github.com/CartagoGit/mcp-vertex"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open MCP Vertex repository"
+          >
+            <img
+              class="project-icon"
+              src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/mcp-vertex.svg"
+              alt="MCP Vertex"
+            />
+            <div class="mcp-visual" aria-hidden="true">
+              <span>MCP</span><i></i><i></i><i></i><b>vertex</b>
+            </div>
+            <p class="case-number">01 — Agent infrastructure</p>
+            <div class="case-content">
+              <span class="case-label">Pinned project</span>
+              <h3>MCP Vertex</h3>
+              <p>
+                An extensible MCP server core and plugin system for structured, repeatable agent
+                workflows.
+              </p>
+              <ul>
+                <li>Typed contracts</li>
+                <li>Plugin architecture</li>
+                <li>CLI tooling</li>
+              </ul>
+              <span class="case-link">Explore repository <span>↗</span></span>
+            </div>
+          </a>
+          <a
+            class="case-card case-zoneless"
+            href="https://github.com/CartagoGit/quickmodel"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open QuickModel repository"
+          >
+            <img
+              class="project-icon"
+              src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/quickmodel.png"
+              alt="QuickModel"
+            />
+            <div class="zoneless-visual" aria-hidden="true">
+              <div class="cal-screen">
+                <small>ARCHITECTURE STATE</small><strong>42<span>.00</span></strong>
+                <div><i>signals</i><i>zoneless</i><i>tested</i></div>
+              </div>
+              <div class="signal-path"></div>
+            </div>
+            <p class="case-number">02 — TypeScript architecture</p>
+            <div class="case-content">
+              <span class="case-label">Pinned project</span>
+              <h3>QuickModel</h3>
+              <p>
+                A TypeScript modelling and serialization library focused on explicit contracts and
+                dependable data boundaries.
+              </p>
+              <ul>
+                <li>Type-safe models</li>
+                <li>Serialization</li>
+                <li>Developer experience</li>
+              </ul>
+              <span class="case-link">Explore repository <span>↗</span></span>
+            </div>
+          </a>
+          <article class="case-card case-vertex">
+            <div class="keyer-visual" aria-hidden="true">
+              <span class="terminal-dot"></span><span class="terminal-dot"></span
+              ><span class="terminal-dot"></span
+              ><code
+                >$ keyer status<br /><b>●</b> encrypted workspace<br /><i
+                  >ready for delivery</i
+                ></code
+              ><em>npm / typescript</em>
+            </div>
+            <p class="case-number">03 — Developer tooling</p>
+            <div class="case-content">
+              <span class="case-label">Pinned project</span>
+              <h3>Keyer</h3>
+              <p>
+                A published TypeScript CLI and library for managing secrets and configuration
+                workflows with a cleaner developer experience.
+              </p>
+              <ul>
+                <li>CLI design</li>
+                <li>Node.js tooling</li>
+                <li>Published package</li>
+              </ul>
+              <div class="keyer-actions">
+                <a href="https://github.com/CartagoGit/Keyer" target="_blank" rel="noreferrer"
+                  >Repository ↗</a
+                ><a
+                  href="https://www.npmjs.com/package/@cartago-git/keyer"
+                  target="_blank"
+                  rel="noreferrer"
+                  >View on npm ↗</a
+                >
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="secondary-work">
+          <p>Also pinned</p>
+          <a href="https://github.com/CartagoGit/print-cv" target="_blank" rel="noreferrer"
+            >Print CV <span>Vue, validation and E2E · repository</span> ↗</a
+          ><a
+            href="https://github.com/CartagoGit/zoneless-calculator"
+            target="_blank"
+            rel="noreferrer"
+            >Zoneless Calculator <span>Angular signals and tests · repository</span> ↗</a
+          ><a href="https://github.com/CartagoGit/NestGpt" target="_blank" rel="noreferrer"
+            >NestGpt <span>NestJS and GPT integration · repository</span> ↗</a
+          >
+        </div>
+        <section class="home-directory public-directory" aria-labelledby="directory-title">
+          <div>
+            <p class="eyebrow">Public surface</p>
+            <h2 id="directory-title">Code, packages<br /><em>and demos.</em></h2>
+            <p>Direct public links grouped separately from the pinned repositories above.</p>
+          </div>
+          <div class="directory-grid">
+            <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"
+              ><span>01 / CODE</span><b>GitHub profile</b
+              ><small>Repositories, pinned work and contribution history.</small><i>↗</i></a
+            ><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"
+              ><span>02 / SHIP</span><b>Docker Hub</b
+              ><small>Public container images and delivery context.</small><i>↗</i></a
+            ><a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"
+              ><span>03 / DEMO</span><b>DeathBlitz</b
+              ><small>Public interactive product experiment.</small><i>↗</i></a
+            ><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"
+              ><span>04 / PLAY</span><b>Cartago Tetris</b
+              ><small>Keyboard interaction and game-loop state.</small><i>↗</i></a
+            >
+          </div>
+        </section>
+      </section>
+    }
+
+    @if (page() === 'approach') {
+      <section id="main-content" class="capabilities section" aria-labelledby="capabilities-title">
+        <div class="section-heading">
+          <p class="eyebrow">02 / Capabilities</p>
+          <h2 id="capabilities-title">A system, not a<br />technology list.</h2>
+          <p>Choose an area to see how it appears in the work.</p>
+        </div>
+        <div class="capability-layout">
+          <div class="capability-tabs" role="tablist" aria-label="Engineering capabilities">
+            @for (capability of capabilities; track capability.id; let index = $index) {
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="activeCapability() === capability.id"
+                [class.active]="activeCapability() === capability.id"
+                (click)="setCapability(capability.id)"
+              >
+                <span>0{{ index + 1 }}</span
+                >{{ capability.eyebrow.split(' / ')[1] }}<i>↘</i>
+              </button>
+            }
+          </div>
+          <article class="capability-detail" role="tabpanel">
+            <p class="eyebrow">{{ selectedCapability().eyebrow }}</p>
+            <h3>{{ selectedCapability().title }}</h3>
+            <p>{{ selectedCapability().detail }}</p>
+            <div class="tool-pills">
+              @for (tool of selectedCapability().tools; track tool) {
+                <span>{{ tool }}</span>
+              }
+            </div>
+            <footer><span class="pulse"></span>{{ selectedCapability().proof }}</footer>
+          </article>
+        </div>
+      </section>
+
+      <section class="operational section">
+        <div>
+          <p class="eyebrow">04 / Professional experience</p>
+          <h2>Complex workflows,<br />quietly delivered.</h2>
+        </div>
+        <div class="operational-copy">
+          <p>
+            I build repeated-use business interfaces where roles, long-lived rules and complex forms
+            need to remain understandable. I can discuss the patterns and decisions without exposing
+            client code, data or product details.
+          </p>
+          <ul>
+            <li>Role-dependent actions and permissions</li>
+            <li>Web and Android delivery</li>
+            <li>Resilient forms and progressive validation</li>
+            <li>Architecture and testing practices that scale</li>
+          </ul>
+        </div>
+      </section>
+    }
+
+    @if (page() === 'knowledge') {
+      <section id="main-content" class="knowledge section" aria-labelledby="knowledge-title">
+        <div class="section-heading">
+          <p class="eyebrow">Knowledge system</p>
+          <h2 id="knowledge-title">Languages are tools.<br /><em>Judgement connects them.</em></h2>
+          <p>Hover a tile to see where each part of the stack is useful in a product.</p>
+        </div>
+        <div class="knowledge-grid">
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40">
+              <path d="M20 3 35 12v17L20 37 5 29V12z" /></svg
+            ><span>Frontend</span><b>Angular · TypeScript · SCSS</b>
+            <p>Signals, SSR, responsive interfaces and accessible UI for real workflows.</p>
+          </article>
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33" /></svg
+            ><span>Mobile</span><b>Ionic · Capacitor · Android</b>
+            <p>One product system carried from web to touch-first releases.</p>
+          </article>
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16" /></svg
+            ><span>Quality</span><b>Vitest · Accessibility · Performance</b>
+            <p>Tests, semantics and performance budgets that expose risk early.</p>
+          </article>
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40">
+              <path d="M8 10h24v20H8zM14 16h12M14 22h7" /></svg
+            ><span>Tooling</span><b>Node.js · MCP · Docker</b>
+            <p>CLIs, containers and typed agent workflows for repeatable delivery.</p>
+          </article>
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="14" />
+              <path d="M20 6v28M6 20h28" /></svg
+            ><span>Systems</span><b>CDK · Storybook · Tokens</b>
+            <p>Reusable primitives that make a visual language scale without flattening it.</p>
+          </article>
+          <article>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z" /></svg
+            ><span>Backend edges</span><b>NestJS · APIs · GPT</b>
+            <p>Clear integration boundaries when a frontend needs a dependable service layer.</p>
+          </article>
+        </div>
+      </section>
+    }
+
+    @if (page() === 'docker') {
+      <section id="main-content" class="docker-page section" aria-labelledby="docker-title">
+        <div class="section-heading">
+          <p class="eyebrow">Container delivery</p>
+          <h2 id="docker-title">Build it.<br /><em>Ship it.</em></h2>
+          <p>
+            Public container work belongs beside the frontend, because delivery is part of the
+            product experience.
+          </p>
+        </div>
+        <a
+          class="docker-terminal"
+          href="https://hub.docker.com/u/cartagodocker"
+          target="_blank"
+          rel="noreferrer"
+          ><span>Docker Hub / cartagodocker</span
+          ><code
+            >$ docker pull cartagodocker/&lt;image&gt;<br /><b>●</b> public images available<br /><i
+              >Open Docker Hub ↗</i
+            ></code
+          >
+          <div><em>Angular</em><em>Node</em><em>Delivery</em></div></a
+        >
+      </section>
+    }
+
+    @if (page() === 'demos') {
+      <section id="main-content" class="demos-page section" aria-labelledby="demos-title">
+        <div class="section-heading">
+          <p class="eyebrow">Public experiments</p>
+          <h2 id="demos-title">Interaction you can<br /><em>actually try.</em></h2>
+          <p>Small public demos are kept distinct from the featured engineering projects.</p>
+        </div>
+        <div class="demo-links">
+          <a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"
+            ><span>01</span><b>DeathBlitz</b>
+            <p>Stateful product interaction and persistent progression.</p>
+            <i>Open demo ↗</i></a
+          ><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"
+            ><span>02</span><b>Cartago Tetris</b>
+            <p>Keyboard interaction, game loop and responsive board state.</p>
+            <i>Open demo ↗</i></a
+          ><a href="https://cartago-snake.netlify.app/" target="_blank" rel="noreferrer"
+            ><span>03</span><b>Cartago Snake</b>
+            <p>Real-time movement, collision handling and state updates.</p>
+            <i>Open demo ↗</i></a
+          ><a href="https://cartago-minesweeper.netlify.app/" target="_blank" rel="noreferrer"
+            ><span>04</span><b>Minesweeper</b>
+            <p>Grid interaction, timers and information hierarchy.</p>
+            <i>Open demo ↗</i></a
+          >
+        </div>
+        <section class="neon-game" aria-labelledby="neon-game-title">
+          <div>
+            <p class="eyebrow">Tiny pointless game</p>
+            <h3 id="neon-game-title">Catch the neon signal.</h3>
+            <p>Pure interaction design: the target moves on each successful hit.</p>
+            <b>{{ neonScore() }} <small>signals caught</small></b>
+          </div>
+          <div class="neon-grid" aria-label="Neon signal game">
+            @for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
+              <button
+                type="button"
+                [class.target]="neonTarget() === cell"
+                (click)="hitNeonTarget(cell)"
+                [attr.aria-label]="neonTarget() === cell ? 'Catch signal' : 'Empty signal node'"
+              >
+                <i></i>
+              </button>
+            }
+          </div>
+        </section>
+      </section>
+    }
+
+    @if (page() === 'lab') {
+      <section id="main-content" class="lab section" aria-labelledby="lab-title">
+        <div class="section-heading">
+          <p class="eyebrow">03 / Frontend lab</p>
+          <h2 id="lab-title">Product telemetry,<br />not UI filler.</h2>
+          <p>
+            Switch the perspective to see how KPIs, visual hierarchy and state changes can explain a
+            product decision.
+          </p>
+        </div>
+        <div class="lab-toolbar">
+          <div role="group" aria-label="Choose a dashboard perspective">
+            @for (metric of telemetry; track metric.id) {
+              <button
+                [class.active]="activeTelemetry() === metric.id"
+                (click)="setTelemetry(metric.id)"
+              >
+                {{ metric.label }}
+              </button>
+            }
+          </div>
+          <button class="command-button" type="button" (click)="commandOpen.set(true)">
+            <kbd>⌘</kbd><kbd>K</kbd> Command palette
+          </button>
+        </div>
+        <div class="chart-switcher" role="group" aria-label="Choose a chart representation">
+          <span>Visualise as</span
+          ><button [class.active]="chartType() === 'bars'" (click)="setChartType('bars')">
+            Bars</button
+          ><button [class.active]="chartType() === 'line'" (click)="setChartType('line')">
+            Line</button
+          ><button [class.active]="chartType() === 'area'" (click)="setChartType('area')">
+            Area
+          </button>
+        </div>
+        <section
+          class="telemetry-dashboard"
+          [attr.data-metric]="activeTelemetry()"
+          [attr.data-chart]="chartType()"
+          aria-live="polite"
+        >
+          <article class="telemetry-summary">
+            <span>{{ selectedTelemetry().label }}</span
+            ><b>{{ selectedTelemetry().value }}</b
+            ><small>{{ selectedTelemetry().valueLabel }}</small>
+            <p>{{ selectedTelemetry().note }}</p>
+          </article>
+          <article class="telemetry-chart">
+            <header>
+              <div>
+                <span>8-week trend</span><b>{{ selectedTelemetry().title }}</b>
+              </div>
+              <i>LIVE</i>
+            </header>
+            <div class="bar-chart" aria-label="Metric trend chart">
+              @for (bar of selectedTelemetry().bars; track $index) {
+                <span [style.--bar]="bar + '%'" [attr.aria-label]="bar + ' percent'"></span>
+              }
+              <svg viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
+                <path
+                  d="M0 145 C38 132, 54 116, 88 122 S136 76, 172 93 S220 75, 254 63 S302 70, 336 35 S375 40,400 16"
+                />
+              </svg>
+            </div>
+            <footer><span>Week 01</span><span>Week 08</span></footer>
+          </article>
+          <div class="telemetry-kpis">
+            @for (kpi of selectedTelemetry().kpis; track kpi[1]) {
+              <article>
+                <b>{{ kpi[0] }}</b
+                ><span>{{ kpi[1] }}</span
+                ><i>↗</i>
+              </article>
+            }
+          </div>
+        </section>
+        <section class="playground" aria-labelledby="playground-title">
+          <div class="playground-copy">
+            <p class="eyebrow">04 / Interactive</p>
+            <h3 id="playground-title">Arrange the product loop.</h3>
+            <p>
+              Drag each stage into a deliberate order. The board validates the complete workflow,
+              rather than rewarding a sequence of clicks.
+            </p>
+            <p class="playground-status" aria-live="polite">
+              <span></span>{{ playgroundMessage() }}
+            </p>
+          </div>
+          <div class="playground-board" [class.complete]="playgroundComplete()">
+            <div class="playground-track" aria-hidden="true">
+              <i [style.--progress]="playgroundComplete() ? 4 : 0"></i>
+            </div>
+            <div class="playground-steps">
+              @for (step of playgroundOrder(); track step; let index = $index) {
+                <button
+                  type="button"
+                  draggable="true"
+                  [class.done]="playgroundComplete()"
+                  [class.dragging]="draggedStep() === step"
+                  (dragstart)="startDrag(step)"
+                  (dragend)="draggedStep.set(null)"
+                  (dragover)="$event.preventDefault()"
+                  (drop)="dropStep(step)"
+                >
+                  <span>0{{ index + 1 }}</span
+                  ><b>{{ playgroundStep(step).label }}</b
+                  ><small>{{ playgroundStep(step).hint }}</small
+                  ><i aria-hidden="true">⠿</i>
+                </button>
+              }
+            </div>
+            <footer>
+              <span
+                >{{ playgroundRuns() }} completed
+                {{ playgroundRuns() === 1 ? 'loop' : 'loops' }}</span
+              ><button type="button" (click)="resetPlayground()">
+                Reset <i aria-hidden="true">↻</i>
+              </button>
+            </footer>
+          </div>
+        </section>
+        <p class="motion-note">
+          Motion is optional. This page respects <code>prefers-reduced-motion</code> and remains
+          fully usable without it.
+        </p>
+      </section>
+    }
+
+    @if (page() === 'contact') {
+      <section id="main-content" class="contact section" aria-labelledby="contact-title">
+        <div class="contact-image">
+          <!-- TODO(image): replace with a professional portrait of Mario, preferably editorial, dark-background, vertical 4:5. --><img
+            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85"
+            alt="Temporary portrait placeholder to be replaced with a professional photo of Mario"
+          />
+        </div>
+        <div class="contact-copy">
+          <p class="eyebrow">05 / Contact</p>
+          <h2 id="contact-title">Have a frontend problem worth <em>solving?</em></h2>
+          <p>
+            I work on Angular product interfaces, mobile delivery, frontend architecture and
+            TypeScript tooling.
+          </p>
+          <div class="contact-links">
+            <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"
+              >GitHub <span>↗</span></a
+            ><a
+              href="https://www.linkedin.com/in/mario-cabrero-volarich"
+              target="_blank"
+              rel="noreferrer"
+              >LinkedIn <span>↗</span></a
+            ><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"
+              >Docker Hub <span>↗</span></a
+            >
+          </div>
+          <form (submit)="submitContact($event)" aria-label="Contact form">
+            <label
+              >Your email
+              <input
+                type="email"
+                autocomplete="email"
+                placeholder="you@company.com"
+                required /></label
+            ><label
+              >What are you building?
+              <textarea rows="3" placeholder="A few useful details…" required></textarea></label
+            ><button class="button button-primary" type="submit">
+              Send an introduction <span>↗</span>
+            </button>
+            @if (formSent()) {
+              <p class="form-feedback" role="status">
+                Thanks — this demo validates the interaction. Connect it to your preferred email or
+                form service before launch.
+              </p>
+            }
+          </form>
+        </div>
+      </section>
+    }
   </div>
 
-  <footer class="site-footer"><a class="brand" [routerLink]="['/', locale()]"><span class="brand-mark">C.</span><span>Cartago</span></a><p>© {{ 2026 }} Mario Cabrero Volarich.</p><div class="footer-links" aria-label="Public links"><a href="https://www.linkedin.com/in/mario-cabrero-volarich" target="_blank" rel="noreferrer"><i class="linkedin-icon"><img src="/icons/linkedin-profile-badge.svg" alt="" /></i><span>LinkedIn</span></a><a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="socialIcons.github.path" fill="currentColor" /></svg><span>GitHub</span></a><a href="https://www.npmjs.com/~cartago-git" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="socialIcons.npm.path" fill="#cb3837" /></svg><span>npm</span></a><a href="https://github.com/CartagoGit/mcp-vertex" target="_blank" rel="noreferrer"><img src="/icons/mcp-vertex.svg" alt="" /><span>MCP Vertex</span></a><a href="https://github.com/CartagoGit/quickmodel" target="_blank" rel="noreferrer"><img src="/icons/quickmodel.png" alt="" /><span>QuickModel</span></a></div><a href="#main-content">Back to top ↑</a></footer>
+  <footer class="site-footer">
+    <a class="brand" [routerLink]="['/', locale()]"
+      ><span class="brand-mark">C.</span><span>Cartago</span></a
+    >
+    <p>© {{ 2026 }} Mario Cabrero Volarich.</p>
+    <div class="footer-links" aria-label="Public links">
+      @for (link of publicLinks; track link.href) {
+        <a [href]="link.href" target="_blank" rel="noreferrer">
+          @if (link.imageSrc) {
+            <img [src]="link.imageSrc" alt="" />
+          } @else {
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" />
+            </svg>
+          }
+          <span>{{ link.label }}</span></a
+        >
+      }
+    </div>
+    <a href="#main-content">Back to top ↑</a>
+  </footer>
 
   @if (commandOpen()) {
     <div class="command-dialog-backdrop" (click)="commandOpen.set(false)">
-      <section class="command-dialog" role="dialog" aria-modal="true" aria-labelledby="command-title" (click)="$event.stopPropagation()"><div><p id="command-title">Command palette</p><button type="button" (click)="commandOpen.set(false)" aria-label="Close command palette">×</button></div><label>Search product commands <input autofocus placeholder="Try ‘work’ or ‘contact’" /></label><a [routerLink]="routeFor('work')" (click)="setTransition('work'); commandOpen.set(false)"><span>↗</span> View selected work <kbd>↵</kbd></a><a [routerLink]="routeFor('lab')" (click)="setTransition('lab'); commandOpen.set(false)"><span>✦</span> Explore Frontend Lab <kbd>↵</kbd></a><a [routerLink]="routeFor('contact')" (click)="setTransition('contact'); commandOpen.set(false)"><span>✉</span> Start a conversation <kbd>↵</kbd></a></section>
+      <section
+        class="command-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="command-title"
+        (click)="$event.stopPropagation()"
+      >
+        <div>
+          <p id="command-title">Command palette</p>
+          <button type="button" (click)="commandOpen.set(false)" aria-label="Close command palette">
+            ×
+          </button>
+        </div>
+        <label
+          >Search product commands <input autofocus placeholder="Try ‘work’ or ‘contact’" /></label
+        ><a [routerLink]="routeFor('work')" (click)="setTransition('work'); commandOpen.set(false)"
+          ><span>↗</span> View selected work <kbd>↵</kbd></a
+        ><a [routerLink]="routeFor('lab')" (click)="setTransition('lab'); commandOpen.set(false)"
+          ><span>✦</span> Explore Frontend Lab <kbd>↵</kbd></a
+        ><a
+          [routerLink]="routeFor('contact')"
+          (click)="setTransition('contact'); commandOpen.set(false)"
+          ><span>✉</span> Start a conversation <kbd>↵</kbd></a
+        >
+      </section>
     </div>
   }
 </main>

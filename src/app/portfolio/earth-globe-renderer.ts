@@ -54,7 +54,11 @@ const fragmentShader = `
 `;
 
 /** Draws a true spherical projection at the display resolution using WebGL. */
-export function renderEarthFrame(canvas: HTMLCanvasElement, image: HTMLImageElement, frame: EarthFrame): void {
+export function renderEarthFrame(
+  canvas: HTMLCanvasElement,
+  image: HTMLImageElement,
+  frame: EarthFrame,
+): void {
   const program = getProgram(canvas, image);
   if (!program) return;
 
@@ -77,7 +81,11 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
   const cached = programs.get(canvas);
   if (cached !== undefined) return cached;
 
-  const context = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
+  const context = canvas.getContext('webgl', {
+    alpha: true,
+    antialias: true,
+    premultipliedAlpha: false,
+  });
   if (!context) {
     programs.set(canvas, null);
     return null;
@@ -103,7 +111,11 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
   const buffer = context.createBuffer();
   if (!buffer) return null;
   context.bindBuffer(context.ARRAY_BUFFER, buffer);
-  context.bufferData(context.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), context.STATIC_DRAW);
+  context.bufferData(
+    context.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+    context.STATIC_DRAW,
+  );
   context.useProgram(program);
   context.enableVertexAttribArray(position);
   context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
@@ -114,7 +126,14 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
   context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
-  context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, context.RGBA, context.UNSIGNED_BYTE, image);
+  context.texImage2D(
+    context.TEXTURE_2D,
+    0,
+    context.RGBA,
+    context.RGBA,
+    context.UNSIGNED_BYTE,
+    image,
+  );
   context.uniform1i(context.getUniformLocation(program, 'earthTexture'), 0);
 
   const renderer = { context, program, texture, angle, axis };
@@ -122,7 +141,11 @@ function getProgram(canvas: HTMLCanvasElement, image: HTMLImageElement): GlobePr
   return renderer;
 }
 
-function compileShader(context: WebGLRenderingContext, type: number, source: string): WebGLShader | null {
+function compileShader(
+  context: WebGLRenderingContext,
+  type: number,
+  source: string,
+): WebGLShader | null {
   const shader = context.createShader(type);
   if (!shader) return null;
   context.shaderSource(shader, source);

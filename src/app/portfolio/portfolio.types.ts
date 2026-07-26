@@ -1,8 +1,10 @@
 /** Shared domain contracts for the portfolio screens. */
 export type Locale = 'en' | 'es';
-export type PortfolioPageId = 'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
+export type PortfolioPageId =
+  'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
 export type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
-export type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
+export type CapabilityId =
+  'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
 export type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 export type TelemetryId = 'product' | 'quality' | 'delivery';
 export type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
@@ -33,6 +35,14 @@ export interface Technology {
   label: string;
   iconPath: string;
   color: string;
+}
+
+export interface PublicLink {
+  label: string;
+  href: string;
+  imageSrc?: string;
+  iconPath?: string;
+  color?: string;
 }
 
 export interface LanguageOption {
