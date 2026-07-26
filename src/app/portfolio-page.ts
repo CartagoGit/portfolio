@@ -13,6 +13,7 @@ type TelemetryId = 'product' | 'quality' | 'delivery';
 type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
 type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 type HeroPalette = 'ocean' | 'heat' | 'lime';
+type HeroPanelTransition = 'slide' | 'flip' | 'scan' | 'zoom';
 
 interface Capability {
   id: CapabilityId;
@@ -79,6 +80,7 @@ export class PortfolioPage {
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly heroEffect = signal<HeroEffect>('idle');
+  protected readonly heroPanelTransition = signal<HeroPanelTransition>('slide');
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
@@ -248,6 +250,10 @@ export class PortfolioPage {
 
   protected setHeroPanel(panel: HeroPanelId): void {
     if (this.activeHeroPanel() === panel) return;
+    const currentTransition = this.heroPanelTransition();
+    const availableTransitions: HeroPanelTransition[] = ['slide', 'flip', 'scan', 'zoom'];
+    const nextTransitions = availableTransitions.filter((transition) => transition !== currentTransition);
+    this.heroPanelTransition.set(nextTransitions[Math.floor(Math.random() * nextTransitions.length)]);
     this.heroEffect.set('idle');
     this.activeHeroPanel.set(panel);
   }
