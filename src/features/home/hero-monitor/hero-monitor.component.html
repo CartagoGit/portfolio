@@ -1,0 +1,212 @@
+<div
+	class="hero-composition"
+	aria-label="Interactive representation of Mario's core frontend technologies"
+	(mouseenter)="earth.start()"
+	(mouseleave)="earth.stop()"
+	(pointerdown)="returnEarthBehind($event)">
+	<div
+		class="orb orb-one"
+		[class.earth-active]="earth.active()"
+		[class.earth-out-behind]="earthDepth() === 'out-behind'"
+		[class.earth-front-ready]="earthDepth() === 'front-ready'"
+		[class.earth-front]="earthDepth() === 'front'"
+		[class.earth-out-front]="earthDepth() === 'out-front'"
+		[class.earth-behind-ready]="earthDepth() === 'behind-ready'"
+		aria-hidden="true">
+		<app-earth-globe
+			#earth
+			[depth]="earthDepth()" />
+	</div>
+	<div class="orb orb-two"></div>
+	<div
+		class="interface-shell"
+		[attr.data-chart]="chartType()"
+		(mouseleave)="returnEarthBehind()"
+		(pointerdown)="returnEarthBehind($event)"
+		(click)="returnEarthBehind($event)">
+		<div
+			class="monitor-chrome"
+			aria-hidden="true">
+			<span></span>
+			<span></span>
+			<span></span>
+			<i></i>
+			<b>cartago.system</b>
+		</div>
+		<div class="monitor-header">
+			<button
+				class="earth-motion-control"
+				type="button"
+				[attr.aria-pressed]="earthDepth() === 'front'"
+				(click)="earth.changeMotion(); showEarthInFront($event)"
+				aria-label="Change the Earth's rotation"></button>
+			<a
+				class="monitor-banner-link"
+				href="https://github.com/CartagoGit"
+				target="_blank"
+				rel="noreferrer"
+				[attr.aria-disabled]="earthBlocksMonitor()"
+				[attr.tabindex]="earthBlocksMonitor() ? -1 : null"
+				[class.is-disabled]="earthBlocksMonitor()"
+				(click)="guardMonitorBanner($event)"
+				aria-label="Open CartagoGit on GitHub">
+				<img
+					class="hero-banner"
+					src="/images/cartagonova-banner-03-neon.png"
+					alt="CartagoNova banner" />
+			</a>
+		</div>
+		<div class="interface-body">
+			<div
+				class="monitor-selector"
+				aria-label="Core technologies">
+				@for (panel of panels; track panel.id) {
+					<button
+						type="button"
+						[class.active]="activePanel() === panel.id"
+						(click)="selectPanel(panel.id)">
+						@if (panel.iconAsset) {
+							<img
+								class="core-icon"
+								[src]="panel.iconAsset"
+								alt="" />
+						} @else {
+							<svg
+								class="core-icon"
+								viewBox="0 0 24 24"
+								aria-hidden="true">
+								<path
+									[attr.d]="panel.iconPath"
+									[attr.fill]="panel.color" />
+							</svg>
+						}
+						<span>{{ panel.label }}</span>
+					</button>
+				}
+			</div>
+			<div
+				class="interface-canvas"
+				[class.technology-open]="selectedPanel()">
+				<section
+					class="dashboard-view"
+					[class.panel-hidden]="selectedPanel() || panelChanging()"
+					[class.swap-hidden]="panelChanging()">
+					<div class="canvas-heading">
+						<span>
+							<i></i>
+							CartagoNova / system telemetry
+						</span>
+						<small>LIVE</small>
+					</div>
+					<div
+						class="hero-chart-switcher"
+						aria-label="Dashboard chart type">
+						@for (chart of chartOptions; track chart.id) {
+							<button
+								type="button"
+								[class.active]="chartType() === chart.id"
+								(click)="setChart(chart.id)">
+								{{ chart.label }}
+							</button>
+						}
+					</div>
+					<p class="dashboard-caption">
+						Choose a technology on the left to see its role. These
+						controls change the visualisation only.
+					</p>
+					<div class="chart-workspace">
+						<div
+							class="canvas-chart"
+							[attr.data-chart]="chartType()"
+							[attr.data-palette]="palette()">
+							@for (bar of chartBars(); track $index) {
+								<span
+									[style.height.%]="bar"
+									[style.background]="gradient(bar)"></span>
+							}
+							<svg
+								viewBox="0 0 360 120"
+								preserveAspectRatio="none"
+								aria-label="Portfolio dashboard chart">
+								<path [attr.d]="chartPath()" />
+							</svg>
+							<em>product signal / 2026</em>
+						</div>
+						<div
+							class="chart-symbols"
+							aria-label="Randomise chart values">
+							@for (symbol of ['⌁', '◌', '✦']; track symbol) {
+								<button
+									type="button"
+									(click)="randomizeChart()"
+									aria-label="Refresh chart values">
+									{{ symbol }}
+								</button>
+							}
+							<button
+								class="temperature-icon"
+								type="button"
+								[class.active]="palette() === 'heat'"
+								(click)="setTemperature()"
+								aria-label="Random temperature colours">
+								◉
+							</button>
+						</div>
+					</div>
+				</section>
+				@if (selectedPanel(); as panel) {
+					<article
+						class="technology-detail"
+						[attr.data-effect]="effect()"
+						[attr.data-transition]="panelTransition()">
+						<div>
+							@if (panel.iconAsset) {
+								<img
+									class="core-icon"
+									[src]="panel.iconAsset"
+									alt="" />
+							} @else {
+								<svg
+									class="core-icon"
+									viewBox="0 0 24 24"
+									aria-hidden="true">
+									<path
+										[attr.d]="panel.iconPath"
+										[attr.fill]="panel.color" />
+								</svg>
+							}
+							<h3>{{ panel.label }}</h3>
+							<p>{{ panel.detail }}</p>
+						</div>
+						<div
+							class="effect-controls"
+							aria-label="Technology description effects">
+							@for (
+								effectOption of effectOptions;
+								track effectOption.id
+							) {
+								<button
+									type="button"
+									(click)="setEffect(effectOption.id)"
+									[attr.aria-label]="effectOption.id">
+									{{ effectOption.symbol }}
+								</button>
+							}
+						</div>
+						<button
+							class="detail-retry"
+							type="button"
+							(click)="clearPanel()">
+							Retry ↻
+						</button>
+					</article>
+				}
+			</div>
+		</div>
+	</div>
+	<p class="hero-note">
+		Built with explicit state,
+		<br />
+		progressive enhancement and care.
+	</p>
+</div>

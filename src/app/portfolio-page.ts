@@ -1,5 +1,4 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import type { OnDestroy } from '@angular/core';
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -27,16 +26,10 @@ import { ApproachPageComponent } from '../features/approach/approach-page.compon
 import { KnowledgePageComponent } from '../features/knowledge/knowledge-page.component';
 import { LabPageComponent } from '../features/lab/lab-page.component';
 import { WorkPageComponent } from '../features/work/work-page.component';
-import { EarthGlobeComponent } from '../features/home/earth-globe/earth-globe.component';
-import { EarthDepthFacade } from '../features/home/earth-globe/earth-depth.facade';
-import { HeroMonitorFacade } from '../features/home/hero-monitor/hero-monitor.facade';
+import { HeroMonitorComponent } from '../features/home/hero-monitor/hero-monitor.component';
 import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
 import type {
 	CapabilityId,
-	ChartType,
-	HeroEffect,
-	HeroPalette,
-	HeroPanelId,
 	Locale,
 	PortfolioPageId,
 } from '../domain/portfolio.types';
@@ -54,22 +47,20 @@ import type {
 		KnowledgePageComponent,
 		LabPageComponent,
 		WorkPageComponent,
-		EarthGlobeComponent,
+		HeroMonitorComponent,
 		HomeIntroComponent,
 	],
 	templateUrl: './portfolio-page.html',
 	styleUrl: './portfolio-page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortfolioPage implements OnDestroy {
+export class PortfolioPage {
 	private readonly route = inject(ActivatedRoute);
 	private readonly router = inject(Router);
 	private readonly document = inject(DOCUMENT);
 	private readonly title = inject(Title);
 	private readonly meta = inject(Meta);
 	private readonly platformId = inject(PLATFORM_ID);
-	protected readonly hero = new HeroMonitorFacade();
-	protected readonly earth = new EarthDepthFacade();
 
 	protected readonly locale = signal<Locale>('en');
 	protected readonly page = signal<PortfolioPageId>('home');
@@ -81,19 +72,9 @@ export class PortfolioPage implements OnDestroy {
 	protected readonly activeCapability = signal<CapabilityId>('product');
 	protected readonly commandOpen = signal(false);
 	protected readonly formSent = signal(false);
-	protected readonly activeHeroPanel = this.hero.activePanel;
-	protected readonly heroChartType = this.hero.chartType;
-	protected readonly heroEffect = this.hero.effect;
-	protected readonly heroPanelTransition = this.hero.panelTransition;
-	protected readonly heroPanelChanging = this.hero.panelChanging;
-	protected readonly heroPalette = this.hero.palette;
-	protected readonly heroChartBars = this.hero.chartBars;
-	protected readonly earthDepth = this.earth.state;
-	protected readonly earthBlocksMonitor = this.earth.blocksMonitor;
 	protected readonly neonScore = signal(0);
 	protected readonly neonTarget = signal(4);
 	protected readonly publicLinks = PUBLIC_LINKS;
-	protected readonly heroPanels = this.hero.panels;
 	protected readonly technologyMarquee = TECHNOLOGY_MARQUEE;
 	protected readonly languages = LANGUAGES;
 
@@ -105,8 +86,6 @@ export class PortfolioPage implements OnDestroy {
 				({ id }) => id === this.activeCapability()
 			) ?? this.capabilities[0]
 	);
-	protected readonly selectedHeroPanel = this.hero.selectedPanel;
-	protected readonly heroChartPath = this.hero.chartPath;
 
 	protected readonly copy = computed(() =>
 		this.locale() === 'en'
@@ -199,61 +178,6 @@ export class PortfolioPage implements OnDestroy {
 
 	protected setCapability(id: CapabilityId): void {
 		this.activeCapability.set(id);
-	}
-
-	protected setHeroPanel(panel: HeroPanelId): void {
-		this.hero.selectPanel(panel);
-	}
-
-	protected clearHeroPanel(): void {
-		this.hero.clearPanel();
-	}
-
-	protected setHeroChart(type: ChartType): void {
-		this.hero.setChart(type);
-	}
-
-	protected randomizeHeroChart(): void {
-		this.hero.randomizeChart();
-	}
-
-	protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
-		this.hero.setEffect(effect);
-	}
-
-	protected setHeroPalette(palette: HeroPalette): void {
-		this.hero.setPalette(palette);
-	}
-
-	protected setHeroTemperature(): void {
-		this.hero.setTemperature();
-	}
-
-	protected chartBarGradient(value: number): string {
-		return this.hero.gradient(value);
-	}
-
-	ngOnDestroy(): void {
-		this.hero.destroy();
-	}
-
-	protected showEarthInFront(): void {
-		this.earth.showInFront();
-	}
-
-	protected onEarthControlClick(event: MouseEvent): void {
-		event.stopPropagation();
-		this.showEarthInFront();
-	}
-
-	protected guardMonitorBanner(event: MouseEvent): void {
-		if (!this.earthBlocksMonitor()) return;
-		event.preventDefault();
-		event.stopPropagation();
-	}
-
-	protected returnEarthBehind(event?: MouseEvent): void {
-		this.earth.returnBehind(event?.target);
 	}
 
 	protected hitNeonTarget(index: number): void {
