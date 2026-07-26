@@ -149,32 +149,7 @@
               >{{ copy().contact }} <span aria-hidden="true">→</span></a
             >
           </div>
-          <div class="technology-marquee" aria-label="Technology index from the CartagoGit profile">
-            <div class="technology-track">
-              @for (technology of technologyMarquee; track technology.label) {
-                <span
-                  class="technology-token"
-                  tabindex="0"
-                  [style.--label-width.px]="technology.label.length * 8 + 44"
-                  ><svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg
-                  ><b>{{ technology.label }}</b></span
-                >
-              }
-            </div>
-            <div class="technology-track" aria-hidden="true">
-              @for (technology of technologyMarquee; track technology.label) {
-                <span
-                  class="technology-token"
-                  tabindex="-1"
-                  [style.--label-width.px]="technology.label.length * 8 + 44"
-                  ><svg viewBox="0 0 24 24">
-                    <path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg
-                  ><b>{{ technology.label }}</b></span
-                >
-              }
-            </div>
-          </div>
+          <app-technology-marquee [technologies]="technologyMarquee" />
           <div class="hero-socials" aria-label="Public profiles and featured projects">
             @for (link of publicLinks; track link.href) {
               <a [href]="link.href" target="_blank" rel="noreferrer">

@@ -1,0 +1,18 @@
+<div class="technology-marquee" aria-label="Technology index from the CartagoGit profile">
+  @for (duplicate of [false, true]; track duplicate) {
+    <div class="technology-marquee__track" [attr.aria-hidden]="duplicate || null">
+      @for (technology of technologies(); track technology.label) {
+        <span
+          class="technology-marquee__token"
+          [attr.tabindex]="duplicate ? -1 : 0"
+          [style.--label-width.px]="technology.label.length * 8 + 44"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path [attr.d]="technology.iconPath" [attr.fill]="technology.color" />
+          </svg>
+          <b>{{ technology.label }}</b>
+        </span>
+      }
+    </div>
+  }
+</div>
