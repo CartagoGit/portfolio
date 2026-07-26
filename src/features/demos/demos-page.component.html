@@ -1,39 +1,54 @@
-<section id="main-content" class="demos-page" aria-labelledby="demos-title">
-  <div class="demos-page__heading">
-    <p>Public experiments</p>
-    <h2 id="demos-title">
-      Interaction you can
-      <br />
-      <em>actually try.</em>
-    </h2>
-    <p>Small public demos are kept distinct from the featured engineering projects.</p>
-  </div>
-  <div class="demos-page__links">
-    @for (demo of demos; track demo[1]) {
-      <a [href]="demo[3]" target="_blank" rel="noreferrer">
-        <span>{{ demo[0] }}</span>
-        <b>{{ demo[1] }}</b>
-        <p>{{ demo[2] }}</p>
-        <i>Open demo ↗</i>
-      </a>
-    }
-  </div>
-  <section class="demos-page__game">
-    <div>
-      <p>Tiny pointless game</p>
-      <h3>Catch the neon signal.</h3>
-      <p>Pure interaction design: the target moves on each successful hit.</p>
-      <b>
-        {{ score() }}
-        <small>signals caught</small>
-      </b>
-    </div>
-    <div class="demos-page__grid">
-      @for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
-        <button type="button" [class.is-target]="target() === cell" (click)="hit.emit(cell)">
-          <i></i>
-        </button>
-      }
-    </div>
-  </section>
+<section
+	id="main-content"
+	class="demos-page"
+	aria-labelledby="demos-title">
+	<div class="demos-page__heading">
+		<p>Public experiments</p>
+		<h2 id="demos-title">
+			Interaction you can
+			<br />
+			<em>actually try.</em>
+		</h2>
+		<p>
+			Small public demos are kept distinct from the featured engineering
+			projects.
+		</p>
+	</div>
+	<div class="demos-page__links">
+		@for (demo of demos; track demo[1]) {
+			<a
+				[href]="demo[3]"
+				target="_blank"
+				rel="noreferrer">
+				<span>{{ demo[0] }}</span>
+				<b>{{ demo[1] }}</b>
+				<p>{{ demo[2] }}</p>
+				<i>Open demo ↗</i>
+			</a>
+		}
+	</div>
+	<section class="demos-page__game">
+		<div>
+			<p>Tiny pointless game</p>
+			<h3>Catch the neon signal.</h3>
+			<p>
+				Pure interaction design: the target moves on each successful
+				hit.
+			</p>
+			<b>
+				{{ score() }}
+				<small>signals caught</small>
+			</b>
+		</div>
+		<div class="demos-page__grid">
+			@for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
+				<button
+					type="button"
+					[class.is-target]="target() === cell"
+					(click)="hit.emit(cell)">
+					<i></i>
+				</button>
+			}
+		</div>
+	</section>
 </section>

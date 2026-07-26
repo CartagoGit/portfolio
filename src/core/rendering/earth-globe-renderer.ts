@@ -1,18 +1,18 @@
 /** GPU renderer for the interactive Earth; CPU work is deliberately avoided. */
 export interface EarthFrame {
-  angle: number;
-  axisX: number;
-  axisY: number;
-  axisZ: number;
-  foreground: boolean;
+	angle: number;
+	axisX: number;
+	axisY: number;
+	axisZ: number;
+	foreground: boolean;
 }
 
 interface GlobeProgram {
-  context: WebGLRenderingContext;
-  program: WebGLProgram;
-  texture: WebGLTexture;
-  angle: WebGLUniformLocation;
-  axis: WebGLUniformLocation;
+	context: WebGLRenderingContext;
+	program: WebGLProgram;
+	texture: WebGLTexture;
+	angle: WebGLUniformLocation;
+	axis: WebGLUniformLocation;
 }
 
 const programs = new WeakMap<HTMLCanvasElement, GlobeProgram | null>();
@@ -55,118 +55,142 @@ const fragmentShader = `
 
 /** Draws a true spherical projection at the display resolution using WebGL. */
 export function renderEarthFrame(
-  canvas: HTMLCanvasElement,
-  image: HTMLCanvasElement,
-  frame: EarthFrame,
+	canvas: HTMLCanvasElement,
+	image: HTMLCanvasElement,
+	frame: EarthFrame
 ): void {
-  const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
-  const size = Math.min(1024, Math.max(320, Math.round((canvas.clientWidth || 300) * deviceScale)));
-  if (canvas.width !== size || canvas.height !== size) {
-    canvas.width = size;
-    canvas.height = size;
-    // Resizing a canvas resets its WebGL state, so the GPU program and texture
-    // must be created only after the final drawing buffer size is known.
-    programs.delete(canvas);
-  }
+	const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
+	const size = Math.min(
+		1024,
+		Math.max(320, Math.round((canvas.clientWidth || 300) * deviceScale))
+	);
+	if (canvas.width !== size || canvas.height !== size) {
+		canvas.width = size;
+		canvas.height = size;
+		// Resizing a canvas resets its WebGL state, so the GPU program and texture
+		// must be created only after the final drawing buffer size is known.
+		programs.delete(canvas);
+	}
 
-  const program = getProgram(canvas, image);
-  if (!program) return;
+	const program = getProgram(canvas, image);
+	if (!program) return;
 
-  const { context } = program;
-  context.viewport(0, 0, size, size);
-  context.useProgram(program.program);
-  context.uniform1f(program.angle, frame.angle);
-  context.uniform3f(program.axis, frame.axisX, frame.axisY, frame.axisZ);
-  context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
+	const { context } = program;
+	context.viewport(0, 0, size, size);
+	context.useProgram(program.program);
+	context.uniform1f(program.angle, frame.angle);
+	context.uniform3f(program.axis, frame.axisX, frame.axisY, frame.axisZ);
+	context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
 }
 
-function getProgram(canvas: HTMLCanvasElement, image: HTMLCanvasElement): GlobeProgram | null {
-  const cached = programs.get(canvas);
-  if (cached !== undefined) return cached;
+function getProgram(
+	canvas: HTMLCanvasElement,
+	image: HTMLCanvasElement
+): GlobeProgram | null {
+	const cached = programs.get(canvas);
+	if (cached !== undefined) return cached;
 
-  const context = canvas.getContext('webgl', {
-    alpha: true,
-    antialias: true,
-    premultipliedAlpha: false,
-  });
-  if (!context) {
-    programs.set(canvas, null);
-    return null;
-  }
+	const context = canvas.getContext('webgl', {
+		alpha: true,
+		antialias: true,
+		premultipliedAlpha: false,
+	});
+	if (!context) {
+		programs.set(canvas, null);
+		return null;
+	}
 
-  const vertex = compileShader(context, context.VERTEX_SHADER, vertexShader);
-  const fragment = compileShader(context, context.FRAGMENT_SHADER, fragmentShader);
-  if (!vertex || !fragment) return null;
-  const program = context.createProgram();
-  const texture = context.createTexture();
-  if (!program || !texture) return null;
+	const vertex = compileShader(context, context.VERTEX_SHADER, vertexShader);
+	const fragment = compileShader(
+		context,
+		context.FRAGMENT_SHADER,
+		fragmentShader
+	);
+	if (!vertex || !fragment) return null;
+	const program = context.createProgram();
+	const texture = context.createTexture();
+	if (!program || !texture) return null;
 
-  context.attachShader(program, vertex);
-  context.attachShader(program, fragment);
-  context.linkProgram(program);
-  if (!context.getProgramParameter(program, context.LINK_STATUS)) return null;
+	context.attachShader(program, vertex);
+	context.attachShader(program, fragment);
+	context.linkProgram(program);
+	if (!context.getProgramParameter(program, context.LINK_STATUS)) return null;
 
-  const position = context.getAttribLocation(program, 'position');
-  const angle = context.getUniformLocation(program, 'angle');
-  const axis = context.getUniformLocation(program, 'axis');
-  if (position < 0 || !angle || !axis) return null;
+	const position = context.getAttribLocation(program, 'position');
+	const angle = context.getUniformLocation(program, 'angle');
+	const axis = context.getUniformLocation(program, 'axis');
+	if (position < 0 || !angle || !axis) return null;
 
-  const buffer = context.createBuffer();
-  if (!buffer) return null;
-  context.bindBuffer(context.ARRAY_BUFFER, buffer);
-  context.bufferData(
-    context.ARRAY_BUFFER,
-    new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-    context.STATIC_DRAW,
-  );
-  context.useProgram(program);
-  context.enableVertexAttribArray(position);
-  context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
-  context.activeTexture(context.TEXTURE0);
-  context.bindTexture(context.TEXTURE_2D, texture);
-  // The shader maps texture V=0 to the screen's north pole, so source rows
-  // must stay in their original top-to-bottom order.
-  context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
-  context.texParameteri(
-    context.TEXTURE_2D,
-    context.TEXTURE_MIN_FILTER,
-    context.LINEAR_MIPMAP_LINEAR,
-  );
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.REPEAT);
-  context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
-  context.texImage2D(
-    context.TEXTURE_2D,
-    0,
-    context.RGBA,
-    context.RGBA,
-    context.UNSIGNED_BYTE,
-    image,
-  );
-  context.generateMipmap(context.TEXTURE_2D);
-  const anisotropy = context.getExtension('EXT_texture_filter_anisotropic');
-  if (anisotropy) {
-    context.texParameterf(
-      context.TEXTURE_2D,
-      anisotropy.TEXTURE_MAX_ANISOTROPY_EXT,
-      context.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT),
-    );
-  }
-  context.uniform1i(context.getUniformLocation(program, 'earthTexture'), 0);
+	const buffer = context.createBuffer();
+	if (!buffer) return null;
+	context.bindBuffer(context.ARRAY_BUFFER, buffer);
+	context.bufferData(
+		context.ARRAY_BUFFER,
+		new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+		context.STATIC_DRAW
+	);
+	context.useProgram(program);
+	context.enableVertexAttribArray(position);
+	context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
+	context.activeTexture(context.TEXTURE0);
+	context.bindTexture(context.TEXTURE_2D, texture);
+	// The shader maps texture V=0 to the screen's north pole, so source rows
+	// must stay in their original top-to-bottom order.
+	context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
+	context.texParameteri(
+		context.TEXTURE_2D,
+		context.TEXTURE_MIN_FILTER,
+		context.LINEAR_MIPMAP_LINEAR
+	);
+	context.texParameteri(
+		context.TEXTURE_2D,
+		context.TEXTURE_MAG_FILTER,
+		context.LINEAR
+	);
+	context.texParameteri(
+		context.TEXTURE_2D,
+		context.TEXTURE_WRAP_S,
+		context.REPEAT
+	);
+	context.texParameteri(
+		context.TEXTURE_2D,
+		context.TEXTURE_WRAP_T,
+		context.CLAMP_TO_EDGE
+	);
+	context.texImage2D(
+		context.TEXTURE_2D,
+		0,
+		context.RGBA,
+		context.RGBA,
+		context.UNSIGNED_BYTE,
+		image
+	);
+	context.generateMipmap(context.TEXTURE_2D);
+	const anisotropy = context.getExtension('EXT_texture_filter_anisotropic');
+	if (anisotropy) {
+		context.texParameterf(
+			context.TEXTURE_2D,
+			anisotropy.TEXTURE_MAX_ANISOTROPY_EXT,
+			context.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+		);
+	}
+	context.uniform1i(context.getUniformLocation(program, 'earthTexture'), 0);
 
-  const renderer = { context, program, texture, angle, axis };
-  programs.set(canvas, renderer);
-  return renderer;
+	const renderer = { context, program, texture, angle, axis };
+	programs.set(canvas, renderer);
+	return renderer;
 }
 
 function compileShader(
-  context: WebGLRenderingContext,
-  type: number,
-  source: string,
+	context: WebGLRenderingContext,
+	type: number,
+	source: string
 ): WebGLShader | null {
-  const shader = context.createShader(type);
-  if (!shader) return null;
-  context.shaderSource(shader, source);
-  context.compileShader(shader);
-  return context.getShaderParameter(shader, context.COMPILE_STATUS) ? shader : null;
+	const shader = context.createShader(type);
+	if (!shader) return null;
+	context.shaderSource(shader, source);
+	context.compileShader(shader);
+	return context.getShaderParameter(shader, context.COMPILE_STATUS)
+		? shader
+		: null;
 }

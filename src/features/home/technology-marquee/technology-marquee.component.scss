@@ -1,119 +1,119 @@
 :host {
-  display: block;
-  min-width: 0;
+	display: block;
+	min-width: 0;
 }
 
 .technology-marquee {
-  position: relative;
-  display: flex;
-  width: min(100%, 480px);
-  max-width: 100%;
-  margin: 1.15rem 0 0.7rem;
-  padding: 1.45rem 1.3rem 0.55rem;
-  overflow: hidden;
-  user-select: none;
+	position: relative;
+	display: flex;
+	width: min(100%, 480px);
+	max-width: 100%;
+	margin: 1.15rem 0 0.7rem;
+	padding: 1.45rem 1.3rem 0.55rem;
+	overflow: hidden;
+	user-select: none;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    bottom: 0;
-    width: 1.3rem;
-    pointer-events: none;
-  }
-  &::before {
-    left: 0;
-    background: linear-gradient(to right, var(--canvas), transparent);
-  }
-  &::after {
-    right: 0;
-    background: linear-gradient(to left, var(--canvas), transparent);
-  }
-  &__track {
-    display: flex;
-    flex: none;
-    align-items: center;
-    gap: 0.8rem;
-    min-width: max-content;
-    padding: 0 0.05rem 0.1rem;
-    animation: technology-marquee-scroll 82s linear infinite;
-  }
-  &:hover &__track {
-    animation-play-state: paused;
-  }
-  &__token {
-    position: relative;
-    display: grid;
-    width: 27px;
-    height: 27px;
-    flex: none;
-    place-items: center;
-    outline: 0;
-    transition: width 0.25s ease;
-  }
-  &__token svg {
-    width: 22px;
-    height: 22px;
-    transition:
-      transform 0.22s ease,
-      filter 0.22s ease;
-  }
-  &__token b {
-    position: absolute;
-    z-index: 4;
-    left: calc(100% + 0.35rem);
-    padding: 0.32rem 0.45rem;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--ink);
-    font: 0.55rem 'DM Mono';
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-6px);
-    pointer-events: none;
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease;
-  }
-  &__token:hover,
-  &__token:focus {
-    width: var(--label-width);
-  }
-  &__token:hover svg,
-  &__token:focus svg {
-    transform: scale(1.18);
-    filter: drop-shadow(0 0 8px var(--cyan));
-  }
-  &__token:hover b,
-  &__token:focus b {
-    opacity: 1;
-    transform: translateX(0);
-  }
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: 2;
+		top: 0;
+		bottom: 0;
+		width: 1.3rem;
+		pointer-events: none;
+	}
+	&::before {
+		left: 0;
+		background: linear-gradient(to right, var(--canvas), transparent);
+	}
+	&::after {
+		right: 0;
+		background: linear-gradient(to left, var(--canvas), transparent);
+	}
+	&__track {
+		display: flex;
+		flex: none;
+		align-items: center;
+		gap: 0.8rem;
+		min-width: max-content;
+		padding: 0 0.05rem 0.1rem;
+		animation: technology-marquee-scroll 82s linear infinite;
+	}
+	&:hover &__track {
+		animation-play-state: paused;
+	}
+	&__token {
+		position: relative;
+		display: grid;
+		width: 27px;
+		height: 27px;
+		flex: none;
+		place-items: center;
+		outline: 0;
+		transition: width 0.25s ease;
+	}
+	&__token svg {
+		width: 22px;
+		height: 22px;
+		transition:
+			transform 0.22s ease,
+			filter 0.22s ease;
+	}
+	&__token b {
+		position: absolute;
+		z-index: 4;
+		left: calc(100% + 0.35rem);
+		padding: 0.32rem 0.45rem;
+		border: 1px solid var(--line);
+		border-radius: 6px;
+		background: var(--surface);
+		color: var(--ink);
+		font: 0.55rem 'DM Mono';
+		white-space: nowrap;
+		opacity: 0;
+		transform: translateX(-6px);
+		pointer-events: none;
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease;
+	}
+	&__token:hover,
+	&__token:focus {
+		width: var(--label-width);
+	}
+	&__token:hover svg,
+	&__token:focus svg {
+		transform: scale(1.18);
+		filter: drop-shadow(0 0 8px var(--cyan));
+	}
+	&__token:hover b,
+	&__token:focus b {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 @keyframes technology-marquee-scroll {
-  to {
-    transform: translateX(calc(-100% - 0.8rem));
-  }
+	to {
+		transform: translateX(calc(-100% - 0.8rem));
+	}
 }
 
 @media (max-width: 640px) {
-  .technology-marquee {
-    margin: 0.8rem 0 0.45rem;
-    &__track {
-      gap: 0.6rem;
-      animation-duration: 88s;
-    }
-    &__token {
-      width: 23px;
-      height: 25px;
-    }
-    &__token svg {
-      width: 19px;
-      height: 19px;
-    }
-  }
+	.technology-marquee {
+		margin: 0.8rem 0 0.45rem;
+		&__track {
+			gap: 0.6rem;
+			animation-duration: 88s;
+		}
+		&__token {
+			width: 23px;
+			height: 25px;
+		}
+		&__token svg {
+			width: 19px;
+			height: 19px;
+		}
+	}
 }

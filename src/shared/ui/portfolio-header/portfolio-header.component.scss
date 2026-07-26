@@ -1,144 +1,144 @@
 :host {
-  display: block;
+	display: block;
 }
 .portfolio-header {
-  position: fixed;
-  z-index: 20;
-  top: 0;
-  left: 50%;
-  display: flex;
-  width: min(1380px, calc(100% - 3rem));
-  height: 88px;
-  align-items: center;
-  gap: 1.4rem;
-  transform: translateX(-50%);
-  transition:
-    height 0.3s ease,
-    width 0.3s ease,
-    background 0.3s ease,
-    backdrop-filter 0.3s ease;
-  &--scrolled {
-    top: 0.65rem;
-    width: min(1120px, calc(100% - 2rem));
-    height: 62px;
-    padding: 0 1rem;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--canvas) 76%, transparent);
-    backdrop-filter: blur(18px) saturate(145%);
-  }
-  &__brand {
-    color: var(--ink);
-    font-weight: 800;
-    text-decoration: none;
-  }
-  &__mark {
-    color: var(--cyan);
-    margin-right: 0.2rem;
-  }
-  &__nav {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    gap: 0.2rem;
-  }
-  &__nav a {
-    padding: 0.45rem 0.6rem;
-    color: var(--muted);
-    font: 0.62rem 'DM Mono';
-    text-decoration: none;
-  }
-  &__nav a:hover,
-  &__nav a.is-active {
-    color: var(--cyan);
-  }
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  &__locale {
-    position: relative;
-  }
-  &__locale > button,
-  &__theme {
-    display: flex;
-    height: 2.35rem;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    padding: 0 0.55rem;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--surface) 65%, transparent);
-    color: var(--ink);
-  }
-  &__locale img {
-    width: 1.5rem;
-    border-radius: 3px;
-  }
-  &__locale-menu {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 0.6rem);
-    width: 180px;
-    padding: 0.35rem;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: var(--surface);
-  }
-  &__locale-menu button {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1.6rem 1fr auto;
-    gap: 0.55rem;
-    padding: 0.55rem;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--ink);
-    text-align: left;
-  }
-  &__locale-menu small {
-    display: block;
-    color: var(--muted);
-  }
-  &__menu {
-    display: none;
-  }
+	position: fixed;
+	z-index: 20;
+	top: 0;
+	left: 50%;
+	display: flex;
+	width: min(1380px, calc(100% - 3rem));
+	height: 88px;
+	align-items: center;
+	gap: 1.4rem;
+	transform: translateX(-50%);
+	transition:
+		height 0.3s ease,
+		width 0.3s ease,
+		background 0.3s ease,
+		backdrop-filter 0.3s ease;
+	&--scrolled {
+		top: 0.65rem;
+		width: min(1120px, calc(100% - 2rem));
+		height: 62px;
+		padding: 0 1rem;
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--canvas) 76%, transparent);
+		backdrop-filter: blur(18px) saturate(145%);
+	}
+	&__brand {
+		color: var(--ink);
+		font-weight: 800;
+		text-decoration: none;
+	}
+	&__mark {
+		color: var(--cyan);
+		margin-right: 0.2rem;
+	}
+	&__nav {
+		display: flex;
+		flex: 1;
+		justify-content: center;
+		gap: 0.2rem;
+	}
+	&__nav a {
+		padding: 0.45rem 0.6rem;
+		color: var(--muted);
+		font: 0.62rem 'DM Mono';
+		text-decoration: none;
+	}
+	&__nav a:hover,
+	&__nav a.is-active {
+		color: var(--cyan);
+	}
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	&__locale {
+		position: relative;
+	}
+	&__locale > button,
+	&__theme {
+		display: flex;
+		height: 2.35rem;
+		align-items: center;
+		justify-content: center;
+		gap: 0.3rem;
+		padding: 0 0.55rem;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		background: color-mix(in srgb, var(--surface) 65%, transparent);
+		color: var(--ink);
+	}
+	&__locale img {
+		width: 1.5rem;
+		border-radius: 3px;
+	}
+	&__locale-menu {
+		position: absolute;
+		right: 0;
+		top: calc(100% + 0.6rem);
+		width: 180px;
+		padding: 0.35rem;
+		border: 1px solid var(--line);
+		border-radius: 16px;
+		background: var(--surface);
+	}
+	&__locale-menu button {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 1.6rem 1fr auto;
+		gap: 0.55rem;
+		padding: 0.55rem;
+		border: 0;
+		border-radius: 10px;
+		background: transparent;
+		color: var(--ink);
+		text-align: left;
+	}
+	&__locale-menu small {
+		display: block;
+		color: var(--muted);
+	}
+	&__menu {
+		display: none;
+	}
 }
 @media (max-width: 900px) {
-  .portfolio-header {
-    width: calc(100% - 1.7rem);
-    &__menu {
-      display: grid;
-      gap: 4px;
-      margin-left: auto;
-      border: 0;
-      background: transparent;
-    }
-    &__menu span:not(.sr-only) {
-      display: block;
-      width: 20px;
-      height: 2px;
-      background: var(--ink);
-    }
-    &__nav {
-      display: none;
-      position: absolute;
-      top: calc(100% + 0.5rem);
-      right: 0;
-      left: 0;
-      padding: 0.65rem;
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-    &__nav--open {
-      display: flex;
-      flex-direction: column;
-    }
-    &__actions {
-      order: 3;
-    }
-  }
+	.portfolio-header {
+		width: calc(100% - 1.7rem);
+		&__menu {
+			display: grid;
+			gap: 4px;
+			margin-left: auto;
+			border: 0;
+			background: transparent;
+		}
+		&__menu span:not(.sr-only) {
+			display: block;
+			width: 20px;
+			height: 2px;
+			background: var(--ink);
+		}
+		&__nav {
+			display: none;
+			position: absolute;
+			top: calc(100% + 0.5rem);
+			right: 0;
+			left: 0;
+			padding: 0.65rem;
+			border: 1px solid var(--line);
+			background: var(--surface);
+		}
+		&__nav--open {
+			display: flex;
+			flex-direction: column;
+		}
+		&__actions {
+			order: 3;
+		}
+	}
 }

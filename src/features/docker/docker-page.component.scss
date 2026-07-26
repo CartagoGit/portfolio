@@ -1,81 +1,81 @@
 :host {
-  display: block;
+	display: block;
 }
 .docker-page {
-  width: min(1180px, calc(100% - 3rem));
-  min-height: 68vh;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: clamp(2rem, 8vw, 8rem);
-  align-items: center;
-  &__heading > p {
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  &__heading > p:first-child {
-    color: var(--cyan);
-    font: 0.65rem 'DM Mono';
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  h2 {
-    margin: 0.6rem 0 1rem;
-    font-size: clamp(2.5rem, 6vw, 6rem);
-    line-height: 0.88;
-  }
-  h2 em {
-    color: var(--cyan);
-    font-style: normal;
-  }
-  &__terminal {
-    display: grid;
-    gap: 1.4rem;
-    padding: clamp(1.4rem, 4vw, 3rem);
-    border: 1px solid var(--line);
-    background: linear-gradient(145deg, #071a2d, #06101d);
-    color: var(--ink);
-    text-decoration: none;
-    box-shadow: 0 30px 80px #0005;
-    transition:
-      transform 0.35s ease,
-      border-color 0.25s ease;
-  }
-  &__terminal:hover {
-    border-color: var(--cyan);
-    transform: translateY(-7px);
-  }
-  &__terminal > span {
-    color: var(--cyan);
-    font: 0.65rem 'DM Mono';
-  }
-  code {
-    color: #d9ebff;
-    font: 0.8rem/2 'DM Mono';
-  }
-  code b {
-    color: var(--lime);
-  }
-  code i {
-    color: var(--cyan);
-    font-style: normal;
-  }
-  &__terminal div {
-    display: flex;
-    gap: 0.45rem;
-  }
-  &__terminal em {
-    padding: 0.28rem 0.45rem;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    font: 0.55rem 'DM Mono';
-    font-style: normal;
-  }
+	width: min(1180px, calc(100% - 3rem));
+	min-height: 68vh;
+	margin: auto;
+	display: grid;
+	grid-template-columns: 0.8fr 1.2fr;
+	gap: clamp(2rem, 8vw, 8rem);
+	align-items: center;
+	&__heading > p {
+		color: var(--muted);
+		line-height: 1.7;
+	}
+	&__heading > p:first-child {
+		color: var(--cyan);
+		font: 0.65rem 'DM Mono';
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+	h2 {
+		margin: 0.6rem 0 1rem;
+		font-size: clamp(2.5rem, 6vw, 6rem);
+		line-height: 0.88;
+	}
+	h2 em {
+		color: var(--cyan);
+		font-style: normal;
+	}
+	&__terminal {
+		display: grid;
+		gap: 1.4rem;
+		padding: clamp(1.4rem, 4vw, 3rem);
+		border: 1px solid var(--line);
+		background: linear-gradient(145deg, #071a2d, #06101d);
+		color: var(--ink);
+		text-decoration: none;
+		box-shadow: 0 30px 80px #0005;
+		transition:
+			transform 0.35s ease,
+			border-color 0.25s ease;
+	}
+	&__terminal:hover {
+		border-color: var(--cyan);
+		transform: translateY(-7px);
+	}
+	&__terminal > span {
+		color: var(--cyan);
+		font: 0.65rem 'DM Mono';
+	}
+	code {
+		color: #d9ebff;
+		font: 0.8rem/2 'DM Mono';
+	}
+	code b {
+		color: var(--lime);
+	}
+	code i {
+		color: var(--cyan);
+		font-style: normal;
+	}
+	&__terminal div {
+		display: flex;
+		gap: 0.45rem;
+	}
+	&__terminal em {
+		padding: 0.28rem 0.45rem;
+		border: 1px solid var(--line);
+		color: var(--muted);
+		font: 0.55rem 'DM Mono';
+		font-style: normal;
+	}
 }
 @media (max-width: 760px) {
-  .docker-page {
-    width: min(100% - 1.7rem, 560px);
-    grid-template-columns: 1fr;
-    padding: 2rem 0;
-  }
+	.docker-page {
+		width: min(100% - 1.7rem, 560px);
+		grid-template-columns: 1fr;
+		padding: 2rem 0;
+	}
 }

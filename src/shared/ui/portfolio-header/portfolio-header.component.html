@@ -1,136 +1,130 @@
-<header class="portfolio-header" [class.portfolio-header--scrolled]="scrolled()">
-  <a
-    class="portfolio-header__brand"
-    [routerLink]="routeFor('home')"
-    (click)="selectPage('home')"
-    aria-label="Cartago home"
-  >
-    <span class="portfolio-header__mark">C.</span>
-    <span>Cartago</span>
-  </a>
-  <button
-    class="portfolio-header__menu"
-    type="button"
-    (click)="menuToggle.emit()"
-    [attr.aria-expanded]="menuOpen()"
-    aria-controls="site-navigation"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-    <span class="sr-only">Toggle navigation</span>
-  </button>
-  <nav
-    class="portfolio-header__nav"
-    id="site-navigation"
-    [class.portfolio-header__nav--open]="menuOpen()"
-    aria-label="Main navigation"
-  >
-    <a
-      [routerLink]="routeFor('work')"
-      [class.is-active]="page() === 'work'"
-      (click)="selectPage('work')"
-    >
-      {{ copy().navWork }}
-    </a>
-    <a
-      [routerLink]="routeFor('lab')"
-      [class.is-active]="page() === 'lab'"
-      (click)="selectPage('lab')"
-    >
-      {{ copy().navLab }}
-    </a>
-    <a
-      [routerLink]="routeFor('approach')"
-      [class.is-active]="page() === 'approach'"
-      (click)="selectPage('approach')"
-    >
-      {{ copy().navAbout }}
-    </a>
-    <a
-      [routerLink]="routeFor('knowledge')"
-      [class.is-active]="page() === 'knowledge'"
-      (click)="selectPage('knowledge')"
-    >
-      Knowledge
-    </a>
-    <a
-      [routerLink]="routeFor('docker')"
-      [class.is-active]="page() === 'docker'"
-      (click)="selectPage('docker')"
-    >
-      Docker
-    </a>
-    <a
-      [routerLink]="routeFor('demos')"
-      [class.is-active]="page() === 'demos'"
-      (click)="selectPage('demos')"
-    >
-      Demos
-    </a>
-    <a
-      [routerLink]="routeFor('contact')"
-      [class.is-active]="page() === 'contact'"
-      (click)="selectPage('contact')"
-    >
-      {{ copy().contact }}
-    </a>
-  </nav>
-  <div class="portfolio-header__actions">
-    <div class="portfolio-header__locale">
-      <button
-        type="button"
-        (click)="localeToggle.emit()"
-        [attr.aria-expanded]="localeMenuOpen()"
-        aria-haspopup="listbox"
-      >
-        <img
-          [src]="locale() === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'"
-          width="24"
-          height="16"
-          alt=""
-        />
-        <span>{{ locale().toUpperCase() }}</span>
-        <i>⌄</i>
-      </button>
-      @if (localeMenuOpen() || localeMenuClosing()) {
-        <div
-          class="portfolio-header__locale-menu"
-          [class.is-closing]="localeMenuClosing()"
-          role="listbox"
-        >
-          @for (language of languages(); track language.id) {
-            <button
-              type="button"
-              role="option"
-              [attr.aria-selected]="locale() === language.id"
-              (click)="localeSelect.emit(language.id)"
-            >
-              <img
-                [src]="language.id === 'en' ? '/icons/flag-en.svg' : '/icons/flag-es.svg'"
-                width="24"
-                height="16"
-                alt=""
-              />
-              <span>
-                {{ language.label }}
-                <small>{{ language.detail }}</small>
-              </span>
-              @if (locale() === language.id) {
-                <b>✓</b>
-              }
-            </button>
-          }
-        </div>
-      }
-    </div>
-    <button
-      class="portfolio-header__theme"
-      type="button"
-      (click)="themeToggle.emit()"
-      [attr.aria-pressed]="lightMode()"
-    >
-      <span>{{ lightMode() ? '☼' : '◐' }}</span>
-    </button>
-  </div>
+<header
+	class="portfolio-header"
+	[class.portfolio-header--scrolled]="scrolled()">
+	<a
+		class="portfolio-header__brand"
+		[routerLink]="routeFor('home')"
+		(click)="selectPage('home')"
+		aria-label="Cartago home">
+		<span class="portfolio-header__mark">C.</span>
+		<span>Cartago</span>
+	</a>
+	<button
+		class="portfolio-header__menu"
+		type="button"
+		(click)="menuToggle.emit()"
+		[attr.aria-expanded]="menuOpen()"
+		aria-controls="site-navigation">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span class="sr-only">Toggle navigation</span>
+	</button>
+	<nav
+		class="portfolio-header__nav"
+		id="site-navigation"
+		[class.portfolio-header__nav--open]="menuOpen()"
+		aria-label="Main navigation">
+		<a
+			[routerLink]="routeFor('work')"
+			[class.is-active]="page() === 'work'"
+			(click)="selectPage('work')">
+			{{ copy().navWork }}
+		</a>
+		<a
+			[routerLink]="routeFor('lab')"
+			[class.is-active]="page() === 'lab'"
+			(click)="selectPage('lab')">
+			{{ copy().navLab }}
+		</a>
+		<a
+			[routerLink]="routeFor('approach')"
+			[class.is-active]="page() === 'approach'"
+			(click)="selectPage('approach')">
+			{{ copy().navAbout }}
+		</a>
+		<a
+			[routerLink]="routeFor('knowledge')"
+			[class.is-active]="page() === 'knowledge'"
+			(click)="selectPage('knowledge')">
+			Knowledge
+		</a>
+		<a
+			[routerLink]="routeFor('docker')"
+			[class.is-active]="page() === 'docker'"
+			(click)="selectPage('docker')">
+			Docker
+		</a>
+		<a
+			[routerLink]="routeFor('demos')"
+			[class.is-active]="page() === 'demos'"
+			(click)="selectPage('demos')">
+			Demos
+		</a>
+		<a
+			[routerLink]="routeFor('contact')"
+			[class.is-active]="page() === 'contact'"
+			(click)="selectPage('contact')">
+			{{ copy().contact }}
+		</a>
+	</nav>
+	<div class="portfolio-header__actions">
+		<div class="portfolio-header__locale">
+			<button
+				type="button"
+				(click)="localeToggle.emit()"
+				[attr.aria-expanded]="localeMenuOpen()"
+				aria-haspopup="listbox">
+				<img
+					[src]="
+						locale() === 'en'
+							? '/icons/flag-en.svg'
+							: '/icons/flag-es.svg'
+					"
+					width="24"
+					height="16"
+					alt="" />
+				<span>{{ locale().toUpperCase() }}</span>
+				<i>⌄</i>
+			</button>
+			@if (localeMenuOpen() || localeMenuClosing()) {
+				<div
+					class="portfolio-header__locale-menu"
+					[class.is-closing]="localeMenuClosing()"
+					role="listbox">
+					@for (language of languages(); track language.id) {
+						<button
+							type="button"
+							role="option"
+							[attr.aria-selected]="locale() === language.id"
+							(click)="localeSelect.emit(language.id)">
+							<img
+								[src]="
+									language.id === 'en'
+										? '/icons/flag-en.svg'
+										: '/icons/flag-es.svg'
+								"
+								width="24"
+								height="16"
+								alt="" />
+							<span>
+								{{ language.label }}
+								<small>{{ language.detail }}</small>
+							</span>
+							@if (locale() === language.id) {
+								<b>✓</b>
+							}
+						</button>
+					}
+				</div>
+			}
+		</div>
+		<button
+			class="portfolio-header__theme"
+			type="button"
+			(click)="themeToggle.emit()"
+			[attr.aria-pressed]="lightMode()">
+			<span>{{ lightMode() ? '☼' : '◐' }}</span>
+		</button>
+	</div>
 </header>

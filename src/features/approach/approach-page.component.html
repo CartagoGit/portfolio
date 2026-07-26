@@ -1,65 +1,76 @@
-<section id="main-content" class="approach-page" aria-labelledby="capabilities-title">
-  <div class="approach-page__heading">
-    <p>02 / Capabilities</p>
-    <h2 id="capabilities-title">
-      A system, not a
-      <br />
-      technology list.
-    </h2>
-    <p>Choose an area to see how it appears in the work.</p>
-  </div>
-  <div class="approach-page__capabilities">
-    <div class="approach-page__tabs" role="tablist">
-      @for (capability of capabilities(); track capability.id; let index = $index) {
-        <button
-          type="button"
-          role="tab"
-          [attr.aria-selected]="activeCapability() === capability.id"
-          [class.is-active]="activeCapability() === capability.id"
-          (click)="selected.emit(capability.id)"
-        >
-          <span>0{{ index + 1 }}</span>
-          {{ capability.eyebrow.split(' / ')[1] }}
-          <i>↘</i>
-        </button>
-      }
-    </div>
-    <article class="approach-page__detail" role="tabpanel">
-      <p>{{ selectedCapability().eyebrow }}</p>
-      <h3>{{ selectedCapability().title }}</h3>
-      <p>{{ selectedCapability().detail }}</p>
-      <div>
-        @for (tool of selectedCapability().tools; track tool) {
-          <span>{{ tool }}</span>
-        }
-      </div>
-      <footer>
-        <i></i>
-        {{ selectedCapability().proof }}
-      </footer>
-    </article>
-  </div>
+<section
+	id="main-content"
+	class="approach-page"
+	aria-labelledby="capabilities-title">
+	<div class="approach-page__heading">
+		<p>02 / Capabilities</p>
+		<h2 id="capabilities-title">
+			A system, not a
+			<br />
+			technology list.
+		</h2>
+		<p>Choose an area to see how it appears in the work.</p>
+	</div>
+	<div class="approach-page__capabilities">
+		<div
+			class="approach-page__tabs"
+			role="tablist">
+			@for (
+				capability of capabilities();
+				track capability.id;
+				let index = $index
+			) {
+				<button
+					type="button"
+					role="tab"
+					[attr.aria-selected]="activeCapability() === capability.id"
+					[class.is-active]="activeCapability() === capability.id"
+					(click)="selected.emit(capability.id)">
+					<span>0{{ index + 1 }}</span>
+					{{ capability.eyebrow.split(' / ')[1] }}
+					<i>↘</i>
+				</button>
+			}
+		</div>
+		<article
+			class="approach-page__detail"
+			role="tabpanel">
+			<p>{{ selectedCapability().eyebrow }}</p>
+			<h3>{{ selectedCapability().title }}</h3>
+			<p>{{ selectedCapability().detail }}</p>
+			<div>
+				@for (tool of selectedCapability().tools; track tool) {
+					<span>{{ tool }}</span>
+				}
+			</div>
+			<footer>
+				<i></i>
+				{{ selectedCapability().proof }}
+			</footer>
+		</article>
+	</div>
 </section>
 <section class="approach-page__experience">
-  <div>
-    <p>04 / Professional experience</p>
-    <h2>
-      Complex workflows,
-      <br />
-      quietly delivered.
-    </h2>
-  </div>
-  <div>
-    <p>
-      I build repeated-use business interfaces where roles, long-lived rules and complex forms need
-      to remain understandable. I can discuss the patterns and decisions without exposing client
-      code, data or product details.
-    </p>
-    <ul>
-      <li>Role-dependent actions and permissions</li>
-      <li>Web and Android delivery</li>
-      <li>Resilient forms and progressive validation</li>
-      <li>Architecture and testing practices that scale</li>
-    </ul>
-  </div>
+	<div>
+		<p>04 / Professional experience</p>
+		<h2>
+			Complex workflows,
+			<br />
+			quietly delivered.
+		</h2>
+	</div>
+	<div>
+		<p>
+			I build repeated-use business interfaces where roles, long-lived
+			rules and complex forms need to remain understandable. I can discuss
+			the patterns and decisions without exposing client code, data or
+			product details.
+		</p>
+		<ul>
+			<li>Role-dependent actions and permissions</li>
+			<li>Web and Android delivery</li>
+			<li>Resilient forms and progressive validation</li>
+			<li>Architecture and testing practices that scale</li>
+		</ul>
+	</div>
 </section>

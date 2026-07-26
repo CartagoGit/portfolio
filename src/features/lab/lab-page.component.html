@@ -1,137 +1,169 @@
-<section id="main-content" class="lab-page" aria-labelledby="lab-title">
-  <div class="lab-page__heading">
-    <p>03 / Frontend lab</p>
-    <h2 id="lab-title">
-      Product telemetry,
-      <br />
-      not UI filler.
-    </h2>
-    <p>
-      Switch the perspective to see how KPIs, visual hierarchy and state changes can explain a
-      product decision.
-    </p>
-  </div>
-  <div class="lab-page__toolbar">
-    <div role="group" aria-label="Choose a dashboard perspective">
-      @for (metric of telemetry; track metric.id) {
-        <button
-          type="button"
-          [class.is-active]="activeTelemetry() === metric.id"
-          (click)="setTelemetry(metric.id)"
-        >
-          {{ metric.label }}
-        </button>
-      }
-    </div>
-    <button class="lab-page__command" type="button" (click)="commandRequested.emit()">
-      <kbd>⌘</kbd>
-      <kbd>K</kbd>
-      Command palette
-    </button>
-  </div>
-  <div class="lab-page__switcher" role="group" aria-label="Choose a chart representation">
-    <span>Visualise as</span>
-    @for (type of chartTypes; track type) {
-      <button type="button" [class.is-active]="chartType() === type" (click)="setChartType(type)">
-        {{ type }}
-      </button>
-    }
-  </div>
-  <section
-    class="lab-page__dashboard"
-    [attr.data-metric]="activeTelemetry()"
-    [attr.data-chart]="chartType()"
-    aria-live="polite"
-  >
-    <article class="lab-page__summary">
-      <span>{{ selectedTelemetry().label }}</span>
-      <b>{{ selectedTelemetry().value }}</b>
-      <small>{{ selectedTelemetry().valueLabel }}</small>
-      <p>{{ selectedTelemetry().note }}</p>
-    </article>
-    <article class="lab-page__chart">
-      <header>
-        <div>
-          <span>8-week trend</span>
-          <b>{{ selectedTelemetry().title }}</b>
-        </div>
-        <i>LIVE</i>
-      </header>
-      <div class="lab-page__bar-chart" aria-label="Metric trend chart">
-        @for (bar of selectedTelemetry().bars; track $index) {
-          <span [style.--bar]="bar + '%'" [attr.aria-label]="bar + ' percent'"></span>
-        }
-        <svg viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-          <path
-            d="M0 145 C38 132,54 116,88 122 S136 76,172 93 S220 75,254 63 S302 70,336 35 S375 40,400 16"
-          />
-        </svg>
-      </div>
-      <footer>
-        <span>Week 01</span>
-        <span>Week 08</span>
-      </footer>
-    </article>
-    <div class="lab-page__kpis">
-      @for (kpi of selectedTelemetry().kpis; track kpi[1]) {
-        <article>
-          <b>{{ kpi[0] }}</b>
-          <span>{{ kpi[1] }}</span>
-          <i>↗</i>
-        </article>
-      }
-    </div>
-  </section>
-  <section class="lab-page__playground" aria-labelledby="playground-title">
-    <div>
-      <p>04 / Interactive</p>
-      <h3 id="playground-title">Arrange the product loop.</h3>
-      <p>
-        Drag each stage into a deliberate order. The board validates the complete workflow, rather
-        than rewarding a sequence of clicks.
-      </p>
-      <p class="lab-page__status" aria-live="polite">
-        <span></span>
-        {{ playgroundMessage() }}
-      </p>
-    </div>
-    <div class="lab-page__board" [class.is-complete]="playgroundComplete()">
-      <div class="lab-page__track" aria-hidden="true">
-        <i [style.--progress]="playgroundComplete() ? 4 : 0"></i>
-      </div>
-      <div class="lab-page__steps">
-        @for (step of playgroundOrder(); track step; let index = $index) {
-          <button
-            type="button"
-            draggable="true"
-            [class.is-done]="playgroundComplete()"
-            [class.is-dragging]="draggedStep() === step"
-            (dragstart)="startDrag(step)"
-            (dragend)="draggedStep.set(null)"
-            (dragover)="$event.preventDefault()"
-            (drop)="dropStep(step)"
-          >
-            <span>0{{ index + 1 }}</span>
-            <b>{{ playgroundStep(step).label }}</b>
-            <small>{{ playgroundStep(step).hint }}</small>
-            <i aria-hidden="true">⠿</i>
-          </button>
-        }
-      </div>
-      <footer>
-        <span>
-          {{ playgroundRuns() }} completed {{ playgroundRuns() === 1 ? 'loop' : 'loops' }}
-        </span>
-        <button type="button" (click)="resetPlayground()">
-          Reset
-          <i aria-hidden="true">↻</i>
-        </button>
-      </footer>
-    </div>
-  </section>
-  <p class="lab-page__motion-note">
-    Motion is optional. This page respects
-    <code>prefers-reduced-motion</code>
-    and remains fully usable without it.
-  </p>
+<section
+	id="main-content"
+	class="lab-page"
+	aria-labelledby="lab-title">
+	<div class="lab-page__heading">
+		<p>03 / Frontend lab</p>
+		<h2 id="lab-title">
+			Product telemetry,
+			<br />
+			not UI filler.
+		</h2>
+		<p>
+			Switch the perspective to see how KPIs, visual hierarchy and state
+			changes can explain a product decision.
+		</p>
+	</div>
+	<div class="lab-page__toolbar">
+		<div
+			role="group"
+			aria-label="Choose a dashboard perspective">
+			@for (metric of telemetry; track metric.id) {
+				<button
+					type="button"
+					[class.is-active]="activeTelemetry() === metric.id"
+					(click)="setTelemetry(metric.id)">
+					{{ metric.label }}
+				</button>
+			}
+		</div>
+		<button
+			class="lab-page__command"
+			type="button"
+			(click)="commandRequested.emit()">
+			<kbd>⌘</kbd>
+			<kbd>K</kbd>
+			Command palette
+		</button>
+	</div>
+	<div
+		class="lab-page__switcher"
+		role="group"
+		aria-label="Choose a chart representation">
+		<span>Visualise as</span>
+		@for (type of chartTypes; track type) {
+			<button
+				type="button"
+				[class.is-active]="chartType() === type"
+				(click)="setChartType(type)">
+				{{ type }}
+			</button>
+		}
+	</div>
+	<section
+		class="lab-page__dashboard"
+		[attr.data-metric]="activeTelemetry()"
+		[attr.data-chart]="chartType()"
+		aria-live="polite">
+		<article class="lab-page__summary">
+			<span>{{ selectedTelemetry().label }}</span>
+			<b>{{ selectedTelemetry().value }}</b>
+			<small>{{ selectedTelemetry().valueLabel }}</small>
+			<p>{{ selectedTelemetry().note }}</p>
+		</article>
+		<article class="lab-page__chart">
+			<header>
+				<div>
+					<span>8-week trend</span>
+					<b>{{ selectedTelemetry().title }}</b>
+				</div>
+				<i>LIVE</i>
+			</header>
+			<div
+				class="lab-page__bar-chart"
+				aria-label="Metric trend chart">
+				@for (bar of selectedTelemetry().bars; track $index) {
+					<span
+						[style.--bar]="bar + '%'"
+						[attr.aria-label]="bar + ' percent'"></span>
+				}
+				<svg
+					viewBox="0 0 400 180"
+					preserveAspectRatio="none"
+					aria-hidden="true">
+					<path
+						d="M0 145 C38 132,54 116,88 122 S136 76,172 93 S220 75,254 63 S302 70,336 35 S375 40,400 16" />
+				</svg>
+			</div>
+			<footer>
+				<span>Week 01</span>
+				<span>Week 08</span>
+			</footer>
+		</article>
+		<div class="lab-page__kpis">
+			@for (kpi of selectedTelemetry().kpis; track kpi[1]) {
+				<article>
+					<b>{{ kpi[0] }}</b>
+					<span>{{ kpi[1] }}</span>
+					<i>↗</i>
+				</article>
+			}
+		</div>
+	</section>
+	<section
+		class="lab-page__playground"
+		aria-labelledby="playground-title">
+		<div>
+			<p>04 / Interactive</p>
+			<h3 id="playground-title">Arrange the product loop.</h3>
+			<p>
+				Drag each stage into a deliberate order. The board validates the
+				complete workflow, rather than rewarding a sequence of clicks.
+			</p>
+			<p
+				class="lab-page__status"
+				aria-live="polite">
+				<span></span>
+				{{ playgroundMessage() }}
+			</p>
+		</div>
+		<div
+			class="lab-page__board"
+			[class.is-complete]="playgroundComplete()">
+			<div
+				class="lab-page__track"
+				aria-hidden="true">
+				<i [style.--progress]="playgroundComplete() ? 4 : 0"></i>
+			</div>
+			<div class="lab-page__steps">
+				@for (
+					step of playgroundOrder();
+					track step;
+					let index = $index
+				) {
+					<button
+						type="button"
+						draggable="true"
+						[class.is-done]="playgroundComplete()"
+						[class.is-dragging]="draggedStep() === step"
+						(dragstart)="startDrag(step)"
+						(dragend)="draggedStep.set(null)"
+						(dragover)="$event.preventDefault()"
+						(drop)="dropStep(step)">
+						<span>0{{ index + 1 }}</span>
+						<b>{{ playgroundStep(step).label }}</b>
+						<small>{{ playgroundStep(step).hint }}</small>
+						<i aria-hidden="true">⠿</i>
+					</button>
+				}
+			</div>
+			<footer>
+				<span>
+					{{ playgroundRuns() }} completed
+					{{ playgroundRuns() === 1 ? 'loop' : 'loops' }}
+				</span>
+				<button
+					type="button"
+					(click)="resetPlayground()">
+					Reset
+					<i aria-hidden="true">↻</i>
+				</button>
+			</footer>
+		</div>
+	</section>
+	<p class="lab-page__motion-note">
+		Motion is optional. This page respects
+		<code>prefers-reduced-motion</code>
+		and remains fully usable without it.
+	</p>
 </section>

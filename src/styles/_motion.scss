@@ -5,13 +5,13 @@ $entrance-ease: tokens.$ease-emphasized;
 /// Marks elements animated with opacity/transform as composited layers.
 /// Keep this narrow: persistent will-change on large layout containers is costly.
 @mixin composited($properties...) {
-  will-change: $properties;
-  backface-visibility: hidden;
+	will-change: $properties;
+	backface-visibility: hidden;
 }
 
 /// Shared transition for elements that leave without layout work.
 @mixin opacity-transform-transition($duration: tokens.$motion-base) {
-  transition:
-    opacity $duration ease,
-    transform $duration $entrance-ease;
+	transition:
+		opacity $duration ease,
+		transform $duration $entrance-ease;
 }

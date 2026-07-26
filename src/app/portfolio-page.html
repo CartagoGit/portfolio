@@ -1,357 +1,437 @@
-<main class="portfolio" [class.light-mode]="lightMode()">
-  <a class="skip-link" href="#main-content">Skip to content</a>
+<main
+	class="portfolio"
+	[class.light-mode]="lightMode()">
+	<a
+		class="skip-link"
+		href="#main-content">
+		Skip to content
+	</a>
 
-  <app-portfolio-header
-    [locale]="locale()"
-    [page]="page()"
-    [copy]="copy()"
-    [languages]="languages"
-    [menuOpen]="menuOpen()"
-    [localeMenuOpen]="localeMenuOpen()"
-    [localeMenuClosing]="localeMenuClosing()"
-    [lightMode]="lightMode()"
-    [scrolled]="scrolled()"
-    (navigate)="setTransition($event)"
-    (menuToggle)="toggleMenu()"
-    (localeToggle)="toggleLocaleMenu()"
-    (localeSelect)="selectLocale($event)"
-    (themeToggle)="setTheme()"
-  />
-  <div class="route-stage">
-    @if (page() === 'home') {
-      <section id="main-content" class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">
-            <span></span>
-            CartagoNova / personal frontend systems
-          </p>
-          <h1 id="hero-title">
-            Mario Cabrero
-            <br />
-            <em>Volarich</em>
-          </h1>
-          <p class="hero-signature">Cartago / CartagoNova · frontend product engineer</p>
-          <p class="hero-role">{{ copy().role }}</p>
-          <p class="hero-intro">{{ copy().intro }}</p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              [routerLink]="routeFor('demos')"
-              (click)="setTransition('demos')"
-            >
-              {{ copy().viewWork }}
-              <span aria-hidden="true">↘</span>
-            </a>
-            <a
-              class="button button-quiet"
-              [routerLink]="routeFor('contact')"
-              (click)="setTransition('contact')"
-            >
-              {{ copy().contact }}
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
-          <app-technology-marquee [technologies]="technologyMarquee" />
-          <app-profile-links [links]="publicLinks" />
-        </div>
+	<app-portfolio-header
+		[locale]="locale()"
+		[page]="page()"
+		[copy]="copy()"
+		[languages]="languages"
+		[menuOpen]="menuOpen()"
+		[localeMenuOpen]="localeMenuOpen()"
+		[localeMenuClosing]="localeMenuClosing()"
+		[lightMode]="lightMode()"
+		[scrolled]="scrolled()"
+		(navigate)="setTransition($event)"
+		(menuToggle)="toggleMenu()"
+		(localeToggle)="toggleLocaleMenu()"
+		(localeSelect)="selectLocale($event)"
+		(themeToggle)="setTheme()" />
+	<div class="route-stage">
+		@if (page() === 'home') {
+			<section
+				id="main-content"
+				class="hero"
+				aria-labelledby="hero-title">
+				<div class="hero-copy">
+					<p class="eyebrow">
+						<span></span>
+						CartagoNova / personal frontend systems
+					</p>
+					<h1 id="hero-title">
+						Mario Cabrero
+						<br />
+						<em>Volarich</em>
+					</h1>
+					<p class="hero-signature">
+						Cartago / CartagoNova · frontend product engineer
+					</p>
+					<p class="hero-role">{{ copy().role }}</p>
+					<p class="hero-intro">{{ copy().intro }}</p>
+					<div class="hero-actions">
+						<a
+							class="button button-primary"
+							[routerLink]="routeFor('demos')"
+							(click)="setTransition('demos')">
+							{{ copy().viewWork }}
+							<span aria-hidden="true">↘</span>
+						</a>
+						<a
+							class="button button-quiet"
+							[routerLink]="routeFor('contact')"
+							(click)="setTransition('contact')">
+							{{ copy().contact }}
+							<span aria-hidden="true">→</span>
+						</a>
+					</div>
+					<app-technology-marquee
+						[technologies]="technologyMarquee" />
+					<app-profile-links [links]="publicLinks" />
+				</div>
 
-        <div
-          class="hero-composition"
-          aria-label="Interactive representation of Mario's core frontend technologies"
-          (mouseenter)="earth.start()"
-          (mouseleave)="earth.stop()"
-          (pointerdown)="returnEarthBehind($event)"
-        >
-          <div
-            class="orb orb-one"
-            [class.earth-active]="earth.active()"
-            [class.earth-out-behind]="earthDepth() === 'out-behind'"
-            [class.earth-front-ready]="earthDepth() === 'front-ready'"
-            [class.earth-front]="earthDepth() === 'front'"
-            [class.earth-out-front]="earthDepth() === 'out-front'"
-            [class.earth-behind-ready]="earthDepth() === 'behind-ready'"
-            aria-hidden="true"
-          >
-            <app-earth-globe #earth [depth]="earthDepth()" />
-          </div>
-          <div class="orb orb-two"></div>
-          <div
-            class="interface-shell"
-            [attr.data-chart]="heroChartType()"
-            (mouseleave)="returnEarthBehind()"
-            (pointerdown)="returnEarthBehind($event)"
-            (click)="returnEarthBehind($event)"
-          >
-            <div class="monitor-chrome" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-              <i></i>
-              <b>cartago.system</b>
-            </div>
-            <div class="monitor-header">
-              <button
-                class="earth-motion-control"
-                type="button"
-                [attr.aria-pressed]="earthDepth() === 'front'"
-                (click)="earth.changeMotion(); onEarthControlClick($event)"
-                aria-label="Change the Earth's rotation"
-              ></button>
-              <a
-                class="monitor-banner-link"
-                href="https://github.com/CartagoGit"
-                target="_blank"
-                rel="noreferrer"
-                [attr.aria-disabled]="earthBlocksMonitor()"
-                [attr.tabindex]="earthBlocksMonitor() ? -1 : null"
-                [class.is-disabled]="earthBlocksMonitor()"
-                (click)="guardMonitorBanner($event)"
-                aria-label="Open CartagoGit on GitHub"
-              >
-                <img
-                  class="hero-banner"
-                  src="/images/cartagonova-banner-03-neon.png"
-                  alt="CartagoNova banner"
-                />
-              </a>
-            </div>
-            <div class="interface-body">
-              <div class="monitor-selector" aria-label="Core technologies">
-                @for (panel of heroPanels; track panel.id) {
-                  <button
-                    type="button"
-                    [class.active]="activeHeroPanel() === panel.id"
-                    (click)="setHeroPanel(panel.id)"
-                  >
-                    @if (panel.iconAsset) {
-                      <img class="core-icon" [src]="panel.iconAsset" alt="" />
-                    } @else {
-                      <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path [attr.d]="panel.iconPath" [attr.fill]="panel.color" />
-                      </svg>
-                    }
-                    <span>{{ panel.label }}</span>
-                  </button>
-                }
-              </div>
-              <div class="interface-canvas" [class.technology-open]="selectedHeroPanel()">
-                <section
-                  class="dashboard-view"
-                  [class.panel-hidden]="selectedHeroPanel() || heroPanelChanging()"
-                  [class.swap-hidden]="heroPanelChanging()"
-                >
-                  <div class="canvas-heading">
-                    <span>
-                      <i></i>
-                      CartagoNova / system telemetry
-                    </span>
-                    <small>LIVE</small>
-                  </div>
-                  <div class="hero-chart-switcher" aria-label="Dashboard chart type">
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'bars'"
-                      (click)="setHeroChart('bars')"
-                    >
-                      Velocity
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'line'"
-                      (click)="setHeroChart('line')"
-                    >
-                      Signals
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'area'"
-                      (click)="setHeroChart('area')"
-                    >
-                      Coverage
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'dots'"
-                      (click)="setHeroChart('dots')"
-                    >
-                      Dots
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'pulse'"
-                      (click)="setHeroChart('pulse')"
-                    >
-                      Pulse
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'wave'"
-                      (click)="setHeroChart('wave')"
-                    >
-                      Wave
-                    </button>
-                    <button
-                      type="button"
-                      [class.active]="heroChartType() === 'grid'"
-                      (click)="setHeroChart('grid')"
-                    >
-                      Grid
-                    </button>
-                  </div>
-                  <p class="dashboard-caption">
-                    Choose a technology on the left to see its role. These controls change the
-                    visualisation only.
-                  </p>
-                  <div class="chart-workspace">
-                    <div
-                      class="canvas-chart"
-                      [attr.data-chart]="heroChartType()"
-                      [attr.data-palette]="heroPalette()"
-                    >
-                      @for (bar of heroChartBars(); track $index) {
-                        <span
-                          [style.height.%]="bar"
-                          [style.background]="chartBarGradient(bar)"
-                        ></span>
-                      }
-                      <svg
-                        viewBox="0 0 360 120"
-                        preserveAspectRatio="none"
-                        aria-label="Portfolio dashboard chart"
-                      >
-                        <path [attr.d]="heroChartPath()" />
-                      </svg>
-                      <em>product signal / 2026</em>
-                    </div>
-                    <div class="chart-symbols" aria-label="Randomise chart values">
-                      <button
-                        type="button"
-                        (click)="randomizeHeroChart()"
-                        aria-label="Refresh signal"
-                      >
-                        ⌁
-                      </button>
-                      <button
-                        type="button"
-                        (click)="randomizeHeroChart()"
-                        aria-label="Refresh metrics"
-                      >
-                        ◌
-                      </button>
-                      <button
-                        type="button"
-                        (click)="randomizeHeroChart()"
-                        aria-label="Refresh state"
-                      >
-                        ✦
-                      </button>
-                      <button
-                        class="temperature-icon"
-                        type="button"
-                        [class.active]="heroPalette() === 'heat'"
-                        (click)="setHeroTemperature()"
-                        aria-label="Random temperature colours"
-                      >
-                        ◉
-                      </button>
-                    </div>
-                  </div>
-                </section>
-                @if (selectedHeroPanel(); as selectedPanel) {
-                  <article
-                    class="technology-detail"
-                    [attr.data-effect]="heroEffect()"
-                    [attr.data-transition]="heroPanelTransition()"
-                  >
-                    <div>
-                      @if (selectedPanel.iconAsset) {
-                        <img class="core-icon" [src]="selectedPanel.iconAsset" alt="" />
-                      } @else {
-                        <svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true">
-                          <path
-                            [attr.d]="selectedPanel.iconPath"
-                            [attr.fill]="selectedPanel.color"
-                          />
-                        </svg>
-                      }
-                      <h3>{{ selectedPanel.label }}</h3>
-                      <p>{{ selectedPanel.detail }}</p>
-                    </div>
-                    <div class="effect-controls" aria-label="Technology description effects">
-                      <button type="button" (click)="setHeroEffect('shake')" aria-label="Shake">
-                        ≈
-                      </button>
-                      <button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">
-                        ⌘
-                      </button>
-                      <button type="button" (click)="setHeroEffect('float')" aria-label="Float">
-                        ↟
-                      </button>
-                      <button
-                        type="button"
-                        (click)="setHeroEffect('spectrum')"
-                        aria-label="Spectrum"
-                      >
-                        ◈
-                      </button>
-                    </div>
-                    <button class="detail-retry" type="button" (click)="clearHeroPanel()">
-                      Retry ↻
-                    </button>
-                  </article>
-                }
-              </div>
-            </div>
-          </div>
-          <p class="hero-note">
-            Built with explicit state,
-            <br />
-            progressive enhancement and care.
-          </p>
-        </div>
-      </section>
-    }
+				<div
+					class="hero-composition"
+					aria-label="Interactive representation of Mario's core frontend technologies"
+					(mouseenter)="earth.start()"
+					(mouseleave)="earth.stop()"
+					(pointerdown)="returnEarthBehind($event)">
+					<div
+						class="orb orb-one"
+						[class.earth-active]="earth.active()"
+						[class.earth-out-behind]="earthDepth() === 'out-behind'"
+						[class.earth-front-ready]="
+							earthDepth() === 'front-ready'
+						"
+						[class.earth-front]="earthDepth() === 'front'"
+						[class.earth-out-front]="earthDepth() === 'out-front'"
+						[class.earth-behind-ready]="
+							earthDepth() === 'behind-ready'
+						"
+						aria-hidden="true">
+						<app-earth-globe
+							#earth
+							[depth]="earthDepth()" />
+					</div>
+					<div class="orb orb-two"></div>
+					<div
+						class="interface-shell"
+						[attr.data-chart]="heroChartType()"
+						(mouseleave)="returnEarthBehind()"
+						(pointerdown)="returnEarthBehind($event)"
+						(click)="returnEarthBehind($event)">
+						<div
+							class="monitor-chrome"
+							aria-hidden="true">
+							<span></span>
+							<span></span>
+							<span></span>
+							<i></i>
+							<b>cartago.system</b>
+						</div>
+						<div class="monitor-header">
+							<button
+								class="earth-motion-control"
+								type="button"
+								[attr.aria-pressed]="earthDepth() === 'front'"
+								(click)="
+									earth.changeMotion();
+									onEarthControlClick($event)
+								"
+								aria-label="Change the Earth's rotation"></button>
+							<a
+								class="monitor-banner-link"
+								href="https://github.com/CartagoGit"
+								target="_blank"
+								rel="noreferrer"
+								[attr.aria-disabled]="earthBlocksMonitor()"
+								[attr.tabindex]="
+									earthBlocksMonitor() ? -1 : null
+								"
+								[class.is-disabled]="earthBlocksMonitor()"
+								(click)="guardMonitorBanner($event)"
+								aria-label="Open CartagoGit on GitHub">
+								<img
+									class="hero-banner"
+									src="/images/cartagonova-banner-03-neon.png"
+									alt="CartagoNova banner" />
+							</a>
+						</div>
+						<div class="interface-body">
+							<div
+								class="monitor-selector"
+								aria-label="Core technologies">
+								@for (panel of heroPanels; track panel.id) {
+									<button
+										type="button"
+										[class.active]="
+											activeHeroPanel() === panel.id
+										"
+										(click)="setHeroPanel(panel.id)">
+										@if (panel.iconAsset) {
+											<img
+												class="core-icon"
+												[src]="panel.iconAsset"
+												alt="" />
+										} @else {
+											<svg
+												class="core-icon"
+												viewBox="0 0 24 24"
+												aria-hidden="true">
+												<path
+													[attr.d]="panel.iconPath"
+													[attr.fill]="panel.color" />
+											</svg>
+										}
+										<span>{{ panel.label }}</span>
+									</button>
+								}
+							</div>
+							<div
+								class="interface-canvas"
+								[class.technology-open]="selectedHeroPanel()">
+								<section
+									class="dashboard-view"
+									[class.panel-hidden]="
+										selectedHeroPanel() ||
+										heroPanelChanging()
+									"
+									[class.swap-hidden]="heroPanelChanging()">
+									<div class="canvas-heading">
+										<span>
+											<i></i>
+											CartagoNova / system telemetry
+										</span>
+										<small>LIVE</small>
+									</div>
+									<div
+										class="hero-chart-switcher"
+										aria-label="Dashboard chart type">
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'bars'
+											"
+											(click)="setHeroChart('bars')">
+											Velocity
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'line'
+											"
+											(click)="setHeroChart('line')">
+											Signals
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'area'
+											"
+											(click)="setHeroChart('area')">
+											Coverage
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'dots'
+											"
+											(click)="setHeroChart('dots')">
+											Dots
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'pulse'
+											"
+											(click)="setHeroChart('pulse')">
+											Pulse
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'wave'
+											"
+											(click)="setHeroChart('wave')">
+											Wave
+										</button>
+										<button
+											type="button"
+											[class.active]="
+												heroChartType() === 'grid'
+											"
+											(click)="setHeroChart('grid')">
+											Grid
+										</button>
+									</div>
+									<p class="dashboard-caption">
+										Choose a technology on the left to see
+										its role. These controls change the
+										visualisation only.
+									</p>
+									<div class="chart-workspace">
+										<div
+											class="canvas-chart"
+											[attr.data-chart]="heroChartType()"
+											[attr.data-palette]="heroPalette()">
+											@for (
+												bar of heroChartBars();
+												track $index
+											) {
+												<span
+													[style.height.%]="bar"
+													[style.background]="
+														chartBarGradient(bar)
+													"></span>
+											}
+											<svg
+												viewBox="0 0 360 120"
+												preserveAspectRatio="none"
+												aria-label="Portfolio dashboard chart">
+												<path
+													[attr.d]="
+														heroChartPath()
+													" />
+											</svg>
+											<em>product signal / 2026</em>
+										</div>
+										<div
+											class="chart-symbols"
+											aria-label="Randomise chart values">
+											<button
+												type="button"
+												(click)="randomizeHeroChart()"
+												aria-label="Refresh signal">
+												⌁
+											</button>
+											<button
+												type="button"
+												(click)="randomizeHeroChart()"
+												aria-label="Refresh metrics">
+												◌
+											</button>
+											<button
+												type="button"
+												(click)="randomizeHeroChart()"
+												aria-label="Refresh state">
+												✦
+											</button>
+											<button
+												class="temperature-icon"
+												type="button"
+												[class.active]="
+													heroPalette() === 'heat'
+												"
+												(click)="setHeroTemperature()"
+												aria-label="Random temperature colours">
+												◉
+											</button>
+										</div>
+									</div>
+								</section>
+								@if (selectedHeroPanel(); as selectedPanel) {
+									<article
+										class="technology-detail"
+										[attr.data-effect]="heroEffect()"
+										[attr.data-transition]="
+											heroPanelTransition()
+										">
+										<div>
+											@if (selectedPanel.iconAsset) {
+												<img
+													class="core-icon"
+													[src]="
+														selectedPanel.iconAsset
+													"
+													alt="" />
+											} @else {
+												<svg
+													class="core-icon"
+													viewBox="0 0 24 24"
+													aria-hidden="true">
+													<path
+														[attr.d]="
+															selectedPanel.iconPath
+														"
+														[attr.fill]="
+															selectedPanel.color
+														" />
+												</svg>
+											}
+											<h3>{{ selectedPanel.label }}</h3>
+											<p>{{ selectedPanel.detail }}</p>
+										</div>
+										<div
+											class="effect-controls"
+											aria-label="Technology description effects">
+											<button
+												type="button"
+												(click)="setHeroEffect('shake')"
+												aria-label="Shake">
+												≈
+											</button>
+											<button
+												type="button"
+												(click)="
+													setHeroEffect('glitch')
+												"
+												aria-label="Glitch">
+												⌘
+											</button>
+											<button
+												type="button"
+												(click)="setHeroEffect('float')"
+												aria-label="Float">
+												↟
+											</button>
+											<button
+												type="button"
+												(click)="
+													setHeroEffect('spectrum')
+												"
+												aria-label="Spectrum">
+												◈
+											</button>
+										</div>
+										<button
+											class="detail-retry"
+											type="button"
+											(click)="clearHeroPanel()">
+											Retry ↻
+										</button>
+									</article>
+								}
+							</div>
+						</div>
+					</div>
+					<p class="hero-note">
+						Built with explicit state,
+						<br />
+						progressive enhancement and care.
+					</p>
+				</div>
+			</section>
+		}
 
-    @if (page() === 'work') {
-      <app-work-page />
-    }
+		@if (page() === 'work') {
+			<app-work-page />
+		}
 
-    @if (page() === 'approach') {
-      <app-approach-page
-        [capabilities]="capabilities"
-        [activeCapability]="activeCapability()"
-        [selectedCapability]="selectedCapability()"
-        (selected)="setCapability($event)"
-      />
-    }
+		@if (page() === 'approach') {
+			<app-approach-page
+				[capabilities]="capabilities"
+				[activeCapability]="activeCapability()"
+				[selectedCapability]="selectedCapability()"
+				(selected)="setCapability($event)" />
+		}
 
-    @if (page() === 'knowledge') {
-      <app-knowledge-page />
-    }
+		@if (page() === 'knowledge') {
+			<app-knowledge-page />
+		}
 
-    @if (page() === 'docker') {
-      <app-docker-page />
-    }
+		@if (page() === 'docker') {
+			<app-docker-page />
+		}
 
-    @if (page() === 'demos') {
-      <app-demos-page [score]="neonScore()" [target]="neonTarget()" (hit)="hitNeonTarget($event)" />
-    }
+		@if (page() === 'demos') {
+			<app-demos-page
+				[score]="neonScore()"
+				[target]="neonTarget()"
+				(hit)="hitNeonTarget($event)" />
+		}
 
-    @if (page() === 'lab') {
-      <app-lab-page (commandRequested)="commandOpen.set(true)" />
-    }
+		@if (page() === 'lab') {
+			<app-lab-page (commandRequested)="commandOpen.set(true)" />
+		}
 
-    @if (page() === 'contact') {
-      <app-contact-page [sent]="formSent()" (submitted)="formSent.set(true)" />
-    }
-  </div>
+		@if (page() === 'contact') {
+			<app-contact-page
+				[sent]="formSent()"
+				(submitted)="formSent.set(true)" />
+		}
+	</div>
 
-  <app-portfolio-footer [locale]="locale()" [links]="publicLinks" />
+	<app-portfolio-footer
+		[locale]="locale()"
+		[links]="publicLinks" />
 
-  <app-command-palette
-    [open]="commandOpen()"
-    [locale]="locale()"
-    (close)="commandOpen.set(false)"
-    (navigate)="setTransition($event)"
-  />
+	<app-command-palette
+		[open]="commandOpen()"
+		[locale]="locale()"
+		(close)="commandOpen.set(false)"
+		(navigate)="setTransition($event)" />
 </main>

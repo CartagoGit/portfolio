@@ -1,122 +1,122 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 
 :root {
-  color-scheme: dark;
-  font-family: 'Manrope', Arial, sans-serif;
-  background: #090a12;
-  color: #eff3ff;
+	color-scheme: dark;
+	font-family: 'Manrope', Arial, sans-serif;
+	background: #090a12;
+	color: #eff3ff;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 body {
-  margin: 0;
-  min-width: 320px;
-  background: #090a12;
-  transition: background 0.35s ease;
+	margin: 0;
+	min-width: 320px;
+	background: #090a12;
+	transition: background 0.35s ease;
 }
 body:has(.portfolio.light-mode) {
-  background: #f3f7ff;
+	background: #f3f7ff;
 }
 button,
 a,
 input,
 textarea {
-  font: inherit;
+	font: inherit;
 }
 button {
-  cursor: pointer;
+	cursor: pointer;
 }
 a {
-  color: inherit;
+	color: inherit;
 }
 :focus-visible {
-  outline: 3px solid #5ae2ff;
-  outline-offset: 4px;
+	outline: 3px solid #5ae2ff;
+	outline-offset: 4px;
 }
 
 /* The shell (including the fixed header) remains stable; only route content moves. */
 ::view-transition-old(root) {
-  animation: none;
-  opacity: 0;
+	animation: none;
+	opacity: 0;
 }
 ::view-transition-new(root) {
-  animation: none;
-  opacity: 1;
+	animation: none;
+	opacity: 1;
 }
 ::view-transition-old(route-content),
 ::view-transition-new(route-content) {
-  animation-duration: 0.68s;
-  animation-timing-function: cubic-bezier(0.22, 0.9, 0.25, 1);
+	animation-duration: 0.68s;
+	animation-timing-function: cubic-bezier(0.22, 0.9, 0.25, 1);
 }
 ::view-transition-old(route-content) {
-  z-index: 1;
+	z-index: 1;
 }
 ::view-transition-new(route-content) {
-  z-index: 2;
+	z-index: 2;
 }
 html[data-transition-direction='forward']::view-transition-old(route-content) {
-  animation-name: portfolio-exit-left;
+	animation-name: portfolio-exit-left;
 }
 html[data-transition-direction='forward']::view-transition-new(route-content) {
-  animation-name: portfolio-enter-right;
+	animation-name: portfolio-enter-right;
 }
 html[data-transition-direction='backward']::view-transition-old(route-content) {
-  animation-name: portfolio-exit-right;
+	animation-name: portfolio-exit-right;
 }
 html[data-transition-direction='backward']::view-transition-new(route-content) {
-  animation-name: portfolio-enter-left;
+	animation-name: portfolio-enter-left;
 }
 @keyframes portfolio-exit-left {
-  55% {
-    opacity: 0;
-  }
-  to {
-    transform: translateX(-12%) scale(0.975);
-    opacity: 0;
-    filter: blur(3px);
-  }
+	55% {
+		opacity: 0;
+	}
+	to {
+		transform: translateX(-12%) scale(0.975);
+		opacity: 0;
+		filter: blur(3px);
+	}
 }
 @keyframes portfolio-enter-right {
-  from {
-    transform: translateX(12%) scale(0.985);
-    opacity: 0.18;
-    filter: blur(5px) saturate(1.3);
-  }
-  55% {
-    opacity: 1;
-  }
+	from {
+		transform: translateX(12%) scale(0.985);
+		opacity: 0.18;
+		filter: blur(5px) saturate(1.3);
+	}
+	55% {
+		opacity: 1;
+	}
 }
 @keyframes portfolio-exit-right {
-  55% {
-    opacity: 0;
-  }
-  to {
-    transform: translateX(12%) scale(0.975);
-    opacity: 0;
-    filter: blur(3px);
-  }
+	55% {
+		opacity: 0;
+	}
+	to {
+		transform: translateX(12%) scale(0.975);
+		opacity: 0;
+		filter: blur(3px);
+	}
 }
 @keyframes portfolio-enter-left {
-  from {
-    transform: translateX(-12%) scale(0.985);
-    opacity: 0.18;
-    filter: blur(5px) saturate(1.3);
-  }
-  55% {
-    opacity: 1;
-  }
+	from {
+		transform: translateX(-12%) scale(0.985);
+		opacity: 0.18;
+		filter: blur(5px) saturate(1.3);
+	}
+	55% {
+		opacity: 1;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root),
-  ::view-transition-old(route-content),
-  ::view-transition-new(route-content) {
-    animation: none;
-  }
+	::view-transition-old(root),
+	::view-transition-new(root),
+	::view-transition-old(route-content),
+	::view-transition-new(route-content) {
+		animation: none;
+	}
 }

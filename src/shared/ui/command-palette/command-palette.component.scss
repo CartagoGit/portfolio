@@ -1,67 +1,67 @@
 :host {
-  display: contents;
+	display: contents;
 }
 
 .command-palette {
-  position: fixed;
-  z-index: 50;
-  inset: 0;
-  display: grid;
-  place-items: start center;
-  padding: 15vh 1rem;
-  background: #060810a8;
-  backdrop-filter: blur(5px);
+	position: fixed;
+	z-index: 50;
+	inset: 0;
+	display: grid;
+	place-items: start center;
+	padding: 15vh 1rem;
+	background: #060810a8;
+	backdrop-filter: blur(5px);
 
-  &__dialog {
-    width: min(100%, 580px);
-    padding: 1rem;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    box-shadow: 0 30px 100px #0009;
-  }
-  &__heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  &__heading p {
-    margin: 0;
-    font-weight: 800;
-  }
-  &__heading button {
-    border: 0;
-    background: transparent;
-    color: var(--ink);
-    font-size: 1.5rem;
-  }
-  &__search {
-    display: grid;
-    gap: 0.5rem;
-    margin: 1rem 0;
-    color: var(--muted);
-    font: 0.6rem 'DM Mono';
-  }
-  &__search input {
-    padding: 0.75rem;
-    border: 1px solid var(--line);
-    outline: 0;
-    color: var(--ink);
-    background: transparent;
-  }
-  &__search input:focus {
-    border-color: var(--cyan);
-  }
-  & > .command-palette__dialog > a {
-    display: grid;
-    grid-template-columns: 2rem 1fr auto;
-    align-items: center;
-    padding: 0.75rem 0.3rem;
-    border-top: 1px solid var(--line);
-    color: var(--ink);
-    font-size: 0.78rem;
-    text-decoration: none;
-  }
-  & > .command-palette__dialog > a span {
-    color: var(--cyan);
-  }
+	&__dialog {
+		width: min(100%, 580px);
+		padding: 1rem;
+		border: 1px solid var(--line);
+		background: var(--surface);
+		box-shadow: 0 30px 100px #0009;
+	}
+	&__heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	&__heading p {
+		margin: 0;
+		font-weight: 800;
+	}
+	&__heading button {
+		border: 0;
+		background: transparent;
+		color: var(--ink);
+		font-size: 1.5rem;
+	}
+	&__search {
+		display: grid;
+		gap: 0.5rem;
+		margin: 1rem 0;
+		color: var(--muted);
+		font: 0.6rem 'DM Mono';
+	}
+	&__search input {
+		padding: 0.75rem;
+		border: 1px solid var(--line);
+		outline: 0;
+		color: var(--ink);
+		background: transparent;
+	}
+	&__search input:focus {
+		border-color: var(--cyan);
+	}
+	& > .command-palette__dialog > a {
+		display: grid;
+		grid-template-columns: 2rem 1fr auto;
+		align-items: center;
+		padding: 0.75rem 0.3rem;
+		border-top: 1px solid var(--line);
+		color: var(--ink);
+		font-size: 0.78rem;
+		text-decoration: none;
+	}
+	& > .command-palette__dialog > a span {
+		color: var(--cyan);
+	}
 }

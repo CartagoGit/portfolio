@@ -1,35 +1,49 @@
 @if (open()) {
-  <div class="command-palette" (click)="close.emit()">
-    <section
-      class="command-palette__dialog"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="command-title"
-      (click)="$event.stopPropagation()"
-    >
-      <div class="command-palette__heading">
-        <p id="command-title">Command palette</p>
-        <button type="button" (click)="close.emit()" aria-label="Close command palette">×</button>
-      </div>
-      <label class="command-palette__search">
-        Search product commands
-        <input autofocus placeholder="Try ‘work’ or ‘contact’" />
-      </label>
-      <a [routerLink]="routeFor('work')" (click)="select('work')">
-        <span>↗</span>
-        View selected work
-        <kbd>↵</kbd>
-      </a>
-      <a [routerLink]="routeFor('lab')" (click)="select('lab')">
-        <span>✦</span>
-        Explore Frontend Lab
-        <kbd>↵</kbd>
-      </a>
-      <a [routerLink]="routeFor('contact')" (click)="select('contact')">
-        <span>✉</span>
-        Start a conversation
-        <kbd>↵</kbd>
-      </a>
-    </section>
-  </div>
+	<div
+		class="command-palette"
+		(click)="close.emit()">
+		<section
+			class="command-palette__dialog"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="command-title"
+			(click)="$event.stopPropagation()">
+			<div class="command-palette__heading">
+				<p id="command-title">Command palette</p>
+				<button
+					type="button"
+					(click)="close.emit()"
+					aria-label="Close command palette">
+					×
+				</button>
+			</div>
+			<label class="command-palette__search">
+				Search product commands
+				<input
+					autofocus
+					placeholder="Try ‘work’ or ‘contact’" />
+			</label>
+			<a
+				[routerLink]="routeFor('work')"
+				(click)="select('work')">
+				<span>↗</span>
+				View selected work
+				<kbd>↵</kbd>
+			</a>
+			<a
+				[routerLink]="routeFor('lab')"
+				(click)="select('lab')">
+				<span>✦</span>
+				Explore Frontend Lab
+				<kbd>↵</kbd>
+			</a>
+			<a
+				[routerLink]="routeFor('contact')"
+				(click)="select('contact')">
+				<span>✉</span>
+				Start a conversation
+				<kbd>↵</kbd>
+			</a>
+		</section>
+	</div>
 }
