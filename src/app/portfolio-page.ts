@@ -374,7 +374,7 @@ export class PortfolioPage {
   protected returnEarthBehind(event: MouseEvent): void {
     if (this.earthDepth() !== 'front') return;
     const target = event.target as HTMLElement | null;
-    if (target?.closest('button, a, input, select, textarea')) return;
+    if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
     window.setTimeout(() => this.earthDepth.set('behind'), 620);
   }
