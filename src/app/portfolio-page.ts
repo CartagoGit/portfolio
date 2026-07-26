@@ -59,14 +59,15 @@ export class PortfolioPage {
   protected readonly draggedStep = signal<PlaygroundStep | null>(null);
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
   protected readonly activeHeroPanel = signal<HeroPanelId>('overview');
+  protected readonly showHeroChart = signal(true);
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
-  protected readonly heroLayers = signal(['Angular 22', 'TypeScript', 'Ionic', 'Capacitor', 'MCP Vertex', 'Testing']);
-  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string }[] = [
-    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture', iconPath: siAngular.path },
-    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer', iconPath: siTypescript.path },
-    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y', iconPath: siVitest.path },
-    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android', iconPath: siIonic.path || siCapacitor.path },
+  protected readonly heroLayers = signal(['Angular', 'TypeScript', 'Ionic', 'Capacitor', 'Vitest', 'Playwright']);
+  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
+    { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#dd0031' },
+    { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
+    { id: 'quality', label: 'Vitest', metric: 'VT', detail: 'Fast unit and integration testing that keeps frontend behaviour dependable.', iconPath: siVitest.path, color: '#fcc72b' },
+    { id: 'mobile', label: 'Ionic + Capacitor', metric: 'MOB', detail: 'A shared product system delivered to web and native mobile surfaces.', iconPath: siIonic.path || siCapacitor.path, color: '#3880ff' },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },
@@ -204,6 +205,11 @@ export class PortfolioPage {
 
   protected setHeroPanel(panel: HeroPanelId): void {
     this.activeHeroPanel.set(panel);
+    this.showHeroChart.set(false);
+  }
+
+  protected showHeroOverview(): void {
+    this.showHeroChart.set(true);
   }
 
   protected setTelemetry(metric: TelemetryId): void {

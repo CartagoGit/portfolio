@@ -56,25 +56,25 @@
       <div class="hero-socials" aria-label="Public profiles"><a href="https://www.linkedin.com/in/mario-cabrero-volarich" target="_blank" rel="noreferrer">LinkedIn / Mario Cabrero</a><a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer">GitHub</a><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer">Docker</a><a href="https://www.npmjs.com/package/@cartago-git/keyer" target="_blank" rel="noreferrer">npm</a></div>
     </div>
 
-    <div class="hero-composition" aria-label="Interactive representation of frontend engineering layers">
+    <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies">
       <div class="orb orb-one"></div><div class="orb orb-two"></div>
       <div class="interface-shell" [attr.data-panel]="activeHeroPanel()">
+        <img class="hero-banner" src="https://raw.githubusercontent.com/CartagoGit/CartagoGit/main/assets/banner-03-neon.png" alt="CartagoNova banner" />
         <div class="interface-topbar"><span></span><span></span><span></span><i></i></div>
         <div class="interface-body">
           <div class="interface-sidebar" aria-label="Portfolio dashboard sections">
             @for (panel of heroPanels; track panel.id) {
-              <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><span>{{ panel.label }}</span></button>
+              <button type="button" [class.active]="activeHeroPanel() === panel.id && !showHeroChart()" (click)="setHeroPanel(panel.id)"><svg viewBox="0 0 24 24" [style.fill]="panel.color" aria-hidden="true"><path [attr.d]="panel.iconPath" /></svg><span>{{ panel.label }}</span></button>
             }
           </div>
           <div class="interface-canvas">
-            <div class="canvas-heading"><span><svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg>{{ selectedHeroPanel().label }}</span><button type="button" (click)="setHeroPanel('overview')" aria-label="Return to Angular products">↻</button></div>
-            <div class="canvas-cards">
-              @for (panel of heroPanels.slice(0, 3); track panel.id) {
-                <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><b>{{ panel.metric }}</b><small>{{ panel.detail }}</small></button>
-              }
-            </div>
-            <p class="canvas-description">{{ selectedHeroPanel().detail }}</p>
-            <div class="canvas-chart"><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Interactive performance chart"><path [class.workflows]="activeHeroPanel() === 'workflows'" [class.quality]="activeHeroPanel() === 'quality'" [class.mobile]="activeHeroPanel() === 'mobile'" d="M0 99 C34 89, 55 51, 93 70 S143 42, 185 54 S245 11, 284 37 S329 31, 360 8" /></svg></div>
+            <div class="canvas-heading"><span><svg class="panel-icon" viewBox="0 0 24 24" [style.fill]="selectedHeroPanel().color" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg>{{ showHeroChart() ? 'CartagoNova core stack' : selectedHeroPanel().label }}</span><button type="button" (click)="showHeroOverview()" aria-label="Show core stack overview">↻</button></div>
+            @if (showHeroChart()) {
+              <div class="canvas-cards">@for (panel of heroPanels; track panel.id) { <button type="button" (click)="setHeroPanel(panel.id)"><b [style.color]="panel.color">{{ panel.metric }}</b><small>{{ panel.label }}</small></button> }</div>
+              <div class="canvas-chart"><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Core technology overview"><path d="M0 99 C34 89, 55 51, 93 70 S143 42, 185 54 S245 11, 284 37 S329 31, 360 8" /></svg></div>
+            } @else {
+              <article class="technology-explainer"><svg viewBox="0 0 24 24" [style.fill]="selectedHeroPanel().color" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg><h3>{{ selectedHeroPanel().label }}</h3><p>{{ selectedHeroPanel().detail }}</p><button type="button" (click)="showHeroOverview()">Back to core stack</button></article>
+            }
           </div>
         </div>
       </div>
