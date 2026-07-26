@@ -3,54 +3,76 @@
 }
 .portfolio-header {
 	position: fixed;
-	z-index: 20;
+	z-index: 40;
 	top: 0;
 	left: 50%;
 	display: flex;
 	width: min(1380px, calc(100% - 3rem));
 	height: 88px;
 	align-items: center;
+	justify-content: space-between;
 	gap: 1.4rem;
 	transform: translateX(-50%);
 	transition:
 		height 0.3s ease,
 		width 0.3s ease,
 		background 0.3s ease,
-		backdrop-filter 0.3s ease;
+		backdrop-filter 0.3s ease,
+		border-color 0.3s ease,
+		box-shadow 0.3s ease;
 	&--scrolled {
 		top: 0.65rem;
 		width: min(1120px, calc(100% - 2rem));
 		height: 62px;
 		padding: 0 1rem;
-		border: 1px solid var(--line);
+		border: 1px solid color-mix(in srgb, var(--blue) 45%, var(--line));
 		border-radius: 16px;
 		background: color-mix(in srgb, var(--canvas) 76%, transparent);
 		backdrop-filter: blur(18px) saturate(145%);
+		box-shadow:
+			0 12px 35px #0004,
+			var(--neon);
 	}
 	&__brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
 		color: var(--ink);
+		font-size: 1.05rem;
 		font-weight: 800;
+		letter-spacing: -0.04em;
 		text-decoration: none;
 	}
 	&__mark {
+		display: grid;
+		width: 1.85rem;
+		height: 1.85rem;
+		place-items: center;
+		border-radius: 50%;
+		background: var(--blue);
 		color: var(--cyan);
-		margin-right: 0.2rem;
+		box-shadow: var(--neon);
+		font-family: 'Playfair Display', serif;
+		font-size: 1.25rem;
 	}
 	&__nav {
 		display: flex;
 		flex: 1;
 		justify-content: center;
-		gap: 0.2rem;
+		gap: clamp(0.35rem, 1.7vw, 1.35rem);
+		margin: 0 1.2rem;
 	}
 	&__nav a {
-		padding: 0.45rem 0.6rem;
+		padding: 0.45rem 0;
 		color: var(--muted);
-		font: 0.62rem 'DM Mono';
+		font: 700 0.72rem 'DM Mono';
+		letter-spacing: 0.02em;
 		text-decoration: none;
 	}
 	&__nav a:hover,
 	&__nav a.is-active {
 		color: var(--cyan);
+		text-shadow: 0 0 16px var(--cyan);
 	}
 	&__actions {
 		display: flex;
@@ -73,6 +95,12 @@
 		background: color-mix(in srgb, var(--surface) 65%, transparent);
 		color: var(--ink);
 	}
+	&__locale > button:hover,
+	&__theme:hover {
+		border-color: var(--cyan);
+		color: var(--cyan);
+		box-shadow: var(--neon);
+	}
 	&__locale img {
 		width: 1.5rem;
 		border-radius: 3px;
@@ -85,7 +113,15 @@
 		padding: 0.35rem;
 		border: 1px solid var(--line);
 		border-radius: 16px;
-		background: var(--surface);
+		background: color-mix(in srgb, var(--surface) 89%, transparent);
+		backdrop-filter: blur(18px);
+		box-shadow: 0 18px 45px #0006;
+		transform-origin: top right;
+		animation: header-menu-in 0.2s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	}
+	&__locale-menu.is-closing {
+		pointer-events: none;
+		animation: header-menu-out 0.18s ease both;
 	}
 	&__locale-menu button {
 		display: grid;
@@ -102,9 +138,30 @@
 	&__locale-menu small {
 		display: block;
 		color: var(--muted);
+		font: 0.55rem 'DM Mono';
+		margin-top: 0.15rem;
 	}
 	&__menu {
 		display: none;
+	}
+}
+@keyframes header-menu-in {
+	from {
+		opacity: 0;
+		transform: translateY(-8px) scale(0.94);
+		filter: blur(3px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		filter: blur(0);
+	}
+}
+@keyframes header-menu-out {
+	to {
+		opacity: 0;
+		transform: translateY(-7px) scale(0.95);
+		filter: blur(2px);
 	}
 }
 @media (max-width: 900px) {
@@ -116,6 +173,7 @@
 			margin-left: auto;
 			border: 0;
 			background: transparent;
+			padding: 0.5rem;
 		}
 		&__menu span:not(.sr-only) {
 			display: block;
@@ -131,11 +189,16 @@
 			left: 0;
 			padding: 0.65rem;
 			border: 1px solid var(--line);
-			background: var(--surface);
+			border-radius: 12px;
+			background: color-mix(in srgb, var(--surface) 95%, transparent);
+			backdrop-filter: blur(18px);
 		}
 		&__nav--open {
 			display: flex;
 			flex-direction: column;
+		}
+		&__nav a {
+			padding: 0.7rem;
 		}
 		&__actions {
 			order: 3;
