@@ -368,7 +368,7 @@ export class PortfolioPage {
   protected showEarthInFront(): void {
     if (this.earthDepth() !== 'behind') return;
     this.earthDepth.set('crossing-front');
-    window.setTimeout(() => this.earthDepth.set('front'), 520);
+    window.setTimeout(() => this.earthDepth.set('front'), 300);
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -386,8 +386,8 @@ export class PortfolioPage {
     const target = event?.target as HTMLElement | null | undefined;
     if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
-    window.setTimeout(() => this.earthDepth.set('settling-behind'), 520);
-    window.setTimeout(() => this.earthDepth.set('behind'), 940);
+    window.setTimeout(() => this.earthDepth.set('settling-behind'), 300);
+    window.setTimeout(() => this.earthDepth.set('behind'), 680);
   }
 
   private renderEarth(): void {
