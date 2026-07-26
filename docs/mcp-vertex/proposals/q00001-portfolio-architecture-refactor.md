@@ -36,7 +36,7 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
   doneWhen: Root template delegates both pages; static data moves to domain; each feature has tests.
 - id: qs3
   title: Extract Knowledge and Lab interactive features
-  status: in-progress
+  status: done
   doneWhen: Root owns only state facade; chart and capability interactions are feature contracts with tests.
 - id: qs4
   title: Remove legacy shell SCSS and establish BEM style layers
@@ -53,6 +53,6 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
 
 ## Evidence
 
-- 2026-07-26: Approach, Work and Knowledge are isolated feature components. Their templates,
+- 2026-07-26: Approach, Work, Knowledge and Lab are isolated feature components. Their templates,
   styles and tests no longer belong to the route shell; the portfolio-content audit now reads
   every extracted public page.

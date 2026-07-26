@@ -16,10 +16,8 @@ import {
   CAPABILITIES,
   HERO_PANELS,
   LANGUAGES,
-  PLAYGROUND_STEPS,
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
-  TELEMETRY,
 } from '../domain/portfolio/portfolio.data';
 import { renderEarthFrame } from '../core/portfolio/rendering/earth-globe-renderer';
 import { nextHeroPanelTransition } from '../core/portfolio/motion/portfolio-motion';
@@ -33,6 +31,7 @@ import { DemosPageComponent } from '../features/portfolio/demos/demos-page.compo
 import { ProfileLinksComponent } from '../features/portfolio/home/profile-links/profile-links.component';
 import { ApproachPageComponent } from '../features/portfolio/approach/approach-page.component';
 import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledge-page.component';
+import { LabPageComponent } from '../features/portfolio/lab/lab-page.component';
 import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
 import type {
   CapabilityId,
@@ -42,9 +41,7 @@ import type {
   HeroPanelId,
   HeroPanelTransition,
   Locale,
-  PlaygroundStep,
   PortfolioPageId,
-  TelemetryId,
 } from '../domain/portfolio/portfolio.types';
 
 @Component({
@@ -60,6 +57,7 @@ import type {
     ProfileLinksComponent,
     ApproachPageComponent,
     KnowledgePageComponent,
+    LabPageComponent,
     WorkPageComponent,
     TechnologyMarqueeComponent,
   ],
@@ -102,20 +100,8 @@ export class PortfolioPage implements OnDestroy {
   protected readonly lightMode = signal(false);
   protected readonly scrolled = signal(false);
   protected readonly activeCapability = signal<CapabilityId>('product');
-  protected readonly labState = signal<'all' | 'focus' | 'motion'>('all');
-  protected readonly activeTelemetry = signal<TelemetryId>('product');
-  protected readonly chartType = signal<ChartType>('bars');
   protected readonly commandOpen = signal(false);
   protected readonly formSent = signal(false);
-  protected readonly playgroundProgress = signal(0);
-  protected readonly playgroundRuns = signal(0);
-  protected readonly draggedStep = signal<PlaygroundStep | null>(null);
-  protected readonly playgroundOrder = signal<PlaygroundStep[]>([
-    'build',
-    'discover',
-    'verify',
-    'model',
-  ]);
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly heroEffect = signal<HeroEffect>('idle');
@@ -148,21 +134,6 @@ export class PortfolioPage implements OnDestroy {
     const points = bars.map((bar, index) => `${index * 90},${118 - bar}`);
     return `M${points[0]} C30,${118 - bars[0]} 58,${118 - bars[1]} ${points[1]} S148,${118 - bars[2]} ${points[2]} S238,${118 - bars[3]} ${points[3]} S328,${118 - bars[4]} ${points[4]}`;
   });
-
-  protected readonly playgroundSteps = PLAYGROUND_STEPS;
-  protected readonly playgroundMessage = computed(() => {
-    if (this.playgroundComplete())
-      return 'Loop complete — the product workflow is in a deliberate order.';
-    return 'Drag the steps into the order in which a product should be shipped.';
-  });
-  protected readonly playgroundComplete = computed(() =>
-    this.playgroundOrder().every((step, index) => step === this.playgroundSteps[index].id),
-  );
-
-  protected readonly telemetry = TELEMETRY;
-  protected readonly selectedTelemetry = computed(
-    () => this.telemetry.find(({ id }) => id === this.activeTelemetry()) ?? this.telemetry[0],
-  );
 
   protected readonly copy = computed(() =>
     this.locale() === 'en'
@@ -460,65 +431,11 @@ export class PortfolioPage implements OnDestroy {
     });
   }
 
-  protected setTelemetry(metric: TelemetryId): void {
-    this.activeTelemetry.set(metric);
-  }
-
-  protected setChartType(type: ChartType): void {
-    this.chartType.set(type);
-  }
-
   protected hitNeonTarget(index: number): void {
     if (index !== this.neonTarget()) return;
     const score = this.neonScore() + 1;
     this.neonScore.set(score);
     this.neonTarget.set((index + 2 + score * 3) % 9);
-  }
-
-  protected playStep(step: PlaygroundStep): void {
-    const expected = this.playgroundSteps[this.playgroundProgress()]?.id;
-    if (step !== expected) {
-      this.playgroundProgress.set(0);
-      return;
-    }
-    const next = this.playgroundProgress() + 1;
-    if (next === this.playgroundSteps.length) {
-      this.playgroundProgress.set(next);
-      this.playgroundRuns.update((runs) => runs + 1);
-      return;
-    }
-    this.playgroundProgress.set(next);
-  }
-
-  protected startDrag(step: PlaygroundStep): void {
-    this.draggedStep.set(step);
-  }
-
-  protected dropStep(target: PlaygroundStep): void {
-    const dragged = this.draggedStep();
-    if (!dragged || dragged === target) return;
-    this.playgroundOrder.update((order) => {
-      const next = [...order];
-      const from = next.indexOf(dragged);
-      const to = next.indexOf(target);
-      next.splice(from, 1);
-      next.splice(to, 0, dragged);
-      return next;
-    });
-    this.draggedStep.set(null);
-    if (this.playgroundOrder().every((step, index) => step === this.playgroundSteps[index].id)) {
-      this.playgroundRuns.update((runs) => runs + 1);
-    }
-  }
-
-  protected playgroundStep(step: PlaygroundStep) {
-    return this.playgroundSteps.find(({ id }) => id === step) ?? this.playgroundSteps[0];
-  }
-
-  protected resetPlayground(): void {
-    this.playgroundProgress.set(0);
-    this.playgroundOrder.set(['build', 'discover', 'verify', 'model']);
-    this.draggedStep.set(null);
   }
 
   protected submitContact(event: SubmitEvent): void {
