@@ -131,6 +131,11 @@ export class PortfolioPage {
   protected readonly selectedHeroPanel = computed(
     () => this.heroPanels.find(({ id }) => id === this.activeHeroPanel()),
   );
+  protected readonly heroChartPath = computed(() => {
+    const bars = this.heroChartBars();
+    const points = bars.map((bar, index) => `${index * 90},${118 - bar}`);
+    return `M${points[0]} C30,${118 - bars[0]} 58,${118 - bars[1]} ${points[1]} S148,${118 - bars[2]} ${points[2]} S238,${118 - bars[3]} ${points[3]} S328,${118 - bars[4]} ${points[4]}`;
+  });
 
   protected readonly playgroundSteps: readonly { id: PlaygroundStep; label: string; hint: string }[] = [
     { id: 'discover', label: 'Discover', hint: 'Understand the person and the workflow.' },
@@ -228,8 +233,9 @@ export class PortfolioPage {
   }
 
   protected setHeroPanel(panel: HeroPanelId): void {
-    this.activeHeroPanel.set(panel);
+    this.activeHeroPanel.set(null);
     this.heroEffect.set('idle');
+    window.setTimeout(() => this.activeHeroPanel.set(panel), 24);
   }
 
   protected clearHeroPanel(): void {
@@ -248,7 +254,7 @@ export class PortfolioPage {
 
   protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
     this.heroEffect.set('idle');
-    queueMicrotask(() => this.heroEffect.set(effect));
+    window.setTimeout(() => this.heroEffect.set(effect), 24);
   }
 
   protected startEarthSpin(): void {
