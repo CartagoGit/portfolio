@@ -341,7 +341,7 @@ export class PortfolioPage {
     const previous = this.earthLastFrameAt ?? now;
     const delta = Math.min(48, now - previous);
     this.earthLastFrameAt = now;
-    const blend = 1 - Math.exp(-delta / 850);
+    const blend = 1 - Math.exp(-delta / 620);
     this.earthMotion.speed += (this.earthMotion.targetSpeed - this.earthMotion.speed) * blend;
     this.earthMotion.axisX += (this.earthMotion.targetAxisX - this.earthMotion.axisX) * blend;
     this.earthMotion.axisY += (this.earthMotion.targetAxisY - this.earthMotion.axisY) * blend;
@@ -357,18 +357,18 @@ export class PortfolioPage {
 
   protected changeEarthMotion(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    const direction = Math.random() > .5 ? 1 : -1;
-    this.earthMotion.targetSpeed = direction * (.00008 + Math.random() * .00014);
-    this.earthMotion.targetAxisX = -.28 + Math.random() * .56;
-    this.earthMotion.targetAxisY = -.98 + Math.random() * .3;
-    this.earthMotion.targetAxisZ = .12 + Math.random() * .36;
+    const direction = this.earthMotion.targetSpeed >= 0 ? -1 : 1;
+    this.earthMotion.targetSpeed = direction * (.00014 + Math.random() * .00032);
+    this.earthMotion.targetAxisX = -.78 + Math.random() * 1.56;
+    this.earthMotion.targetAxisY = -.84 + Math.random() * 1.68;
+    this.earthMotion.targetAxisZ = -.68 + Math.random() * 1.36;
     if (!this.earthSpinning()) this.startEarthSpin();
   }
 
   protected showEarthInFront(): void {
     if (this.earthDepth() !== 'behind') return;
     this.earthDepth.set('crossing-front');
-    window.setTimeout(() => this.earthDepth.set('front'), 280);
+    window.setTimeout(() => this.earthDepth.set('front'), 520);
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -386,8 +386,8 @@ export class PortfolioPage {
     const target = event?.target as HTMLElement | null | undefined;
     if (target?.closest('.earth-motion-control')) return;
     this.earthDepth.set('returning');
-    window.setTimeout(() => this.earthDepth.set('settling-behind'), 280);
-    window.setTimeout(() => this.earthDepth.set('behind'), 590);
+    window.setTimeout(() => this.earthDepth.set('settling-behind'), 520);
+    window.setTimeout(() => this.earthDepth.set('behind'), 940);
   }
 
   private renderEarth(): void {
