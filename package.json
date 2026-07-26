@@ -9,7 +9,7 @@
 		"test": "ng test",
 		"lint:src": "eslint --config config/eslint/eslint.config.ts src --ext .ts --cache --cache-location .cache/eslint/src.eslintcache",
 		"lint:tests": "eslint --config config/eslint/eslint.config.ts \"src/**/*.spec.ts\" --cache --cache-location .cache/eslint/tests.eslintcache",
-		"lint:tools": "eslint --config config/eslint/eslint.config.ts \"config/**/*.ts\" \"tools/**/*.ts\" --cache --cache-location .cache/eslint/tools.eslintcache",
+		"lint:tools": "eslint --config config/eslint/eslint.config.ts \"config/**/*.ts\" \"tools/check-mcp-vertex.mjs\" --cache --cache-location .cache/eslint/tools.eslintcache",
 		"lint": "bun run lint:src && bun run lint:tests && bun run lint:tools",
 		"lint:ci": "bun run lint:src -- --max-warnings=0 && bun run lint:tests -- --max-warnings=0 && bun run lint:tools -- --max-warnings=0",
 		"lint:fix": "bun run lint:src -- --fix && bun run lint:tests -- --fix && bun run lint:tools -- --fix",

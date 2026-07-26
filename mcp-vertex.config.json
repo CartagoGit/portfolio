@@ -66,9 +66,7 @@
 					"MDM Platform",
 					"Gestion de Tarifas"
 				],
-				"perSeRoots": [
-					"beateam"
-				],
+				"perSeRoots": ["beateam"],
 				"locale": "en"
 			}
 		}

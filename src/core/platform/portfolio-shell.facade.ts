@@ -44,7 +44,8 @@ export class PortfolioShellFacade {
 
 	constructor() {
 		this.lightMode.set(
-			this._document.documentElement.getAttribute('data-theme') === 'light'
+			this._document.documentElement.getAttribute('data-theme') ===
+				'light'
 		);
 		this._route.paramMap.subscribe((params) => {
 			const locale = params.get('locale') === 'es' ? 'es' : 'en';

@@ -5,7 +5,10 @@ import {
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { ILocale, IPortfolioPageId } from '../../../domain/portfolio.types';
+import type {
+	ILocale,
+	IPortfolioPageId,
+} from '../../../domain/portfolio.types';
 
 @Component({
 	selector: 'app-command-palette',

@@ -31,7 +31,8 @@ export class HeroMonitorFacade {
 	private _panelTimer?: number;
 	selectPanel(panel: IHeroPanelId): void {
 		if (this.activePanel() === panel) return;
-		if (this._panelTimer !== undefined) window.clearTimeout(this._panelTimer);
+		if (this._panelTimer !== undefined)
+			window.clearTimeout(this._panelTimer);
 		this.panelTransition.set(
 			nextHeroPanelTransition(this.panelTransition())
 		);
@@ -45,7 +46,8 @@ export class HeroMonitorFacade {
 		}, 24);
 	}
 	clearPanel(): void {
-		if (this._panelTimer !== undefined) window.clearTimeout(this._panelTimer);
+		if (this._panelTimer !== undefined)
+			window.clearTimeout(this._panelTimer);
 		this._panelTimer = undefined;
 		this.panelChanging.set(false);
 		this.activePanel.set(null);
@@ -86,6 +88,7 @@ export class HeroMonitorFacade {
 		return 'linear-gradient(to top, #1678ff, #32c8ff)';
 	}
 	destroy(): void {
-		if (this._panelTimer !== undefined) window.clearTimeout(this._panelTimer);
+		if (this._panelTimer !== undefined)
+			window.clearTimeout(this._panelTimer);
 	}
 }

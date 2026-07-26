@@ -56,7 +56,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	readonly canvasRef = viewChild<HTMLCanvasElement>('canvas');
 
 	ngAfterViewInit(): void {
-		this._canvas = this.canvasRef()?.nativeElement;
+		this._canvas = this.canvasRef();
 		if (this._canvas) this._prepare();
 	}
 	start(): void {
@@ -158,7 +158,11 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.stop();
 	}
 	private _prepare(): void {
-		if (!isPlatformBrowser(this._platformId) || this._texture || this._loading)
+		if (
+			!isPlatformBrowser(this._platformId) ||
+			this._texture ||
+			this._loading
+		)
 			return;
 		this._loading = true;
 		const image = new Image();
@@ -215,11 +219,9 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 					axisX: this._motion.axisX,
 					axisY: this._motion.axisY,
 					axisZ: this._motion.axisZ,
-					foreground: [
-						'front-ready',
-						'front',
-						'out-front',
-					].includes(this.depth()),
+					foreground: ['front-ready', 'front', 'out-front'].includes(
+						this.depth()
+					),
 				},
 			});
 		this._frame = requestAnimationFrame((time) => this._animate(time));
