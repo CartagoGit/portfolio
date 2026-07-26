@@ -1,7 +1,14 @@
 @use '../../../styles/motion';
 
 app-hero-monitor {
-	display: contents;
+	display: block;
+	min-width: 0;
+	align-self: center;
+}
+
+app-hero-monitor .hero-composition {
+	width: 100%;
+	min-width: 0;
 }
 /* Interactive monitor states: technology rail, telemetry dashboard and animated detail panel. */
 .interface-shell {
@@ -1081,5 +1088,37 @@ app-hero-monitor {
 	100% {
 		filter: hue-rotate(360deg) saturate(1);
 		transform: scale(1);
+	}
+}
+
+// The host is a real grid item. Keeping the composition's geometry here avoids
+// a parent-shell refactor changing the monitor or globe's visual anchor.
+app-hero-monitor .hero-composition {
+	min-height: 480px;
+	align-items: start;
+}
+
+app-hero-monitor .interface-shell {
+	justify-self: end;
+	margin-left: auto;
+}
+
+app-hero-monitor .orb-one {
+	left: auto;
+	top: -6.8rem;
+	right: -3.6rem;
+	z-index: 1;
+}
+
+@media (max-width: 900px) {
+	app-hero-monitor .interface-shell,
+	app-hero-monitor .hero-composition:hover .interface-shell {
+		width: calc(100% - 1.7rem);
+	}
+
+	app-hero-monitor .orb-one {
+		left: -2.7rem;
+		right: auto;
+		top: -3.8rem;
 	}
 }
