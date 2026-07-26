@@ -56,13 +56,14 @@
       <div class="hero-socials" aria-label="Public profiles and featured projects"><a href="https://www.linkedin.com/in/mario-cabrero-volarich" target="_blank" rel="noreferrer">LinkedIn / Mario Cabrero</a><a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer">GitHub</a><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer">Docker</a><a href="https://www.npmjs.com/package/@cartago-git/keyer" target="_blank" rel="noreferrer">npm / Keyer</a><a href="https://github.com/CartagoGit/mcp-vertex" target="_blank" rel="noreferrer">MCP Vertex ↗</a><a href="https://github.com/CartagoGit/quickmodel" target="_blank" rel="noreferrer">QuickModel ↗</a></div>
     </div>
 
-    <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies">
-      <div class="orb orb-one" aria-hidden="true"><span class="earth-texture"></span></div><div class="orb orb-two"></div>
+    <div class="hero-composition" aria-label="Interactive representation of Mario's core frontend technologies" (mouseenter)="startEarthSpin()" (mouseleave)="stopEarthSpin()">
+      <div class="orb orb-one" [class.earth-active]="earthSpinning()" aria-hidden="true"><canvas #earthCanvas class="earth-canvas"></canvas></div><div class="orb orb-two"></div>
       <div class="interface-shell" [attr.data-chart]="heroChartType()">
+        <div class="monitor-chrome" aria-hidden="true"><span></span><span></span><span></span><i></i><b>cartago.system</b></div>
         <img class="hero-banner" src="/images/cartagonova-banner-03-neon.png" alt="CartagoNova banner" />
         <div class="interface-body">
           <div class="interface-canvas">
-            <div class="canvas-heading"><span>CartagoNova / system telemetry</span></div>
+            <div class="canvas-heading"><span><i></i>CartagoNova / system telemetry</span><small>LIVE</small></div>
             <div class="hero-chart-switcher" aria-label="Dashboard chart type">
               <button type="button" [class.active]="heroChartType() === 'bars'" (click)="setHeroChart('bars')">Velocity</button><button type="button" [class.active]="heroChartType() === 'line'" (click)="setHeroChart('line')">Signals</button><button type="button" [class.active]="heroChartType() === 'area'" (click)="setHeroChart('area')">Coverage</button>
             </div>
@@ -71,7 +72,7 @@
             } @else {
               <p class="dashboard-caption">Choose a technology on the right to see its role. These controls change the visualisation only.</p>
             }
-            <div class="canvas-chart" [attr.data-chart]="heroChartType()"><span></span><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Portfolio dashboard chart"><path d="M0 97 C28 80, 55 90, 83 67 S136 72, 167 49 S224 64, 253 33 S308 42, 360 12" /></svg></div>
+            <div class="canvas-chart" [attr.data-chart]="heroChartType()"><span></span><span></span><span></span><span></span><span></span><svg viewBox="0 0 360 120" preserveAspectRatio="none" aria-label="Portfolio dashboard chart"><path d="M0 97 C28 80, 55 90, 83 67 S136 72, 167 49 S224 64, 253 33 S308 42, 360 12" /></svg><em>product signal / 2026</em></div>
           </div>
         </div>
       </div>

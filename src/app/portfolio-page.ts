@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, computed, HostListener, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { siAngular, siBun, siCapacitor, siDocker, siIonic, siTypescript, siVitest } from 'simple-icons';
@@ -40,6 +40,11 @@ export class PortfolioPage {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly platformId = inject(PLATFORM_ID);
+  private earthCanvas?: HTMLCanvasElement;
+  private earthTexture?: ImageData;
+  private earthFrame?: number;
+  private earthStartedAt = 0;
+  private earthLoading = false;
 
   protected readonly locale = signal<Locale>('en');
   protected readonly page = signal<PortfolioPageId>('home');
@@ -60,6 +65,7 @@ export class PortfolioPage {
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
+  protected readonly earthSpinning = signal(false);
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string }[] = [
@@ -166,6 +172,12 @@ export class PortfolioPage {
     this.applyPreferredLocale();
   }
 
+  @ViewChild('earthCanvas')
+  set earthCanvasRef(canvas: ElementRef<HTMLCanvasElement> | undefined) {
+    this.earthCanvas = canvas?.nativeElement;
+    if (this.earthCanvas) this.prepareEarthTexture();
+  }
+
   protected setTheme(): void {
     const next = !this.lightMode();
     this.lightMode.set(next);
@@ -214,6 +226,106 @@ export class PortfolioPage {
 
   protected setHeroChart(type: ChartType): void {
     this.heroChartType.set(type);
+  }
+
+  protected startEarthSpin(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.earthSpinning.set(true);
+    this.prepareEarthTexture();
+    if (this.earthTexture && this.earthFrame === undefined) {
+      this.earthStartedAt = performance.now();
+      this.animateEarth(this.earthStartedAt);
+    }
+  }
+
+  protected stopEarthSpin(): void {
+    this.earthSpinning.set(false);
+    if (this.earthFrame !== undefined) {
+      cancelAnimationFrame(this.earthFrame);
+      this.earthFrame = undefined;
+    }
+  }
+
+  private prepareEarthTexture(): void {
+    if (!isPlatformBrowser(this.platformId) || this.earthTexture || this.earthLoading) return;
+    this.earthLoading = true;
+    const texture = new Image();
+    texture.src = '/images/cartagonova-earth-texture.png';
+    texture.onload = () => {
+      const source = this.document.createElement('canvas');
+      source.width = 720;
+      source.height = 360;
+      const context = source.getContext('2d', { willReadFrequently: true });
+      if (!context) return;
+      context.drawImage(texture, 0, 0, source.width, source.height);
+      this.earthTexture = context.getImageData(0, 0, source.width, source.height);
+      this.earthLoading = false;
+      if (this.earthSpinning() && this.earthFrame === undefined) {
+        this.earthStartedAt = performance.now();
+        this.animateEarth(this.earthStartedAt);
+      }
+    };
+    texture.onerror = () => { this.earthLoading = false; };
+  }
+
+  private animateEarth(now: number): void {
+    if (!this.earthSpinning()) {
+      this.earthFrame = undefined;
+      return;
+    }
+    this.renderEarth(now - this.earthStartedAt);
+    this.earthFrame = requestAnimationFrame((time) => this.animateEarth(time));
+  }
+
+  private renderEarth(elapsed: number): void {
+    const canvas = this.earthCanvas;
+    const texture = this.earthTexture;
+    if (!canvas || !texture) return;
+    const size = Math.min(320, Math.max(220, Math.round(canvas.clientWidth || 260)));
+    if (canvas.width !== size || canvas.height !== size) {
+      canvas.width = size;
+      canvas.height = size;
+    }
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    const output = context.createImageData(size, size);
+    const radius = size / 2;
+    const axisX = .38;
+    const axisY = -.52;
+    const axisZ = .76;
+    const angle = elapsed * .00023;
+    const cosine = Math.cos(-angle);
+    const sine = Math.sin(-angle);
+    const textureWidth = texture.width;
+    const textureHeight = texture.height;
+    for (let py = 0; py < size; py += 1) {
+      const y = (py + .5 - radius) / radius;
+      for (let px = 0; px < size; px += 1) {
+        const x = (px + .5 - radius) / radius;
+        const distance = x * x + y * y;
+        const outputIndex = (py * size + px) * 4;
+        if (distance > 1) continue;
+        const z = Math.sqrt(1 - distance);
+        const dot = axisX * x + axisY * y + axisZ * z;
+        const crossX = axisY * z - axisZ * y;
+        const crossY = axisZ * x - axisX * z;
+        const crossZ = axisX * y - axisY * x;
+        const rotatedX = x * cosine + crossX * sine + axisX * dot * (1 - cosine);
+        const rotatedY = y * cosine + crossY * sine + axisY * dot * (1 - cosine);
+        const rotatedZ = z * cosine + crossZ * sine + axisZ * dot * (1 - cosine);
+        const longitude = Math.atan2(rotatedX, rotatedZ);
+        const latitude = Math.asin(Math.max(-1, Math.min(1, rotatedY)));
+        const sourceX = Math.floor(((longitude / (Math.PI * 2) + .5) % 1) * textureWidth);
+        const sourceY = Math.max(0, Math.min(textureHeight - 1, Math.floor((.5 - latitude / Math.PI) * textureHeight)));
+        const sourceIndex = (sourceY * textureWidth + sourceX) * 4;
+        const light = .34 + .66 * Math.max(0, -.35 * x - .2 * y + .92 * z);
+        output.data[outputIndex] = texture.data[sourceIndex] * light;
+        output.data[outputIndex + 1] = texture.data[sourceIndex + 1] * light;
+        output.data[outputIndex + 2] = texture.data[sourceIndex + 2] * light;
+        output.data[outputIndex + 3] = 255;
+      }
+    }
+    context.putImageData(output, 0, 0);
   }
 
   protected setTelemetry(metric: TelemetryId): void {
