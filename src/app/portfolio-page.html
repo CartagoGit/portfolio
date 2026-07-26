@@ -926,33 +926,10 @@
 
   <app-portfolio-footer [locale]="locale()" [links]="publicLinks" />
 
-  @if (commandOpen()) {
-    <div class="command-dialog-backdrop" (click)="commandOpen.set(false)">
-      <section
-        class="command-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="command-title"
-        (click)="$event.stopPropagation()"
-      >
-        <div>
-          <p id="command-title">Command palette</p>
-          <button type="button" (click)="commandOpen.set(false)" aria-label="Close command palette">
-            ×
-          </button>
-        </div>
-        <label
-          >Search product commands <input autofocus placeholder="Try ‘work’ or ‘contact’" /></label
-        ><a [routerLink]="routeFor('work')" (click)="setTransition('work'); commandOpen.set(false)"
-          ><span>↗</span> View selected work <kbd>↵</kbd></a
-        ><a [routerLink]="routeFor('lab')" (click)="setTransition('lab'); commandOpen.set(false)"
-          ><span>✦</span> Explore Frontend Lab <kbd>↵</kbd></a
-        ><a
-          [routerLink]="routeFor('contact')"
-          (click)="setTransition('contact'); commandOpen.set(false)"
-          ><span>✉</span> Start a conversation <kbd>↵</kbd></a
-        >
-      </section>
-    </div>
-  }
+  <app-command-palette
+    [open]="commandOpen()"
+    [locale]="locale()"
+    (close)="commandOpen.set(false)"
+    (navigate)="setTransition($event)"
+  />
 </main>
