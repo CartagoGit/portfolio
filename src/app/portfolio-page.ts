@@ -45,7 +45,18 @@ export class PortfolioPage {
   private earthCanvas?: HTMLCanvasElement;
   private earthTexture?: ImageData;
   private earthFrame?: number;
-  private earthStartedAt = 0;
+  private earthLastFrameAt?: number;
+  private earthAngle = 0;
+  private readonly earthMotion = {
+    speed: .00016,
+    targetSpeed: .00016,
+    axisX: .13,
+    axisY: -.95,
+    axisZ: .28,
+    targetAxisX: .13,
+    targetAxisY: -.95,
+    targetAxisZ: .28,
+  };
   private earthLoading = false;
 
   protected readonly locale = signal<Locale>('en');
@@ -285,8 +296,8 @@ export class PortfolioPage {
     this.earthSpinning.set(true);
     this.prepareEarthTexture();
     if (this.earthTexture && this.earthFrame === undefined) {
-      this.earthStartedAt = performance.now();
-      this.animateEarth(this.earthStartedAt);
+      this.earthLastFrameAt = undefined;
+      this.animateEarth(performance.now());
     }
   }
 
@@ -296,6 +307,7 @@ export class PortfolioPage {
       cancelAnimationFrame(this.earthFrame);
       this.earthFrame = undefined;
     }
+    this.earthLastFrameAt = undefined;
   }
 
   private prepareEarthTexture(): void {
@@ -313,8 +325,8 @@ export class PortfolioPage {
       this.earthTexture = context.getImageData(0, 0, source.width, source.height);
       this.earthLoading = false;
       if (this.earthSpinning() && this.earthFrame === undefined) {
-        this.earthStartedAt = performance.now();
-        this.animateEarth(this.earthStartedAt);
+        this.earthLastFrameAt = undefined;
+        this.animateEarth(performance.now());
       }
     };
     texture.onerror = () => { this.earthLoading = false; };
@@ -325,11 +337,34 @@ export class PortfolioPage {
       this.earthFrame = undefined;
       return;
     }
-    this.renderEarth(now - this.earthStartedAt);
+    const previous = this.earthLastFrameAt ?? now;
+    const delta = Math.min(48, now - previous);
+    this.earthLastFrameAt = now;
+    const blend = 1 - Math.exp(-delta / 850);
+    this.earthMotion.speed += (this.earthMotion.targetSpeed - this.earthMotion.speed) * blend;
+    this.earthMotion.axisX += (this.earthMotion.targetAxisX - this.earthMotion.axisX) * blend;
+    this.earthMotion.axisY += (this.earthMotion.targetAxisY - this.earthMotion.axisY) * blend;
+    this.earthMotion.axisZ += (this.earthMotion.targetAxisZ - this.earthMotion.axisZ) * blend;
+    const axisLength = Math.hypot(this.earthMotion.axisX, this.earthMotion.axisY, this.earthMotion.axisZ);
+    this.earthMotion.axisX /= axisLength;
+    this.earthMotion.axisY /= axisLength;
+    this.earthMotion.axisZ /= axisLength;
+    this.earthAngle += this.earthMotion.speed * delta;
+    this.renderEarth();
     this.earthFrame = requestAnimationFrame((time) => this.animateEarth(time));
   }
 
-  private renderEarth(elapsed: number): void {
+  protected changeEarthMotion(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const direction = Math.random() > .5 ? 1 : -1;
+    this.earthMotion.targetSpeed = direction * (.00008 + Math.random() * .00014);
+    this.earthMotion.targetAxisX = -.28 + Math.random() * .56;
+    this.earthMotion.targetAxisY = -.98 + Math.random() * .3;
+    this.earthMotion.targetAxisZ = .12 + Math.random() * .36;
+    if (!this.earthSpinning()) this.startEarthSpin();
+  }
+
+  private renderEarth(): void {
     const canvas = this.earthCanvas;
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
@@ -343,10 +378,8 @@ export class PortfolioPage {
     if (!context) return;
     const output = context.createImageData(size, size);
     const radius = size / 2;
-    const axisX = .13;
-    const axisY = -.95;
-    const axisZ = .28;
-    const angle = elapsed * .00016;
+    const { axisX, axisY, axisZ } = this.earthMotion;
+    const angle = this.earthAngle;
     const cosine = Math.cos(angle);
     const sine = Math.sin(angle);
     const textureWidth = texture.width;
