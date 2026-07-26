@@ -49,7 +49,7 @@ actionable `nextAction` so an agent can render them inline.
 - id: q2s1
   title: Adopt canonical layered shape under `tools/mcp-vertex/portfolio-content/`
   status: done
-  doneWhen: `src/{index,public/index}.ts` + `src/lib/{services,tools,contracts}`; legacy `.mjs` archived.
+  doneWhen: `src/{index,public/index}.ts` + `src/lib/{services,tools,contracts}`; previous single-file `.mjs` deleted.
 - id: q2s2
   title: Implement `portfolio_content_audit` with typed `outputSchema` and severity
   status: done
@@ -89,7 +89,5 @@ actionable `nextAction` so an agent can render them inline.
   `portfolio-content-public-boundary-es`,
   `portfolio-content-runbook`) cover publication rules in both
   languages and an explicit runbook of when to call each tool.
-- 2026-07-26: Legacy single-file plugin archived under
-  `tools/mcp-vertex/_legacy/portfolio-content.mjs` and added to
-  `.gitignore`. The canonical path is
-  `tools/mcp-vertex/portfolio-content/src/index.ts`.
+- 2026-07-26: Legacy single-file plugin removed; the canonical
+  path is `tools/mcp-vertex/portfolio-content/src/index.ts`.

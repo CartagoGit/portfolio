@@ -70,7 +70,7 @@ declares both `inputSchema` and `outputSchema`; tests instantiate a
 fake `IMcpPluginContext` and capture the registered handlers so the
 plugin can be exercised without spinning up a transport.
 
-The legacy single-file variant (`portfolio-content.mjs`) is preserved
-under `tools/mcp-vertex/_legacy/` for diff comparison and is
-`.gitignore`d.
+The legacy single-file variant of the plugin was rewritten in place;
+the canonical path is `tools/mcp-vertex/portfolio-content/src/index.ts`
+and is registered in `mcp-vertex.config.json` via `path:`.
 

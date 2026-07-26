@@ -46,6 +46,5 @@ Thumbs.db
 /.cache/
 
 # mcp-vertex plugin artifacts
-/tools/mcp-vertex/_legacy/
 /tools/mcp-vertex/portfolio-content/node_modules/
 /tools/mcp-vertex/portfolio-content/.dist/

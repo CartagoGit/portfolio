@@ -1,32 +1,33 @@
 /**
- * `portfolio-content` mcp-vertex local plugin.
+ * `@portfolio/mcp-vertex-portfolio-content` — local mcp-vertex plugin
+ * for the public portfolio.
  *
- * Two pure tools and three knowledge entries — the canonical
- * "host-local plugin" shape used by other mcp-vertex hosts (see
- * `docs/mcp-vertex/examples/custom-plugin/` for the minimal
- * single-file contract, and `plugins/deps/` for the layered shape).
+ * Two read-only tools and three knowledge entries. The plugin follows
+ * the canonical mcp-vertex plugin contract:
  *
- * Tools:
- *   - `portfolio_content_audit`    — scan public templates for
- *                                    `TODO(image)` placeholders and
- *                                    forbidden employer/client terms.
- *                                    Pure read; no writes, no network.
- *   - `portfolio_case_study_brief` — return the bilingual writing
- *                                    brief for one featured case study.
- *                                    Pure (no I/O).
+ *   - `name` is the bare loader id (`portfolio-content`); the host
+ *     loader expands it to `@mcp-vertex/portfolio-content` →
+ *     `mcp-portfolio-content` → `portfolio-content` per
+ *     `resolvePluginSpecifier`. The host config below points at this
+ *     file via `path:`, so the specifier chain is skipped — but the
+ *     `name` is still the contract surface.
+ *   - `optionsSchema` is validated by the loader BEFORE `register()`
+ *     runs. We never re-parse it ourselves (the loader already does).
+ *   - Every tool declares both `inputSchema` and `outputSchema` and
+ *     uses `toolJson` from `@mcp-vertex/core/public` for the
+ *     `structuredContent` envelope.
+ *   - `configExample` is rendered by the docs site on the
+ *     `/plugins/portfolio-content` page so the host can copy/paste it.
  *
- * Knowledge entries (bilingual):
- *   - `portfolio-content-public-boundary-en`
- *   - `portfolio-content-public-boundary-es`
- *   - `portfolio-content-runbook`
- *
- * Options are surfaced via `mcp-vertex.config.json` under
- * `plugins.portfolio-content.options`:
+ * Activation:
  *
  *   {
- *     "contentPaths": ["src/app/portfolio-page.html", ...],
- *     "forbiddenTerms": ["Beateam", "Mazinger", ...],
- *     "locale": "en" | "es"
+ *     "plugins": {
+ *       "portfolio-content": {
+ *         "path": "tools/mcp-vertex/portfolio-content/src/index.ts",
+ *         "options": { ... }
+ *       }
+ *     }
  *   }
  */
 
@@ -36,23 +37,35 @@ import { definePlugin } from '@mcp-vertex/core/public';
 
 import { buildAuditTool } from './lib/tools/audit-tool';
 import { buildBriefTool } from './lib/tools/briefs-tool';
-import type { PortfolioLocale } from './lib/contracts/interfaces/briefs.interface';
 
+/**
+ * Plugin-level options. Every field is optional; missing fields fall
+ * back to the canonical defaults so a host that ships no options block
+ * behaves exactly as before. This is the OCP seam: the plugin's engine
+ * stays stable, hosts that need to override paths / terms / language
+ * pass typed values through `plugins.portfolio-content.options`.
+ */
 export const OptionsSchema = z.object({
-	contentPaths: z.array(z.string()).min(1).default([
-		'src/app/portfolio-page.html',
-		'src/features/contact/contact-page.component.html',
-		'src/features/docker/docker-page.component.html',
-		'src/features/demos/demos-page.component.html',
-		'src/features/approach/approach-page.component.html',
-		'src/features/work/work-page.component.html',
-		'src/features/knowledge/knowledge-page.component.html',
-		'src/features/lab/lab-page.component.html',
-		'src/features/home/home-intro/home-intro.component.html',
-		'src/features/home/hero-monitor/hero-monitor.component.html',
-		'src/features/home/earth-globe/earth-globe.component.html',
-	]),
+	/** Workspace-relative templates to audit. Default: every public page. */
+	contentPaths: z
+		.array(z.string().min(1))
+		.min(1)
+		.default([
+			'src/app/portfolio-page.html',
+			'src/features/contact/contact-page.component.html',
+			'src/features/docker/docker-page.component.html',
+			'src/features/demos/demos-page.component.html',
+			'src/features/approach/approach-page.component.html',
+			'src/features/work/work-page.component.html',
+			'src/features/knowledge/knowledge-page.component.html',
+			'src/features/lab/lab-page.component.html',
+			'src/features/home/home-intro/home-intro.component.html',
+			'src/features/home/hero-monitor/hero-monitor.component.html',
+			'src/features/home/earth-globe/earth-globe.component.html',
+		]),
+	/** Employer/client names the audit refuses to allow through. */
 	forbiddenTerms: z.array(z.string()).default([]),
+	/** Bilingual output: `nextAction` + knowledge entry. */
 	locale: z.enum(['en', 'es']).default('en'),
 });
 
@@ -97,9 +110,9 @@ estos patrones cuando el material no está verificado:
   open-source enlazados desde \`/work\` están permitidos.
 - **Reglas de negocio, datos internos o procesos**. Describe el
   *resultado*, nunca la regla o la entrada.
-- **Marcadores \`TODO(image):\` sin reemplazar** en HTML en
-  committed. Aparecen como findings de severidad \`warning\` hasta que
-  llegue un asset público real.
+- **Marcadores \`TODO(image):\` sin reemplazar** en HTML committed.
+  Aparecen como findings de severidad \`warning\` hasta que llegue un
+  asset público real.
 
 Cada plantilla pública en
 \`plugins.portfolio-content.options.contentPaths\` se escanea. Añade una
@@ -118,7 +131,7 @@ Two read-only tools cover everything an agent needs:
 Call this *before merging any change to a public template* (or right
 after) and gate the publish on \`report.ok === true\`. The tool:
 
-- returns \`{ ok, severity, findings, nextAction }\`
+- returns \`{ ok, contentPaths, severity, findings, nextAction }\`
 - emits \`error\` for each \`forbiddenTerm\` match
 - emits \`warning\` for each \`TODO\(image\): …\` placeholder
 - emits \`info\` for missing files / duplicates / IO errors
@@ -141,21 +154,41 @@ nothing more, nothing less.
 | Brief is empty | Unknown \`caseStudy\` id; enum is the source of truth. |
 `;
 
+/**
+ * Loader-parsed options (the loader has already validated against
+ * `OptionsSchema`; we type the cast locally so consumers see the
+ * narrowed shape).
+ */
+type LoadedOptions = PortfolioContentOptions;
+
 export default definePlugin({
 	name: 'portfolio-content',
 	version: '0.2.0',
 	describe:
 		'Audit public portfolio content (TODO(image), forbidden employer/client terms) and return bilingual case-study writing briefs. Read-only.',
 	optionsSchema: OptionsSchema,
+	configExample: {
+		summary:
+			'Default config for the public portfolio host. Drop the whole block into `mcp-vertex.config.json` under `plugins.portfolio-content.options`.',
+		options: {
+			contentPaths: [
+				'src/app/portfolio-page.html',
+				'src/features/contact/contact-page.component.html',
+				'src/features/work/work-page.component.html',
+			],
+			forbiddenTerms: [
+				'Beateam',
+				'Mazinger',
+				'MDM Platform',
+				'Gestion de Tarifas',
+			],
+			locale: 'en',
+		},
+	},
 	register(ctx) {
-		const parsed = OptionsSchema.safeParse(ctx.options ?? {});
-		if (!parsed.success) {
-			throw new Error(
-				`portfolio-content plugin rejected its options: ${parsed.error.message}`,
-			);
-		}
-		const o = parsed.data;
-		const locale: PortfolioLocale = o.locale;
+		// The loader already validated `ctx.options` against `OptionsSchema`,
+		// so this cast is safe. A runtime re-parse would be redundant.
+		const o = ctx.options as LoadedOptions;
 
 		return {
 			tools: [
@@ -163,11 +196,11 @@ export default definePlugin({
 					namespacePrefix: ctx.namespacePrefix,
 					contentPaths: o.contentPaths,
 					forbiddenTerms: o.forbiddenTerms,
-					locale,
+					locale: o.locale,
 				}),
 				buildBriefTool({
 					namespacePrefix: ctx.namespacePrefix,
-					defaultLocale: locale,
+					defaultLocale: o.locale,
 				}),
 			],
 			knowledge: [
@@ -191,8 +224,9 @@ export default definePlugin({
 	},
 });
 
-// Public barrel: re-exported types and engine functions so other
-// plugins can reuse the audit / brief logic without copying it.
+// Public barrel: re-exported engine functions and types so the audit
+// and brief logic can be reused by other plugins or scripts without
+// copying them.
 export {
 	buildFsAuditReader,
 	runPortfolioAudit,
@@ -206,9 +240,7 @@ export type {
 	PortfolioAuditSeverity,
 	PortfolioAuditFindingId,
 } from './lib/contracts/interfaces/audit.interface';
-export {
-	buildAuditTool,
-} from './lib/tools/audit-tool';
+export { buildAuditTool } from './lib/tools/audit-tool';
 export {
 	buildCaseStudyBriefs,
 	caseStudyBrief,
@@ -220,6 +252,4 @@ export type {
 	PortfolioCaseStudyId,
 	PortfolioLocale,
 } from './lib/contracts/interfaces/briefs.interface';
-export {
-	buildBriefTool,
-} from './lib/tools/briefs-tool';
+export { buildBriefTool } from './lib/tools/briefs-tool';
