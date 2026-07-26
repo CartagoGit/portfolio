@@ -32,6 +32,8 @@ import { DockerPageComponent } from '../features/portfolio/docker/docker-page.co
 import { DemosPageComponent } from '../features/portfolio/demos/demos-page.component';
 import { ProfileLinksComponent } from '../features/portfolio/home/profile-links/profile-links.component';
 import { ApproachPageComponent } from '../features/portfolio/approach/approach-page.component';
+import { KnowledgePageComponent } from '../features/portfolio/knowledge/knowledge-page.component';
+import { WorkPageComponent } from '../features/portfolio/work/work-page.component';
 import type {
   CapabilityId,
   ChartType,
@@ -57,6 +59,8 @@ import type {
     DemosPageComponent,
     ProfileLinksComponent,
     ApproachPageComponent,
+    KnowledgePageComponent,
+    WorkPageComponent,
     TechnologyMarqueeComponent,
   ],
   templateUrl: './portfolio-page.html',

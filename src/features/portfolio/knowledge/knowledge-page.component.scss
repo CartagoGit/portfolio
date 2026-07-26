@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+.knowledge-page {
+  width: min(1380px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: clamp(3rem, 5vw, 5.5rem) 0;
+  &__heading {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  &__heading > p:first-child {
+    color: var(--cyan);
+    font: 0.65rem 'DM Mono';
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  &__heading h2 {
+    margin: 0;
+    font-size: clamp(2.2rem, 3.9vw, 3.9rem);
+    line-height: 0.96;
+  }
+  &__heading h2 em {
+    color: var(--cyan);
+    font-family: 'Playfair Display';
+  }
+  &__heading > p:last-child {
+    margin: 0;
+    padding-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    perspective: 1000px;
+    animation: knowledge-rise 0.52s 0.08s both;
+  }
+  &__grid article {
+    position: relative;
+    min-height: 220px;
+    overflow: hidden;
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    transform-style: preserve-3d;
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1),
+      border-color 0.3s,
+      box-shadow 0.3s;
+  }
+  &__grid article::after {
+    position: absolute;
+    right: -68px;
+    bottom: -74px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--blue), transparent 70%);
+    content: '';
+    opacity: 0.3;
+    transition: transform 0.4s;
+  }
+  &__grid article:hover {
+    border-color: var(--cyan);
+    box-shadow: var(--neon);
+    transform: rotateX(5deg) rotateY(-6deg) translateY(-7px);
+  }
+  &__grid article:hover::after {
+    transform: scale(1.7);
+  }
+  &__grid span {
+    display: block;
+    color: var(--cyan);
+    font: 0.62rem 'DM Mono';
+    text-transform: uppercase;
+  }
+  &__grid b {
+    display: block;
+    margin: 1.2rem 0 0.7rem;
+    font-size: 1.45rem;
+    letter-spacing: -0.055em;
+  }
+  &__grid p {
+    max-width: 310px;
+    color: var(--muted);
+    font-size: 0.77rem;
+    line-height: 1.6;
+  }
+  &__icon {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 2;
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--cyan) 50%, transparent));
+    transition: transform 0.45s;
+  }
+  &__grid article:hover &__icon {
+    transform: translateZ(28px) rotate(12deg) scale(1.15);
+  }
+}
+@keyframes knowledge-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 700px) {
+  .knowledge-page {
+    width: min(100% - 1.7rem, 560px);
+    &__heading,
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

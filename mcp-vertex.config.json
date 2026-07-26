@@ -40,7 +40,10 @@
           "src/app/portfolio-page.html",
           "src/features/portfolio/contact/contact-page.component.html",
           "src/features/portfolio/docker/docker-page.component.html",
-          "src/features/portfolio/demos/demos-page.component.html"
+          "src/features/portfolio/demos/demos-page.component.html",
+          "src/features/portfolio/approach/approach-page.component.html",
+          "src/features/portfolio/work/work-page.component.html",
+          "src/features/portfolio/knowledge/knowledge-page.component.html"
         ],
         "forbiddenTerms": ["Beateam", "Mazinger", "MDM Platform", "Gestion de Tarifas"]
       }
