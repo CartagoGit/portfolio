@@ -11,6 +11,8 @@
 		"lint:fix": "bun run lint -- --fix",
 		"format": "prettier --write \"src/**/*.{ts,html,scss}\" \"*.{json,mjs}\"",
 		"format:check": "prettier --check \"src/**/*.{ts,html,scss}\" \"*.{json,mjs}\"",
+		"format:styles": "prettier --write \"src/**/*.scss\"",
+		"format:styles:check": "prettier --check \"src/**/*.scss\"",
 		"typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.spec.json",
 		"check": "bun run format:check && bun run lint && bun run typecheck",
 		"mcp:check": "bun tools/check-mcp-vertex.mjs",
