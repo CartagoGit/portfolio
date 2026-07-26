@@ -24,6 +24,7 @@
     "@mcp-vertex/core": "file:../mcp-vertex/packages/core",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
+    "simple-icons": "^16.27.0",
     "tslib": "^2.3.0",
     "zod": "^4.4.3"
   },

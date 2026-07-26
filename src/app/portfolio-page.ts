@@ -2,6 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, computed, HostListener, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { siAngular, siCapacitor, siIonic, siTypescript, siVitest } from 'simple-icons';
 
 type Locale = 'en' | 'es';
 type PortfolioPageId = 'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
@@ -61,11 +62,11 @@ export class PortfolioPage {
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly heroLayers = signal(['Angular 22', 'TypeScript', 'Ionic', 'Capacitor', 'MCP Vertex', 'Testing']);
-  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; icon: string }[] = [
-    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/angular.svg' },
-    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/typescript.svg' },
-    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/playwright.svg' },
-    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/ionic.svg' },
+  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string }[] = [
+    { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture', iconPath: siAngular.path },
+    { id: 'workflows', label: 'TypeScript tools', metric: 'MCP', detail: 'Vertex · QuickModel · Keyer', iconPath: siTypescript.path },
+    { id: 'quality', label: 'Quality system', metric: 'E2E', detail: 'Vitest · Playwright · A11y', iconPath: siVitest.path },
+    { id: 'mobile', label: 'Mobile delivery', metric: 'iOS+', detail: 'Ionic · Capacitor · Android', iconPath: siIonic.path || siCapacitor.path },
   ];
   protected readonly languages: readonly LanguageOption[] = [
     { id: 'en', label: 'English', detail: 'US + UK' },

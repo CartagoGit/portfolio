@@ -67,7 +67,7 @@
             }
           </div>
           <div class="interface-canvas">
-            <div class="canvas-heading"><span><img [src]="selectedHeroPanel().icon" alt="" />{{ selectedHeroPanel().label }}</span><button type="button" (click)="setHeroPanel('overview')" aria-label="Return to Angular products">↻</button></div>
+            <div class="canvas-heading"><span><svg class="panel-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="selectedHeroPanel().iconPath" /></svg>{{ selectedHeroPanel().label }}</span><button type="button" (click)="setHeroPanel('overview')" aria-label="Return to Angular products">↻</button></div>
             <div class="canvas-cards">
               @for (panel of heroPanels.slice(0, 3); track panel.id) {
                 <button type="button" [class.active]="activeHeroPanel() === panel.id" (click)="setHeroPanel(panel.id)"><b>{{ panel.metric }}</b><small>{{ panel.detail }}</small></button>
