@@ -1,42 +1,20 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, computed, ElementRef, HostListener, inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { siAngular, siBun, siCapacitor, siClaude, siDocker, siElectron, siEslint, siFirebase, siGit, siGithub, siGithubactions, siGithubcopilot, siGitlab, siIonic, siJest, siKotlin, siLinux, siMaterialdesign, siMinimax, siModelcontextprotocol, siMongodb, siMongoose, siNestjs, siNodedotjs, siNpm, siNx, siOpencode, siPrettier, siPrimeng, siPrisma, siReact, siReactivex, siSass, siStorybook, siTailwindcss, siTypescript, siVite, siVitest, siVuedotjs, siX, siZod } from 'simple-icons';
-
-type Locale = 'en' | 'es';
-type PortfolioPageId = 'home' | 'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact';
-type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
-type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
-type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
-type TelemetryId = 'product' | 'quality' | 'delivery';
-type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
-type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
-type HeroPalette = 'ocean' | 'heat' | 'lime';
-type HeroPanelTransition = 'slide' | 'flip' | 'scan';
-
-interface Capability {
-  id: CapabilityId;
-  eyebrow: string;
-  title: string;
-  detail: string;
-  tools: string[];
-  proof: string;
-}
-
-interface LanguageOption {
-  id: Locale;
-  label: string;
-  detail: string;
-}
+import { CAPABILITIES, HERO_PANELS, LANGUAGES, PLAYGROUND_STEPS, SOCIAL_ICONS, TECHNOLOGY_MARQUEE, TELEMETRY } from './portfolio/portfolio.data';
+import { renderEarthFrame } from './portfolio/earth-globe-renderer';
+import { nextHeroPanelTransition } from './portfolio/portfolio-motion';
+import type { CapabilityId, ChartType, HeroEffect, HeroPalette, HeroPanelId, HeroPanelTransition, Locale, PlaygroundStep, PortfolioPageId, TelemetryId } from './portfolio/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-page',
   imports: [RouterLink],
   templateUrl: './portfolio-page.html',
   styleUrl: './portfolio-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortfolioPage {
+export class PortfolioPage implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
@@ -47,6 +25,9 @@ export class PortfolioPage {
   private earthTexture?: ImageData;
   private earthFrame?: number;
   private earthLastFrameAt?: number;
+  private earthLastRenderAt?: number;
+  private readonly earthRenderInterval = 1000 / 30;
+  private heroPanelTimer?: number;
   private earthAngle = 0;
   private readonly earthMotion = {
     speed: .00016,
@@ -88,59 +69,12 @@ export class PortfolioPage {
   protected readonly earthDepth = signal<'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'>('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
-  protected readonly socialIcons = { github: siGithub, npm: siNpm };
-  protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string; iconPath: string; color: string; iconAsset?: string }[] = [
-    { id: 'overview', label: 'Angular', metric: 'UI', detail: 'Framework for structured, reactive web products with SSR and signals.', iconPath: siAngular.path, color: '#ff2d95', iconAsset: '/icons/angular.svg' },
-    { id: 'workflows', label: 'TypeScript', metric: 'TS', detail: 'Typed contracts for interfaces, libraries and developer tooling.', iconPath: siTypescript.path, color: '#3178c6' },
-    { id: 'quality', label: 'Vitest', metric: 'VT', detail: 'Fast unit and integration testing that keeps frontend behaviour dependable.', iconPath: siVitest.path, color: '#fcc72b' },
-    { id: 'mobile', label: 'Ionic + Capacitor', metric: 'MOB', detail: 'A shared product system delivered to web and native mobile surfaces.', iconPath: siIonic.path || siCapacitor.path, color: '#3880ff' },
-    { id: 'tooling', label: 'Bun', metric: 'BUN', detail: 'A fast JavaScript runtime and toolkit used to keep local feedback loops short.', iconPath: siBun.path, color: '#f9f1e8' },
-    { id: 'delivery', label: 'Docker', metric: 'CTR', detail: 'Containerised delivery for reproducible environments and public image distribution.', iconPath: siDocker.path, color: '#2496ed' },
-  ];
-  protected readonly technologyMarquee: readonly { label: string; iconPath: string; color: string }[] = [
-    { label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' }, { label: 'Angular', iconPath: siAngular.path, color: '#ff2d95' }, { label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' }, { label: 'Ionic', iconPath: siIonic.path, color: '#3880ff' }, { label: 'Capacitor', iconPath: siCapacitor.path, color: '#119eff' }, { label: 'Angular Material', iconPath: siMaterialdesign.path, color: '#757575' }, { label: 'Sass', iconPath: siSass.path, color: '#cc6699' },
-    { label: 'Bun', iconPath: siBun.path, color: '#f9f1e1' }, { label: 'Node.js', iconPath: siNodedotjs.path, color: '#339933' }, { label: 'NestJS', iconPath: siNestjs.path, color: '#e0234e' }, { label: 'npm', iconPath: siNpm.path, color: '#cb3837' }, { label: 'Docker', iconPath: siDocker.path, color: '#2496ed' }, { label: 'Git', iconPath: siGit.path, color: '#f05032' }, { label: 'GitLab CI', iconPath: siGitlab.path, color: '#fc6d26' }, { label: 'Vitest', iconPath: siVitest.path, color: '#6e9f18' }, { label: 'Jest', iconPath: siJest.path, color: '#c21325' }, { label: 'GitHub Actions', iconPath: siGithubactions.path, color: '#2088ff' },
-    { label: 'Vue', iconPath: siVuedotjs.path, color: '#4fc08d' }, { label: 'React', iconPath: siReact.path, color: '#61dafb' }, { label: 'Electron', iconPath: siElectron.path, color: '#47848f' }, { label: 'Tailwind CSS', iconPath: siTailwindcss.path, color: '#06b6d4' }, { label: 'PrimeNG', iconPath: siPrimeng.path, color: '#dd0031' }, { label: 'Storybook', iconPath: siStorybook.path, color: '#ff4785' }, { label: 'Vite', iconPath: siVite.path, color: '#646cff' }, { label: 'Nx', iconPath: siNx.path, color: '#143055' },
-    { label: 'MongoDB', iconPath: siMongodb.path, color: '#47a248' }, { label: 'Mongoose', iconPath: siMongoose.path, color: '#880000' }, { label: 'Prisma', iconPath: siPrisma.path, color: '#2d3748' }, { label: 'Zod', iconPath: siZod.path, color: '#3e67b1' }, { label: 'Firebase', iconPath: siFirebase.path, color: '#dd2c00' }, { label: 'Linux', iconPath: siLinux.path, color: '#fcc624' }, { label: 'Kotlin', iconPath: siKotlin.path, color: '#7f52ff' },
-    { label: 'Claude', iconPath: siClaude.path, color: '#d97757' }, { label: 'MiniMax', iconPath: siMinimax.path, color: '#e8e8e8' }, { label: 'Grok', iconPath: siX.path, color: '#e8e8e8' }, { label: 'OpenCode', iconPath: siOpencode.path, color: '#e8e8e8' }, { label: 'GitHub Copilot', iconPath: siGithubcopilot.path, color: '#ffffff' }, { label: 'Model Context Protocol', iconPath: siModelcontextprotocol.path, color: '#ffffff' }, { label: 'ESLint', iconPath: siEslint.path, color: '#4b32c3' }, { label: 'Prettier', iconPath: siPrettier.path, color: '#f7b93e' }, { label: 'GitHub', iconPath: siGithub.path, color: '#ffffff' },
-  ];
-  protected readonly languages: readonly LanguageOption[] = [
-    { id: 'en', label: 'English', detail: 'US + UK' },
-    { id: 'es', label: 'Español', detail: 'España' },
-  ];
+  protected readonly socialIcons = SOCIAL_ICONS;
+  protected readonly heroPanels = HERO_PANELS;
+  protected readonly technologyMarquee = TECHNOLOGY_MARQUEE;
+  protected readonly languages = LANGUAGES;
 
-  protected readonly capabilities: Capability[] = [
-    {
-      id: 'product', eyebrow: '01 / Product interfaces', title: 'Operational by design.',
-      detail: 'Interfaces for people who use them all day: dense information, clear next actions and graceful empty states.',
-      tools: ['Angular', 'SCSS', 'Responsive UI'], proof: 'Workflow interfaces · complex forms · interaction design',
-    },
-    {
-      id: 'architecture', eyebrow: '02 / Angular architecture', title: 'Explicitly reactive.',
-      detail: 'Standalone components, signals and typed boundaries make state changes understandable, testable and fast.',
-      tools: ['Angular 22', 'Signals', 'Zoneless'], proof: 'Zoneless Calculator · production Angular patterns',
-    },
-    {
-      id: 'mobile', eyebrow: '03 / Mobile delivery', title: 'One product, more surfaces.',
-      detail: 'Web workflows designed for touch, constrained space and release-ready Android delivery — not simply shrunk desktop screens.',
-      tools: ['Ionic', 'Capacitor', 'Android'], proof: 'Web + Android operational delivery',
-    },
-    {
-      id: 'quality', eyebrow: '04 / Testing & quality', title: 'Confidence is a feature.',
-      detail: 'A focused testing pyramid, semantic HTML and performance budgets keep product work reliable as it grows.',
-      tools: ['Vitest', 'Accessibility', 'Performance'], proof: 'Unit → integration → dependable releases',
-    },
-    {
-      id: 'systems', eyebrow: '05 / Design systems', title: 'Consistent, not repetitive.',
-      detail: 'Flexible primitives turn a visual language into reusable, accessible interfaces without flattening every screen into a template.',
-      tools: ['Tokens', 'CDK', 'Storybook'], proof: 'Reusable UI patterns · states · responsive rules',
-    },
-    {
-      id: 'tooling', eyebrow: '06 / Developer tooling', title: 'The frontend has an engine room.',
-      detail: 'Typed contracts, CLIs and MCP tooling turn repeated engineering work into dependable workflows for teams and agents.',
-      tools: ['TypeScript', 'MCP', 'Docker'], proof: 'MCP Vertex · QuickModel · Keyer',
-    },
-  ];
+  protected readonly capabilities = CAPABILITIES;
 
   protected readonly selectedCapability = computed(
     () => this.capabilities.find(({ id }) => id === this.activeCapability()) ?? this.capabilities[0],
@@ -154,12 +88,7 @@ export class PortfolioPage {
     return `M${points[0]} C30,${118 - bars[0]} 58,${118 - bars[1]} ${points[1]} S148,${118 - bars[2]} ${points[2]} S238,${118 - bars[3]} ${points[3]} S328,${118 - bars[4]} ${points[4]}`;
   });
 
-  protected readonly playgroundSteps: readonly { id: PlaygroundStep; label: string; hint: string }[] = [
-    { id: 'discover', label: 'Discover', hint: 'Understand the person and the workflow.' },
-    { id: 'model', label: 'Model', hint: 'Make state and constraints explicit.' },
-    { id: 'build', label: 'Build', hint: 'Compose a useful, responsive interface.' },
-    { id: 'verify', label: 'Verify', hint: 'Test the journey before shipping.' },
-  ];
+  protected readonly playgroundSteps = PLAYGROUND_STEPS;
   protected readonly playgroundMessage = computed(() => {
     if (this.playgroundComplete()) return 'Loop complete — the product workflow is in a deliberate order.';
     return 'Drag the steps into the order in which a product should be shipped.';
@@ -168,11 +97,7 @@ export class PortfolioPage {
     (step, index) => step === this.playgroundSteps[index].id,
   ));
 
-  protected readonly telemetry = [
-    { id: 'product' as const, label: 'Product signal', title: 'A dashboard should reveal a decision.', value: '98%', valueLabel: 'workflow clarity', kpis: [['12', 'active patterns'], ['4.2h', 'saved per flow'], ['3', 'surfaces']], bars: [34, 46, 42, 68, 61, 78, 88, 96], note: 'Signals are grouped by workflow, not by a vanity metric.' },
-    { id: 'quality' as const, label: 'Quality signal', title: 'Quality is a visible operating metric.', value: '94%', valueLabel: 'critical flow coverage', kpis: [['0', 'blocking a11y issues'], ['18', 'checked states'], ['1.8s', 'interaction budget']], bars: [55, 58, 71, 67, 79, 85, 89, 94], note: 'Testing, semantics and performance share the same delivery conversation.' },
-    { id: 'delivery' as const, label: 'Delivery signal', title: 'One interface, more than one surface.', value: '2×', valueLabel: 'web + Android delivery', kpis: [['7', 'release checkpoints'], ['3', 'deployment paths'], ['99.9%', 'workflow availability']], bars: [30, 38, 58, 55, 72, 69, 84, 91], note: 'Responsive product work considers the next device before it becomes a rewrite.' },
-  ] as const;
+  protected readonly telemetry = TELEMETRY;
   protected readonly selectedTelemetry = computed(
     () => this.telemetry.find(({ id }) => id === this.activeTelemetry()) ?? this.telemetry[0],
   );
@@ -251,20 +176,22 @@ export class PortfolioPage {
 
   protected setHeroPanel(panel: HeroPanelId): void {
     if (this.activeHeroPanel() === panel) return;
-    const currentTransition = this.heroPanelTransition();
-    const availableTransitions: HeroPanelTransition[] = ['slide', 'flip', 'scan'];
-    const nextTransitions = availableTransitions.filter((transition) => transition !== currentTransition);
-    this.heroPanelTransition.set(nextTransitions[Math.floor(Math.random() * nextTransitions.length)]);
+    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
+    this.heroPanelTransition.set(nextHeroPanelTransition(this.heroPanelTransition()));
     this.heroEffect.set('idle');
     this.heroPanelChanging.set(true);
     this.activeHeroPanel.set(null);
-    window.setTimeout(() => {
+    this.heroPanelTimer = window.setTimeout(() => {
+      this.heroPanelTimer = undefined;
       this.activeHeroPanel.set(panel);
       requestAnimationFrame(() => this.heroPanelChanging.set(false));
     }, 24);
   }
 
   protected clearHeroPanel(): void {
+    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
+    this.heroPanelTimer = undefined;
+    this.heroPanelChanging.set(false);
     this.activeHeroPanel.set(null);
     this.heroEffect.set('idle');
   }
@@ -310,6 +237,7 @@ export class PortfolioPage {
     this.prepareEarthTexture();
     if (this.earthTexture && this.earthFrame === undefined) {
       this.earthLastFrameAt = undefined;
+      this.earthLastRenderAt = undefined;
       this.animateEarth(performance.now());
     }
   }
@@ -321,6 +249,7 @@ export class PortfolioPage {
       this.earthFrame = undefined;
     }
     this.earthLastFrameAt = undefined;
+    this.earthLastRenderAt = undefined;
   }
 
   private prepareEarthTexture(): void {
@@ -339,6 +268,7 @@ export class PortfolioPage {
       this.earthLoading = false;
       if (this.earthSpinning() && this.earthFrame === undefined) {
         this.earthLastFrameAt = undefined;
+        this.earthLastRenderAt = undefined;
         this.animateEarth(performance.now());
       }
     };
@@ -363,8 +293,16 @@ export class PortfolioPage {
     this.earthMotion.axisY /= axisLength;
     this.earthMotion.axisZ /= axisLength;
     this.earthAngle += this.earthMotion.speed * delta;
-    this.renderEarth();
+    if (this.earthLastRenderAt === undefined || now - this.earthLastRenderAt >= this.earthRenderInterval) {
+      this.earthLastRenderAt = now;
+      this.renderEarth();
+    }
     this.earthFrame = requestAnimationFrame((time) => this.animateEarth(time));
+  }
+
+  ngOnDestroy(): void {
+    this.stopEarthSpin();
+    if (this.heroPanelTimer !== undefined) window.clearTimeout(this.heroPanelTimer);
   }
 
   protected changeEarthMotion(): void {
@@ -409,51 +347,9 @@ export class PortfolioPage {
     const canvas = this.earthCanvas;
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
-    const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
     const inFront = this.earthDepth() === 'front-ready' || this.earthDepth() === 'front' || this.earthDepth() === 'out-front';
-    const size = Math.min(960, Math.max(640, Math.round((canvas.clientWidth || 300) * deviceScale * (inFront ? 1.14 : 1))));
-    if (canvas.width !== size || canvas.height !== size) {
-      canvas.width = size;
-      canvas.height = size;
-    }
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    const output = context.createImageData(size, size);
-    const radius = size / 2;
     const { axisX, axisY, axisZ } = this.earthMotion;
-    const angle = this.earthAngle;
-    const cosine = Math.cos(angle);
-    const sine = Math.sin(angle);
-    const textureWidth = texture.width;
-    const textureHeight = texture.height;
-    for (let py = 0; py < size; py += 1) {
-      const y = (py + .5 - radius) / radius;
-      for (let px = 0; px < size; px += 1) {
-        const x = (px + .5 - radius) / radius;
-        const distance = x * x + y * y;
-        const outputIndex = (py * size + px) * 4;
-        if (distance > 1) continue;
-        const z = Math.sqrt(1 - distance);
-        const dot = axisX * x + axisY * y + axisZ * z;
-        const crossX = axisY * z - axisZ * y;
-        const crossY = axisZ * x - axisX * z;
-        const crossZ = axisX * y - axisY * x;
-        const rotatedX = x * cosine + crossX * sine + axisX * dot * (1 - cosine);
-        const rotatedY = y * cosine + crossY * sine + axisY * dot * (1 - cosine);
-        const rotatedZ = z * cosine + crossZ * sine + axisZ * dot * (1 - cosine);
-        const longitude = Math.atan2(rotatedX, rotatedZ);
-        const latitude = Math.asin(Math.max(-1, Math.min(1, -rotatedY)));
-        const sourceX = Math.floor(((longitude / (Math.PI * 2) + .5) % 1) * textureWidth);
-        const sourceY = Math.max(0, Math.min(textureHeight - 1, Math.floor((.5 - latitude / Math.PI) * textureHeight)));
-        const sourceIndex = (sourceY * textureWidth + sourceX) * 4;
-        const light = .34 + .66 * Math.max(0, -.35 * x - .2 * y + .92 * z);
-        output.data[outputIndex] = texture.data[sourceIndex] * light;
-        output.data[outputIndex + 1] = texture.data[sourceIndex + 1] * light;
-        output.data[outputIndex + 2] = texture.data[sourceIndex + 2] * light;
-        output.data[outputIndex + 3] = 255;
-      }
-    }
-    context.putImageData(output, 0, 0);
+    renderEarthFrame(canvas, texture, { angle: this.earthAngle, axisX, axisY, axisZ, foreground: inFront });
   }
 
   protected setTelemetry(metric: TelemetryId): void {
