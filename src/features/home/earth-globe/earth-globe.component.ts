@@ -19,10 +19,10 @@ import type { IEarthDepth } from '../../../domain/portfolio.types';
 	styleUrl: './earth-globe.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
-		'(pointerdown)': '_beginDrag($event)',
-		'(pointermove)': '_rotateFromDrag($event)',
-		'(pointerup)': '_endDrag($event)',
-		'(pointercancel)': '_endDrag($event)',
+		'(pointerdown)': 'beginDrag($event)',
+		'(pointermove)': 'rotateFromDrag($event)',
+		'(pointerup)': 'endDrag($event)',
+		'(pointercancel)': 'endDrag($event)',
 	},
 })
 export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
@@ -84,7 +84,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.start();
 	}
 
-	protected _beginDrag(event: PointerEvent): void {
+	beginDrag(event: PointerEvent): void {
 		if (!this._isInteractive()) return;
 		event.preventDefault();
 		event.stopPropagation();
@@ -100,7 +100,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.start();
 	}
 
-	protected _rotateFromDrag(event: PointerEvent): void {
+	rotateFromDrag(event: PointerEvent): void {
 		if (!this._drag || event.pointerId !== this._drag.pointerId) return;
 		event.preventDefault();
 		event.stopPropagation();
@@ -141,7 +141,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.start();
 	}
 
-	protected _endDrag(event: PointerEvent): void {
+	endDrag(event: PointerEvent): void {
 		if (!this._drag || event.pointerId !== this._drag.pointerId) return;
 		event.preventDefault();
 		event.stopPropagation();

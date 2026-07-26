@@ -1,0 +1,121 @@
+// Site footer + global utility animations. Keyframes live in
+// `src/styles/_keyframes.scss` so every partial can reuse them; this file
+// holds only footer composition rules and the inline `@keyframes` blocks
+// that are still referenced by selectors outside this partial.
+
+.site-footer {
+	width: min(1380px, calc(100% - 3rem));
+	padding: 1.5rem 0 2.5rem;
+	margin: auto;
+	display: flex;
+	gap: 1.5rem;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 0.68rem;
+	color: var(--muted);
+}
+.site-footer p {
+	margin: 0;
+}
+.site-footer > a:last-child {
+	color: var(--ink);
+	text-decoration: none;
+	font-weight: 800;
+}
+.footer-links {
+	display: flex;
+	gap: 0.7rem;
+	flex-wrap: wrap;
+}
+.footer-links a {
+	font: 0.61rem 'DM Mono';
+	text-decoration: none;
+	color: var(--muted);
+}
+.footer-links a:hover {
+	color: var(--cyan);
+}
+@keyframes page-rise {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes bar-rise {
+	from {
+		transform: scaleY(0.08);
+		opacity: 0.2;
+	}
+	to {
+		transform: scaleY(1);
+		opacity: 1;
+	}
+}
+@keyframes line-draw {
+	from {
+		stroke-dashoffset: 550;
+		opacity: 0;
+	}
+	to {
+		stroke-dashoffset: 0;
+		opacity: 1;
+	}
+}
+@keyframes menu-in {
+	from {
+		opacity: 0;
+		transform: translateY(-8px) scale(0.94);
+		filter: blur(3px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		filter: blur(0);
+	}
+}
+@keyframes menu-out {
+	to {
+		opacity: 0;
+		transform: translateY(-7px) scale(0.95);
+		filter: blur(2px);
+	}
+}
+@keyframes complete-pop {
+	50% {
+		transform: translateY(-7px) scale(1.03);
+		box-shadow: 0 0 28px color-mix(in srgb, var(--lime) 45%, transparent);
+	}
+	to {
+		transform: translateY(0) scale(1);
+	}
+}
+@keyframes orbit {
+	to {
+		rotate: 360deg;
+	}
+}
+@keyframes drift {
+	50% {
+		transform: rotate(-20deg) scale(1.04);
+	}
+}
+@keyframes target-pulse {
+	50% {
+		transform: scale(0.94);
+		border-color: var(--lime);
+	}
+}
+@keyframes technology-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px) scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}

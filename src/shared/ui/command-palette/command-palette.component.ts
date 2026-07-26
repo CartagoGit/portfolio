@@ -23,13 +23,13 @@ export class CommandPaletteComponent {
 	readonly close = output<void>();
 	readonly navigate = output<IPortfolioPageId>();
 
-	protected _routeFor(page: IPortfolioPageId): string[] {
+	routeFor(page: IPortfolioPageId): string[] {
 		return page === 'home'
 			? ['/', this.locale()]
 			: ['/', this.locale(), page];
 	}
 
-	protected _select(page: IPortfolioPageId): void {
+	select(page: IPortfolioPageId): void {
 		this.navigate.emit(page);
 		this.close.emit();
 	}

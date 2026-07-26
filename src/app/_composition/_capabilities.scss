@@ -1,0 +1,292 @@
+// Capabilities (system, not technology list) + Lab (mini tables, signals,
+// command-style toolbar). Both blocks are still rendered inline in
+// `portfolio-page.html` for the legacy sheet. The visual contract matches
+// the extracted `approach-page.component.scss` and `lab-page.component.scss`.
+
+.capabilities {
+	background: linear-gradient(
+		140deg,
+		transparent 15%,
+		var(--surface) 15%,
+		var(--surface) 85%,
+		transparent 85%
+	);
+	width: 100%;
+	padding-left: max(1.5rem, calc((100vw - 1380px) / 2));
+	padding-right: max(1.5rem, calc((100vw - 1380px) / 2));
+}
+.capability-layout {
+	display: grid;
+	grid-template-columns: 1fr 1.15fr;
+	min-height: 470px;
+	border-top: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+.capability-tabs {
+	padding: 1rem 0;
+}
+.capability-tabs button {
+	display: grid;
+	grid-template-columns: 2rem 1fr 1rem;
+	gap: 1rem;
+	width: 100%;
+	background: transparent;
+	color: var(--muted);
+	border: 0;
+	padding: 1rem 0.7rem;
+	text-align: left;
+	font-size: 0.9rem;
+	border-left: 2px solid transparent;
+}
+.capability-tabs button span {
+	font-family: 'DM Mono';
+	font-size: 0.62rem;
+}
+.capability-tabs button i {
+	font-style: normal;
+	opacity: 0;
+}
+.capability-tabs button.active,
+.capability-tabs button:hover {
+	color: var(--ink);
+	border-left-color: var(--cyan);
+	background: linear-gradient(90deg, var(--cyan) -200%, transparent 40%);
+}
+.capability-tabs button.active i {
+	opacity: 1;
+	color: var(--cyan);
+}
+.capability-detail {
+	padding: 3rem;
+	align-self: center;
+	border-left: 1px solid var(--line);
+}
+.capability-detail h3 {
+	font-size: clamp(2.5rem, 4vw, 4.4rem);
+	line-height: 0.9;
+	margin: 0.5rem 0 1.3rem;
+}
+.capability-detail > p:not(.eyebrow) {
+	max-width: 500px;
+	color: var(--muted);
+	line-height: 1.7;
+	font-size: 0.95rem;
+}
+.tool-pills {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	margin: 1.6rem 0 3rem;
+}
+.capability-detail footer {
+	font-family: 'DM Mono';
+	font-size: 0.63rem;
+	color: var(--muted);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.pulse {
+	display: inline-block;
+	width: 7px;
+	height: 7px;
+	background: var(--lime);
+	border-radius: 50%;
+	box-shadow: 0 0 0 5px color-mix(in srgb, var(--lime) 15%, transparent);
+}
+.lab {
+	border-bottom: 1px solid var(--line);
+}
+.lab-toolbar {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1.2rem;
+}
+.lab-toolbar [role='group'] {
+	display: flex;
+	gap: 0.3rem;
+	flex-wrap: wrap;
+}
+.lab-toolbar button {
+	background: transparent;
+	border: 1px solid var(--line);
+	color: var(--muted);
+	padding: 0.55rem 0.7rem;
+	font-size: 0.68rem;
+	font-weight: 700;
+	border-radius: 10px;
+}
+.lab-toolbar button.active,
+.lab-toolbar button:hover {
+	border-color: var(--cyan);
+	color: var(--cyan);
+	box-shadow: var(--neon);
+}
+.command-button {
+	display: flex;
+	gap: 0.2rem;
+	align-items: center;
+}
+.command-button kbd,
+.fake-command kbd,
+.command-dialog kbd {
+	font-family: 'DM Mono';
+	font-size: 0.62rem;
+	color: var(--muted);
+	border: 1px solid var(--line);
+	padding: 0.1rem 0.25rem;
+}
+.lab-grid {
+	display: grid;
+	grid-template-columns: 1.15fr 1fr 1fr;
+	gap: 1rem;
+}
+.lab-card {
+	min-height: 370px;
+	border: 1px solid var(--line);
+	background: var(--surface);
+	padding: 1.35rem;
+	transition:
+		opacity 0.25s,
+		transform 0.25s;
+}
+.lab-card:hover {
+	transform: translateY(-4px);
+	border-color: var(--cyan);
+	box-shadow: var(--neon);
+}
+.lab-card.dimmed {
+	opacity: 0.38;
+}
+.lab-card-head {
+	display: flex;
+	justify-content: space-between;
+	font: 0.61rem 'DM Mono';
+	color: var(--muted);
+}
+.lab-card-head i {
+	font-style: normal;
+	color: var(--cyan);
+}
+.lab-card h3 {
+	font-size: 1.55rem;
+	line-height: 1;
+	margin: 2rem 0 1.5rem;
+}
+.lab-card > p {
+	font-size: 0.75rem;
+	line-height: 1.6;
+	color: var(--muted);
+	margin-top: 1.5rem;
+}
+.mini-table {
+	font-size: 0.66rem;
+	border: 1px solid var(--line);
+	font-family: 'DM Mono';
+}
+.table-search {
+	padding: 0.6rem;
+	border-bottom: 1px solid var(--line);
+	color: var(--muted);
+}
+.table-row {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr 0.5fr;
+	gap: 0.3rem;
+	padding: 0.55rem 0.6rem;
+	border-bottom: 1px solid var(--line);
+}
+.table-row:last-child {
+	border-bottom: 0;
+}
+.table-head {
+	color: var(--muted);
+	font-size: 0.55rem;
+}
+.table-row b {
+	font-weight: 500;
+}
+.table-row em {
+	font-style: normal;
+	font-size: 0.55rem;
+}
+.ready {
+	color: var(--lime);
+}
+.review {
+	color: #ffc46a;
+}
+.fake-command {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	border: 1px solid var(--line);
+	padding: 0.75rem;
+}
+.fake-command p {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.67rem;
+	flex: 1;
+}
+.command-options {
+	margin-top: 0.7rem;
+	display: grid;
+	gap: 0.4rem;
+}
+.command-options span {
+	font-size: 0.65rem;
+	color: var(--muted);
+}
+.command-options b {
+	display: inline-grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	background: var(--surface-2);
+	color: var(--cyan);
+	margin-right: 0.5rem;
+}
+.signal-demo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 3.5rem 0;
+}
+.signal-node {
+	width: 68px;
+	height: 68px;
+	border: 1px solid var(--line);
+	display: grid;
+	place-items: center;
+	text-align: center;
+	font: 0.57rem 'DM Mono';
+	background: var(--surface-2);
+	position: relative;
+}
+.signal-node.source {
+	border-color: var(--blue);
+	color: var(--blue);
+}
+.signal-node.computed {
+	border-color: var(--cyan);
+	color: var(--cyan);
+	transform: translateY(-20px);
+}
+.signal-node.output {
+	border-color: var(--lime);
+	color: var(--lime);
+}
+.signal-demo > span {
+	width: 23px;
+	border-top: 1px dashed var(--line);
+}
+.motion-note {
+	font: 0.62rem 'DM Mono';
+	color: var(--muted);
+	margin: 1rem 0 0;
+}
+.motion-note code {
+	color: var(--cyan);
+}

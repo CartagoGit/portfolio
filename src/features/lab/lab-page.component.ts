@@ -9,8 +9,27 @@ import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/portfolio.data';
 import type {
 	IChartType,
 	IPlaygroundStep,
+	IPlaygroundStepDefinition,
+	ITelemetry,
 	ITelemetryId,
 } from '../../domain/portfolio.types';
+
+const FALLBACK_TELEMETRY: ITelemetry = {
+	id: 'product',
+	label: '',
+	title: '',
+	value: '',
+	valueLabel: '',
+	kpis: [],
+	bars: [],
+	note: '',
+};
+
+const FALLBACK_STEP: IPlaygroundStepDefinition = {
+	id: 'discover',
+	label: '',
+	hint: '',
+};
 
 @Component({
 	selector: 'app-lab-page',
@@ -33,10 +52,10 @@ export class LabPageComponent {
 		'verify',
 		'model',
 	]);
-	readonly selectedTelemetry = computed(
+	readonly selectedTelemetry = computed<ITelemetry>(
 		() =>
 			this.telemetry.find(({ id }) => id === this.activeTelemetry()) ??
-			this.telemetry[0]
+			FALLBACK_TELEMETRY
 	);
 	readonly playgroundComplete = computed(() => {
 		const order = this.playgroundOrder();
@@ -72,10 +91,10 @@ export class LabPageComponent {
 		if (this.playgroundComplete())
 			this.playgroundRuns.update((runs) => runs + 1);
 	}
-	playgroundStep(step: IPlaygroundStep) {
+	playgroundStep(step: IPlaygroundStep): IPlaygroundStepDefinition {
 		return (
 			this.playgroundSteps.find(({ id }) => id === step) ??
-			this.playgroundSteps[0]
+			FALLBACK_STEP
 		);
 	}
 	resetPlayground(): void {

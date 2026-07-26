@@ -22,25 +22,28 @@ import type {
 	encapsulation: ViewEncapsulation.None,
 })
 export class HeroMonitorComponent implements OnDestroy {
-	protected readonly _hero = new HeroMonitorFacade();
-	protected readonly _earth = new EarthDepthFacade();
+	// Composition root: two facades that own the monitor's state.
+	private readonly _hero = new HeroMonitorFacade();
+	private readonly _earth = new EarthDepthFacade();
 
-	protected readonly _activePanel = this._hero.activePanel;
-	protected readonly _chartType = this._hero.chartType;
-	protected readonly _effect = this._hero.effect;
-	protected readonly _panelTransition = this._hero.panelTransition;
-	protected readonly _panelChanging = this._hero.panelChanging;
-	protected readonly _palette = this._hero.palette;
-	protected readonly _chartBars = this._hero.chartBars;
-	protected readonly _chartPath = this._hero.chartPath;
-	protected readonly _selectedPanel = this._hero.selectedPanel;
-	protected readonly _panels = this._hero.panels;
-	protected readonly _earthDepth = this._earth.state;
-	protected readonly _earthBlocksMonitor = this._earth.blocksMonitor;
-	protected readonly _chartOptions: ReadonlyArray<{
-		id: IChartType;
-		label: string;
-	}> = [
+	// Public mirrors so the template can render the signals without exposing
+	// the private facades. The re-exported `Signal<T>` keeps the original
+	// reference equality, so changes propagate without manual syncing.
+	readonly earth = this._earth;
+	readonly activePanel = this._hero.activePanel;
+	readonly chartType = this._hero.chartType;
+	readonly effect = this._hero.effect;
+	readonly panelTransition = this._hero.panelTransition;
+	readonly panelChanging = this._hero.panelChanging;
+	readonly palette = this._hero.palette;
+	readonly chartBars = this._hero.chartBars;
+	readonly chartPath = this._hero.chartPath;
+	readonly selectedPanel = this._hero.selectedPanel;
+	readonly panels = this._hero.panels;
+	readonly earthDepth = this._earth.state;
+	readonly earthBlocksMonitor = this._earth.blocksMonitor;
+
+	readonly chartOptions: ReadonlyArray<{ id: IChartType; label: string }> = [
 		{ id: 'bars', label: 'Velocity' },
 		{ id: 'line', label: 'Signals' },
 		{ id: 'area', label: 'Coverage' },
@@ -49,7 +52,8 @@ export class HeroMonitorComponent implements OnDestroy {
 		{ id: 'wave', label: 'Wave' },
 		{ id: 'grid', label: 'Grid' },
 	];
-	protected readonly _effectOptions: ReadonlyArray<{
+
+	readonly effectOptions: ReadonlyArray<{
 		id: Exclude<IHeroEffect, 'idle'>;
 		symbol: string;
 	}> = [
@@ -63,46 +67,46 @@ export class HeroMonitorComponent implements OnDestroy {
 		this._hero.destroy();
 	}
 
-	protected _selectPanel(panel: IHeroPanelId): void {
+	selectPanel(panel: IHeroPanelId): void {
 		this._hero.selectPanel(panel);
 	}
 
-	protected _clearPanel(): void {
+	clearPanel(): void {
 		this._hero.clearPanel();
 	}
 
-	protected _setChart(type: IChartType): void {
+	setChart(type: IChartType): void {
 		this._hero.setChart(type);
 	}
 
-	protected _randomizeChart(): void {
+	randomizeChart(): void {
 		this._hero.randomizeChart();
 	}
 
-	protected _setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
+	setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
 		this._hero.setEffect(effect);
 	}
 
-	protected _setTemperature(): void {
+	setTemperature(): void {
 		this._hero.setTemperature();
 	}
 
-	protected _gradient(value: number): string {
+	gradient(value: number): string {
 		return this._hero.gradient(value);
 	}
 
-	protected _showEarthInFront(event: MouseEvent): void {
+	showEarthInFront(event: MouseEvent): void {
 		event.stopPropagation();
 		this._earth.showInFront();
 	}
 
-	protected _guardMonitorBanner(event: MouseEvent): void {
-		if (!this._earthBlocksMonitor()) return;
+	guardMonitorBanner(event: MouseEvent): void {
+		if (!this.earthBlocksMonitor()) return;
 		event.preventDefault();
 		event.stopPropagation();
 	}
 
-	protected _returnEarthBehind(event?: MouseEvent): void {
+	returnEarthBehind(event?: MouseEvent): void {
 		if (this._isEarthTarget(event?.relatedTarget)) return;
 		this._earth.returnBehind(event?.target);
 	}

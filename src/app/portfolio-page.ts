@@ -40,13 +40,13 @@ import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfoli
 	// extracted monitor. Keep it global until every primitive has moved.
 	encapsulation: ViewEncapsulation.None,
 	host: {
-		'(window:scroll)': '_onWindowScroll()',
+		'(window:scroll)': 'onWindowScroll()',
 	},
 })
 export class PortfolioPage {
-	protected readonly _shell = new PortfolioShellFacade();
+	readonly shell = new PortfolioShellFacade();
 
-	protected _onWindowScroll(): void {
-		this._shell.setScrolled(window.scrollY > 20);
+	onWindowScroll(): void {
+		this.shell.setScrolled(window.scrollY > 20);
 	}
 }

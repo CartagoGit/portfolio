@@ -9,17 +9,15 @@ import {
 	TECHNOLOGY_MARQUEE,
 } from '../../domain/portfolio.data';
 import type { ILocale, IPortfolioPageId } from '../../domain/portfolio.types';
+import { detectPreferredLocale, persistLocale } from './portfolio-locale';
+import {
+	PAGE_ORDER,
+	buildDescription,
+	buildTitle,
+	transitionDirection,
+} from './portfolio-seo';
 
-const PAGE_ORDER: readonly IPortfolioPageId[] = [
-	'home',
-	'work',
-	'lab',
-	'approach',
-	'knowledge',
-	'docker',
-	'demos',
-	'contact',
-];
+export { PAGE_ORDER, transitionDirection } from './portfolio-seo';
 
 export class PortfolioShellFacade {
 	private readonly _route = inject(ActivatedRoute);
@@ -51,11 +49,11 @@ export class PortfolioShellFacade {
 			const locale = params.get('locale') === 'es' ? 'es' : 'en';
 			this.locale.set(locale);
 			this._document.documentElement.lang = locale;
-			this._updateSeo();
+			this._refreshSeo();
 		});
 		this._route.data.subscribe((data) => {
 			this.page.set(this._asPage(data['page']));
-			this._updateSeo();
+			this._refreshSeo();
 		});
 		this._applyPreferredLocale();
 	}
@@ -76,7 +74,7 @@ export class PortfolioShellFacade {
 	selectLocale(locale: ILocale): void {
 		this.localeMenuOpen.set(false);
 		this._persistLocale(locale);
-		void this._router.navigate(this.routeFor(this.page(), locale));
+		void this._router.navigate(this._routeFor(this.page(), locale));
 	}
 
 	toggleLocaleMenu(): void {
@@ -97,96 +95,48 @@ export class PortfolioShellFacade {
 	}
 
 	setTransition(target: IPortfolioPageId): void {
-		const direction =
-			PAGE_ORDER.indexOf(target) >= PAGE_ORDER.indexOf(this.page())
-				? 'forward'
-				: 'backward';
 		this._document.documentElement.dataset['transitionDirection'] =
-			direction;
+			transitionDirection(this.page(), target);
 		this.menuOpen.set(false);
 		this.localeMenuOpen.set(false);
 	}
 
 	routeFor(page: IPortfolioPageId, locale = this.locale()): string[] {
+		return this._routeFor(page, locale);
+	}
+
+	private _routeFor(page: IPortfolioPageId, locale: ILocale): string[] {
 		return page === 'home' ? ['/', locale] : ['/', locale, page];
 	}
 
 	private _asPage(page: unknown): IPortfolioPageId {
 		return typeof page === 'string' &&
-			PAGE_ORDER.includes(page as IPortfolioPageId)
+			(PAGE_ORDER as readonly string[]).includes(page)
 			? (page as IPortfolioPageId)
 			: 'home';
 	}
 
-	private _updateSeo(): void {
-		const spanish = this.locale() === 'es';
-		const labels: Record<IPortfolioPageId, string> = spanish
-			? {
-					home: 'Frontend product engineer',
-					work: 'Proyectos destacados',
-					lab: 'Laboratorio frontend',
-					approach: 'Enfoque',
-					knowledge: 'Conocimientos',
-					docker: 'Docker',
-					demos: 'Demos',
-					contact: 'Contacto',
-				}
-			: {
-					home: 'Frontend product engineer',
-					work: 'Pinned projects',
-					lab: 'Frontend lab',
-					approach: 'Approach',
-					knowledge: 'Knowledge',
-					docker: 'Docker',
-					demos: 'Demos',
-					contact: 'Contact',
-				};
-		const description = spanish
-			? 'Portfolio de Mario Cabrero Volarich: frontend de producto, Angular, TypeScript, móvil y tooling.'
-			: 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.';
-		this._title.setTitle(`Cartago · ${labels[this.page()]}`);
-		this._meta.updateTag({ name: 'description', content: description });
+	private _refreshSeo(): void {
+		this._title.setTitle(buildTitle(this.locale(), this.page()));
+		this._meta.updateTag({
+			name: 'description',
+			content: buildDescription(this.locale()),
+		});
 	}
 
 	private _applyPreferredLocale(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
-		let saved: string | null = null;
-		try {
-			saved = localStorage.getItem('cartago-locale');
-		} catch {
-			/* Storage can be blocked. */
-		}
-		const cookieLocale = this._document.cookie.match(
-			/(?:^|; )cartago_locale=([^;]+)/
-		)?.[1];
-		const candidate =
-			saved ??
-			cookieLocale ??
-			navigator.languages
-				.find(
-					(language) =>
-						language.startsWith('es') || language.startsWith('en')
+		const locale = detectPreferredLocale(this._document);
+		if (!locale || locale === this.locale()) return;
+		queueMicrotask(
+			() =>
+				void this._router.navigate(
+					this.routeFor(this.page(), locale)
 				)
-				?.slice(0, 2) ??
-			'en';
-		const locale: ILocale = candidate === 'es' ? 'es' : 'en';
-		if (locale !== this.locale()) {
-			queueMicrotask(
-				() =>
-					void this._router.navigate(
-						this.routeFor(this.page(), locale)
-					)
-			);
-		}
+		);
 	}
 
 	private _persistLocale(locale: ILocale): void {
-		if (!isPlatformBrowser(this._platformId)) return;
-		try {
-			localStorage.setItem('cartago-locale', locale);
-		} catch {
-			/* Cookie remains a server-readable fallback. */
-		}
-		this._document.cookie = `cartago_locale=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+		persistLocale(this._document, locale);
 	}
 }

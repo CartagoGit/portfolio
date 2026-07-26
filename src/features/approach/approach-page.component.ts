@@ -5,7 +5,16 @@ import {
 	signal,
 } from '@angular/core';
 import { CAPABILITIES } from '../../domain/portfolio.data';
-import type { ICapabilityId } from '../../domain/portfolio.types';
+import type { ICapability, ICapabilityId } from '../../domain/portfolio.types';
+
+const FALLBACK_CAPABILITY: ICapability = {
+	id: 'product',
+	eyebrow: '',
+	title: '',
+	detail: '',
+	tools: [],
+	proof: '',
+};
 
 @Component({
 	selector: 'app-approach-page',
@@ -14,16 +23,16 @@ import type { ICapabilityId } from '../../domain/portfolio.types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachPageComponent {
-	protected readonly _capabilities = CAPABILITIES;
-	protected readonly _activeCapability = signal<ICapabilityId>('product');
-	protected readonly _selectedCapability = computed(
+	readonly capabilities = CAPABILITIES;
+	readonly activeCapability = signal<ICapabilityId>('product');
+	readonly selectedCapability = computed<ICapability>(
 		() =>
-			this._capabilities.find(
-				({ id }) => id === this._activeCapability()
-			) ?? this._capabilities[0]
+			this.capabilities.find(
+				({ id }) => id === this.activeCapability()
+			) ?? FALLBACK_CAPABILITY
 	);
 
-	protected _selectCapability(id: ICapabilityId): void {
-		this._activeCapability.set(id);
+	selectCapability(id: ICapabilityId): void {
+		this.activeCapability.set(id);
 	}
 }

@@ -35,12 +35,12 @@ export class PortfolioHeaderComponent {
 	readonly localeSelect = output<ILocale>();
 	readonly themeToggle = output<void>();
 
-	protected _routeFor(page: IPortfolioPageId): string[] {
+	routeFor(page: IPortfolioPageId): string[] {
 		return page === 'home'
 			? ['/', this.locale()]
 			: ['/', this.locale(), page];
 	}
-	protected _selectPage(page: IPortfolioPageId): void {
+	selectPage(page: IPortfolioPageId): void {
 		this.navigate.emit(page);
 	}
 }

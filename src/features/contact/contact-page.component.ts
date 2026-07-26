@@ -7,9 +7,10 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactPageComponent {
-	protected readonly _sent = signal(false);
-	protected _submit(event: SubmitEvent): void {
+	readonly sent = signal(false);
+
+	submit(event: SubmitEvent): void {
 		event.preventDefault();
-		this._sent.set(true);
+		this.sent.set(true);
 	}
 }
