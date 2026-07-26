@@ -10,8 +10,9 @@ type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
 type CapabilityId = 'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
 type HeroPanelId = 'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 type TelemetryId = 'product' | 'quality' | 'delivery';
-type ChartType = 'bars' | 'line' | 'area';
-type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float';
+type ChartType = 'bars' | 'line' | 'area' | 'dots' | 'pulse';
+type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
+type HeroPalette = 'ocean' | 'heat' | 'lime';
 
 interface Capability {
   id: CapabilityId;
@@ -67,6 +68,7 @@ export class PortfolioPage {
   protected readonly activeHeroPanel = signal<HeroPanelId | null>(null);
   protected readonly heroChartType = signal<ChartType>('bars');
   protected readonly heroEffect = signal<HeroEffect>('idle');
+  protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
   protected readonly neonScore = signal(0);
@@ -255,6 +257,11 @@ export class PortfolioPage {
   protected setHeroEffect(effect: Exclude<HeroEffect, 'idle'>): void {
     this.heroEffect.set('idle');
     window.setTimeout(() => this.heroEffect.set(effect), 24);
+  }
+
+  protected setHeroPalette(palette: HeroPalette): void {
+    this.heroPalette.set(palette);
+    this.randomizeHeroChart();
   }
 
   protected startEarthSpin(): void {
