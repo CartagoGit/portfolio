@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import type { ElementRef, OnDestroy } from '@angular/core';
+import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +18,7 @@ import type { EarthDepth } from '../../../../domain/portfolio/portfolio.types';
   styleUrl: './earth-globe.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EarthGlobeComponent implements OnDestroy {
+export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
   readonly depth = input.required<EarthDepth>();
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
@@ -43,6 +43,10 @@ export class EarthGlobeComponent implements OnDestroy {
   @ViewChild('canvas') set canvasRef(value: ElementRef<HTMLCanvasElement> | undefined) {
     this.canvas = value?.nativeElement;
     if (this.canvas) this.prepare();
+  }
+
+  ngAfterViewInit(): void {
+    this.prepare();
   }
   start(): void {
     if (!isPlatformBrowser(this.platformId)) return;
