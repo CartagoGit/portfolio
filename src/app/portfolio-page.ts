@@ -82,7 +82,7 @@ export class PortfolioPage {
   protected readonly heroPalette = signal<HeroPalette>('ocean');
   protected readonly heroChartBars = signal([42, 67, 52, 83, 71]);
   protected readonly earthSpinning = signal(false);
-  protected readonly earthDepth = signal<'behind' | 'leaping-front' | 'front' | 'returning'>('behind');
+  protected readonly earthDepth = signal<'behind' | 'out-behind' | 'front-ready' | 'front' | 'out-front' | 'behind-ready'>('behind');
   protected readonly neonScore = signal(0);
   protected readonly neonTarget = signal(4);
   protected readonly socialIcons = { github: siGithub, npm: siNpm };
@@ -367,10 +367,12 @@ export class PortfolioPage {
 
   protected showEarthInFront(): void {
     if (this.earthDepth() !== 'behind') return;
-    this.earthDepth.set('leaping-front');
+    this.earthDepth.set('out-behind');
     window.setTimeout(() => {
-      if (this.earthDepth() === 'leaping-front') this.earthDepth.set('front');
-    }, 280);
+      if (this.earthDepth() !== 'out-behind') return;
+      this.earthDepth.set('front-ready');
+      requestAnimationFrame(() => this.earthDepth.set('front'));
+    }, 140);
   }
 
   protected onEarthControlClick(event: MouseEvent): void {
@@ -380,13 +382,15 @@ export class PortfolioPage {
   }
 
   protected returnEarthBehind(event?: MouseEvent): void {
-    if (this.earthDepth() !== 'front' && this.earthDepth() !== 'leaping-front') return;
+    if (this.earthDepth() !== 'front') return;
     const target = event?.target as HTMLElement | null | undefined;
     if (target?.closest('.earth-motion-control')) return;
-    this.earthDepth.set('returning');
+    this.earthDepth.set('out-front');
     window.setTimeout(() => {
-      if (this.earthDepth() === 'returning') this.earthDepth.set('behind');
-    }, 290);
+      if (this.earthDepth() !== 'out-front') return;
+      this.earthDepth.set('behind-ready');
+      requestAnimationFrame(() => this.earthDepth.set('behind'));
+    }, 140);
   }
 
   private renderEarth(): void {
@@ -394,7 +398,8 @@ export class PortfolioPage {
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
     const deviceScale = Math.min(window.devicePixelRatio || 1, 1.75);
-    const size = Math.min(560, Math.max(300, Math.round((canvas.clientWidth || 300) * deviceScale)));
+    const inFront = this.earthDepth() === 'front' || this.earthDepth() === 'out-front';
+    const size = Math.min(768, Math.max(360, Math.round((canvas.clientWidth || 300) * deviceScale * (inFront ? 1.14 : 1))));
     if (canvas.width !== size || canvas.height !== size) {
       canvas.width = size;
       canvas.height = size;
