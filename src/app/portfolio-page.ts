@@ -58,6 +58,8 @@ export class PortfolioPage {
   protected readonly draggedStep = signal<PlaygroundStep | null>(null);
   protected readonly playgroundOrder = signal<PlaygroundStep[]>(['build', 'discover', 'verify', 'model']);
   protected readonly activeHeroPanel = signal<HeroPanelId>('overview');
+  protected readonly neonScore = signal(0);
+  protected readonly neonTarget = signal(4);
   protected readonly heroLayers = signal(['Angular 22', 'TypeScript', 'Ionic', 'Capacitor', 'MCP Vertex', 'Testing']);
   protected readonly heroPanels: readonly { id: HeroPanelId; label: string; metric: string; detail: string }[] = [
     { id: 'overview', label: 'Angular products', metric: 'v22', detail: 'Signals · SSR · UI architecture' },
@@ -206,6 +208,13 @@ export class PortfolioPage {
 
   protected setChartType(type: ChartType): void {
     this.chartType.set(type);
+  }
+
+  protected hitNeonTarget(index: number): void {
+    if (index !== this.neonTarget()) return;
+    const score = this.neonScore() + 1;
+    this.neonScore.set(score);
+    this.neonTarget.set((index + 2 + score * 3) % 9);
   }
 
   protected playStep(step: PlaygroundStep): void {
