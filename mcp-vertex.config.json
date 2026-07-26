@@ -33,7 +33,7 @@
 			}
 		},
 		"portfolio-content": {
-			"path": "tools/mcp-vertex/portfolio-content.mjs",
+			"path": "tools/mcp-vertex/portfolio-content/src/index.ts",
 			"prefix": "portfolio",
 			"options": {
 				"contentPaths": [
@@ -54,7 +54,8 @@
 					"Mazinger",
 					"MDM Platform",
 					"Gestion de Tarifas"
-				]
+				],
+				"locale": "en"
 			}
 		}
 	}

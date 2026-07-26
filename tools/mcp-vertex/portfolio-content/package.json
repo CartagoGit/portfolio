@@ -1,0 +1,22 @@
+{
+	"name": "@portfolio/mcp-vertex-portfolio-content",
+	"version": "0.2.0",
+	"type": "module",
+	"private": true,
+	"description": "Local mcp-vertex plugin for the public portfolio. Audits public templates for forbidden terms / image TODOs and returns bilingual case-study briefs. Read-only.",
+	"main": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./public": "./src/public/index.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"test": "vitest run"
+	},
+	"peerDependencies": {
+		"@mcp-vertex/core": "*"
+	},
+	"dependencies": {
+		"zod": "^4.4.3"
+	}
+}
