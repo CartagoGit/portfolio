@@ -28,7 +28,7 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
 
 - id: qs1
   title: Extract Home interactive monitor and profile presentation feature
-  status: in-progress
+  status: done
   doneWhen: Root template delegates Home; Earth adapter remains in core; feature has tests.
 - id: qs2
   title: Extract Work and Approach presentation features
@@ -40,7 +40,7 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
   doneWhen: Root owns only state facade; chart and capability interactions are feature contracts with tests.
 - id: qs4
   title: Remove legacy shell SCSS and establish BEM style layers
-  status: pending
+  status: in-progress
   doneWhen: Feature selectors leave `portfolio-page.scss`; style budget warning is resolved without altering user configuration.
 - id: qs5
   title: Finalize quality gates and MCP Vertex evidence
@@ -59,3 +59,6 @@ The route shell in `src/app` only coordinates route, locale, theme and page stat
 - 2026-07-26: The Earth canvas lifecycle is isolated under the Home feature. Its renderer remains
   a core adapter and the feature owns texture preparation, motion interpolation and animation
   cleanup.
+- 2026-07-26: The Home introduction and interactive monitor now delegate from the route shell.
+  The monitor owns its state facades, Earth depth behaviour, template, tests and visual layer;
+  moving its stylesheet removed the root CSS budget warning without weakening the configured limit.
