@@ -4,8 +4,10 @@
     [routerLink]="routeFor('home')"
     (click)="selectPage('home')"
     aria-label="Cartago home"
-    ><span class="portfolio-header__mark">C.</span><span>Cartago</span></a
   >
+    <span class="portfolio-header__mark">C.</span>
+    <span>Cartago</span>
+  </a>
   <button
     class="portfolio-header__menu"
     type="button"
@@ -13,7 +15,10 @@
     [attr.aria-expanded]="menuOpen()"
     aria-controls="site-navigation"
   >
-    <span></span><span></span><span></span><span class="sr-only">Toggle navigation</span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span class="sr-only">Toggle navigation</span>
   </button>
   <nav
     class="portfolio-header__nav"
@@ -25,38 +30,51 @@
       [routerLink]="routeFor('work')"
       [class.is-active]="page() === 'work'"
       (click)="selectPage('work')"
-      >{{ copy().navWork }}</a
-    ><a
+    >
+      {{ copy().navWork }}
+    </a>
+    <a
       [routerLink]="routeFor('lab')"
       [class.is-active]="page() === 'lab'"
       (click)="selectPage('lab')"
-      >{{ copy().navLab }}</a
-    ><a
+    >
+      {{ copy().navLab }}
+    </a>
+    <a
       [routerLink]="routeFor('approach')"
       [class.is-active]="page() === 'approach'"
       (click)="selectPage('approach')"
-      >{{ copy().navAbout }}</a
-    ><a
+    >
+      {{ copy().navAbout }}
+    </a>
+    <a
       [routerLink]="routeFor('knowledge')"
       [class.is-active]="page() === 'knowledge'"
       (click)="selectPage('knowledge')"
-      >Knowledge</a
-    ><a
+    >
+      Knowledge
+    </a>
+    <a
       [routerLink]="routeFor('docker')"
       [class.is-active]="page() === 'docker'"
       (click)="selectPage('docker')"
-      >Docker</a
-    ><a
+    >
+      Docker
+    </a>
+    <a
       [routerLink]="routeFor('demos')"
       [class.is-active]="page() === 'demos'"
       (click)="selectPage('demos')"
-      >Demos</a
-    ><a
+    >
+      Demos
+    </a>
+    <a
       [routerLink]="routeFor('contact')"
       [class.is-active]="page() === 'contact'"
       (click)="selectPage('contact')"
-      >{{ copy().contact }}</a
     >
+      {{ copy().contact }}
+    </a>
   </nav>
   <div class="portfolio-header__actions">
     <div class="portfolio-header__locale">
@@ -71,8 +89,9 @@
           width="24"
           height="16"
           alt=""
-        /><span>{{ locale().toUpperCase() }}</span
-        ><i>⌄</i>
+        />
+        <span>{{ locale().toUpperCase() }}</span>
+        <i>⌄</i>
       </button>
       @if (localeMenuOpen() || localeMenuClosing()) {
         <div
@@ -92,9 +111,11 @@
                 width="24"
                 height="16"
                 alt=""
-              /><span
-                >{{ language.label }}<small>{{ language.detail }}</small></span
-              >
+              />
+              <span>
+                {{ language.label }}
+                <small>{{ language.detail }}</small>
+              </span>
               @if (locale() === language.id) {
                 <b>✓</b>
               }

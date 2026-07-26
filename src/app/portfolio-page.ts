@@ -1,12 +1,11 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import type { ElementRef, OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
   HostListener,
   inject,
-  OnDestroy,
   PLATFORM_ID,
   signal,
   ViewChild,
@@ -21,15 +20,15 @@ import {
   PUBLIC_LINKS,
   TECHNOLOGY_MARQUEE,
   TELEMETRY,
-} from './portfolio/domain/portfolio.data';
-import { renderEarthFrame } from './portfolio/core/rendering/earth-globe-renderer';
-import { nextHeroPanelTransition } from './portfolio/core/motion/portfolio-motion';
-import { PortfolioFooterComponent } from './portfolio/shared/ui/portfolio-footer/portfolio-footer.component';
-import { CommandPaletteComponent } from './portfolio/shared/ui/command-palette/command-palette.component';
-import { TechnologyMarqueeComponent } from './portfolio/features/home/technology-marquee/technology-marquee.component';
-import { PortfolioHeaderComponent } from './portfolio/shared/ui/portfolio-header/portfolio-header.component';
-import { ContactPageComponent } from './portfolio/features/contact/contact-page.component';
-import { DockerPageComponent } from './portfolio/features/docker/docker-page.component';
+} from '../domain/portfolio/portfolio.data';
+import { renderEarthFrame } from '../core/portfolio/rendering/earth-globe-renderer';
+import { nextHeroPanelTransition } from '../core/portfolio/motion/portfolio-motion';
+import { PortfolioFooterComponent } from '../shared/portfolio/ui/portfolio-footer/portfolio-footer.component';
+import { CommandPaletteComponent } from '../shared/portfolio/ui/command-palette/command-palette.component';
+import { TechnologyMarqueeComponent } from '../features/portfolio/home/technology-marquee/technology-marquee.component';
+import { PortfolioHeaderComponent } from '../shared/portfolio/ui/portfolio-header/portfolio-header.component';
+import { ContactPageComponent } from '../features/portfolio/contact/contact-page.component';
+import { DockerPageComponent } from '../features/portfolio/docker/docker-page.component';
 import type {
   CapabilityId,
   ChartType,
@@ -41,7 +40,7 @@ import type {
   PlaygroundStep,
   PortfolioPageId,
   TelemetryId,
-} from './portfolio/domain/portfolio.types';
+} from '../domain/portfolio/portfolio.types';
 
 @Component({
   selector: 'app-portfolio-page',

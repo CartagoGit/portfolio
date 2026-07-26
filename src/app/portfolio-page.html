@@ -21,8 +21,15 @@
     @if (page() === 'home') {
       <section id="main-content" class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span>CartagoNova / personal frontend systems</p>
-          <h1 id="hero-title">Mario Cabrero<br /><em>Volarich</em></h1>
+          <p class="eyebrow">
+            <span></span>
+            CartagoNova / personal frontend systems
+          </p>
+          <h1 id="hero-title">
+            Mario Cabrero
+            <br />
+            <em>Volarich</em>
+          </h1>
           <p class="hero-signature">Cartago / CartagoNova · frontend product engineer</p>
           <p class="hero-role">{{ copy().role }}</p>
           <p class="hero-intro">{{ copy().intro }}</p>
@@ -31,14 +38,18 @@
               class="button button-primary"
               [routerLink]="routeFor('demos')"
               (click)="setTransition('demos')"
-              >{{ copy().viewWork }} <span aria-hidden="true">↘</span></a
             >
+              {{ copy().viewWork }}
+              <span aria-hidden="true">↘</span>
+            </a>
             <a
               class="button button-quiet"
               [routerLink]="routeFor('contact')"
               (click)="setTransition('contact')"
-              >{{ copy().contact }} <span aria-hidden="true">→</span></a
             >
+              {{ copy().contact }}
+              <span aria-hidden="true">→</span>
+            </a>
           </div>
           <app-technology-marquee [technologies]="technologyMarquee" />
           <div class="hero-socials" aria-label="Public profiles and featured projects">
@@ -51,8 +62,8 @@
                     <path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" />
                   </svg>
                 }
-                <span>{{ link.label }}</span></a
-              >
+                <span>{{ link.label }}</span>
+              </a>
             }
           </div>
         </div>
@@ -85,7 +96,11 @@
             (click)="returnEarthBehind($event)"
           >
             <div class="monitor-chrome" aria-hidden="true">
-              <span></span><span></span><span></span><i></i><b>cartago.system</b>
+              <span></span>
+              <span></span>
+              <span></span>
+              <i></i>
+              <b>cartago.system</b>
             </div>
             <div class="monitor-header">
               <button
@@ -94,18 +109,20 @@
                 [attr.aria-pressed]="earthDepth() === 'front'"
                 (click)="onEarthControlClick($event)"
                 aria-label="Change the Earth's rotation"
-              ></button
-              ><a
+              ></button>
+              <a
                 class="monitor-banner-link"
                 href="https://github.com/CartagoGit"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Open CartagoGit on GitHub"
-                ><img
+              >
+                <img
                   class="hero-banner"
                   src="/images/cartagonova-banner-03-neon.png"
                   alt="CartagoNova banner"
-              /></a>
+                />
+              </a>
             </div>
             <div class="interface-body">
               <div class="monitor-selector" aria-label="Core technologies">
@@ -133,7 +150,11 @@
                   [class.swap-hidden]="heroPanelChanging()"
                 >
                   <div class="canvas-heading">
-                    <span><i></i>CartagoNova / system telemetry</span><small>LIVE</small>
+                    <span>
+                      <i></i>
+                      CartagoNova / system telemetry
+                    </span>
+                    <small>LIVE</small>
                   </div>
                   <div class="hero-chart-switcher" aria-label="Dashboard chart type">
                     <button
@@ -141,38 +162,44 @@
                       [class.active]="heroChartType() === 'bars'"
                       (click)="setHeroChart('bars')"
                     >
-                      Velocity</button
-                    ><button
+                      Velocity
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'line'"
                       (click)="setHeroChart('line')"
                     >
-                      Signals</button
-                    ><button
+                      Signals
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'area'"
                       (click)="setHeroChart('area')"
                     >
-                      Coverage</button
-                    ><button
+                      Coverage
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'dots'"
                       (click)="setHeroChart('dots')"
                     >
-                      Dots</button
-                    ><button
+                      Dots
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'pulse'"
                       (click)="setHeroChart('pulse')"
                     >
-                      Pulse</button
-                    ><button
+                      Pulse
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'wave'"
                       (click)="setHeroChart('wave')"
                     >
-                      Wave</button
-                    ><button
+                      Wave
+                    </button>
+                    <button
                       type="button"
                       [class.active]="heroChartType() === 'grid'"
                       (click)="setHeroChart('grid')"
@@ -201,8 +228,9 @@
                         preserveAspectRatio="none"
                         aria-label="Portfolio dashboard chart"
                       >
-                        <path [attr.d]="heroChartPath()" /></svg
-                      ><em>product signal / 2026</em>
+                        <path [attr.d]="heroChartPath()" />
+                      </svg>
+                      <em>product signal / 2026</em>
                     </div>
                     <div class="chart-symbols" aria-label="Randomise chart values">
                       <button
@@ -210,20 +238,23 @@
                         (click)="randomizeHeroChart()"
                         aria-label="Refresh signal"
                       >
-                        ⌁</button
-                      ><button
+                        ⌁
+                      </button>
+                      <button
                         type="button"
                         (click)="randomizeHeroChart()"
                         aria-label="Refresh metrics"
                       >
-                        ◌</button
-                      ><button
+                        ◌
+                      </button>
+                      <button
                         type="button"
                         (click)="randomizeHeroChart()"
                         aria-label="Refresh state"
                       >
-                        ✦</button
-                      ><button
+                        ✦
+                      </button>
+                      <button
                         class="temperature-icon"
                         type="button"
                         [class.active]="heroPalette() === 'heat'"
@@ -257,12 +288,15 @@
                     </div>
                     <div class="effect-controls" aria-label="Technology description effects">
                       <button type="button" (click)="setHeroEffect('shake')" aria-label="Shake">
-                        ≈</button
-                      ><button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">
-                        ⌘</button
-                      ><button type="button" (click)="setHeroEffect('float')" aria-label="Float">
-                        ↟</button
-                      ><button
+                        ≈
+                      </button>
+                      <button type="button" (click)="setHeroEffect('glitch')" aria-label="Glitch">
+                        ⌘
+                      </button>
+                      <button type="button" (click)="setHeroEffect('float')" aria-label="Float">
+                        ↟
+                      </button>
+                      <button
                         type="button"
                         (click)="setHeroEffect('spectrum')"
                         aria-label="Spectrum"
@@ -278,7 +312,11 @@
               </div>
             </div>
           </div>
-          <p class="hero-note">Built with explicit state,<br />progressive enhancement and care.</p>
+          <p class="hero-note">
+            Built with explicit state,
+            <br />
+            progressive enhancement and care.
+          </p>
         </div>
       </section>
     }
@@ -287,7 +325,11 @@
       <section id="main-content" class="work section" aria-labelledby="work-title">
         <div class="section-heading">
           <p class="eyebrow">01 / Selected work</p>
-          <h2 id="work-title">Pinned work, not<br />filler examples.</h2>
+          <h2 id="work-title">
+            Pinned work, not
+            <br />
+            filler examples.
+          </h2>
           <p>Open-source projects that best represent the technical focus.</p>
         </div>
         <div class="case-grid">
@@ -304,7 +346,11 @@
               alt="MCP Vertex"
             />
             <div class="mcp-visual" aria-hidden="true">
-              <span>MCP</span><i></i><i></i><i></i><b>vertex</b>
+              <span>MCP</span>
+              <i></i>
+              <i></i>
+              <i></i>
+              <b>vertex</b>
             </div>
             <p class="case-number">01 — Agent infrastructure</p>
             <div class="case-content">
@@ -319,7 +365,10 @@
                 <li>Plugin architecture</li>
                 <li>CLI tooling</li>
               </ul>
-              <span class="case-link">Explore repository <span>↗</span></span>
+              <span class="case-link">
+                Explore repository
+                <span>↗</span>
+              </span>
             </div>
           </a>
           <a
@@ -336,8 +385,16 @@
             />
             <div class="zoneless-visual" aria-hidden="true">
               <div class="cal-screen">
-                <small>ARCHITECTURE STATE</small><strong>42<span>.00</span></strong>
-                <div><i>signals</i><i>zoneless</i><i>tested</i></div>
+                <small>ARCHITECTURE STATE</small>
+                <strong>
+                  42
+                  <span>.00</span>
+                </strong>
+                <div>
+                  <i>signals</i>
+                  <i>zoneless</i>
+                  <i>tested</i>
+                </div>
               </div>
               <div class="signal-path"></div>
             </div>
@@ -354,18 +411,26 @@
                 <li>Serialization</li>
                 <li>Developer experience</li>
               </ul>
-              <span class="case-link">Explore repository <span>↗</span></span>
+              <span class="case-link">
+                Explore repository
+                <span>↗</span>
+              </span>
             </div>
           </a>
           <article class="case-card case-vertex">
             <div class="keyer-visual" aria-hidden="true">
-              <span class="terminal-dot"></span><span class="terminal-dot"></span
-              ><span class="terminal-dot"></span
-              ><code
-                >$ keyer status<br /><b>●</b> encrypted workspace<br /><i
-                  >ready for delivery</i
-                ></code
-              ><em>npm / typescript</em>
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+              <span class="terminal-dot"></span>
+              <code>
+                $ keyer status
+                <br />
+                <b>●</b>
+                encrypted workspace
+                <br />
+                <i>ready for delivery</i>
+              </code>
+              <em>npm / typescript</em>
             </div>
             <p class="case-number">03 — Developer tooling</p>
             <div class="case-content">
@@ -381,51 +446,77 @@
                 <li>Published package</li>
               </ul>
               <div class="keyer-actions">
-                <a href="https://github.com/CartagoGit/Keyer" target="_blank" rel="noreferrer"
-                  >Repository ↗</a
-                ><a
+                <a href="https://github.com/CartagoGit/Keyer" target="_blank" rel="noreferrer">
+                  Repository ↗
+                </a>
+                <a
                   href="https://www.npmjs.com/package/@cartago-git/keyer"
                   target="_blank"
                   rel="noreferrer"
-                  >View on npm ↗</a
                 >
+                  View on npm ↗
+                </a>
               </div>
             </div>
           </article>
         </div>
         <div class="secondary-work">
           <p>Also pinned</p>
-          <a href="https://github.com/CartagoGit/print-cv" target="_blank" rel="noreferrer"
-            >Print CV <span>Vue, validation and E2E · repository</span> ↗</a
-          ><a
+          <a href="https://github.com/CartagoGit/print-cv" target="_blank" rel="noreferrer">
+            Print CV
+            <span>Vue, validation and E2E · repository</span>
+            ↗
+          </a>
+          <a
             href="https://github.com/CartagoGit/zoneless-calculator"
             target="_blank"
             rel="noreferrer"
-            >Zoneless Calculator <span>Angular signals and tests · repository</span> ↗</a
-          ><a href="https://github.com/CartagoGit/NestGpt" target="_blank" rel="noreferrer"
-            >NestGpt <span>NestJS and GPT integration · repository</span> ↗</a
           >
+            Zoneless Calculator
+            <span>Angular signals and tests · repository</span>
+            ↗
+          </a>
+          <a href="https://github.com/CartagoGit/NestGpt" target="_blank" rel="noreferrer">
+            NestGpt
+            <span>NestJS and GPT integration · repository</span>
+            ↗
+          </a>
         </div>
         <section class="home-directory public-directory" aria-labelledby="directory-title">
           <div>
             <p class="eyebrow">Public surface</p>
-            <h2 id="directory-title">Code, packages<br /><em>and demos.</em></h2>
+            <h2 id="directory-title">
+              Code, packages
+              <br />
+              <em>and demos.</em>
+            </h2>
             <p>Direct public links grouped separately from the pinned repositories above.</p>
           </div>
           <div class="directory-grid">
-            <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer"
-              ><span>01 / CODE</span><b>GitHub profile</b
-              ><small>Repositories, pinned work and contribution history.</small><i>↗</i></a
-            ><a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer"
-              ><span>02 / SHIP</span><b>Docker Hub</b
-              ><small>Public container images and delivery context.</small><i>↗</i></a
-            ><a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"
-              ><span>03 / DEMO</span><b>DeathBlitz</b
-              ><small>Public interactive product experiment.</small><i>↗</i></a
-            ><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"
-              ><span>04 / PLAY</span><b>Cartago Tetris</b
-              ><small>Keyboard interaction and game-loop state.</small><i>↗</i></a
-            >
+            <a href="https://github.com/CartagoGit" target="_blank" rel="noreferrer">
+              <span>01 / CODE</span>
+              <b>GitHub profile</b>
+              <small>Repositories, pinned work and contribution history.</small>
+              <i>↗</i>
+            </a>
+            <a href="https://hub.docker.com/u/cartagodocker" target="_blank" rel="noreferrer">
+              <span>02 / SHIP</span>
+              <b>Docker Hub</b>
+              <small>Public container images and delivery context.</small>
+              <i>↗</i>
+            </a>
+            <a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer">
+              <span>03 / DEMO</span>
+              <b>DeathBlitz</b>
+              <small>Public interactive product experiment.</small>
+              <i>↗</i>
+            </a>
+            <a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer">
+              <span>04 / PLAY</span>
+              <b>Cartago Tetris</b>
+              <small>Keyboard interaction and game-loop state.</small>
+              <i>↗</i>
+            </a>
           </div>
         </section>
       </section>
@@ -435,7 +526,11 @@
       <section id="main-content" class="capabilities section" aria-labelledby="capabilities-title">
         <div class="section-heading">
           <p class="eyebrow">02 / Capabilities</p>
-          <h2 id="capabilities-title">A system, not a<br />technology list.</h2>
+          <h2 id="capabilities-title">
+            A system, not a
+            <br />
+            technology list.
+          </h2>
           <p>Choose an area to see how it appears in the work.</p>
         </div>
         <div class="capability-layout">
@@ -448,8 +543,9 @@
                 [class.active]="activeCapability() === capability.id"
                 (click)="setCapability(capability.id)"
               >
-                <span>0{{ index + 1 }}</span
-                >{{ capability.eyebrow.split(' / ')[1] }}<i>↘</i>
+                <span>0{{ index + 1 }}</span>
+                {{ capability.eyebrow.split(' / ')[1] }}
+                <i>↘</i>
               </button>
             }
           </div>
@@ -462,7 +558,10 @@
                 <span>{{ tool }}</span>
               }
             </div>
-            <footer><span class="pulse"></span>{{ selectedCapability().proof }}</footer>
+            <footer>
+              <span class="pulse"></span>
+              {{ selectedCapability().proof }}
+            </footer>
           </article>
         </div>
       </section>
@@ -470,7 +569,11 @@
       <section class="operational section">
         <div>
           <p class="eyebrow">04 / Professional experience</p>
-          <h2>Complex workflows,<br />quietly delivered.</h2>
+          <h2>
+            Complex workflows,
+            <br />
+            quietly delivered.
+          </h2>
         </div>
         <div class="operational-copy">
           <p>
@@ -492,42 +595,55 @@
       <section id="main-content" class="knowledge section" aria-labelledby="knowledge-title">
         <div class="section-heading">
           <p class="eyebrow">Knowledge system</p>
-          <h2 id="knowledge-title">Languages are tools.<br /><em>Judgement connects them.</em></h2>
+          <h2 id="knowledge-title">
+            Languages are tools.
+            <br />
+            <em>Judgement connects them.</em>
+          </h2>
           <p>Hover a tile to see where each part of the stack is useful in a product.</p>
         </div>
         <div class="knowledge-grid">
           <article>
             <svg class="knowledge-icon" viewBox="0 0 40 40">
-              <path d="M20 3 35 12v17L20 37 5 29V12z" /></svg
-            ><span>Frontend</span><b>Angular · TypeScript · SCSS</b>
+              <path d="M20 3 35 12v17L20 37 5 29V12z" />
+            </svg>
+            <span>Frontend</span>
+            <b>Angular · TypeScript · SCSS</b>
             <p>Signals, SSR, responsive interfaces and accessible UI for real workflows.</p>
           </article>
           <article>
-            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33" /></svg
-            ><span>Mobile</span><b>Ionic · Capacitor · Android</b>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="m7 7 26 26M33 7 7 33" /></svg>
+            <span>Mobile</span>
+            <b>Ionic · Capacitor · Android</b>
             <p>One product system carried from web to touch-first releases.</p>
           </article>
           <article>
-            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16" /></svg
-            ><span>Quality</span><b>Vitest · Accessibility · Performance</b>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M5 29 14 20l7 6 14-16" /></svg>
+            <span>Quality</span>
+            <b>Vitest · Accessibility · Performance</b>
             <p>Tests, semantics and performance budgets that expose risk early.</p>
           </article>
           <article>
             <svg class="knowledge-icon" viewBox="0 0 40 40">
-              <path d="M8 10h24v20H8zM14 16h12M14 22h7" /></svg
-            ><span>Tooling</span><b>Node.js · MCP · Docker</b>
+              <path d="M8 10h24v20H8zM14 16h12M14 22h7" />
+            </svg>
+            <span>Tooling</span>
+            <b>Node.js · MCP · Docker</b>
             <p>CLIs, containers and typed agent workflows for repeatable delivery.</p>
           </article>
           <article>
             <svg class="knowledge-icon" viewBox="0 0 40 40">
               <circle cx="20" cy="20" r="14" />
-              <path d="M20 6v28M6 20h28" /></svg
-            ><span>Systems</span><b>CDK · Storybook · Tokens</b>
+              <path d="M20 6v28M6 20h28" />
+            </svg>
+            <span>Systems</span>
+            <b>CDK · Storybook · Tokens</b>
             <p>Reusable primitives that make a visual language scale without flattening it.</p>
           </article>
           <article>
-            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z" /></svg
-            ><span>Backend edges</span><b>NestJS · APIs · GPT</b>
+            <svg class="knowledge-icon" viewBox="0 0 40 40"><path d="M7 30 20 6l13 24z" /></svg>
+            <span>Backend edges</span>
+            <b>NestJS · APIs · GPT</b>
             <p>Clear integration boundaries when a frontend needs a dependable service layer.</p>
           </article>
         </div>
@@ -542,34 +658,48 @@
       <section id="main-content" class="demos-page section" aria-labelledby="demos-title">
         <div class="section-heading">
           <p class="eyebrow">Public experiments</p>
-          <h2 id="demos-title">Interaction you can<br /><em>actually try.</em></h2>
+          <h2 id="demos-title">
+            Interaction you can
+            <br />
+            <em>actually try.</em>
+          </h2>
           <p>Small public demos are kept distinct from the featured engineering projects.</p>
         </div>
         <div class="demo-links">
-          <a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer"
-            ><span>01</span><b>DeathBlitz</b>
+          <a href="https://deathblitz.netlify.app/" target="_blank" rel="noreferrer">
+            <span>01</span>
+            <b>DeathBlitz</b>
             <p>Stateful product interaction and persistent progression.</p>
-            <i>Open demo ↗</i></a
-          ><a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer"
-            ><span>02</span><b>Cartago Tetris</b>
+            <i>Open demo ↗</i>
+          </a>
+          <a href="https://cartago-tetris.netlify.app/" target="_blank" rel="noreferrer">
+            <span>02</span>
+            <b>Cartago Tetris</b>
             <p>Keyboard interaction, game loop and responsive board state.</p>
-            <i>Open demo ↗</i></a
-          ><a href="https://cartago-snake.netlify.app/" target="_blank" rel="noreferrer"
-            ><span>03</span><b>Cartago Snake</b>
+            <i>Open demo ↗</i>
+          </a>
+          <a href="https://cartago-snake.netlify.app/" target="_blank" rel="noreferrer">
+            <span>03</span>
+            <b>Cartago Snake</b>
             <p>Real-time movement, collision handling and state updates.</p>
-            <i>Open demo ↗</i></a
-          ><a href="https://cartago-minesweeper.netlify.app/" target="_blank" rel="noreferrer"
-            ><span>04</span><b>Minesweeper</b>
+            <i>Open demo ↗</i>
+          </a>
+          <a href="https://cartago-minesweeper.netlify.app/" target="_blank" rel="noreferrer">
+            <span>04</span>
+            <b>Minesweeper</b>
             <p>Grid interaction, timers and information hierarchy.</p>
-            <i>Open demo ↗</i></a
-          >
+            <i>Open demo ↗</i>
+          </a>
         </div>
         <section class="neon-game" aria-labelledby="neon-game-title">
           <div>
             <p class="eyebrow">Tiny pointless game</p>
             <h3 id="neon-game-title">Catch the neon signal.</h3>
             <p>Pure interaction design: the target moves on each successful hit.</p>
-            <b>{{ neonScore() }} <small>signals caught</small></b>
+            <b>
+              {{ neonScore() }}
+              <small>signals caught</small>
+            </b>
           </div>
           <div class="neon-grid" aria-label="Neon signal game">
             @for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
@@ -591,7 +721,11 @@
       <section id="main-content" class="lab section" aria-labelledby="lab-title">
         <div class="section-heading">
           <p class="eyebrow">03 / Frontend lab</p>
-          <h2 id="lab-title">Product telemetry,<br />not UI filler.</h2>
+          <h2 id="lab-title">
+            Product telemetry,
+            <br />
+            not UI filler.
+          </h2>
           <p>
             Switch the perspective to see how KPIs, visual hierarchy and state changes can explain a
             product decision.
@@ -609,16 +743,20 @@
             }
           </div>
           <button class="command-button" type="button" (click)="commandOpen.set(true)">
-            <kbd>⌘</kbd><kbd>K</kbd> Command palette
+            <kbd>⌘</kbd>
+            <kbd>K</kbd>
+            Command palette
           </button>
         </div>
         <div class="chart-switcher" role="group" aria-label="Choose a chart representation">
-          <span>Visualise as</span
-          ><button [class.active]="chartType() === 'bars'" (click)="setChartType('bars')">
-            Bars</button
-          ><button [class.active]="chartType() === 'line'" (click)="setChartType('line')">
-            Line</button
-          ><button [class.active]="chartType() === 'area'" (click)="setChartType('area')">
+          <span>Visualise as</span>
+          <button [class.active]="chartType() === 'bars'" (click)="setChartType('bars')">
+            Bars
+          </button>
+          <button [class.active]="chartType() === 'line'" (click)="setChartType('line')">
+            Line
+          </button>
+          <button [class.active]="chartType() === 'area'" (click)="setChartType('area')">
             Area
           </button>
         </div>
@@ -629,15 +767,16 @@
           aria-live="polite"
         >
           <article class="telemetry-summary">
-            <span>{{ selectedTelemetry().label }}</span
-            ><b>{{ selectedTelemetry().value }}</b
-            ><small>{{ selectedTelemetry().valueLabel }}</small>
+            <span>{{ selectedTelemetry().label }}</span>
+            <b>{{ selectedTelemetry().value }}</b>
+            <small>{{ selectedTelemetry().valueLabel }}</small>
             <p>{{ selectedTelemetry().note }}</p>
           </article>
           <article class="telemetry-chart">
             <header>
               <div>
-                <span>8-week trend</span><b>{{ selectedTelemetry().title }}</b>
+                <span>8-week trend</span>
+                <b>{{ selectedTelemetry().title }}</b>
               </div>
               <i>LIVE</i>
             </header>
@@ -651,14 +790,17 @@
                 />
               </svg>
             </div>
-            <footer><span>Week 01</span><span>Week 08</span></footer>
+            <footer>
+              <span>Week 01</span>
+              <span>Week 08</span>
+            </footer>
           </article>
           <div class="telemetry-kpis">
             @for (kpi of selectedTelemetry().kpis; track kpi[1]) {
               <article>
-                <b>{{ kpi[0] }}</b
-                ><span>{{ kpi[1] }}</span
-                ><i>↗</i>
+                <b>{{ kpi[0] }}</b>
+                <span>{{ kpi[1] }}</span>
+                <i>↗</i>
               </article>
             }
           </div>
@@ -672,7 +814,8 @@
               rather than rewarding a sequence of clicks.
             </p>
             <p class="playground-status" aria-live="polite">
-              <span></span>{{ playgroundMessage() }}
+              <span></span>
+              {{ playgroundMessage() }}
             </p>
           </div>
           <div class="playground-board" [class.complete]="playgroundComplete()">
@@ -691,26 +834,28 @@
                   (dragover)="$event.preventDefault()"
                   (drop)="dropStep(step)"
                 >
-                  <span>0{{ index + 1 }}</span
-                  ><b>{{ playgroundStep(step).label }}</b
-                  ><small>{{ playgroundStep(step).hint }}</small
-                  ><i aria-hidden="true">⠿</i>
+                  <span>0{{ index + 1 }}</span>
+                  <b>{{ playgroundStep(step).label }}</b>
+                  <small>{{ playgroundStep(step).hint }}</small>
+                  <i aria-hidden="true">⠿</i>
                 </button>
               }
             </div>
             <footer>
-              <span
-                >{{ playgroundRuns() }} completed
-                {{ playgroundRuns() === 1 ? 'loop' : 'loops' }}</span
-              ><button type="button" (click)="resetPlayground()">
-                Reset <i aria-hidden="true">↻</i>
+              <span>
+                {{ playgroundRuns() }} completed {{ playgroundRuns() === 1 ? 'loop' : 'loops' }}
+              </span>
+              <button type="button" (click)="resetPlayground()">
+                Reset
+                <i aria-hidden="true">↻</i>
               </button>
             </footer>
           </div>
         </section>
         <p class="motion-note">
-          Motion is optional. This page respects <code>prefers-reduced-motion</code> and remains
-          fully usable without it.
+          Motion is optional. This page respects
+          <code>prefers-reduced-motion</code>
+          and remains fully usable without it.
         </p>
       </section>
     }

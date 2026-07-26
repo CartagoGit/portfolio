@@ -1,6 +1,10 @@
 {
   "printWidth": 100,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "htmlWhitespaceSensitivity": "ignore",
   "singleQuote": true,
+  "trailingComma": "all",
   "overrides": [
     {
       "files": "*.html",
