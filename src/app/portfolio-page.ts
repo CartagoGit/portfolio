@@ -11,7 +11,6 @@ import {
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-	CAPABILITIES,
 	LANGUAGES,
 	PUBLIC_LINKS,
 	TECHNOLOGY_MARQUEE,
@@ -28,11 +27,7 @@ import { LabPageComponent } from '../features/lab/lab-page.component';
 import { WorkPageComponent } from '../features/work/work-page.component';
 import { HeroMonitorComponent } from '../features/home/hero-monitor/hero-monitor.component';
 import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
-import type {
-	CapabilityId,
-	Locale,
-	PortfolioPageId,
-} from '../domain/portfolio.types';
+import type { Locale, PortfolioPageId } from '../domain/portfolio.types';
 
 @Component({
 	selector: 'app-portfolio-page',
@@ -69,23 +64,10 @@ export class PortfolioPage {
 	protected readonly localeMenuClosing = signal(false);
 	protected readonly lightMode = signal(false);
 	protected readonly scrolled = signal(false);
-	protected readonly activeCapability = signal<CapabilityId>('product');
 	protected readonly commandOpen = signal(false);
-	protected readonly formSent = signal(false);
-	protected readonly neonScore = signal(0);
-	protected readonly neonTarget = signal(4);
 	protected readonly publicLinks = PUBLIC_LINKS;
 	protected readonly technologyMarquee = TECHNOLOGY_MARQUEE;
 	protected readonly languages = LANGUAGES;
-
-	protected readonly capabilities = CAPABILITIES;
-
-	protected readonly selectedCapability = computed(
-		() =>
-			this.capabilities.find(
-				({ id }) => id === this.activeCapability()
-			) ?? this.capabilities[0]
-	);
 
 	protected readonly copy = computed(() =>
 		this.locale() === 'en'
@@ -174,22 +156,6 @@ export class PortfolioPage {
 
 	protected toggleMenu(): void {
 		this.menuOpen.update((value) => !value);
-	}
-
-	protected setCapability(id: CapabilityId): void {
-		this.activeCapability.set(id);
-	}
-
-	protected hitNeonTarget(index: number): void {
-		if (index !== this.neonTarget()) return;
-		const score = this.neonScore() + 1;
-		this.neonScore.set(score);
-		this.neonTarget.set((index + 2 + score * 3) % 9);
-	}
-
-	protected submitContact(event: SubmitEvent): void {
-		event.preventDefault();
-		this.formSent.set(true);
 	}
 
 	protected routeFor(

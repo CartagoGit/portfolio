@@ -16,7 +16,7 @@
 			class="approach-page__tabs"
 			role="tablist">
 			@for (
-				capability of capabilities();
+				capability of capabilities;
 				track capability.id;
 				let index = $index
 			) {
@@ -25,7 +25,7 @@
 					role="tab"
 					[attr.aria-selected]="activeCapability() === capability.id"
 					[class.is-active]="activeCapability() === capability.id"
-					(click)="selected.emit(capability.id)">
+					(click)="selectCapability(capability.id)">
 					<span>0{{ index + 1 }}</span>
 					{{ capability.eyebrow.split(' / ')[1] }}
 					<i>↘</i>

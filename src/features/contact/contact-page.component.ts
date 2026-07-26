@@ -1,9 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	input,
-	output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
 	selector: 'app-contact-page',
@@ -12,10 +7,9 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactPageComponent {
-	readonly sent = input.required<boolean>();
-	readonly submitted = output<void>();
+	protected readonly sent = signal(false);
 	protected submit(event: SubmitEvent): void {
 		event.preventDefault();
-		this.submitted.emit();
+		this.sent.set(true);
 	}
 }

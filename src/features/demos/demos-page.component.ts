@@ -1,9 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	input,
-	output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
 	selector: 'app-demos-page',
@@ -12,9 +7,8 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DemosPageComponent {
-	readonly score = input.required<number>();
-	readonly target = input.required<number>();
-	readonly hit = output<number>();
+	protected readonly score = signal(0);
+	protected readonly target = signal(4);
 	protected readonly demos = [
 		[
 			'01',
@@ -41,4 +35,11 @@ export class DemosPageComponent {
 			'https://cartago-minesweeper.netlify.app/',
 		],
 	] as const;
+
+	protected hit(index: number): void {
+		if (index !== this.target()) return;
+		const score = this.score() + 1;
+		this.score.set(score);
+		this.target.set((index + 2 + score * 3) % 9);
+	}
 }

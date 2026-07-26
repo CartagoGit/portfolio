@@ -43,11 +43,7 @@
 		}
 
 		@if (page() === 'approach') {
-			<app-approach-page
-				[capabilities]="capabilities"
-				[activeCapability]="activeCapability()"
-				[selectedCapability]="selectedCapability()"
-				(selected)="setCapability($event)" />
+			<app-approach-page />
 		}
 
 		@if (page() === 'knowledge') {
@@ -59,10 +55,7 @@
 		}
 
 		@if (page() === 'demos') {
-			<app-demos-page
-				[score]="neonScore()"
-				[target]="neonTarget()"
-				(hit)="hitNeonTarget($event)" />
+			<app-demos-page />
 		}
 
 		@if (page() === 'lab') {
@@ -70,9 +63,7 @@
 		}
 
 		@if (page() === 'contact') {
-			<app-contact-page
-				[sent]="formSent()"
-				(submitted)="formSent.set(true)" />
+			<app-contact-page />
 		}
 	</div>
 
