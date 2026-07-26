@@ -12,14 +12,23 @@
 		"experimentalDecorators": true,
 		"importHelpers": true,
 		"target": "ES2022",
-		"module": "preserve"
+		"module": "preserve",
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"noUncheckedIndexedAccess": true
 	},
 	"angularCompilerOptions": {
 		"enableI18nLegacyMessageIdFormat": false,
 		"strictInjectionParameters": true,
-		"strictInputAccessModifiers": true
+		"strictInputAccessModifiers": true,
+		"strictTemplates": true
 	},
-	"files": [],
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.d.ts",
+		"config/**/*.ts",
+		"tools/**/*.ts"
+	],
 	"references": [
 		{
 			"path": "./tsconfig.app.json"

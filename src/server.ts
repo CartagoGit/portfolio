@@ -35,11 +35,13 @@ app.use(
 	})
 );
 
-/**
- * Keep the locale server-aware. A saved cookie wins; otherwise Accept-Language
- * chooses Spanish or English before Angular renders the route.
- */
-app.use((req, res, next) => {
+// Middlewares extracted to named functions to satisfy the max-params rule.
+function localeMiddleware(ctx: {
+	req: express.Request;
+	res: express.Response;
+	next: express.NextFunction;
+}): void {
+	const { req, res, next } = ctx;
 	const match = req.path.match(/^\/(en|es)(\/.*)?$/);
 	if (!match) return next();
 	const stored = req.headers.cookie?.match(
@@ -54,19 +56,32 @@ app.use((req, res, next) => {
 	if (preferred !== match[1])
 		return res.redirect(302, `/${preferred}${match[2] ?? ''}`);
 	return next();
-});
+}
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
-app.use((req, res, next) => {
+function renderAngular(ctx: {
+	req: express.Request;
+	res: express.Response;
+	next: express.NextFunction;
+}): void {
+	const { req, res, next } = ctx;
 	angularApp
 		.handle(req)
 		.then((response) =>
 			response ? writeResponseToNodeResponse(response, res) : next()
 		)
 		.catch(next);
-});
+}
+
+/**
+ * Keep the locale server-aware. A saved cookie wins; otherwise Accept-Language
+ * chooses Spanish or English before Angular renders the route.
+ */
+app.use((req, res, next) => localeMiddleware({ req, res, next }));
+
+/**
+ * Handle all other requests by rendering the Angular application.
+ */
+app.use((req, res, next) => renderAngular({ req, res, next }));
 
 /**
  * Start the server if this module is the main entry point, or it is ran via PM2.
@@ -74,7 +89,7 @@ app.use((req, res, next) => {
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
 	const port = process.env['PORT'] || 4000;
-	app.listen(port, (error) => {
+	app.listen(port, (error?: Error) => {
 		if (error) {
 			throw error;
 		}

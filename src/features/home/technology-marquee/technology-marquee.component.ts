@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { Technology } from '../../../domain/portfolio.types';
+import type { ITechnology } from '../../../domain/portfolio.types';
 
 @Component({
 	selector: 'app-technology-marquee',
@@ -8,5 +8,5 @@ import type { Technology } from '../../../domain/portfolio.types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TechnologyMarqueeComponent {
-	readonly technologies = input.required<readonly Technology[]>();
+	readonly technologies = input.required<readonly ITechnology[]>();
 }

@@ -1,16 +1,16 @@
-import type { OnDestroy } from '@angular/core';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	type OnDestroy,
 	ViewEncapsulation,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
 import type {
-	ChartType,
-	HeroEffect,
-	HeroPanelId,
+	IChartType,
+	IHeroEffect,
+	IHeroPanelId,
 } from '../../../domain/portfolio.types';
 
 @Component({
@@ -22,25 +22,25 @@ import type {
 	encapsulation: ViewEncapsulation.None,
 })
 export class HeroMonitorComponent implements OnDestroy {
-	protected readonly hero = new HeroMonitorFacade();
-	protected readonly earth = new EarthDepthFacade();
+	protected readonly _hero = new HeroMonitorFacade();
+	protected readonly _earth = new EarthDepthFacade();
 
-	protected readonly activePanel = this.hero.activePanel;
-	protected readonly chartType = this.hero.chartType;
-	protected readonly effect = this.hero.effect;
-	protected readonly panelTransition = this.hero.panelTransition;
-	protected readonly panelChanging = this.hero.panelChanging;
-	protected readonly palette = this.hero.palette;
-	protected readonly chartBars = this.hero.chartBars;
-	protected readonly chartPath = this.hero.chartPath;
-	protected readonly selectedPanel = this.hero.selectedPanel;
-	protected readonly panels = this.hero.panels;
-	protected readonly earthDepth = this.earth.state;
-	protected readonly earthBlocksMonitor = this.earth.blocksMonitor;
-	protected readonly chartOptions: readonly {
-		id: ChartType;
+	protected readonly _activePanel = this._hero.activePanel;
+	protected readonly _chartType = this._hero.chartType;
+	protected readonly _effect = this._hero.effect;
+	protected readonly _panelTransition = this._hero.panelTransition;
+	protected readonly _panelChanging = this._hero.panelChanging;
+	protected readonly _palette = this._hero.palette;
+	protected readonly _chartBars = this._hero.chartBars;
+	protected readonly _chartPath = this._hero.chartPath;
+	protected readonly _selectedPanel = this._hero.selectedPanel;
+	protected readonly _panels = this._hero.panels;
+	protected readonly _earthDepth = this._earth.state;
+	protected readonly _earthBlocksMonitor = this._earth.blocksMonitor;
+	protected readonly _chartOptions: ReadonlyArray<{
+		id: IChartType;
 		label: string;
-	}[] = [
+	}> = [
 		{ id: 'bars', label: 'Velocity' },
 		{ id: 'line', label: 'Signals' },
 		{ id: 'area', label: 'Coverage' },
@@ -49,10 +49,10 @@ export class HeroMonitorComponent implements OnDestroy {
 		{ id: 'wave', label: 'Wave' },
 		{ id: 'grid', label: 'Grid' },
 	];
-	protected readonly effectOptions: readonly {
-		id: Exclude<HeroEffect, 'idle'>;
+	protected readonly _effectOptions: ReadonlyArray<{
+		id: Exclude<IHeroEffect, 'idle'>;
 		symbol: string;
-	}[] = [
+	}> = [
 		{ id: 'shake', symbol: '≈' },
 		{ id: 'glitch', symbol: '⌘' },
 		{ id: 'float', symbol: '↟' },
@@ -60,54 +60,54 @@ export class HeroMonitorComponent implements OnDestroy {
 	];
 
 	ngOnDestroy(): void {
-		this.hero.destroy();
+		this._hero.destroy();
 	}
 
-	protected selectPanel(panel: HeroPanelId): void {
-		this.hero.selectPanel(panel);
+	protected _selectPanel(panel: IHeroPanelId): void {
+		this._hero.selectPanel(panel);
 	}
 
-	protected clearPanel(): void {
-		this.hero.clearPanel();
+	protected _clearPanel(): void {
+		this._hero.clearPanel();
 	}
 
-	protected setChart(type: ChartType): void {
-		this.hero.setChart(type);
+	protected _setChart(type: IChartType): void {
+		this._hero.setChart(type);
 	}
 
-	protected randomizeChart(): void {
-		this.hero.randomizeChart();
+	protected _randomizeChart(): void {
+		this._hero.randomizeChart();
 	}
 
-	protected setEffect(effect: Exclude<HeroEffect, 'idle'>): void {
-		this.hero.setEffect(effect);
+	protected _setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
+		this._hero.setEffect(effect);
 	}
 
-	protected setTemperature(): void {
-		this.hero.setTemperature();
+	protected _setTemperature(): void {
+		this._hero.setTemperature();
 	}
 
-	protected gradient(value: number): string {
-		return this.hero.gradient(value);
+	protected _gradient(value: number): string {
+		return this._hero.gradient(value);
 	}
 
-	protected showEarthInFront(event: MouseEvent): void {
+	protected _showEarthInFront(event: MouseEvent): void {
 		event.stopPropagation();
-		this.earth.showInFront();
+		this._earth.showInFront();
 	}
 
-	protected guardMonitorBanner(event: MouseEvent): void {
-		if (!this.earthBlocksMonitor()) return;
+	protected _guardMonitorBanner(event: MouseEvent): void {
+		if (!this._earthBlocksMonitor()) return;
 		event.preventDefault();
 		event.stopPropagation();
 	}
 
-	protected returnEarthBehind(event?: MouseEvent): void {
-		if (this.isEarthTarget(event?.relatedTarget)) return;
-		this.earth.returnBehind(event?.target);
+	protected _returnEarthBehind(event?: MouseEvent): void {
+		if (this._isEarthTarget(event?.relatedTarget)) return;
+		this._earth.returnBehind(event?.target);
 	}
 
-	private isEarthTarget(target: EventTarget | null | undefined): boolean {
+	private _isEarthTarget(target: EventTarget | null | undefined): boolean {
 		return target instanceof Element && target.closest('.orb-one') !== null;
 	}
 }

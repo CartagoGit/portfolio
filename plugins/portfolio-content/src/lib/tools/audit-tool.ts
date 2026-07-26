@@ -17,6 +17,7 @@ export interface IBuildAuditToolOptions {
 	readonly namespacePrefix: string;
 	readonly contentPaths: readonly string[];
 	readonly forbiddenTerms: readonly string[];
+	readonly perSeRoots: readonly string[];
 	readonly locale: 'en' | 'es';
 }
 
@@ -67,6 +68,7 @@ export const buildAuditTool = (
 				const report = await runPublicAudit({
 					contentPaths,
 					forbiddenTerms: options.forbiddenTerms,
+					perSeRoots: options.perSeRoots,
 					locale: options.locale,
 					reader,
 				});

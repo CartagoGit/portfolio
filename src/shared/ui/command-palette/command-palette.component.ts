@@ -5,7 +5,7 @@ import {
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { Locale, PortfolioPageId } from '../../../domain/portfolio.types';
+import type { ILocale, IPortfolioPageId } from '../../../domain/portfolio.types';
 
 @Component({
 	selector: 'app-command-palette',
@@ -16,17 +16,17 @@ import type { Locale, PortfolioPageId } from '../../../domain/portfolio.types';
 })
 export class CommandPaletteComponent {
 	readonly open = input.required<boolean>();
-	readonly locale = input.required<Locale>();
+	readonly locale = input.required<ILocale>();
 	readonly close = output<void>();
-	readonly navigate = output<PortfolioPageId>();
+	readonly navigate = output<IPortfolioPageId>();
 
-	protected routeFor(page: PortfolioPageId): string[] {
+	protected _routeFor(page: IPortfolioPageId): string[] {
 		return page === 'home'
 			? ['/', this.locale()]
 			: ['/', this.locale(), page];
 	}
 
-	protected select(page: PortfolioPageId): void {
+	protected _select(page: IPortfolioPageId): void {
 		this.navigate.emit(page);
 		this.close.emit();
 	}

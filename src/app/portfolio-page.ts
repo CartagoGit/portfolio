@@ -1,7 +1,6 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
-	HostListener,
 	ViewEncapsulation,
 } from '@angular/core';
 import { ContactPageComponent } from '../features/contact/contact-page.component';
@@ -40,12 +39,14 @@ import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfoli
 	// The legacy shell sheet still contains composition primitives used by the
 	// extracted monitor. Keep it global until every primitive has moved.
 	encapsulation: ViewEncapsulation.None,
+	host: {
+		'(window:scroll)': '_onWindowScroll()',
+	},
 })
 export class PortfolioPage {
-	protected readonly shell = new PortfolioShellFacade();
+	protected readonly _shell = new PortfolioShellFacade();
 
-	@HostListener('window:scroll')
-	protected onWindowScroll(): void {
-		this.shell.setScrolled(window.scrollY > 20);
+	protected _onWindowScroll(): void {
+		this._shell.setScrolled(window.scrollY > 20);
 	}
 }

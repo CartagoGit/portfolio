@@ -8,9 +8,9 @@ import {
 	PUBLIC_LINKS,
 	TECHNOLOGY_MARQUEE,
 } from '../../domain/portfolio.data';
-import type { Locale, PortfolioPageId } from '../../domain/portfolio.types';
+import type { ILocale, IPortfolioPageId } from '../../domain/portfolio.types';
 
-const PAGE_ORDER: readonly PortfolioPageId[] = [
+const PAGE_ORDER: readonly IPortfolioPageId[] = [
 	'home',
 	'work',
 	'lab',
@@ -22,15 +22,15 @@ const PAGE_ORDER: readonly PortfolioPageId[] = [
 ];
 
 export class PortfolioShellFacade {
-	private readonly route = inject(ActivatedRoute);
-	private readonly router = inject(Router);
-	private readonly document = inject(DOCUMENT);
-	private readonly title = inject(Title);
-	private readonly meta = inject(Meta);
-	private readonly platformId = inject(PLATFORM_ID);
+	private readonly _route = inject(ActivatedRoute);
+	private readonly _router = inject(Router);
+	private readonly _document = inject(DOCUMENT);
+	private readonly _title = inject(Title);
+	private readonly _meta = inject(Meta);
+	private readonly _platformId = inject(PLATFORM_ID);
 
-	readonly locale = signal<Locale>('en');
-	readonly page = signal<PortfolioPageId>('home');
+	readonly locale = signal<ILocale>('en');
+	readonly page = signal<IPortfolioPageId>('home');
 	readonly menuOpen = signal(false);
 	readonly localeMenuOpen = signal(false);
 	readonly localeMenuClosing = signal(false);
@@ -44,25 +44,25 @@ export class PortfolioShellFacade {
 
 	constructor() {
 		this.lightMode.set(
-			this.document.documentElement.getAttribute('data-theme') === 'light'
+			this._document.documentElement.getAttribute('data-theme') === 'light'
 		);
-		this.route.paramMap.subscribe((params) => {
+		this._route.paramMap.subscribe((params) => {
 			const locale = params.get('locale') === 'es' ? 'es' : 'en';
 			this.locale.set(locale);
-			this.document.documentElement.lang = locale;
-			this.updateSeo();
+			this._document.documentElement.lang = locale;
+			this._updateSeo();
 		});
-		this.route.data.subscribe((data) => {
-			this.page.set(this.asPage(data['page']));
-			this.updateSeo();
+		this._route.data.subscribe((data) => {
+			this.page.set(this._asPage(data['page']));
+			this._updateSeo();
 		});
-		this.applyPreferredLocale();
+		this._applyPreferredLocale();
 	}
 
 	setTheme(): void {
 		const next = !this.lightMode();
 		this.lightMode.set(next);
-		this.document.documentElement.setAttribute(
+		this._document.documentElement.setAttribute(
 			'data-theme',
 			next ? 'light' : 'dark'
 		);
@@ -72,10 +72,10 @@ export class PortfolioShellFacade {
 		this.scrolled.set(scrolled);
 	}
 
-	selectLocale(locale: Locale): void {
+	selectLocale(locale: ILocale): void {
 		this.localeMenuOpen.set(false);
-		this.persistLocale(locale);
-		void this.router.navigate(this.routeFor(this.page(), locale));
+		this._persistLocale(locale);
+		void this._router.navigate(this.routeFor(this.page(), locale));
 	}
 
 	toggleLocaleMenu(): void {
@@ -95,31 +95,31 @@ export class PortfolioShellFacade {
 		this.menuOpen.update((value) => !value);
 	}
 
-	setTransition(target: PortfolioPageId): void {
+	setTransition(target: IPortfolioPageId): void {
 		const direction =
 			PAGE_ORDER.indexOf(target) >= PAGE_ORDER.indexOf(this.page())
 				? 'forward'
 				: 'backward';
-		this.document.documentElement.dataset['transitionDirection'] =
+		this._document.documentElement.dataset['transitionDirection'] =
 			direction;
 		this.menuOpen.set(false);
 		this.localeMenuOpen.set(false);
 	}
 
-	routeFor(page: PortfolioPageId, locale = this.locale()): string[] {
+	routeFor(page: IPortfolioPageId, locale = this.locale()): string[] {
 		return page === 'home' ? ['/', locale] : ['/', locale, page];
 	}
 
-	private asPage(page: unknown): PortfolioPageId {
+	private _asPage(page: unknown): IPortfolioPageId {
 		return typeof page === 'string' &&
-			PAGE_ORDER.includes(page as PortfolioPageId)
-			? (page as PortfolioPageId)
+			PAGE_ORDER.includes(page as IPortfolioPageId)
+			? (page as IPortfolioPageId)
 			: 'home';
 	}
 
-	private updateSeo(): void {
+	private _updateSeo(): void {
 		const spanish = this.locale() === 'es';
-		const labels: Record<PortfolioPageId, string> = spanish
+		const labels: Record<IPortfolioPageId, string> = spanish
 			? {
 					home: 'Frontend product engineer',
 					work: 'Proyectos destacados',
@@ -143,19 +143,19 @@ export class PortfolioShellFacade {
 		const description = spanish
 			? 'Portfolio de Mario Cabrero Volarich: frontend de producto, Angular, TypeScript, móvil y tooling.'
 			: 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.';
-		this.title.setTitle(`Cartago · ${labels[this.page()]}`);
-		this.meta.updateTag({ name: 'description', content: description });
+		this._title.setTitle(`Cartago · ${labels[this.page()]}`);
+		this._meta.updateTag({ name: 'description', content: description });
 	}
 
-	private applyPreferredLocale(): void {
-		if (!isPlatformBrowser(this.platformId)) return;
+	private _applyPreferredLocale(): void {
+		if (!isPlatformBrowser(this._platformId)) return;
 		let saved: string | null = null;
 		try {
 			saved = localStorage.getItem('cartago-locale');
 		} catch {
 			/* Storage can be blocked. */
 		}
-		const cookieLocale = this.document.cookie.match(
+		const cookieLocale = this._document.cookie.match(
 			/(?:^|; )cartago_locale=([^;]+)/
 		)?.[1];
 		const candidate =
@@ -168,24 +168,24 @@ export class PortfolioShellFacade {
 				)
 				?.slice(0, 2) ??
 			'en';
-		const locale: Locale = candidate === 'es' ? 'es' : 'en';
+		const locale: ILocale = candidate === 'es' ? 'es' : 'en';
 		if (locale !== this.locale()) {
 			queueMicrotask(
 				() =>
-					void this.router.navigate(
+					void this._router.navigate(
 						this.routeFor(this.page(), locale)
 					)
 			);
 		}
 	}
 
-	private persistLocale(locale: Locale): void {
-		if (!isPlatformBrowser(this.platformId)) return;
+	private _persistLocale(locale: ILocale): void {
+		if (!isPlatformBrowser(this._platformId)) return;
 		try {
 			localStorage.setItem('cartago-locale', locale);
 		} catch {
 			/* Cookie remains a server-readable fallback. */
 		}
-		this.document.cookie = `cartago_locale=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+		this._document.cookie = `cartago_locale=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
 	}
 }

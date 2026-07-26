@@ -4,7 +4,7 @@
  *
  * The plugin's job is to **answer questions about the portfolio
  * codebase** so an agent can navigate the project without re-reading
- * every file. Four read-only tools:
+ * every file. Five read-only tools:
  *
  *   - `portfolio_architecture` — returns the canonical layered shape
  *     of `src/` (app / core / domain / features / shared / styles)
@@ -14,6 +14,10 @@
  *   - `portfolio_domain` — exposes the public domain contracts
  *     (`IPortfolioPageId`, `ICapabilityId`, …) extracted from
  *     `src/domain/portfolio.types.ts`.
+ *   - `portfolio_scss_audit` — reads a SCSS file and reports every
+ *     top-level selector with a suggested owning feature. Used to
+ *     migrate legacy shell SCSS into the right feature (or to
+ *     double-check a slice before it lands).
  *   - `portfolio_public_audit` — support tool: scans public
  *     templates for forbidden employer/client terms, per-se
  *     forbidden roots (case-insensitive, separator-collapsed),
@@ -42,6 +46,7 @@ import { buildArchitectureTool } from './lib/tools/architecture-tool';
 import { buildAuditTool } from './lib/tools/audit-tool';
 import { buildDomainTool } from './lib/tools/domain-tool';
 import { buildFeaturesTool } from './lib/tools/features-tool';
+import { buildScssAuditTool } from './lib/tools/scss-audit-tool';
 
 /**
  * Plugin-level options. Every field is optional; missing fields fall
@@ -81,6 +86,13 @@ export const OptionsSchema = z.object({
 	perSeRoots: z.array(z.string().min(1)).default([]),
 	/** Bilingual output of the audit's `nextAction` + knowledge entries. */
 	locale: z.enum(['en', 'es']).default('en'),
+	/**
+	 * Default SCSS file the `portfolio_scss_audit` tool reads when the
+	 * caller does not pass `sourcePath`. Defaults to the legacy shell
+	 * stylesheet so the migration plan against `qs4` keeps the tool
+	 * useful without extra wiring.
+	 */
+	scssAuditSourcePath: z.string().default('src/app/portfolio-page.scss'),
 });
 
 export type PortfolioContentOptions = z.infer<typeof OptionsSchema>;
@@ -319,10 +331,15 @@ export default definePlugin({
 				buildArchitectureTool({ namespacePrefix: ctx.namespacePrefix }),
 				buildFeaturesTool({ namespacePrefix: ctx.namespacePrefix }),
 				buildDomainTool({ namespacePrefix: ctx.namespacePrefix }),
+				buildScssAuditTool({
+					namespacePrefix: ctx.namespacePrefix,
+					defaultSourcePath: o.scssAuditSourcePath,
+				}),
 				buildAuditTool({
 					namespacePrefix: ctx.namespacePrefix,
 					contentPaths: o.contentPaths,
 					forbiddenTerms: o.forbiddenTerms,
+					perSeRoots: o.perSeRoots,
 					locale: o.locale,
 				}),
 			],

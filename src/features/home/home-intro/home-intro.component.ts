@@ -6,11 +6,11 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type {
-	Locale,
-	PortfolioCopy,
-	PortfolioPageId,
-	PublicLink,
-	Technology,
+	ILocale,
+	IPortfolioCopy,
+	IPortfolioPageId,
+	IPublicLink,
+	ITechnology,
 } from '../../../domain/portfolio.types';
 import { ProfileLinksComponent } from '../profile-links/profile-links.component';
 import { TechnologyMarqueeComponent } from '../technology-marquee/technology-marquee.component';
@@ -23,9 +23,9 @@ import { TechnologyMarqueeComponent } from '../technology-marquee/technology-mar
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeIntroComponent {
-	readonly copy = input.required<PortfolioCopy>();
-	readonly locale = input.required<Locale>();
-	readonly technologies = input.required<readonly Technology[]>();
-	readonly links = input.required<readonly PublicLink[]>();
-	readonly navigate = output<PortfolioPageId>();
+	readonly copy = input.required<IPortfolioCopy>();
+	readonly locale = input.required<ILocale>();
+	readonly technologies = input.required<readonly ITechnology[]>();
+	readonly links = input.required<readonly IPublicLink[]>();
+	readonly navigate = output<IPortfolioPageId>();
 }

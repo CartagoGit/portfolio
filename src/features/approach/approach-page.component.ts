@@ -5,7 +5,7 @@ import {
 	signal,
 } from '@angular/core';
 import { CAPABILITIES } from '../../domain/portfolio.data';
-import type { CapabilityId } from '../../domain/portfolio.types';
+import type { ICapabilityId } from '../../domain/portfolio.types';
 
 @Component({
 	selector: 'app-approach-page',
@@ -14,16 +14,16 @@ import type { CapabilityId } from '../../domain/portfolio.types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachPageComponent {
-	protected readonly capabilities = CAPABILITIES;
-	protected readonly activeCapability = signal<CapabilityId>('product');
-	protected readonly selectedCapability = computed(
+	protected readonly _capabilities = CAPABILITIES;
+	protected readonly _activeCapability = signal<ICapabilityId>('product');
+	protected readonly _selectedCapability = computed(
 		() =>
-			this.capabilities.find(
-				({ id }) => id === this.activeCapability()
-			) ?? this.capabilities[0]
+			this._capabilities.find(
+				({ id }) => id === this._activeCapability()
+			) ?? this._capabilities[0]
 	);
 
-	protected selectCapability(id: CapabilityId): void {
-		this.activeCapability.set(id);
+	protected _selectCapability(id: ICapabilityId): void {
+		this._activeCapability.set(id);
 	}
 }

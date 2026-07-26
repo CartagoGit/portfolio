@@ -42,18 +42,18 @@ import {
 	siZod,
 } from 'simple-icons';
 import type {
-	Capability,
-	HeroPanel,
-	LanguageOption,
-	Locale,
-	PortfolioCopy,
-	PlaygroundStepDefinition,
-	PublicLink,
-	Technology,
-	Telemetry,
+	ICapability,
+	IHeroPanel,
+	ILanguageOption,
+	ILocale,
+	IPlaygroundStepDefinition,
+	IPortfolioCopy,
+	IPublicLink,
+	ITechnology,
+	ITelemetry,
 } from './portfolio.types';
 
-export const PORTFOLIO_COPY: Readonly<Record<Locale, PortfolioCopy>> = {
+export const PORTFOLIO_COPY: Readonly<Record<ILocale, IPortfolioCopy>> = {
 	en: {
 		navWork: 'Selected work',
 		navLab: 'Frontend lab',
@@ -76,7 +76,7 @@ export const PORTFOLIO_COPY: Readonly<Record<Locale, PortfolioCopy>> = {
 	},
 };
 
-export const PUBLIC_LINKS: readonly PublicLink[] = [
+export const PUBLIC_LINKS: readonly IPublicLink[] = [
 	{
 		label: 'LinkedIn',
 		href: 'https://www.linkedin.com/in/mario-cabrero-volarich',
@@ -105,7 +105,7 @@ export const PUBLIC_LINKS: readonly PublicLink[] = [
 	},
 ];
 
-export const HERO_PANELS: readonly HeroPanel[] = [
+export const HERO_PANELS: readonly IHeroPanel[] = [
 	{
 		id: 'overview',
 		label: 'Angular',
@@ -157,7 +157,7 @@ export const HERO_PANELS: readonly HeroPanel[] = [
 	},
 ];
 
-export const TECHNOLOGY_MARQUEE: readonly Technology[] = [
+export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = [
 	{ label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' },
 	{ label: 'Angular', iconPath: siAngular.path, color: '#ff2d95' },
 	{ label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' },
@@ -217,12 +217,12 @@ export const TECHNOLOGY_MARQUEE: readonly Technology[] = [
 	{ label: 'GitHub', iconPath: siGithub.path, color: '#ffffff' },
 ];
 
-export const LANGUAGES: readonly LanguageOption[] = [
+export const LANGUAGES: readonly ILanguageOption[] = [
 	{ id: 'en', label: 'English', detail: 'US + UK' },
 	{ id: 'es', label: 'Español', detail: 'España' },
 ];
 
-export const CAPABILITIES: readonly Capability[] = [
+export const CAPABILITIES: readonly ICapability[] = [
 	{
 		id: 'product',
 		eyebrow: '01 / Product interfaces',
@@ -273,7 +273,7 @@ export const CAPABILITIES: readonly Capability[] = [
 	},
 ];
 
-export const PLAYGROUND_STEPS: readonly PlaygroundStepDefinition[] = [
+export const PLAYGROUND_STEPS: readonly IPlaygroundStepDefinition[] = [
 	{
 		id: 'discover',
 		label: 'Discover',
@@ -296,7 +296,7 @@ export const PLAYGROUND_STEPS: readonly PlaygroundStepDefinition[] = [
 	},
 ];
 
-export const TELEMETRY: readonly Telemetry[] = [
+export const TELEMETRY: readonly ITelemetry[] = [
 	{
 		id: 'product',
 		label: 'Product signal',

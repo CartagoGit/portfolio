@@ -12,12 +12,16 @@ describe('renderEarthFrame', () => {
 			return null;
 		}) as typeof canvas.getContext;
 
-		renderEarthFrame(canvas, texture, {
-			angle: 0,
-			axisX: 0,
-			axisY: 1,
-			axisZ: 0,
-			foreground: false,
+		renderEarthFrame({
+			canvas,
+			image: texture,
+			frame: {
+				angle: 0,
+				axisX: 0,
+				axisY: 1,
+				axisZ: 0,
+				foreground: false,
+			},
 		});
 		expect(canvas.width).toBeGreaterThanOrEqual(320);
 		expect(requestedSizes[0]).toBe(canvas.width);

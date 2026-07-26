@@ -95,6 +95,56 @@ const findPrivateTerms = (
 	return matches;
 };
 
+/**
+ * Normalise a string so separator characters (`_`, `-`, `.`, `,`,
+ * `/`, `\`, whitespace) collapse. Lets us match
+ * `beateam-dev` or `beateam.dev` against the root `beateam`.
+ */
+const normaliseForPerSe = (raw: string): string =>
+	raw.toLowerCase().replace(/[\s._,\-/\\]+/g, '');
+
+/**
+ * Map a normalised index (in the separator-collapsed string) back to
+ * the corresponding raw index in the original content. We re-walk the
+ * original string, accumulating the same collapsing rule until the
+ * normalised counter reaches the target.
+ */
+const mapNormalisedIndexToRaw = (content: string, target: number): number => {
+	let normalised = 0;
+	for (let i = 0; i < content.length; i += 1) {
+		if (normalised === target) return i;
+		const char = content[i];
+		if (char !== undefined && !/[\s._,\-/\\]/.test(char)) {
+			normalised += 1;
+		}
+	}
+	return content.length;
+};
+
+/**
+ * Per-se root scanner. A root is a substring (in the normalised
+ * haystack) that appears anywhere in the content. The location we
+ * report points back to the closest raw index we can find by
+ * re-scanning the first `n` characters of the original content.
+ */
+const findPerSeRoots = (
+	content: string,
+	perSeRoots: readonly string[],
+): readonly { root: string; rawIndex: number }[] => {
+	const matches: { root: string; rawIndex: number }[] = [];
+	if (perSeRoots.length === 0) return matches;
+	const haystack = normaliseForPerSe(content);
+	for (const root of perSeRoots) {
+		const needle = normaliseForPerSe(root);
+		if (needle.length === 0) continue;
+		const start = haystack.indexOf(needle);
+		if (start < 0) continue;
+		const rawIndex = mapNormalisedIndexToRaw(content, start);
+		matches.push({ root, rawIndex });
+	}
+	return matches;
+};
+
 export interface IPublicAuditFinding {
 	readonly id: string;
 	readonly severity: 'error' | 'warning' | 'info';
@@ -119,6 +169,12 @@ export interface IPublicAuditReader {
 export interface IPublicAuditOptions {
 	readonly contentPaths: readonly string[];
 	readonly forbiddenTerms: readonly string[];
+	/**
+	 * Per-se forbidden roots. Optional; defaults to an empty list when
+	 * the caller predates the per-se feature. New callers should always
+	 * pass an explicit list (even if empty).
+	 */
+	readonly perSeRoots?: readonly string[];
 	readonly locale: 'en' | 'es';
 	readonly reader: IPublicAuditReader;
 }
@@ -141,7 +197,13 @@ export const buildFsPublicAuditReader = async (): Promise<IPublicAuditReader> =>
 export const runPublicAudit = async (
 	options: IPublicAuditOptions,
 ): Promise<IPublicAuditReport> => {
-	const { contentPaths, forbiddenTerms, locale, reader } = options;
+	const {
+		contentPaths,
+		forbiddenTerms,
+		perSeRoots = [],
+		locale,
+		reader,
+	} = options;
 	const findings: IPublicAuditFinding[] = [];
 	const seen = new Set<string>();
 
@@ -217,6 +279,25 @@ export const runPublicAudit = async (
 					locale === 'es'
 						? 'Reescribe esta sección sin nombrar al employer o cliente.'
 						: 'Rewrite this section without naming the employer or client.',
+			});
+		}
+
+		for (const hit of findPerSeRoots(content, perSeRoots)) {
+			findings.push({
+				id: 'per-se-root',
+				severity: 'error',
+				message:
+					locale === 'es'
+						? `Raíz prohibida per-se: "${hit.root}"`
+						: `Per-se forbidden root: "${hit.root}"`,
+				location: {
+					contentPath,
+					line: content.slice(0, hit.rawIndex).split('\n').length,
+				},
+				remediation:
+					locale === 'es'
+						? 'Quita cualquier forma de esta raíz. Ningún derivado, sufijo ni compuesto está permitido.'
+						: 'Remove every form of this root. No derivative, suffix, or compound is allowed.',
 			});
 		}
 

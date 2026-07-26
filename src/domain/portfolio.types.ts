@@ -1,6 +1,6 @@
 /** Shared domain contracts for the portfolio screens. */
-export type Locale = 'en' | 'es';
-export type PortfolioPageId =
+export type ILocale = 'en' | 'es';
+export type IPortfolioPageId =
 	| 'home'
 	| 'work'
 	| 'lab'
@@ -9,18 +9,18 @@ export type PortfolioPageId =
 	| 'docker'
 	| 'demos'
 	| 'contact';
-export type PlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
-export type CapabilityId =
+export type IPlaygroundStep = 'discover' | 'model' | 'build' | 'verify';
+export type ICapabilityId =
 	'product' | 'architecture' | 'mobile' | 'quality' | 'systems' | 'tooling';
-export type HeroPanelId =
+export type IHeroPanelId =
 	'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
-export type TelemetryId = 'product' | 'quality' | 'delivery';
-export type ChartType =
+export type ITelemetryId = 'product' | 'quality' | 'delivery';
+export type IChartType =
 	'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
-export type HeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
-export type HeroPalette = 'ocean' | 'heat' | 'lime';
-export type HeroPanelTransition = 'slide' | 'flip' | 'scan';
-export type EarthDepth =
+export type IHeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
+export type IHeroPalette = 'ocean' | 'heat' | 'lime';
+export type IHeroPanelTransition = 'slide' | 'flip' | 'scan';
+export type IEarthDepth =
 	| 'behind'
 	| 'out-behind'
 	| 'front-ready'
@@ -28,8 +28,8 @@ export type EarthDepth =
 	| 'out-front'
 	| 'behind-ready';
 
-export interface Capability {
-	id: CapabilityId;
+export interface ICapability {
+	id: ICapabilityId;
 	eyebrow: string;
 	title: string;
 	detail: string;
@@ -37,8 +37,8 @@ export interface Capability {
 	proof: string;
 }
 
-export interface HeroPanel {
-	id: HeroPanelId;
+export interface IHeroPanel {
+	id: IHeroPanelId;
 	label: string;
 	metric: string;
 	detail: string;
@@ -47,13 +47,13 @@ export interface HeroPanel {
 	iconAsset?: string;
 }
 
-export interface Technology {
+export interface ITechnology {
 	label: string;
 	iconPath: string;
 	color: string;
 }
 
-export interface PublicLink {
+export interface IPublicLink {
 	label: string;
 	href: string;
 	imageSrc?: string;
@@ -61,7 +61,7 @@ export interface PublicLink {
 	color?: string;
 }
 
-export interface PortfolioCopy {
+export interface IPortfolioCopy {
 	navWork: string;
 	navLab: string;
 	navAbout: string;
@@ -72,25 +72,25 @@ export interface PortfolioCopy {
 	intro: string;
 }
 
-export interface LanguageOption {
-	id: Locale;
+export interface ILanguageOption {
+	id: ILocale;
 	label: string;
 	detail: string;
 }
 
-export interface PlaygroundStepDefinition {
-	id: PlaygroundStep;
+export interface IPlaygroundStepDefinition {
+	id: IPlaygroundStep;
 	label: string;
 	hint: string;
 }
 
-export interface Telemetry {
-	id: TelemetryId;
+export interface ITelemetry {
+	id: ITelemetryId;
 	label: string;
 	title: string;
 	value: string;
 	valueLabel: string;
-	kpis: readonly (readonly [string, string])[];
+	kpis: ReadonlyArray<readonly [string, string]>;
 	bars: readonly number[];
 	note: string;
 }

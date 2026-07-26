@@ -56,3 +56,12 @@ export type {
 	IPublicAuditReport,
 } from '../lib/services/audit';
 export { buildAuditTool } from '../lib/tools/audit-tool';
+
+export { runScssAudit } from '../lib/services/scss-audit';
+export type {
+	IBuildScssAuditOptions,
+	IScssAuditReport,
+	IScssSelectorEntry,
+	ScssOwnership,
+} from '../lib/contracts/interfaces/scss-audit.interface';
+export { buildScssAuditTool } from '../lib/tools/scss-audit-tool';

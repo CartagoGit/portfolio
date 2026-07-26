@@ -7,9 +7,9 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DemosPageComponent {
-	protected readonly score = signal(0);
-	protected readonly target = signal(4);
-	protected readonly demos = [
+	protected readonly _score = signal(0);
+	protected readonly _target = signal(4);
+	protected readonly _demos = [
 		[
 			'01',
 			'DeathBlitz',
@@ -36,10 +36,10 @@ export class DemosPageComponent {
 		],
 	] as const;
 
-	protected hit(index: number): void {
-		if (index !== this.target()) return;
-		const score = this.score() + 1;
-		this.score.set(score);
-		this.target.set((index + 2 + score * 3) % 9);
+	protected _hit(index: number): void {
+		if (index !== this._target()) return;
+		const score = this._score() + 1;
+		this._score.set(score);
+		this._target.set((index + 2 + score * 3) % 9);
 	}
 }

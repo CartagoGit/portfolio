@@ -1,5 +1,5 @@
 /** GPU renderer for the interactive Earth; CPU work is deliberately avoided. */
-export interface EarthFrame {
+export interface IEarthFrame {
 	angle: number;
 	axisX: number;
 	axisY: number;
@@ -7,7 +7,7 @@ export interface EarthFrame {
 	foreground: boolean;
 }
 
-interface GlobeProgram {
+interface IGlobeProgram {
 	context: WebGLRenderingContext;
 	program: WebGLProgram;
 	texture: WebGLTexture;
@@ -15,7 +15,7 @@ interface GlobeProgram {
 	axis: WebGLUniformLocation;
 }
 
-const programs = new WeakMap<HTMLCanvasElement, GlobeProgram | null>();
+const programs = new WeakMap<HTMLCanvasElement, IGlobeProgram | null>();
 
 const vertexShader = `
   attribute vec2 position;
@@ -54,11 +54,12 @@ const fragmentShader = `
 `;
 
 /** Draws a true spherical projection at the display resolution using WebGL. */
-export function renderEarthFrame(
-	canvas: HTMLCanvasElement,
-	image: HTMLCanvasElement,
-	frame: EarthFrame
-): void {
+export function renderEarthFrame(args: {
+	canvas: HTMLCanvasElement;
+	image: HTMLCanvasElement;
+	frame: IEarthFrame;
+}): void {
+	const { canvas, image, frame } = args;
 	const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
 	const size = Math.min(
 		1024,
@@ -86,7 +87,7 @@ export function renderEarthFrame(
 function getProgram(
 	canvas: HTMLCanvasElement,
 	image: HTMLCanvasElement
-): GlobeProgram | null {
+): IGlobeProgram | null {
 	const cached = programs.get(canvas);
 	if (cached !== undefined) return cached;
 
@@ -100,12 +101,16 @@ function getProgram(
 		return null;
 	}
 
-	const vertex = compileShader(context, context.VERTEX_SHADER, vertexShader);
-	const fragment = compileShader(
+	const vertex = compileShader({
 		context,
-		context.FRAGMENT_SHADER,
-		fragmentShader
-	);
+		type: context.VERTEX_SHADER,
+		source: vertexShader,
+	});
+	const fragment = compileShader({
+		context,
+		type: context.FRAGMENT_SHADER,
+		source: fragmentShader,
+	});
 	if (!vertex || !fragment) return null;
 	const program = context.createProgram();
 	const texture = context.createTexture();
@@ -181,11 +186,12 @@ function getProgram(
 	return renderer;
 }
 
-function compileShader(
-	context: WebGLRenderingContext,
-	type: number,
-	source: string
-): WebGLShader | null {
+function compileShader(args: {
+	context: WebGLRenderingContext;
+	type: number;
+	source: string;
+}): WebGLShader | null {
+	const { context, type, source } = args;
 	const shader = context.createShader(type);
 	if (!shader) return null;
 	context.shaderSource(shader, source);

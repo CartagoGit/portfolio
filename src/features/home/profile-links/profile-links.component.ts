@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { PublicLink } from '../../../domain/portfolio.types';
+import type { IPublicLink } from '../../../domain/portfolio.types';
 
 @Component({
 	selector: 'app-profile-links',
@@ -8,5 +8,5 @@ import type { PublicLink } from '../../../domain/portfolio.types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileLinksComponent {
-	readonly links = input.required<readonly PublicLink[]>();
+	readonly links = input.required<readonly IPublicLink[]>();
 }

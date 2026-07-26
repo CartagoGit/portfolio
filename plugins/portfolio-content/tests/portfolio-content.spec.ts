@@ -1,7 +1,8 @@
 /**
  * Plugin tests. Each suite exercises one slice of the contract
- * (registration shape, architecture, features, domain, audit) so a
- * regression in any of the four tools stays self-evident.
+ * (registration shape, architecture, features, domain, audit,
+ * SCSS audit) so a regression in any of the five tools stays
+ * self-evident.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -12,6 +13,7 @@ import { buildFeatureMap } from '../src/lib/services/features';
 import { buildDomainMap, parseDomainSource } from '../src/lib/services/domain';
 import { runPublicAudit } from '../src/lib/services/audit';
 import type { IPublicAuditReader } from '../src/lib/services/audit';
+import { runScssAudit } from '../src/lib/services/scss-audit';
 import { buildInMemoryFs } from './helpers/in-memory-fs';
 import { captureHandlers, makeFakeContext } from './helpers/fake-context';
 
@@ -29,6 +31,19 @@ describe('@portfolio/mcp-vertex-portfolio-content', () => {
 			expect(result.data.locale).toBe('en');
 			expect(result.data.contentPaths.length).toBeGreaterThan(0);
 			expect(result.data.forbiddenTerms).toEqual([]);
+			expect(result.data.perSeRoots).toEqual([]);
+			expect(result.data.scssAuditSourcePath).toBe(
+				'src/app/portfolio-page.scss',
+			);
+		});
+
+		it('accepts perSeRoots as a list of strings', () => {
+			const result = OptionsSchema.safeParse({
+				perSeRoots: ['beateam'],
+			});
+			expect(result.success).toBe(true);
+			if (!result.success) return;
+			expect(result.data.perSeRoots).toEqual(['beateam']);
 		});
 
 		it('rejects unknown locales', () => {
@@ -38,7 +53,7 @@ describe('@portfolio/mcp-vertex-portfolio-content', () => {
 	});
 
 	describe('registration', () => {
-		it('registers four tools + six knowledge entries', async () => {
+		it('registers five tools + six knowledge entries', async () => {
 			const ctx = makeFakeContext();
 			const { toolIds, knowledgeIds, handlers } = await captureHandlers(
 				plugin,
@@ -48,6 +63,7 @@ describe('@portfolio/mcp-vertex-portfolio-content', () => {
 				'portfolio_architecture',
 				'portfolio_features',
 				'portfolio_domain',
+				'portfolio_scss_audit',
 				'portfolio_public_audit',
 			]);
 			expect(knowledgeIds).toEqual([
@@ -63,6 +79,7 @@ describe('@portfolio/mcp-vertex-portfolio-content', () => {
 				'portfolio_domain',
 				'portfolio_features',
 				'portfolio_public_audit',
+				'portfolio_scss_audit',
 			]);
 		});
 	});
@@ -233,6 +250,74 @@ export const PORTFOLIO_COPY = {};
 				expect(report.severity.warnings).toBe(1);
 			});
 		});
+
+		describe('per-se forbidden roots', () => {
+			const rootReader = (raw: string): IPublicAuditReader => ({
+				readText: async () => raw,
+				exists: async () => true,
+			});
+
+			it('flags every form of a per-se root, case-insensitive', async () => {
+				const report = await runPublicAudit({
+					contentPaths: ['/page.html'],
+					forbiddenTerms: [],
+					perSeRoots: ['beateam'],
+					locale: 'en',
+					reader: rootReader(
+						'Beateam, BEATEAM, beateam, Beateam.es, BeateamSpain, bea-team',
+					),
+				});
+				expect(report.ok).toBe(false);
+				const perSe = report.findings.filter((f) => f.id === 'per-se-root');
+				expect(perSe.length).toBeGreaterThan(0);
+				expect(report.severity.errors).toBe(perSe.length);
+				expect(report.nextAction).toBe(
+					'Remove private-work references before publishing.',
+				);
+			});
+
+			it('reports per-se findings with bilingual remediation', async () => {
+				const report = await runPublicAudit({
+					contentPaths: ['/page.html'],
+					forbiddenTerms: [],
+					perSeRoots: ['beateam'],
+					locale: 'es',
+					reader: rootReader('beateam-dev'),
+				});
+				const perSe = report.findings.find((f) => f.id === 'per-se-root');
+				expect(perSe?.message).toContain('beateam');
+				expect(perSe?.remediation).toMatch(
+					/Ning[uú]n derivado.*est[aá] permitido/,
+				);
+			});
+
+			it('does not emit per-se findings when the root is absent', async () => {
+				const report = await runPublicAudit({
+					contentPaths: ['/page.html'],
+					forbiddenTerms: [],
+					perSeRoots: ['beateam'],
+					locale: 'en',
+					reader: rootReader('a clean page with no roots'),
+				});
+				expect(report.severity.errors).toBe(0);
+				expect(report.severity.warnings).toBe(0);
+				expect(report.ok).toBe(true);
+			});
+
+			it('co-exists with forbiddenTerms (both layers fire)', async () => {
+				const report = await runPublicAudit({
+					contentPaths: ['/page.html'],
+					forbiddenTerms: ['MDM Platform'],
+					perSeRoots: ['beateam'],
+					locale: 'en',
+					reader: rootReader('Beateam and MDM Platform'),
+				});
+				const ids = report.findings.map((f) => f.id);
+				expect(ids).toContain('per-se-root');
+				expect(ids).toContain('private-term');
+				expect(report.severity.errors).toBe(2);
+			});
+		});
 	});
 
 	describe('introspection tools via the registered handlers', () => {
@@ -286,6 +371,149 @@ export const PORTFOLIO_COPY = {};
 			// args falls back to the configured paths.
 			const handler = handlers.get('portfolio_public_audit');
 			expect(handler).toBeDefined();
+		});
+	});
+
+	describe('scss audit engine', () => {
+		const SHELL_SCSS = [
+			`.portfolio {
+				--ink: #fff;
+			}`,
+			`.route-stage {
+				min-height: 100vh;
+			}`,
+			`.hero {
+				display: grid;
+			}`,
+			`.orb {
+				position: absolute;
+			}`,
+			`.orb-one {
+				width: 250px;
+			}`,
+			`.interface-shell {
+				width: 600px;
+			}`,
+			`.canvas-chart {
+				height: 150px;
+			}`,
+			`.layer-list {
+				display: flex;
+			}`,
+			`.home-directory {
+				display: grid;
+			}`,
+			`.directory-grid {
+				display: grid;
+			}`,
+			`.explore-banner {
+				padding: 2rem;
+			}`,
+			`.proof-strip {
+				padding: 1.25rem;
+			}`,
+			`.case-grid {
+				display: grid;
+			}`,
+			`.case-card {
+				min-height: 500px;
+			}`,
+			`.work-page__hero {
+				padding: 2rem;
+			}`,
+			`.lab-page__heading {
+				display: grid;
+			}`,
+			`.contact-page__form {
+				padding: 1rem;
+			}`,
+			`.knowledge-page {
+				padding: 2rem;
+			}`,
+			`.approach-page {
+				padding: 2rem;
+			}`,
+			`.docker-page {
+				padding: 2rem;
+			}`,
+			`.demos-page {
+				padding: 2rem;
+			}`,
+			`.portfolio-header {
+				padding: 1rem;
+			}`,
+			`.profile-links {
+				display: flex;
+			}`,
+			`.mystery-selector {
+				opacity: 0;
+			}`,
+		].join('\n');
+
+		it('classifies every selector into a feature', async () => {
+			const fs = inMemoryFs(
+				{},
+				{ 'src/app/portfolio-page.scss': SHELL_SCSS },
+			);
+			const report = await runScssAudit({
+				sourcePath: 'src/app/portfolio-page.scss',
+				fs,
+			});
+			expect(report.totalSelectors).toBeGreaterThan(15);
+			expect(report.ownershipCounts['home/hero-monitor']).toBeGreaterThanOrEqual(4);
+			expect(report.ownershipCounts['home/home-intro']).toBeGreaterThanOrEqual(4);
+			expect(report.ownershipCounts.work).toBeGreaterThanOrEqual(2);
+			expect(report.ownershipCounts.lab).toBe(1);
+			expect(report.ownershipCounts.contact).toBe(1);
+			expect(report.ownershipCounts.knowledge).toBe(1);
+			expect(report.ownershipCounts.approach).toBe(1);
+			expect(report.ownershipCounts.docker).toBe(1);
+			expect(report.ownershipCounts.demos).toBe(1);
+			expect(report.ownershipCounts['shared/ui']).toBe(1);
+			expect(report.ownershipCounts.shell).toBeGreaterThanOrEqual(2);
+		});
+
+		it('flags unmapped selectors when no pattern matches', async () => {
+			const fs = inMemoryFs(
+				{},
+				{ 'src/app/portfolio-page.scss': '.mystery-selector { opacity: 0; }' },
+			);
+			const report = await runScssAudit({
+				sourcePath: 'src/app/portfolio-page.scss',
+				fs,
+			});
+			expect(report.unmapped.length).toBe(1);
+			expect(report.unmapped[0]?.name).toBe('mystery-selector');
+			expect(report.nextAction).toMatch(/unmapped/i);
+		});
+
+		it('returns an empty report when the source is missing', async () => {
+			const fs = inMemoryFs({}, {});
+			const report = await runScssAudit({
+				sourcePath: 'src/app/portfolio-page.scss',
+				fs,
+			});
+			expect(report.totalSelectors).toBe(0);
+			expect(report.entries).toEqual([]);
+		});
+
+		it('keeps each entry sorted by source line', async () => {
+			const fs = inMemoryFs(
+				{},
+				{
+					'src/app/portfolio-page.scss': `
+.hello { color: red; }
+.world { color: blue; }
+`,
+				},
+			);
+			const report = await runScssAudit(
+				{ sourcePath: 'src/app/portfolio-page.scss', fs },
+			);
+			// `.hello` and `.world` are both `unmapped` so the rationale
+			// contains the resolver warning — we just check sort order.
+			const lines = report.entries.map((e) => e.line);
+			expect(lines).toEqual([...lines].sort((a, b) => a - b));
 		});
 	});
 });

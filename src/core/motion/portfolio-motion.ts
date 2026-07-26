@@ -1,6 +1,6 @@
-import type { HeroPanelTransition } from '../../domain/portfolio.types';
+import type { IHeroPanelTransition } from '../../domain/portfolio.types';
 
-export const HERO_PANEL_TRANSITIONS: readonly HeroPanelTransition[] = [
+export const HERO_PANEL_TRANSITIONS: readonly IHeroPanelTransition[] = [
 	'slide',
 	'flip',
 	'scan',
@@ -8,16 +8,17 @@ export const HERO_PANEL_TRANSITIONS: readonly HeroPanelTransition[] = [
 
 /** Selects a different entry transition without coupling UI state to randomness. */
 export function nextHeroPanelTransition(
-	current: HeroPanelTransition,
+	current: IHeroPanelTransition,
 	random: () => number = Math.random
-): HeroPanelTransition {
+): IHeroPanelTransition {
 	const candidates = HERO_PANEL_TRANSITIONS.filter(
 		(transition) => transition !== current
 	);
-	return candidates[
-		Math.min(
-			candidates.length - 1,
-			Math.floor(random() * candidates.length)
-		)
-	];
+	const index = Math.min(
+		candidates.length - 1,
+		Math.floor(random() * candidates.length)
+	);
+	// `candidates` is never empty here: we only filter out the single
+	// `current` entry, and HERO_PANEL_TRANSITIONS has at least two members.
+	return candidates[index]!;
 }

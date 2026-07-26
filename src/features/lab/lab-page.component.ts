@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/portfolio.data';
 import type {
-	ChartType,
-	PlaygroundStep,
-	TelemetryId,
+	IChartType,
+	IPlaygroundStep,
+	ITelemetryId,
 } from '../../domain/portfolio.types';
 
 @Component({
@@ -21,13 +21,13 @@ import type {
 export class LabPageComponent {
 	readonly commandRequested = output<void>();
 	readonly telemetry = TELEMETRY;
-	readonly chartTypes: readonly ChartType[] = ['bars', 'line', 'area'];
+	readonly chartTypes: readonly IChartType[] = ['bars', 'line', 'area'];
 	readonly playgroundSteps = PLAYGROUND_STEPS;
-	readonly activeTelemetry = signal<TelemetryId>('product');
-	readonly chartType = signal<ChartType>('bars');
+	readonly activeTelemetry = signal<ITelemetryId>('product');
+	readonly chartType = signal<IChartType>('bars');
 	readonly playgroundRuns = signal(0);
-	readonly draggedStep = signal<PlaygroundStep | null>(null);
-	readonly playgroundOrder = signal<PlaygroundStep[]>([
+	readonly draggedStep = signal<IPlaygroundStep | null>(null);
+	readonly playgroundOrder = signal<IPlaygroundStep[]>([
 		'build',
 		'discover',
 		'verify',
@@ -38,27 +38,28 @@ export class LabPageComponent {
 			this.telemetry.find(({ id }) => id === this.activeTelemetry()) ??
 			this.telemetry[0]
 	);
-	readonly playgroundComplete = computed(() =>
-		this.playgroundOrder().every(
-			(step, index) => step === this.playgroundSteps[index].id
-		)
-	);
+	readonly playgroundComplete = computed(() => {
+		const order = this.playgroundOrder();
+		return order.every(
+			(step, index) => step === this.playgroundSteps[index]?.id
+		);
+	});
 	readonly playgroundMessage = computed(() =>
 		this.playgroundComplete()
 			? 'Loop complete — the product workflow is in a deliberate order.'
 			: 'Drag the steps into the order in which a product should be shipped.'
 	);
 
-	setTelemetry(metric: TelemetryId): void {
+	setTelemetry(metric: ITelemetryId): void {
 		this.activeTelemetry.set(metric);
 	}
-	setChartType(type: ChartType): void {
+	setChartType(type: IChartType): void {
 		this.chartType.set(type);
 	}
-	startDrag(step: PlaygroundStep): void {
+	startDrag(step: IPlaygroundStep): void {
 		this.draggedStep.set(step);
 	}
-	dropStep(target: PlaygroundStep): void {
+	dropStep(target: IPlaygroundStep): void {
 		const dragged = this.draggedStep();
 		if (!dragged || dragged === target) return;
 		this.playgroundOrder.update((order) => {
@@ -71,7 +72,7 @@ export class LabPageComponent {
 		if (this.playgroundComplete())
 			this.playgroundRuns.update((runs) => runs + 1);
 	}
-	playgroundStep(step: PlaygroundStep) {
+	playgroundStep(step: IPlaygroundStep) {
 		return (
 			this.playgroundSteps.find(({ id }) => id === step) ??
 			this.playgroundSteps[0]
