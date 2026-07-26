@@ -261,8 +261,8 @@ export class PortfolioPage {
     texture.src = '/images/cartagonova-earth-texture.png';
     texture.onload = () => {
       const source = this.document.createElement('canvas');
-      source.width = 720;
-      source.height = 360;
+      source.width = 1024;
+      source.height = 512;
       const context = source.getContext('2d', { willReadFrequently: true });
       if (!context) return;
       context.drawImage(texture, 0, 0, source.width, source.height);
@@ -289,7 +289,8 @@ export class PortfolioPage {
     const canvas = this.earthCanvas;
     const texture = this.earthTexture;
     if (!canvas || !texture) return;
-    const size = Math.min(320, Math.max(220, Math.round(canvas.clientWidth || 260)));
+    const deviceScale = Math.min(window.devicePixelRatio || 1, 1.75);
+    const size = Math.min(560, Math.max(300, Math.round((canvas.clientWidth || 300) * deviceScale)));
     if (canvas.width !== size || canvas.height !== size) {
       canvas.width = size;
       canvas.height = size;
