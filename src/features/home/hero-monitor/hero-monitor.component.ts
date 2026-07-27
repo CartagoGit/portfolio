@@ -10,11 +10,7 @@ import {
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
-import type {
-	IChartType,
-	IHeroEffect,
-	IHeroPanelId,
-} from '../../../domain/types';
+import type { IChartType, IHeroEffect } from '../../../domain/types';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -40,20 +36,20 @@ import type {
 	},
 })
 export class HeroMonitorComponent implements OnDestroy, OnInit {
-	private readonly _hero = new HeroMonitorFacade();
+	readonly hero = new HeroMonitorFacade();
 	private readonly _earth = new EarthDepthFacade();
 	private readonly _document = inject(DOCUMENT);
 
-	readonly activePanel = this._hero.activePanel;
-	readonly chartType = this._hero.chartType;
-	readonly effect = this._hero.effect;
-	readonly panelTransition = this._hero.panelTransition;
-	readonly panelChanging = this._hero.panelChanging;
-	readonly palette = this._hero.palette;
-	readonly chartBars = this._hero.chartBars;
-	readonly chartPath = this._hero.chartPath;
-	readonly selectedPanel = this._hero.selectedPanel;
-	readonly panels = this._hero.panels;
+	readonly activePanel = this.hero.activePanel;
+	readonly chartType = this.hero.chartType;
+	readonly effect = this.hero.effect;
+	readonly panelTransition = this.hero.panelTransition;
+	readonly panelChanging = this.hero.panelChanging;
+	readonly palette = this.hero.palette;
+	readonly chartBars = this.hero.chartBars;
+	readonly chartPath = this.hero.chartPath;
+	readonly selectedPanel = this.hero.selectedPanel;
+	readonly panels = this.hero.panels;
 	readonly earthDepth = this._earth.state;
 	readonly earthBlocksMonitor = this._earth.blocksMonitor;
 
@@ -83,7 +79,7 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 	}
 
 	ngOnDestroy(): void {
-		this._hero.destroy();
+		this.hero.destroy();
 		this._document.removeEventListener('pointerdown', this._onDocumentDown);
 	}
 
@@ -142,33 +138,5 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		if (target.closest('a')) return;
 		if (target.closest('input, textarea, select')) return;
 		this._earth.returnBehind(target);
-	}
-
-	selectPanel(panel: IHeroPanelId): void {
-		this._hero.selectPanel(panel);
-	}
-
-	clearPanel(): void {
-		this._hero.clearPanel();
-	}
-
-	setChart(type: IChartType): void {
-		this._hero.setChart(type);
-	}
-
-	randomizeChart(): void {
-		this._hero.randomizeChart();
-	}
-
-	setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
-		this._hero.setEffect(effect);
-	}
-
-	setTemperature(): void {
-		this._hero.setTemperature();
-	}
-
-	gradient(value: number): string {
-		return this._hero.gradient(value);
 	}
 }

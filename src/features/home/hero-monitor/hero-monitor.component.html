@@ -60,7 +60,7 @@
 					<button
 						type="button"
 						[class.active]="activePanel() === panel.id"
-						(click)="selectPanel(panel.id)">
+						(click)="hero.selectPanel(panel.id)">
 						@if (panel.iconAsset) {
 							<img
 								class="core-icon"
@@ -101,7 +101,7 @@
 							<button
 								type="button"
 								[class.active]="chartType() === chart.id"
-								(click)="setChart(chart.id)">
+								(click)="hero.setChart(chart.id)">
 								{{ chart.label }}
 							</button>
 						}
@@ -118,7 +118,9 @@
 							@for (bar of chartBars(); track $index) {
 								<span
 									[style.height.%]="bar"
-									[style.background]="gradient(bar)"></span>
+									[style.background]="
+										hero.gradient(bar)
+									"></span>
 							}
 							<svg
 								viewBox="0 0 360 120"
@@ -134,7 +136,7 @@
 							@for (symbol of ['⌁', '◌', '✦']; track symbol) {
 								<button
 									type="button"
-									(click)="randomizeChart()"
+									(click)="hero.randomizeChart()"
 									aria-label="Refresh chart values">
 									{{ symbol }}
 								</button>
@@ -143,7 +145,7 @@
 								class="temperature-icon"
 								type="button"
 								[class.active]="palette() === 'heat'"
-								(click)="setTemperature()"
+								(click)="hero.setTemperature()"
 								aria-label="Random temperature colours">
 								◉
 							</button>
@@ -183,7 +185,7 @@
 							) {
 								<button
 									type="button"
-									(click)="setEffect(effectOption.id)"
+									(click)="hero.setEffect(effectOption.id)"
 									[attr.aria-label]="effectOption.id">
 									{{ effectOption.symbol }}
 								</button>
@@ -192,7 +194,7 @@
 						<button
 							class="detail-retry"
 							type="button"
-							(click)="clearPanel()">
+							(click)="hero.clearPanel()">
 							Retry ↻
 						</button>
 					</article>
