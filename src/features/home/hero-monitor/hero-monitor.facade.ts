@@ -9,6 +9,31 @@ import type {
 	IHeroPanelTransition,
 } from '../../../domain/types';
 
+const CHART_VIEWBOX_HEIGHT = 118;
+const CHART_X_STEP = 90;
+
+/**
+ * Builds the SVG path for the hero monitoring chart. The curve is
+ * composed of one M-anchor plus four cubic-bezier smooth joins; the
+ * control points are placed in CSS-pixel coordinates mirrored
+ * around the segment midpoint. The chart always renders exactly
+ * five bars — any missing value falls back to the mid-canvas
+ * baseline so the path still closes.
+ */
+export function buildChartPath(bars: readonly number[]): string {
+	const point = (index: number): string =>
+		`${index * CHART_X_STEP},${CHART_VIEWBOX_HEIGHT - (bars[index] ?? 0)}`;
+	const value = (index: number): number =>
+		CHART_VIEWBOX_HEIGHT - (bars[index] ?? 0);
+	return [
+		`M${point(0)}`,
+		`C30,${value(0)} 58,${value(1)} ${point(1)}`,
+		`S148,${value(2)} ${point(2)}`,
+		`S238,${value(3)} ${point(3)}`,
+		`S328,${value(4)} ${point(4)}`,
+	].join(' ');
+}
+
 export class HeroMonitorFacade {
 	readonly panels = HERO_PANELS;
 	readonly activePanel = signal<IHeroPanelId | null>(null);
@@ -21,13 +46,7 @@ export class HeroMonitorFacade {
 	readonly selectedPanel = computed(() =>
 		this.panels.find(({ id }) => id === this.activePanel())
 	);
-	readonly chartPath = computed(() => {
-		const bars = this.chartBars();
-		const points = bars.map((bar, index) => `${index * 90},${118 - bar}`);
-		// `chartBars` is initialised with five entries, so indexes 0-4 are
-		// always defined. The non-null assertions are guarded by that invariant.
-		return `M${points[0]} C30,${118 - bars[0]!} 58,${118 - bars[1]!} ${points[1]} S148,${118 - bars[2]!} ${points[2]} S238,${118 - bars[3]!} ${points[3]} S328,${118 - bars[4]!} ${points[4]}`;
-	});
+	readonly chartPath = computed(() => buildChartPath(this.chartBars()));
 	private _panelTimer?: number;
 	selectPanel(panel: IHeroPanelId): void {
 		if (this.activePanel() === panel) return;
