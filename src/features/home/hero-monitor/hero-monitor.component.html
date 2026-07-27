@@ -1,8 +1,8 @@
 <div
 	class="hero-composition"
 	aria-label="Interactive representation of Mario's core frontend technologies"
-	(mouseenter)="earth.start()"
-	(mouseleave)="returnEarthBehind($event)">
+	(mouseenter)="onHeroEnter()"
+	(mouseleave)="scheduleReturnBehind($event)">
 	<div
 		class="orb orb-one"
 		[class.earth-active]="earth.active()"

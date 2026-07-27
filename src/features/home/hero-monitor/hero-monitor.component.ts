@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import { DOCUMENT } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
@@ -6,6 +7,7 @@ import {
 	type OnDestroy,
 	type OnInit,
 	ViewEncapsulation,
+	viewChild,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
@@ -39,6 +41,7 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 	// the private facades. The re-exported `Signal<T>` keeps the original
 	// reference equality, so changes propagate without manual syncing.
 	readonly earth = this._earth;
+	readonly earthView = viewChild<EarthGlobeComponent>('earth');
 	readonly activePanel = this._hero.activePanel;
 	readonly chartType = this._hero.chartType;
 	readonly effect = this._hero.effect;
@@ -90,7 +93,10 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		const target = event.target as Element | null;
 		if (!target) return;
 		if (target.closest('app-hero-monitor')) return;
-		if (this._earth.state() !== 'behind' && this._earth.state() !== 'behind-ready') {
+		if (
+			this._earth.state() !== 'behind' &&
+			this._earth.state() !== 'behind-ready'
+		) {
 			this._userInteracted = false;
 		}
 		this._earth.returnBehind(target);
@@ -128,6 +134,22 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 
 	gradient(value: number): string {
 		return this._hero.gradient(value);
+	}
+
+	/**
+	 * Forward the mouseenter gesture from the composition root to the globe.
+	 * Spin up the renderer AND bring the orb to the front so the user can
+	 * immediately drag it.
+	 */
+	onHeroEnter(): void {
+		this._cancelReturn();
+		this.earthView()?.start();
+		this._earth.showInFront();
+	}
+
+	/** Back-compat alias kept so older templates still resolve. */
+	returnEarthBehind(event?: MouseEvent): void {
+		this.scheduleReturnBehind(event);
 	}
 
 	showEarthInFront(event: MouseEvent): void {
@@ -203,9 +225,6 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 	 * Reset the lock once the globe has been dismissed so a future auto-return
 	 * is allowed.
 	 */
-	private _onEarthReturned(): void {
-		this._userInteracted = false;
-	}
 	private _cancelReturn(): void {
 		if (this._returnTimer !== null) {
 			clearTimeout(this._returnTimer);
@@ -227,7 +246,10 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		if (target.closest('a')) return;
 		if (target.closest('input, textarea, select')) return;
 		this._cancelReturn();
-		if (this._earth.state() !== 'behind' && this._earth.state() !== 'behind-ready') {
+		if (
+			this._earth.state() !== 'behind' &&
+			this._earth.state() !== 'behind-ready'
+		) {
 			this._userInteracted = false;
 		}
 		this._earth.returnBehind(target);

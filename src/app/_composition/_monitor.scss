@@ -363,12 +363,11 @@
 	top: -1.6rem;
 	right: -1rem;
 	pointer-events: none;
-	transform: none;
+	transform: scale(1);
 	transition:
-		width 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
-		height 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
-		top 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
-		right 0.5s cubic-bezier(0.16, 0.94, 0.25, 1);
+		transform 0.55s tokens.$ease-emphasized,
+		top 0.55s tokens.$ease-emphasized,
+		right 0.55s tokens.$ease-emphasized;
 }
 .layer-list {
 	z-index: 4;

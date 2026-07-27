@@ -885,7 +885,9 @@ app-hero-monitor .hero-composition {
 	text-overflow: ellipsis;
 }
 
-/* Fade through depth using real dimensions so the WebGL sphere scales with it. */
+/* Animate the orb growing via `transform: scale()`. The fixed box keeps the
+   WebGL canvas at a stable resolution while `getBoundingClientRect()` lets
+   the renderer follow the scaled bounding box for the actual sphere. */
 .orb-one {
 	animation: none !important;
 	opacity: 1;
@@ -893,18 +895,14 @@ app-hero-monitor .hero-composition {
 	height: 320px;
 	top: -1.6rem;
 	right: -1rem;
-	transform: none;
-	translate: none;
-	rotate: none;
-	scale: none;
+	transform: scale(1);
 	transform-origin: center center;
 	transition:
 		opacity 0.32s ease,
-		width 0.5s tokens.$ease-emphasized,
-		height 0.5s tokens.$ease-emphasized,
-		top 0.5s tokens.$ease-emphasized,
-		right 0.5s tokens.$ease-emphasized;
-	will-change: opacity, width, height;
+		transform 0.55s tokens.$ease-emphasized,
+		top 0.55s tokens.$ease-emphasized,
+		right 0.55s tokens.$ease-emphasized;
+	will-change: transform, opacity, top, right;
 	cursor: pointer;
 	pointer-events: auto;
 }
@@ -917,20 +915,21 @@ app-hero-monitor .hero-composition {
 	z-index: 1;
 	animation: none !important;
 	opacity: 0;
+	transform: scale(0.92);
 	pointer-events: none;
 }
 .orb-one.earth-front-ready {
 	z-index: 6;
 	animation: none !important;
 	opacity: 0;
+	transform: scale(0.92);
 	pointer-events: none;
 }
 .orb-one.earth-front {
 	z-index: 6;
 	animation: none !important;
 	opacity: 1;
-	width: 560px;
-	height: 560px;
+	transform: scale(1.75);
 	top: -7rem;
 	right: -5rem;
 	pointer-events: auto;
@@ -1146,8 +1145,7 @@ app-hero-monitor .orb-one {
 		top: -2.4rem;
 	}
 	app-hero-monitor .orb-one.earth-front {
-		width: 240px;
-		height: 240px;
+		transform: scale(1.5);
 		top: -2rem;
 		right: auto;
 		left: -1.4rem;

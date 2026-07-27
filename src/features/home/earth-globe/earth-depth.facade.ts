@@ -6,7 +6,10 @@ export class EarthDepthFacade {
 	readonly blocksMonitor = computed(() => this.state() !== 'behind');
 
 	showInFront(): void {
-		if (this.state() !== 'behind') return;
+		// Idempotent: snap to a fresh transition chain regardless of the current
+		// state. Without this, any hover/move during an in-flight transition is
+		// silently dropped.
+		if (this.state() === 'front') return;
 		this.state.set('out-behind');
 		window.setTimeout(() => {
 			if (this.state() !== 'out-behind') return;
@@ -16,6 +19,9 @@ export class EarthDepthFacade {
 	}
 
 	returnBehind(target?: EventTarget | null): void {
+		// Only return when the orb is fully on top; the brief grace transitions
+		// are owned by the orchestrator (typically `_cancelReturn`) and we must
+		// not interrupt them with a competing return.
 		if (this.state() !== 'front') return;
 		if (
 			target instanceof HTMLElement &&
