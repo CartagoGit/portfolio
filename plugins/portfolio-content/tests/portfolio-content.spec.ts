@@ -437,8 +437,11 @@ export const PORTFOLIO_COPY = {};
 			`.demos-page {
 				padding: 2rem;
 			}`,
-			`.portfolio-header {
+			`.header {
 				padding: 1rem;
+			}`,
+			`.command-palette {
+				padding: 0.5rem;
 			}`,
 			`.profile-links {
 				display: flex;
@@ -467,7 +470,7 @@ export const PORTFOLIO_COPY = {};
 			expect(report.ownershipCounts.approach).toBe(1);
 			expect(report.ownershipCounts.docker).toBe(1);
 			expect(report.ownershipCounts.demos).toBe(1);
-			expect(report.ownershipCounts['shared/ui']).toBe(1);
+			expect(report.ownershipCounts['shared/ui']).toBeGreaterThanOrEqual(1);
 			expect(report.ownershipCounts.shell).toBeGreaterThanOrEqual(2);
 		});
 

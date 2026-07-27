@@ -140,15 +140,83 @@ const OWNERSHIP_MAP: readonly IOwnershipPattern[] = [
 		match: (selector) => startsWith('contact')(selector),
 	},
 	// shared/ui — `.portfolio-header`, `.portfolio-footer`, `.command-palette`,
-	// `.lab-card`, `.interface-shell` (if upstream).
+	// `.site-footer`, `.footer-links` (the actual current names; the
+	// refactor renamed `portfolio-footer` → `footer`).
 	{
 		ownership: 'shared/ui',
 		target: 'src/shared/ui/<component>/<component>.component.scss',
 		rationale: 'Reusable UI primitives owned by the shared layer.',
 		match: (selector) =>
-			startsWith('portfolio-header')(selector) ||
-			startsWith('portfolio-footer')(selector) ||
+			startsWith('header')(selector) ||
+			startsWith('footer')(selector) ||
 			startsWith('command-palette')(selector),
+	},
+	// Shell-level page containers that the live codebase still uses
+	// (`operational`, `demo-links`, …). These stay in the shell
+	// because they describe the public page composition, not any
+	// single feature.
+	{
+		ownership: 'shell',
+		target: 'src/app/page.scss',
+		rationale:
+			'Shell-level page container (composition root, not feature-specific).',
+		match: (selector) =>
+			equals('operational')(selector) ||
+			equals('demo-links')(selector) ||
+			equals('capabilities')(selector) ||
+			equals('telemetry-dashboard')(selector) ||
+			equals('telemetry-summary')(selector) ||
+			equals('telemetry-chart')(selector) ||
+			equals('form-feedback')(selector) ||
+			equals('operational-copy')(selector) ||
+			equals('site-footer')(selector) ||
+			equals('footer-links')(selector),
+	},
+	// Hero monitor overrides / responsive tweaks that live in the
+	// shell composition partial because they need cascade access.
+	{
+		ownership: 'home/hero-monitor',
+		target: 'src/features/home/hero-monitor/hero-monitor.component.scss',
+		rationale: 'Hero monitor override / responsive tweak.',
+		match: (selector) =>
+			equals('hero-chart-switcher')(selector) ||
+			equals('technology-caption')(selector) ||
+			equals('dashboard-caption')(selector),
+	},
+	// Case-grid visuals that the refactor moved into the work feature
+	// (`.mcp-visual`, `.zoneless-visual`, `.cal-screen`, etc.) — BEM
+	// roots that live in the work case cards.
+	{
+		ownership: 'work',
+		target: 'src/features/work/work-page.component.scss',
+		rationale: 'Work case-card visual (project showcase).',
+		match: (selector) =>
+			equals('mcp-visual')(selector) ||
+			equals('zoneless-visual')(selector) ||
+			equals('cal-screen')(selector) ||
+			equals('signal-path')(selector) ||
+			equals('keyer-visual')(selector) ||
+			equals('nestgpt-visual')(selector) ||
+			equals('printcv-visual')(selector) ||
+			equals('primary-work')(selector) ||
+			equals('secondary-work')(selector) ||
+			equals('work-card')(selector),
+	},
+	// Knowledge / capability card primitives.
+	{
+		ownership: 'knowledge',
+		target: 'src/features/knowledge/knowledge-page.component.scss',
+		rationale: 'Knowledge / capability card.',
+		match: (selector) =>
+			equals('tool-pills')(selector) ||
+			equals('pulse')(selector) ||
+			equals('track-card')(selector) ||
+			equals('lab-card')(selector) ||
+			equals('layer-card')(selector) ||
+			equals('capability-grid')(selector) ||
+			equals('capability-row')(selector) ||
+			equals('capability-detail')(selector) ||
+			equals('capability-meter')(selector),
 	},
 ];
 
