@@ -3,15 +3,15 @@ import {
 	Component,
 	ViewEncapsulation,
 } from '@angular/core';
-import { ContactPageComponent } from '../features/contact/contact.page';
-import { DockerPageComponent } from '../features/docker/docker.page';
-import { DemosPageComponent } from '../features/demos/demos.page';
-import { ApproachPageComponent } from '../features/approach/approach.page';
-import { KnowledgePageComponent } from '../features/knowledge/knowledge.page';
-import { LabPageComponent } from '../features/lab/lab.page';
-import { WorkPageComponent } from '../features/work/work.page';
-import { HeroMonitorComponent } from '../features/home/hero-monitor/hero-monitor.component';
-import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
+import { ContactPageComponent } from '../pages/contact/contact.page';
+import { DockerPageComponent } from '../pages/docker/docker.page';
+import { DemosPageComponent } from '../pages/demos/demos.page';
+import { ApproachPageComponent } from '../pages/approach/approach.page';
+import { KnowledgePageComponent } from '../pages/knowledge/knowledge.page';
+import { LabPageComponent } from '../pages/lab/lab.page';
+import { WorkPageComponent } from '../pages/work/work.page';
+import { HeroMonitorComponent } from '../pages/home/hero-monitor/hero-monitor.component';
+import { HomeIntroComponent } from '../pages/home/home-intro/home-intro.component';
 import { ShellFacade } from '../core/platform/shell.facade';
 import { FooterComponent } from '../shared/ui/footer/footer.component';
 import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
