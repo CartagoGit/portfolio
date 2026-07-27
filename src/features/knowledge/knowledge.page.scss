@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'keyframes' as *;
 @use 'tokens/durations' as tokens;
 
 :host {
@@ -41,7 +42,7 @@
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
 		perspective: 1000px;
-		animation: knowledge-rise 0.52s 0.08s both;
+		animation: page-rise-deep 0.52s 0.08s both;
 	}
 	&__grid article {
 		position: relative;
@@ -107,16 +108,6 @@
 	}
 	&__grid article:hover &__icon {
 		transform: translateZ(28px) rotate(12deg) scale(1.15);
-	}
-}
-@keyframes knowledge-rise {
-	from {
-		opacity: 0;
-		transform: translateY(16px);
-	}
-	to {
-		opacity: 1;
-		transform: none;
 	}
 }
 @media (max-width: 700px) {

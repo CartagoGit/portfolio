@@ -23,6 +23,14 @@ $entrance-ease: tokens.$ease-emphasized;
 		transform $duration $entrance-ease;
 }
 
+/// Slide-in entrance from below, paired with the `page-rise` keyframe.
+/// Deep pages can override just the `from` translate via `& { transform:
+/// translateY(16px) }` placed before the animation declaration to lift
+/// further while reusing the shared timing.
+@mixin page-rise($duration: tokens.$motion-base, $delay: 0s) {
+	animation: page-rise $duration $delay both;
+}
+
 /// The cyan glow used by interactive cards, panels and tabs.
 @mixin neon-glow {
 	box-shadow: var(--neon);

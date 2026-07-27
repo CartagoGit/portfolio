@@ -26,6 +26,21 @@
 	}
 }
 
+/// Deeper variant of `page-rise`: starts 16px below and lands at the
+/// identity transform. Used by pages whose first viewport requires a
+/// stronger pull so the entrance reads as a deliberate move rather
+/// than a quick fade-up.
+@keyframes page-rise-deep {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
 @keyframes bar-rise {
 	from {
 		transform: scaleY(0.08);

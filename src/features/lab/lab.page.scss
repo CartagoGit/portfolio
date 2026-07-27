@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'keyframes' as *;
 @use 'tokens/durations' as tokens;
 
 :host {
@@ -93,7 +94,7 @@
 		display: grid;
 		grid-template-columns: 0.72fr 1.28fr;
 		gap: 1rem;
-		animation: lab-rise 0.52s 0.08s both;
+		animation: page-rise-deep 0.52s 0.08s both;
 	}
 	&__summary,
 	&__chart,
@@ -305,7 +306,7 @@
 			color-mix(in srgb, var(--surface) 94%, var(--blue)),
 			var(--surface)
 		);
-		animation: lab-rise 0.52s 0.08s both;
+		animation: page-rise-deep 0.52s 0.08s both;
 	}
 	&__playground h3 {
 		margin: 0.5rem 0 1rem;
@@ -471,16 +472,6 @@
 	}
 	&__motion-note code {
 		color: var(--cyan);
-	}
-}
-@keyframes lab-rise {
-	from {
-		opacity: 0;
-		transform: translateY(16px);
-	}
-	to {
-		opacity: 1;
-		transform: none;
 	}
 }
 @keyframes lab-bar-rise {
