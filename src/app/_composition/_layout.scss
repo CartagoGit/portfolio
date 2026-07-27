@@ -1,7 +1,7 @@
 // Layout chrome: design tokens exposed via CSS custom properties, the
 // `:host` reset, the `.portfolio` palette override and the shared element
 // transitions. The `.portfolio.light-mode` block swaps the palette to the
-// light variant declared under `src/styles/tokens/_index.scss`.
+// light variant declared under `src/styles/tokens/_palette.scss`.
 
 @use 'tokens' as tokens;
 @use 'keyframes' as *;
@@ -106,17 +106,6 @@
 .operational-copy li:hover {
 	padding-left: 0.55rem;
 	color: var(--cyan);
-}
-
-// Site header (legacy inline styles that came before the extracted
-// `header.component.scss`). Kept here until the header becomes
-// fully standalone.
-.site-header nav {
-	gap: 1.05rem;
-	margin-right: 1.2rem;
-}
-.site-header.scrolled nav {
-	gap: 0.85rem;
 }
 
 @media (max-width: 900px) {

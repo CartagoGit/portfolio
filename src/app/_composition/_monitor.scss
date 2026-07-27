@@ -358,17 +358,17 @@
 }
 .orb-one {
 	z-index: 3;
-	width: 220px;
-	height: 220px;
-	top: -1.4rem;
-	right: -0.4rem;
+	width: 320px;
+	height: 320px;
+	top: -1.6rem;
+	right: -1rem;
 	pointer-events: none;
 	transform: none;
 	transition:
-		width 0.35s tokens.$ease-emphasized,
-		height 0.35s tokens.$ease-emphasized,
-		top 0.35s tokens.$ease-emphasized,
-		right 0.35s tokens.$ease-emphasized;
+		width 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
+		height 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
+		top 0.5s cubic-bezier(0.16, 0.94, 0.25, 1),
+		right 0.5s cubic-bezier(0.16, 0.94, 0.25, 1);
 }
 .layer-list {
 	z-index: 4;

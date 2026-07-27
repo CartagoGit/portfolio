@@ -889,19 +889,21 @@ app-hero-monitor .hero-composition {
 .orb-one {
 	animation: none !important;
 	opacity: 1;
-	width: 220px;
-	height: 220px;
+	width: 320px;
+	height: 320px;
+	top: -1.6rem;
+	right: -1rem;
 	transform: none;
 	translate: none;
 	rotate: none;
 	scale: none;
 	transform-origin: center center;
 	transition:
-		opacity 0.22s ease,
-		width 0.32s tokens.$ease-emphasized,
-		height 0.32s tokens.$ease-emphasized,
-		top 0.32s tokens.$ease-emphasized,
-		right 0.32s tokens.$ease-emphasized;
+		opacity 0.32s ease,
+		width 0.5s tokens.$ease-emphasized,
+		height 0.5s tokens.$ease-emphasized,
+		top 0.5s tokens.$ease-emphasized,
+		right 0.5s tokens.$ease-emphasized;
 	will-change: opacity, width, height;
 	cursor: pointer;
 	pointer-events: auto;
@@ -927,10 +929,10 @@ app-hero-monitor .hero-composition {
 	z-index: 6;
 	animation: none !important;
 	opacity: 1;
-	width: 320px;
-	height: 320px;
-	top: -3.2rem;
-	right: -2.6rem;
+	width: 560px;
+	height: 560px;
+	top: -7rem;
+	right: -5rem;
 	pointer-events: auto;
 	cursor: grab;
 }

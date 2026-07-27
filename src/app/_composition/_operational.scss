@@ -2,8 +2,9 @@
 @use 'tokens/durations' as tokens;
 // Operational section (workflow narrative), contact block, knowledge/demo/
 // docker grids, neon mini-game, keyer visual, command-dialog. These styles
-// are scoped to selectors rendered by inline `<section>` blocks in
-// `page.html` for routes that have not been extracted yet.
+// are scoped to the selectors rendered by the inline `<section>` blocks that
+// the home page keeps in `page.html`. Each future extracted route migrates
+// its own subset of selectors from here into a dedicated `.page.scss`.
 
 .operational {
 	display: grid;

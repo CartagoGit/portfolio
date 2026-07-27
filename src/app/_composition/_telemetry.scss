@@ -1,9 +1,9 @@
 @use 'motion' as motion;
 @use 'tokens/durations' as tokens;
 // Telemetry dashboard (charts, summary, KPIs) and playground (drag-to-order
-// steps). The active visual is owned by `lab.page.scss`; this
-// partial covers the legacy sheet's selectors while the inline blocks
-// remain in `page.html`.
+// steps). The active visual is owned by `lab.page.scss`; this partial
+// owns the selectors rendered by the inline `<section.telemetry-dashboard>`
+// block that the home page keeps in `page.html`.
 
 .telemetry-dashboard {
 	display: grid;
