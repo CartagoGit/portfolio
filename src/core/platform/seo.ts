@@ -1,16 +1,5 @@
 import type { ILocale, IPageComponentId } from '../../domain/types';
 
-export const PAGE_ORDER: readonly IPageComponentId[] = [
-	'home',
-	'work',
-	'lab',
-	'approach',
-	'knowledge',
-	'docker',
-	'demos',
-	'contact',
-] as const;
-
 const PAGE_TITLES: Readonly<
 	Record<ILocale, Readonly<Record<IPageComponentId, string>>>
 > = {
@@ -49,24 +38,4 @@ export function buildTitle(locale: ILocale, page: IPageComponentId): string {
 /// Builds the meta description shown in the result page of every locale.
 export function buildDescription(locale: ILocale): string {
 	return PAGE_DESCRIPTIONS[locale];
-}
-
-/// Returns the navigation direction between the active and target page so the
-/// view transition can swap its enter animation accordingly.
-export function transitionDirection(
-	current: IPageComponentId,
-	target: IPageComponentId
-): 'forward' | 'backward' {
-	return PAGE_ORDER.indexOf(target) >= PAGE_ORDER.indexOf(current)
-		? 'forward'
-		: 'backward';
-}
-
-/**
- * Builds the Angular router URL segments for a page + locale pair. Home
- * collapses to `['/', locale]` so the localized home URL never carries the
- * redundant `home` segment.
- */
-export function routeFor(page: IPageComponentId, locale: ILocale): string[] {
-	return page === 'home' ? ['/', locale] : ['/', locale, page];
 }

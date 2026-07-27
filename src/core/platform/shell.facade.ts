@@ -10,15 +10,10 @@ import {
 } from '../../domain/data';
 import type { ILocale, IPageComponentId } from '../../domain/types';
 import { detectPreferredLocale, persistLocale } from './locale';
-import {
-	buildDescription,
-	buildTitle,
-	PAGE_ORDER,
-	routeFor,
-	transitionDirection,
-} from './seo';
+import { buildDescription, buildTitle } from './seo';
+import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
 
-export { PAGE_ORDER, transitionDirection } from './seo';
+export { PAGE_ORDER, transitionDirection } from './routing';
 
 export class ShellFacade {
 	private readonly _route = inject(ActivatedRoute);

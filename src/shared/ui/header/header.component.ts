@@ -5,7 +5,7 @@ import {
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { routeFor } from '../../../core/platform/seo';
+import { routeFor } from '../../../core/platform/routing';
 import type {
 	ILanguageOption,
 	ILocale,
