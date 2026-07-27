@@ -14,6 +14,7 @@ import {
 	buildDescription,
 	buildTitle,
 	PAGE_ORDER,
+	routeFor,
 	transitionDirection,
 } from './seo';
 
@@ -74,7 +75,7 @@ export class ShellFacade {
 	selectLocale(locale: ILocale): void {
 		this.localeMenuOpen.set(false);
 		this._persistLocale(locale);
-		void this._router.navigate(this._routeFor(this.page(), locale));
+		void this._router.navigate(routeFor(this.page(), locale));
 	}
 
 	toggleLocaleMenu(): void {
@@ -102,11 +103,7 @@ export class ShellFacade {
 	}
 
 	routeFor(page: IPageComponentId, locale = this.locale()): string[] {
-		return this._routeFor(page, locale);
-	}
-
-	private _routeFor(page: IPageComponentId, locale: ILocale): string[] {
-		return page === 'home' ? ['/', locale] : ['/', locale, page];
+		return routeFor(page, locale);
 	}
 
 	private _asPage(page: unknown): IPageComponentId {

@@ -61,3 +61,12 @@ export function transitionDirection(
 		? 'forward'
 		: 'backward';
 }
+
+/**
+ * Builds the Angular router URL segments for a page + locale pair. Home
+ * collapses to `['/', locale]` so the localized home URL never carries the
+ * redundant `home` segment.
+ */
+export function routeFor(page: IPageComponentId, locale: ILocale): string[] {
+	return page === 'home' ? ['/', locale] : ['/', locale, page];
+}

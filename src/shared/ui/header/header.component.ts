@@ -5,6 +5,7 @@ import {
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { routeFor } from '../../../core/platform/seo';
 import type {
 	ILanguageOption,
 	ILocale,
@@ -36,9 +37,7 @@ export class HeaderComponent {
 	readonly themeToggle = output<void>();
 
 	routeFor(page: IPageComponentId): string[] {
-		return page === 'home'
-			? ['/', this.locale()]
-			: ['/', this.locale(), page];
+		return routeFor(page, this.locale());
 	}
 	selectPage(page: IPageComponentId): void {
 		this.navigate.emit(page);

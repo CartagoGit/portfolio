@@ -5,6 +5,7 @@ import {
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { routeFor } from '../../../core/platform/seo';
 import type { ILocale, IPageComponentId } from '../../../domain/types';
 
 @Component({
@@ -21,9 +22,7 @@ export class CommandPaletteComponent {
 	readonly navigate = output<IPageComponentId>();
 
 	routeFor(page: IPageComponentId): string[] {
-		return page === 'home'
-			? ['/', this.locale()]
-			: ['/', this.locale(), page];
+		return routeFor(page, this.locale());
 	}
 
 	select(page: IPageComponentId): void {
