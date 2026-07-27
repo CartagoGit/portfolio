@@ -97,10 +97,6 @@ export class ShellFacade {
 		this.localeMenuOpen.set(false);
 	}
 
-	routeFor(page: IPageComponentId, locale = this.locale()): string[] {
-		return routeFor(page, locale);
-	}
-
 	private _asPage(page: unknown): IPageComponentId {
 		return typeof page === 'string' &&
 			(PAGE_ORDER as readonly string[]).includes(page)
@@ -121,7 +117,7 @@ export class ShellFacade {
 		const locale = detectPreferredLocale(this._document);
 		if (!locale || locale === this.locale()) return;
 		queueMicrotask(
-			() => void this._router.navigate(this.routeFor(this.page(), locale))
+			() => void this._router.navigate(routeFor(this.page(), locale))
 		);
 	}
 
