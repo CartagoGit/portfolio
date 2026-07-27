@@ -84,29 +84,6 @@
 	}
 }
 
-@keyframes complete-pop {
-	50% {
-		transform: translateY(-7px) scale(1.03);
-		box-shadow: 0 0 28px color-mix(in srgb, var(--lime) 45%, transparent);
-	}
-	to {
-		transform: translateY(0) scale(1);
-	}
-}
-
-@keyframes globe-spin {
-	to {
-		rotate: 360deg;
-	}
-}
-
-@keyframes monitor-pulse {
-	50% {
-		opacity: 0.42;
-		transform: scale(0.75);
-	}
-}
-
 @keyframes earth-axis {
 	0% {
 		transform: scale(1) rotateY(0deg);
@@ -135,17 +112,6 @@
 	50% {
 		transform: scale(0.94);
 		border-color: var(--lime);
-	}
-}
-
-@keyframes technology-in {
-	from {
-		opacity: 0;
-		transform: translateY(10px) scale(0.97);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
 	}
 }
 
