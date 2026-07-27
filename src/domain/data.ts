@@ -51,7 +51,7 @@ import type {
 	IPublicLink,
 	ITechnology,
 	ITelemetry,
-} from './portfolio.types';
+} from './types';
 
 export const PORTFOLIO_COPY: Readonly<Record<ILocale, IPortfolioCopy>> = {
 	en: {

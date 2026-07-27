@@ -37,7 +37,7 @@
 			"prefix": "portfolio",
 			"options": {
 				"contentPaths": [
-					"src/app/portfolio-page.html",
+					"src/app/page.html",
 					"src/features/contact/contact-page.component.html",
 					"src/features/docker/docker-page.component.html",
 					"src/features/demos/demos-page.component.html",

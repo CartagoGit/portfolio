@@ -8,20 +8,20 @@ import { RouterLink } from '@angular/router';
 import type {
 	ILanguageOption,
 	ILocale,
+	IPageComponentId,
 	IPortfolioCopy,
-	IPortfolioPageId,
-} from '../../../domain/portfolio.types';
+} from '../../../domain/types';
 
 @Component({
-	selector: 'app-portfolio-header',
+	selector: 'app-shell-header',
 	imports: [RouterLink],
-	templateUrl: './portfolio-header.component.html',
-	styleUrl: './portfolio-header.component.scss',
+	templateUrl: './header.component.html',
+	styleUrl: './header.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortfolioHeaderComponent {
+export class HeaderComponent {
 	readonly locale = input.required<ILocale>();
-	readonly page = input.required<IPortfolioPageId>();
+	readonly page = input.required<IPageComponentId>();
 	readonly copy = input.required<IPortfolioCopy>();
 	readonly languages = input.required<readonly ILanguageOption[]>();
 	readonly menuOpen = input.required<boolean>();
@@ -29,18 +29,18 @@ export class PortfolioHeaderComponent {
 	readonly localeMenuClosing = input.required<boolean>();
 	readonly lightMode = input.required<boolean>();
 	readonly scrolled = input.required<boolean>();
-	readonly navigate = output<IPortfolioPageId>();
+	readonly navigate = output<IPageComponentId>();
 	readonly menuToggle = output<void>();
 	readonly localeToggle = output<void>();
 	readonly localeSelect = output<ILocale>();
 	readonly themeToggle = output<void>();
 
-	routeFor(page: IPortfolioPageId): string[] {
+	routeFor(page: IPageComponentId): string[] {
 		return page === 'home'
 			? ['/', this.locale()]
 			: ['/', this.locale(), page];
 	}
-	selectPage(page: IPortfolioPageId): void {
+	selectPage(page: IPageComponentId): void {
 		this.navigate.emit(page);
 	}
 }

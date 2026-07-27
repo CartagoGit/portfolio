@@ -3,6 +3,7 @@ import {
 	type AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
+	type ElementRef,
 	inject,
 	input,
 	type OnDestroy,
@@ -11,7 +12,7 @@ import {
 	viewChild,
 } from '@angular/core';
 import { renderEarthFrame } from '../../../core/rendering/earth-globe-renderer';
-import type { IEarthDepth } from '../../../domain/portfolio.types';
+import type { IEarthDepth } from '../../../domain/types';
 
 @Component({
 	selector: 'app-earth-globe',
@@ -53,10 +54,10 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		targetAxisY: -0.95,
 		targetAxisZ: 0.28,
 	};
-	readonly canvasRef = viewChild<HTMLCanvasElement>('canvas');
+	readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 
 	ngAfterViewInit(): void {
-		this._canvas = this.canvasRef();
+		this._canvas = this.canvasRef()?.nativeElement;
 		if (this._canvas) this._prepare();
 	}
 	start(): void {

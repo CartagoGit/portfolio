@@ -1,5 +1,5 @@
 import { computed, signal } from '@angular/core';
-import type { IEarthDepth } from '../../../domain/portfolio.types';
+import type { IEarthDepth } from '../../../domain/types';
 
 export class EarthDepthFacade {
 	readonly state = signal<IEarthDepth>('behind');

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PortfolioHeaderComponent } from './portfolio-header.component';
-describe('PortfolioHeaderComponent', () => {
+import { HeaderComponent } from './header.component';
+describe('HeaderComponent', () => {
 	it('renders the active navigation state', async () => {
 		await TestBed.configureTestingModule({
-			imports: [PortfolioHeaderComponent, RouterTestingModule],
+			imports: [HeaderComponent, RouterTestingModule],
 		}).compileComponents();
-		const fixture = TestBed.createComponent(PortfolioHeaderComponent);
+		const fixture = TestBed.createComponent(HeaderComponent);
 		fixture.componentRef.setInput('locale', 'en');
 		fixture.componentRef.setInput('page', 'work');
 		fixture.componentRef.setInput('copy', {

@@ -11,7 +11,7 @@ import type {
 	IChartType,
 	IHeroEffect,
 	IHeroPanelId,
-} from '../../../domain/portfolio.types';
+} from '../../../domain/types';
 
 @Component({
 	selector: 'app-hero-monitor',

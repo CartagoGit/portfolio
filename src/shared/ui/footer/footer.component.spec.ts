@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PortfolioFooterComponent } from './portfolio-footer.component';
+import { FooterComponent } from './footer.component';
 
-describe('PortfolioFooterComponent', () => {
+describe('FooterComponent', () => {
 	it('renders every supplied public link', async () => {
 		await TestBed.configureTestingModule({
-			imports: [PortfolioFooterComponent, RouterTestingModule],
+			imports: [FooterComponent, RouterTestingModule],
 		}).compileComponents();
-		const fixture = TestBed.createComponent(PortfolioFooterComponent);
+		const fixture = TestBed.createComponent(FooterComponent);
 		fixture.componentRef.setInput('locale', 'en');
 		fixture.componentRef.setInput('links', [
 			{
@@ -18,8 +18,7 @@ describe('PortfolioFooterComponent', () => {
 		]);
 		fixture.detectChanges();
 		expect(
-			fixture.nativeElement.querySelector('.portfolio-footer__link')
-				?.textContent
+			fixture.nativeElement.querySelector('.footer__link')?.textContent
 		).toContain('GitHub');
 	});
 });

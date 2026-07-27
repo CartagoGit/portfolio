@@ -1,6 +1,6 @@
 /** Shared domain contracts for the portfolio screens. */
 export type ILocale = 'en' | 'es';
-export type IPortfolioPageId =
+export type IPageComponentId =
 	| 'home'
 	| 'work'
 	| 'lab'

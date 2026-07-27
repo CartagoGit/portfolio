@@ -4,65 +4,49 @@ export const routes: Routes = [
 	{
 		path: ':locale/work',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'work' },
 	},
 	{
 		path: ':locale/lab',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'lab' },
 	},
 	{
 		path: ':locale/approach',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'approach' },
 	},
 	{
 		path: ':locale/knowledge',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'knowledge' },
 	},
 	{
 		path: ':locale/docker',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'docker' },
 	},
 	{
 		path: ':locale/demos',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'demos' },
 	},
 	{
 		path: ':locale/contact',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'contact' },
 	},
 	{
 		path: ':locale',
 		loadComponent: () =>
-			import('./portfolio-page').then(
-				(component) => component.PortfolioPage
-			),
+			import('./page').then((component) => component.PageComponent),
 		data: { page: 'home' },
 	},
 	{ path: '', pathMatch: 'full', redirectTo: 'en' },

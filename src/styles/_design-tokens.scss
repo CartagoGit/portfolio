@@ -4,7 +4,7 @@
 // these variables. The light/dark variants are toggled at the `.portfolio`
 // root, so any descendant consumes the active palette automatically.
 //
-// Migration rule (qs4): anything inlined in `portfolio-page.scss` that matches
+// Migration rule (qs4): anything inlined in `page.scss` that matches
 // a key below must switch to `var(--token)`. The legacy keys
 // (`--ink`, `--canvas`, etc.) started as component-scoped variables and were
 // promoted here when the palette became reusable across pages.

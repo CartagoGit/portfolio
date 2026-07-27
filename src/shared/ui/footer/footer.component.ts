@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { ILocale, IPublicLink } from '../../../domain/portfolio.types';
+import type { ILocale, IPublicLink } from '../../../domain/types';
 
 @Component({
-	selector: 'app-portfolio-footer',
+	selector: 'app-shell-footer',
 	imports: [RouterLink],
-	templateUrl: './portfolio-footer.component.html',
-	styleUrl: './portfolio-footer.component.scss',
+	templateUrl: './footer.component.html',
+	styleUrl: './footer.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortfolioFooterComponent {
+export class FooterComponent {
 	readonly locale = input.required<ILocale>();
 	readonly links = input.required<readonly IPublicLink[]>();
 }

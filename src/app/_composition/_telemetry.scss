@@ -1,7 +1,7 @@
 // Telemetry dashboard (charts, summary, KPIs) and playground (drag-to-order
 // steps). The active visual is owned by `lab-page.component.scss`; this
 // partial covers the legacy sheet's selectors while the inline blocks
-// remain in `portfolio-page.html`.
+// remain in `page.html`.
 
 .telemetry-dashboard {
 	display: grid;

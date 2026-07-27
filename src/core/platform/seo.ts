@@ -1,6 +1,6 @@
-import type { ILocale, IPortfolioPageId } from '../../domain/portfolio.types';
+import type { ILocale, IPageComponentId } from '../../domain/types';
 
-export const PAGE_ORDER: readonly IPortfolioPageId[] = [
+export const PAGE_ORDER: readonly IPageComponentId[] = [
 	'home',
 	'work',
 	'lab',
@@ -12,7 +12,7 @@ export const PAGE_ORDER: readonly IPortfolioPageId[] = [
 ] as const;
 
 const PAGE_TITLES: Readonly<
-	Record<ILocale, Readonly<Record<IPortfolioPageId, string>>>
+	Record<ILocale, Readonly<Record<IPageComponentId, string>>>
 > = {
 	en: {
 		home: 'Frontend product engineer',
@@ -42,7 +42,7 @@ const PAGE_DESCRIPTIONS: Readonly<Record<ILocale, string>> = {
 } as const;
 
 /// Builds the `<title>` string from the active page + locale.
-export function buildTitle(locale: ILocale, page: IPortfolioPageId): string {
+export function buildTitle(locale: ILocale, page: IPageComponentId): string {
 	return `Cartago · ${PAGE_TITLES[locale][page]}`;
 }
 
@@ -54,8 +54,8 @@ export function buildDescription(locale: ILocale): string {
 /// Returns the navigation direction between the active and target page so the
 /// view transition can swap its enter animation accordingly.
 export function transitionDirection(
-	current: IPortfolioPageId,
-	target: IPortfolioPageId
+	current: IPageComponentId,
+	target: IPageComponentId
 ): 'forward' | 'backward' {
 	return PAGE_ORDER.indexOf(target) >= PAGE_ORDER.indexOf(current)
 		? 'forward'

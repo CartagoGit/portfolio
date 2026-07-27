@@ -5,14 +5,14 @@ import {
 	output,
 	signal,
 } from '@angular/core';
-import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/portfolio.data';
+import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/data';
 import type {
 	IChartType,
 	IPlaygroundStep,
 	IPlaygroundStepDefinition,
 	ITelemetry,
 	ITelemetryId,
-} from '../../domain/portfolio.types';
+} from '../../domain/types';
 
 const FALLBACK_TELEMETRY: ITelemetry = {
 	id: 'product',
@@ -93,8 +93,7 @@ export class LabPageComponent {
 	}
 	playgroundStep(step: IPlaygroundStep): IPlaygroundStepDefinition {
 		return (
-			this.playgroundSteps.find(({ id }) => id === step) ??
-			FALLBACK_STEP
+			this.playgroundSteps.find(({ id }) => id === step) ?? FALLBACK_STEP
 		);
 	}
 	resetPlayground(): void {

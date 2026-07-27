@@ -1,4 +1,4 @@
-import type { ILocale } from '../../domain/portfolio.types';
+import type { ILocale } from '../../domain/types';
 
 /**
  * Storage and cookie identifiers used to remember the visitor's preferred

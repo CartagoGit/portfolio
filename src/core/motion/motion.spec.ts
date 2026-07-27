@@ -1,4 +1,4 @@
-import { nextHeroPanelTransition } from './portfolio-motion';
+import { nextHeroPanelTransition } from './motion';
 
 describe('nextHeroPanelTransition', () => {
 	it('never repeats the current animation', () => {

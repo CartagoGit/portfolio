@@ -12,17 +12,17 @@ import { LabPageComponent } from '../features/lab/lab-page.component';
 import { WorkPageComponent } from '../features/work/work-page.component';
 import { HeroMonitorComponent } from '../features/home/hero-monitor/hero-monitor.component';
 import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
-import { PortfolioShellFacade } from '../core/platform/portfolio-shell.facade';
-import { PortfolioFooterComponent } from '../shared/ui/portfolio-footer/portfolio-footer.component';
+import { ShellFacade } from '../core/platform/shell.facade';
+import { FooterComponent } from '../shared/ui/footer/footer.component';
 import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
-import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfolio-header.component';
+import { HeaderComponent } from '../shared/ui/header/header.component';
 
 @Component({
-	selector: 'app-portfolio-page',
+	selector: 'app-root',
 	imports: [
-		PortfolioFooterComponent,
+		FooterComponent,
 		CommandPaletteComponent,
-		PortfolioHeaderComponent,
+		HeaderComponent,
 		ContactPageComponent,
 		DockerPageComponent,
 		DemosPageComponent,
@@ -33,8 +33,8 @@ import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfoli
 		HeroMonitorComponent,
 		HomeIntroComponent,
 	],
-	templateUrl: './portfolio-page.html',
-	styleUrl: './portfolio-page.scss',
+	templateUrl: './page.html',
+	styleUrl: './page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	// The legacy shell sheet still contains composition primitives used by the
 	// extracted monitor. Keep it global until every primitive has moved.
@@ -43,8 +43,8 @@ import { PortfolioHeaderComponent } from '../shared/ui/portfolio-header/portfoli
 		'(window:scroll)': 'onWindowScroll()',
 	},
 })
-export class PortfolioPage {
-	readonly shell = new PortfolioShellFacade();
+export class PageComponent {
+	readonly shell = new ShellFacade();
 
 	onWindowScroll(): void {
 		this.shell.setScrolled(window.scrollY > 20);

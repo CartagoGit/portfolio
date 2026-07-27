@@ -7,11 +7,11 @@ import {
 import { RouterLink } from '@angular/router';
 import type {
 	ILocale,
+	IPageComponentId,
 	IPortfolioCopy,
-	IPortfolioPageId,
 	IPublicLink,
 	ITechnology,
-} from '../../../domain/portfolio.types';
+} from '../../../domain/types';
 import { ProfileLinksComponent } from '../profile-links/profile-links.component';
 import { TechnologyMarqueeComponent } from '../technology-marquee/technology-marquee.component';
 
@@ -27,5 +27,5 @@ export class HomeIntroComponent {
 	readonly locale = input.required<ILocale>();
 	readonly technologies = input.required<readonly ITechnology[]>();
 	readonly links = input.required<readonly IPublicLink[]>();
-	readonly navigate = output<IPortfolioPageId>();
+	readonly navigate = output<IPageComponentId>();
 }

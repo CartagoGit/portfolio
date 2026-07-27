@@ -14,7 +14,7 @@
 	border: 0;
 }
 
-.portfolio-header {
+.header {
 	position: fixed;
 	z-index: 40;
 	top: 0;
@@ -178,7 +178,7 @@
 	}
 }
 @media (max-width: 900px) {
-	.portfolio-header {
+	.header {
 		width: calc(100% - 1.7rem);
 		&__menu {
 			display: grid;

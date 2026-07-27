@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { IPublicLink } from '../../../domain/portfolio.types';
+import type { IPublicLink } from '../../../domain/types';
 
 @Component({
 	selector: 'app-profile-links',

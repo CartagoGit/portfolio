@@ -1,16 +1,16 @@
 <header
-	class="portfolio-header"
-	[class.portfolio-header--scrolled]="scrolled()">
+	class="header"
+	[class.header--scrolled]="scrolled()">
 	<a
-		class="portfolio-header__brand"
+		class="header__brand"
 		[routerLink]="routeFor('home')"
 		(click)="selectPage('home')"
 		aria-label="Cartago home">
-		<span class="portfolio-header__mark">C.</span>
+		<span class="header__mark">C.</span>
 		<span>Cartago</span>
 	</a>
 	<button
-		class="portfolio-header__menu"
+		class="header__menu"
 		type="button"
 		(click)="menuToggle.emit()"
 		[attr.aria-expanded]="menuOpen()"
@@ -21,9 +21,9 @@
 		<span class="sr-only">Toggle navigation</span>
 	</button>
 	<nav
-		class="portfolio-header__nav"
+		class="header__nav"
 		id="site-navigation"
-		[class.portfolio-header__nav--open]="menuOpen()"
+		[class.header__nav--open]="menuOpen()"
 		aria-label="Main navigation">
 		<a
 			[routerLink]="routeFor('work')"
@@ -68,8 +68,8 @@
 			{{ copy().contact }}
 		</a>
 	</nav>
-	<div class="portfolio-header__actions">
-		<div class="portfolio-header__locale">
+	<div class="header__actions">
+		<div class="header__locale">
 			<button
 				type="button"
 				(click)="localeToggle.emit()"
@@ -89,7 +89,7 @@
 			</button>
 			@if (localeMenuOpen() || localeMenuClosing()) {
 				<div
-					class="portfolio-header__locale-menu"
+					class="header__locale-menu"
 					[class.is-closing]="localeMenuClosing()"
 					role="listbox">
 					@for (language of languages(); track language.id) {
@@ -120,7 +120,7 @@
 			}
 		</div>
 		<button
-			class="portfolio-header__theme"
+			class="header__theme"
 			type="button"
 			(click)="themeToggle.emit()"
 			[attr.aria-pressed]="lightMode()">

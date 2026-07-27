@@ -2,7 +2,7 @@
 // `case-card`, `case-overlay`, `case-content`, `case-link`), proof strip,
 // explore banner, home directory, and the case visuals (`mcp-visual`,
 // `zoneless-visual`, `cal-screen`, `signal-path`). Every selector here is
-// consumed by the `<app-*>` blocks still rendered inline in `portfolio-page.html`.
+// consumed by the `<app-*>` blocks still rendered inline in `page.html`.
 
 .proof-strip {
 	width: min(1380px, calc(100% - 3rem));

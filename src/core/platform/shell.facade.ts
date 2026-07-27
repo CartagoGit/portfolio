@@ -7,19 +7,19 @@ import {
 	PORTFOLIO_COPY,
 	PUBLIC_LINKS,
 	TECHNOLOGY_MARQUEE,
-} from '../../domain/portfolio.data';
-import type { ILocale, IPortfolioPageId } from '../../domain/portfolio.types';
-import { detectPreferredLocale, persistLocale } from './portfolio-locale';
+} from '../../domain/data';
+import type { ILocale, IPageComponentId } from '../../domain/types';
+import { detectPreferredLocale, persistLocale } from './locale';
 import {
-	PAGE_ORDER,
 	buildDescription,
 	buildTitle,
+	PAGE_ORDER,
 	transitionDirection,
-} from './portfolio-seo';
+} from './seo';
 
-export { PAGE_ORDER, transitionDirection } from './portfolio-seo';
+export { PAGE_ORDER, transitionDirection } from './seo';
 
-export class PortfolioShellFacade {
+export class ShellFacade {
 	private readonly _route = inject(ActivatedRoute);
 	private readonly _router = inject(Router);
 	private readonly _document = inject(DOCUMENT);
@@ -28,7 +28,7 @@ export class PortfolioShellFacade {
 	private readonly _platformId = inject(PLATFORM_ID);
 
 	readonly locale = signal<ILocale>('en');
-	readonly page = signal<IPortfolioPageId>('home');
+	readonly page = signal<IPageComponentId>('home');
 	readonly menuOpen = signal(false);
 	readonly localeMenuOpen = signal(false);
 	readonly localeMenuClosing = signal(false);
@@ -94,25 +94,25 @@ export class PortfolioShellFacade {
 		this.menuOpen.update((value) => !value);
 	}
 
-	setTransition(target: IPortfolioPageId): void {
+	setTransition(target: IPageComponentId): void {
 		this._document.documentElement.dataset['transitionDirection'] =
 			transitionDirection(this.page(), target);
 		this.menuOpen.set(false);
 		this.localeMenuOpen.set(false);
 	}
 
-	routeFor(page: IPortfolioPageId, locale = this.locale()): string[] {
+	routeFor(page: IPageComponentId, locale = this.locale()): string[] {
 		return this._routeFor(page, locale);
 	}
 
-	private _routeFor(page: IPortfolioPageId, locale: ILocale): string[] {
+	private _routeFor(page: IPageComponentId, locale: ILocale): string[] {
 		return page === 'home' ? ['/', locale] : ['/', locale, page];
 	}
 
-	private _asPage(page: unknown): IPortfolioPageId {
+	private _asPage(page: unknown): IPageComponentId {
 		return typeof page === 'string' &&
 			(PAGE_ORDER as readonly string[]).includes(page)
-			? (page as IPortfolioPageId)
+			? (page as IPageComponentId)
 			: 'home';
 	}
 
@@ -129,10 +129,7 @@ export class PortfolioShellFacade {
 		const locale = detectPreferredLocale(this._document);
 		if (!locale || locale === this.locale()) return;
 		queueMicrotask(
-			() =>
-				void this._router.navigate(
-					this.routeFor(this.page(), locale)
-				)
+			() => void this._router.navigate(this.routeFor(this.page(), locale))
 		);
 	}
 

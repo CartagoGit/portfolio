@@ -1,4 +1,4 @@
-import type { IHeroPanelTransition } from '../../domain/portfolio.types';
+import type { IHeroPanelTransition } from '../../domain/types';
 
 export const HERO_PANEL_TRANSITIONS: readonly IHeroPanelTransition[] = [
 	'slide',
