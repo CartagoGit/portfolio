@@ -1,9 +1,10 @@
 // The motion module: animation helpers + shared transitions.
 //
 // Components import via `@use 'motion' as motion;`.
-// `tokens` are loaded via the durations partial directly so we do not
-// depend on the `tokens/_index.scss` barrel, which is only used by the
-// global stylesheet.
+// The `_durations` partial is `@forward`ed so consumers can reach the
+// shared easing curves (`tokens.$ease-standard` / `tokens.$ease-emphasized`)
+// without having to add a second `@use` for them.
+@forward '../tokens/durations';
 @use '../tokens/durations' as tokens;
 
 $entrance-ease: tokens.$ease-emphasized;

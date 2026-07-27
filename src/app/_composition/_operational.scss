@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'tokens/durations' as tokens;
 // Operational section (workflow narrative), contact block, knowledge/demo/
 // docker grids, neon mini-game, keyer visual, command-dialog. These styles
 // are scoped to selectors rendered by inline `<section>` blocks in
@@ -238,7 +239,7 @@
 }
 .locale-menu {
 	transform-origin: top right;
-	animation: menu-in 0.2s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	animation: menu-in 0.2s tokens.$ease-standard both;
 }
 .locale-menu.closing {
 	pointer-events: none;

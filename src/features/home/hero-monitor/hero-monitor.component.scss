@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'tokens/durations' as tokens;
 
 app-hero-monitor {
 	display: block;
@@ -88,7 +89,7 @@ app-hero-monitor .hero-composition {
 	flex-direction: column;
 	transition:
 		opacity 0.28s ease,
-		transform 0.36s cubic-bezier(0.2, 0.9, 0.2, 1),
+		transform 0.36s tokens.$ease-standard,
 		filter 0.3s ease;
 }
 .dashboard-view.panel-hidden {
@@ -283,7 +284,7 @@ app-hero-monitor .hero-composition {
 }
 .canvas-chart path {
 	transition:
-		d 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+		d 0.55s tokens.$ease-standard,
 		stroke 0.35s ease,
 		transform 0.4s ease;
 }
@@ -390,7 +391,7 @@ app-hero-monitor .hero-composition {
 .canvas-chart > span {
 	background: linear-gradient(to top, var(--chart-low), var(--chart-high));
 	transition:
-		height 0.55s cubic-bezier(0.2, 0.9, 0.2, 1),
+		height 0.55s tokens.$ease-standard,
 		background 0.4s ease,
 		transform 0.4s ease;
 }
@@ -548,7 +549,7 @@ app-hero-monitor .hero-composition {
 		transparent 72%
 	);
 	transform: translateX(-115%);
-	animation: technology-sweep 0.68s 0.08s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	animation: technology-sweep 0.68s 0.08s tokens.$ease-standard both;
 	pointer-events: none;
 }
 .technology-detail > div,
@@ -669,7 +670,7 @@ app-hero-monitor .hero-composition {
 .hero-composition:hover .interface-shell {
 	width: min(calc(100% + 130px), 780px);
 	transition:
-		transform 0.68s cubic-bezier(0.16, 0.94, 0.25, 1),
+		transform 0.68s tokens.$ease-emphasized,
 		box-shadow 0.4s ease;
 	transform-origin: center right;
 }
@@ -731,7 +732,7 @@ app-hero-monitor .hero-composition {
 }
 .earth-motion-control:active span {
 	transform: rotate(140deg);
-	transition: transform 0.55s cubic-bezier(0.16, 0.94, 0.25, 1);
+	transition: transform 0.55s tokens.$ease-emphasized;
 }
 .monitor-banner-link {
 	display: block;
@@ -897,10 +898,10 @@ app-hero-monitor .hero-composition {
 	transform-origin: center center;
 	transition:
 		opacity 0.22s ease,
-		width 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
-		height 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
-		top 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
-		right 0.32s cubic-bezier(0.16, 0.94, 0.25, 1);
+		width 0.32s tokens.$ease-emphasized,
+		height 0.32s tokens.$ease-emphasized,
+		top 0.32s tokens.$ease-emphasized,
+		right 0.32s tokens.$ease-emphasized;
 	will-change: opacity, width, height;
 	cursor: pointer;
 	pointer-events: auto;

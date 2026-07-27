@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'tokens/durations' as tokens;
 
 :host {
 	display: block;
@@ -188,9 +189,9 @@
 		background: linear-gradient(to top, var(--blue), var(--cyan));
 		box-shadow: 0 0 20px #32c8ff22;
 		transform-origin: bottom;
-		animation: lab-bar-rise 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+		animation: lab-bar-rise 0.55s tokens.$ease-standard both;
 		transition:
-			height 0.45s cubic-bezier(0.2, 0.9, 0.2, 1),
+			height 0.45s tokens.$ease-standard,
 			background 0.35s;
 	}
 	&__bar-chart svg {
@@ -371,7 +372,7 @@
 			var(--lime)
 		);
 		@include motion.cyan-glow;
-		transition: width 0.42s cubic-bezier(0.2, 0.9, 0.2, 1);
+		transition: width 0.42s tokens.$ease-standard;
 	}
 	&__steps {
 		position: relative;
