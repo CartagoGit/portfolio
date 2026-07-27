@@ -210,7 +210,7 @@
 		stroke-linecap: round;
 		filter: drop-shadow(0 0 7px var(--cyan));
 		stroke-dasharray: 550;
-		animation: lab-line-draw 0.65s ease both;
+		animation: line-draw 0.65s ease both;
 	}
 	&__dashboard[data-chart='line'] &__bar-chart > span {
 		align-self: flex-end;
@@ -477,16 +477,6 @@
 @keyframes lab-bar-rise {
 	from {
 		transform: scaleY(0.1);
-	}
-}
-@keyframes lab-line-draw {
-	from {
-		stroke-dashoffset: 550;
-		opacity: 0;
-	}
-	to {
-		stroke-dashoffset: 0;
-		opacity: 1;
 	}
 }
 @media (max-width: 900px) {
