@@ -33,8 +33,8 @@ const FALLBACK_STEP: IPlaygroundStepDefinition = {
 
 @Component({
 	selector: 'app-lab-page',
-	templateUrl: './lab-page.component.html',
-	styleUrl: './lab-page.component.scss',
+	templateUrl: './lab.page.html',
+	styleUrl: './lab.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabPageComponent {

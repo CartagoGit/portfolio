@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DockerPageComponent } from './docker-page.component';
+import { DockerPageComponent } from './docker.page';
 describe('DockerPageComponent', () => {
 	it('links to the public Docker Hub profile', async () => {
 		await TestBed.configureTestingModule({

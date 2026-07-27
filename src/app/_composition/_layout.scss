@@ -1,10 +1,10 @@
 // Layout chrome: design tokens exposed via CSS custom properties, the
 // `:host` reset, the `.portfolio` palette override and the shared element
 // transitions. The `.portfolio.light-mode` block swaps the palette to the
-// light variant declared in `src/styles/_design-tokens.scss`.
+// light variant declared under `src/styles/tokens/`.
 
-@use '../../styles/design-tokens' as tokens;
-@use '../../styles/keyframes';
+@use '../../styles/tokens' as tokens;
+@use '../../styles/keyframes' as *;
 
 :host {
 	display: block;

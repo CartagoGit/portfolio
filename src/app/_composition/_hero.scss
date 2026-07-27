@@ -1,3 +1,4 @@
+@use '../../../styles/motion' as motion;
 // Hero composition: skip-link, route-stage, hero grid, orb, interface shell,
 // canvas*, layer list, hero-note. Styles are global on purpose: the
 // composition root uses `ViewEncapsulation.None` so the monitor subcomponents
@@ -24,12 +25,12 @@
 	position: relative;
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(420px, 0.95fr);
-	min-height: calc(100vh - 88px);
+	min-height: 0;
 	max-width: 1380px;
-	padding: clamp(4rem, 9vw, 9rem) 0 4rem;
+	padding: clamp(3rem, 7vw, 6rem) 0 2.5rem;
 	width: calc(100% - 3rem);
 	margin: auto;
-	gap: 4rem;
+	gap: 2rem;
 }
 .hero::before {
 	content: '';
@@ -60,7 +61,7 @@ h3 {
 	letter-spacing: -0.065em;
 }
 .hero-composition {
-	min-height: 550px;
+	min-height: 360px;
 	align-self: center;
 	display: grid;
 	place-items: center;

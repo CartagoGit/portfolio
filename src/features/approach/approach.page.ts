@@ -18,8 +18,8 @@ const FALLBACK_CAPABILITY: ICapability = {
 
 @Component({
 	selector: 'app-approach-page',
-	templateUrl: './approach-page.component.html',
-	styleUrl: './approach-page.component.scss',
+	templateUrl: './approach.page.html',
+	styleUrl: './approach.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachPageComponent {

@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
 	selector: 'app-demos-page',
-	templateUrl: './demos-page.component.html',
-	styleUrl: './demos-page.component.scss',
+	templateUrl: './demos.page.html',
+	styleUrl: './demos.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DemosPageComponent {

@@ -2,8 +2,7 @@
 	class="hero-composition"
 	aria-label="Interactive representation of Mario's core frontend technologies"
 	(mouseenter)="earth.start()"
-	(mouseleave)="earth.stop()"
-	(pointerdown)="returnEarthBehind($event)">
+	(mouseleave)="returnEarthBehind($event)">
 	<div
 		class="orb orb-one"
 		[class.earth-active]="earth.active()"
@@ -21,9 +20,7 @@
 	<div
 		class="interface-shell"
 		[attr.data-chart]="chartType()"
-		(mouseleave)="returnEarthBehind($event)"
-		(pointerdown)="returnEarthBehind($event)"
-		(click)="returnEarthBehind($event)">
+		(click)="handleShellInteraction($event)">
 		<div
 			class="monitor-chrome"
 			aria-hidden="true">

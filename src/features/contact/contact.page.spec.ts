@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ContactPageComponent } from './contact-page.component';
+import { ContactPageComponent } from './contact.page';
 describe('ContactPageComponent', () => {
 	it('shows feedback after submitting the form', async () => {
 		await TestBed.configureTestingModule({

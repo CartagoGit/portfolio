@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WorkPageComponent } from './work-page.component';
+import { WorkPageComponent } from './work.page';
 
 describe('WorkPageComponent', () => {
 	it('renders the public pinned projects', async () => {

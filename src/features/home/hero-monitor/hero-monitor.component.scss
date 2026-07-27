@@ -1,4 +1,4 @@
-@use '../../../styles/motion';
+@use '../../../styles/motion' as motion;
 
 app-hero-monitor {
 	display: block;
@@ -884,36 +884,48 @@ app-hero-monitor .hero-composition {
 	text-overflow: ellipsis;
 }
 
-/* Fade through depth without positional movement: lock translation and animate scale only. */
+/* Fade through depth using real dimensions so the WebGL sphere scales with it. */
 .orb-one {
 	animation: none !important;
 	opacity: 1;
-	transform: none !important;
-	translate: none !important;
-	scale: 1;
+	transform: none;
+	translate: none;
+	rotate: none;
+	scale: none;
 	transform-origin: center center;
 	transition:
-		opacity 0.2s ease,
-		scale 0.26s cubic-bezier(0.16, 0.94, 0.25, 1);
-	will-change: opacity, scale;
+		opacity 0.22s ease,
+		width 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
+		height 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
+		top 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
+		right 0.32s cubic-bezier(0.16, 0.94, 0.25, 1);
+	will-change: opacity, width, height;
+}
+.orb-one::before,
+.orb-one::after {
+	content: none !important;
+	display: none !important;
 }
 .orb-one.earth-out-behind {
 	z-index: 1;
 	animation: none !important;
 	opacity: 0;
-	scale: 0.92;
+	pointer-events: none;
 }
 .orb-one.earth-front-ready {
-	z-index: 5;
+	z-index: 6;
 	animation: none !important;
 	opacity: 0;
-	scale: 0.92;
+	pointer-events: none;
 }
 .orb-one.earth-front {
-	z-index: 5;
+	z-index: 6;
 	animation: none !important;
 	opacity: 1;
-	scale: 1.14;
+	width: 360px;
+	height: 360px;
+	top: -6rem;
+	right: -4rem;
 	pointer-events: auto;
 	cursor: grab;
 }
@@ -921,16 +933,16 @@ app-hero-monitor .hero-composition {
 	cursor: grabbing;
 }
 .orb-one.earth-out-front {
-	z-index: 5;
+	z-index: 6;
 	animation: none !important;
 	opacity: 0;
-	scale: 0.92;
+	pointer-events: none;
 }
 .orb-one.earth-behind-ready {
 	z-index: 1;
 	animation: none !important;
 	opacity: 0;
-	scale: 0.92;
+	pointer-events: none;
 }
 
 /* Dashboard is never exposed while a technology card is being replaced. */
@@ -1099,7 +1111,7 @@ app-hero-monitor .hero-composition {
 // The host is a real grid item. Keeping the composition's geometry here avoids
 // a parent-shell refactor changing the monitor or globe's visual anchor.
 app-hero-monitor .hero-composition {
-	min-height: 480px;
+	min-height: 0;
 	align-items: start;
 }
 
@@ -1110,8 +1122,8 @@ app-hero-monitor .interface-shell {
 
 app-hero-monitor .orb-one {
 	left: auto;
-	top: -6.8rem;
-	right: -3.6rem;
+	top: -1.2rem;
+	right: -0.5rem;
 	z-index: 1;
 }
 
@@ -1124,6 +1136,13 @@ app-hero-monitor .orb-one {
 	app-hero-monitor .orb-one {
 		left: -2.7rem;
 		right: auto;
-		top: -3.8rem;
+		top: -2.4rem;
+	}
+	app-hero-monitor .orb-one.earth-front {
+		width: 280px;
+		height: 280px;
+		top: -4.6rem;
+		right: auto;
+		left: -3.4rem;
 	}
 }

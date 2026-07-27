@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DemosPageComponent } from './demos-page.component';
+import { DemosPageComponent } from './demos.page';
 describe('DemosPageComponent', () => {
 	it('moves the signal target after a successful hit', async () => {
 		await TestBed.configureTestingModule({

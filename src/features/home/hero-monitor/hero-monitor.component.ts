@@ -107,11 +107,27 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	returnEarthBehind(event?: MouseEvent): void {
-		if (this._isEarthTarget(event?.relatedTarget)) return;
+		if (this._isEarthTarget(event?.relatedTarget as Element | null)) return;
 		this._earth.returnBehind(event?.target);
 	}
 
-	private _isEarthTarget(target: EventTarget | null | undefined): boolean {
-		return target instanceof Element && target.closest('.orb-one') !== null;
+	/**
+	 * Click anywhere on the monitor shell that is NOT the globe, the motion
+	 * control, or a meaningful interactive control should release the globe
+	 * back behind the monitor. Anything inside the chrome stays put.
+	 */
+	handleShellInteraction(event: MouseEvent): void {
+		const target = event.target as Element | null;
+		if (!target) return;
+		if (target.closest('.orb-one')) return;
+		if (target.closest('.earth-motion-control')) return;
+		if (target.closest('button')) return;
+		if (target.closest('a')) return;
+		if (target.closest('input, textarea, select')) return;
+		this._earth.returnBehind(target);
+	}
+
+	private _isEarthTarget(target: Element | null | undefined): boolean {
+		return !!target && target.closest('.orb-one') !== null;
 	}
 }

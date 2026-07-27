@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { LabPageComponent } from './lab-page.component';
+import { LabPageComponent } from './lab.page';
 
 describe('LabPageComponent', () => {
 	it('changes the selected telemetry metric', async () => {

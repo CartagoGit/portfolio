@@ -1,7 +1,8 @@
+@use '../../../styles/motion' as motion;
 // Capabilities (system, not technology list) + Lab (mini tables, signals,
 // command-style toolbar). Both blocks are still rendered inline in
 // `page.html` for the legacy sheet. The visual contract matches
-// the extracted `approach-page.component.scss` and `lab-page.component.scss`.
+// the extracted `approach.page.scss` and `lab.page.scss`.
 
 .capabilities {
 	background: linear-gradient(
@@ -121,7 +122,7 @@
 .lab-toolbar button:hover {
 	border-color: var(--cyan);
 	color: var(--cyan);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 }
 .command-button {
 	display: flex;
@@ -154,7 +155,7 @@
 .lab-card:hover {
 	transform: translateY(-4px);
 	border-color: var(--cyan);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 }
 .lab-card.dimmed {
 	opacity: 0.38;

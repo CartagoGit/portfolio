@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
 	selector: 'app-contact-page',
-	templateUrl: './contact-page.component.html',
-	styleUrl: './contact-page.component.scss',
+	templateUrl: './contact.page.html',
+	styleUrl: './contact.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactPageComponent {

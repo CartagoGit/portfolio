@@ -1,3 +1,4 @@
+@use '../../../styles/motion' as motion;
 // Hero monitor live styles: the wide-monitor frame, technology rail,
 // technology marquee, site footer grid, and all the responsive overrides
 // that were appended to the original monolithic sheet.
@@ -355,11 +356,17 @@
 }
 .orb-one {
 	z-index: 3;
-	width: 205px;
-	height: 205px;
-	top: -1.7rem;
-	right: -0.7rem;
+	width: 150px;
+	height: 150px;
+	top: -1.2rem;
+	right: -0.5rem;
 	pointer-events: none;
+	transform: none;
+	transition:
+		width 0.35s cubic-bezier(0.16, 0.94, 0.25, 1),
+		height 0.35s cubic-bezier(0.16, 0.94, 0.25, 1),
+		top 0.35s cubic-bezier(0.16, 0.94, 0.25, 1),
+		right 0.35s cubic-bezier(0.16, 0.94, 0.25, 1);
 }
 .layer-list {
 	z-index: 4;
@@ -572,33 +579,7 @@
 	transform: scale(1) rotate(0);
 	animation: earth-axis 24s linear infinite;
 }
-.orb-one::before,
-.orb-one::after {
-	content: '';
-	position: absolute;
-	inset: 8%;
-	border: 1px solid transparent;
-	border-radius: 50%;
-	opacity: 0;
-	transition:
-		opacity 0.55s ease,
-		transform 0.55s ease;
-}
-.hero-composition:hover .orb-one::before {
-	opacity: 1;
-	border-color: #a4f8ff77;
-	inset: 12% -15%;
-	transform: rotate(24deg);
-}
-.hero-composition:hover .orb-one::after {
-	opacity: 1;
-	border-color: #a4f8ff66;
-	inset: -15% 18%;
-	transform: rotate(-25deg);
-}
-.hero-composition:hover .orb-one img {
-	animation: earth-axis 22s linear infinite;
-}
+
 @keyframes earth-axis {
 	0% {
 		transform: scale(1) rotateY(0deg);

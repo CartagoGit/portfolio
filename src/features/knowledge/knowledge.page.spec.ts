@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { KnowledgePageComponent } from './knowledge-page.component';
+import { KnowledgePageComponent } from './knowledge.page';
 
 describe('KnowledgePageComponent', () => {
 	it('renders the portfolio knowledge taxonomy', async () => {

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ApproachPageComponent } from './approach-page.component';
+import { ApproachPageComponent } from './approach.page';
 describe('ApproachPageComponent', () => {
 	it('keeps capability selection inside the feature', async () => {
 		await TestBed.configureTestingModule({

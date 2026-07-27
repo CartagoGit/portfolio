@@ -1,5 +1,6 @@
+@use '../../../styles/motion' as motion;
 // Telemetry dashboard (charts, summary, KPIs) and playground (drag-to-order
-// steps). The active visual is owned by `lab-page.component.scss`; this
+// steps). The active visual is owned by `lab.page.scss`; this
 // partial covers the legacy sheet's selectors while the inline blocks
 // remain in `page.html`.
 
@@ -155,7 +156,7 @@
 .telemetry-kpis article:hover {
 	transform: translateY(-4px);
 	border-color: var(--cyan);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 }
 .playground {
 	display: grid;
@@ -264,7 +265,7 @@
 	transform: translateY(-5px);
 	color: var(--ink);
 	border-color: var(--cyan);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 }
 .playground-steps button.done {
 	color: var(--lime);

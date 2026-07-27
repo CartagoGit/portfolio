@@ -3,13 +3,13 @@ import {
 	Component,
 	ViewEncapsulation,
 } from '@angular/core';
-import { ContactPageComponent } from '../features/contact/contact-page.component';
-import { DockerPageComponent } from '../features/docker/docker-page.component';
-import { DemosPageComponent } from '../features/demos/demos-page.component';
-import { ApproachPageComponent } from '../features/approach/approach-page.component';
-import { KnowledgePageComponent } from '../features/knowledge/knowledge-page.component';
-import { LabPageComponent } from '../features/lab/lab-page.component';
-import { WorkPageComponent } from '../features/work/work-page.component';
+import { ContactPageComponent } from '../features/contact/contact.page';
+import { DockerPageComponent } from '../features/docker/docker.page';
+import { DemosPageComponent } from '../features/demos/demos.page';
+import { ApproachPageComponent } from '../features/approach/approach.page';
+import { KnowledgePageComponent } from '../features/knowledge/knowledge.page';
+import { LabPageComponent } from '../features/lab/lab.page';
+import { WorkPageComponent } from '../features/work/work.page';
 import { HeroMonitorComponent } from '../features/home/hero-monitor/hero-monitor.component';
 import { HomeIntroComponent } from '../features/home/home-intro/home-intro.component';
 import { ShellFacade } from '../core/platform/shell.facade';
