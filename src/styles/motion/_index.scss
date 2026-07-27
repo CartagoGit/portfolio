@@ -1,4 +1,10 @@
-@use './tokens' as tokens;
+// The motion module: animation helpers + shared transitions.
+//
+// Components import via `@use 'motion' as motion;`.
+// `tokens` are loaded via the durations partial directly so we do not
+// depend on the `tokens/_index.scss` barrel, which is only used by the
+// global stylesheet.
+@use '../tokens/durations' as tokens;
 
 $entrance-ease: tokens.$ease-emphasized;
 
@@ -14,4 +20,29 @@ $entrance-ease: tokens.$ease-emphasized;
 	transition:
 		opacity $duration ease,
 		transform $duration $entrance-ease;
+}
+
+/// The cyan glow used by interactive cards, panels and tabs.
+@mixin neon-glow {
+	box-shadow: var(--neon);
+}
+
+/// Tighter cyan glow for icon-sized elements (kbd chips, status dots).
+@mixin cyan-glow($radius: 18px) {
+	box-shadow: 0 0 $radius var(--cyan);
+}
+
+/// Lift-and-glow transition used on every hoverable card/panel.
+/// Pairs with `:hover { @include lift-on-hover; }`.
+@mixin hover-lift-base {
+	transition:
+		transform tokens.$motion-base tokens.$ease-standard,
+		border-color tokens.$motion-base,
+		box-shadow tokens.$motion-base;
+}
+
+@mixin lift-on-hover($translate: -5px) {
+	transform: translateY($translate);
+	border-color: var(--cyan);
+	box-shadow: var(--neon);
 }

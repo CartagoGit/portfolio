@@ -1,10 +1,10 @@
 // Layout chrome: design tokens exposed via CSS custom properties, the
 // `:host` reset, the `.portfolio` palette override and the shared element
 // transitions. The `.portfolio.light-mode` block swaps the palette to the
-// light variant declared under `src/styles/tokens/`.
+// light variant declared under `src/styles/tokens/_index.scss`.
 
-@use '../../styles/tokens' as tokens;
-@use '../../styles/keyframes' as *;
+@use 'tokens' as tokens;
+@use 'keyframes' as *;
 
 :host {
 	display: block;
@@ -28,14 +28,14 @@
 }
 .route-stage {
 	view-transition-name: route-content;
-	min-height: calc(100vh - 88px);
+	min-height: 0;
 }
 .route-stage:has(.hero) {
-	min-height: calc(100dvh - 156px);
+	min-height: 0;
 }
 .route-stage:has(.hero) .hero {
-	min-height: calc(100dvh - 156px);
-	padding: clamp(2rem, 5vw, 4.5rem) 0 2rem;
+	min-height: 0;
+	padding: clamp(1rem, 2.4vw, 1.8rem) 0 1rem;
 }
 .portfolio
 	:where(

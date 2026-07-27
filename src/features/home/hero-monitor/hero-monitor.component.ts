@@ -100,6 +100,20 @@ export class HeroMonitorComponent implements OnDestroy {
 		this._earth.showInFront();
 	}
 
+	/**
+	 * Clicking the visible orb behind the monitor should bring it forward —
+	 * the same gesture as the motion control, but on the sphere itself.
+	 * When the globe is already in front, the pointer drag inside EarthGlobeComponent
+	 * takes precedence and this stopPropagation prevents the canvas click
+	 * from leaking to the shell click handler.
+	 */
+	handleOrbClick(event: MouseEvent): void {
+		event.stopPropagation();
+		if (this._earth.state() === 'behind' || this._earth.state() === 'behind-ready') {
+			this._earth.showInFront();
+		}
+	}
+
 	guardMonitorBanner(event: MouseEvent): void {
 		if (!this.earthBlocksMonitor()) return;
 		event.preventDefault();

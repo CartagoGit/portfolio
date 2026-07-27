@@ -2,8 +2,8 @@
 // and keyframes from the local partials, then declare the reset and view
 // transition shell that every page relies on.
 
-@use './styles/tokens' as tokens;
-@use './styles/keyframes';
+@use './styles/tokens/index' as tokens;
+@use './styles/keyframes/index';
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 

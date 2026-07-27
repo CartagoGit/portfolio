@@ -11,6 +11,7 @@
 		[class.earth-front]="earthDepth() === 'front'"
 		[class.earth-out-front]="earthDepth() === 'out-front'"
 		[class.earth-behind-ready]="earthDepth() === 'behind-ready'"
+		(click)="handleOrbClick($event)"
 		aria-hidden="true">
 		<app-earth-globe
 			#earth

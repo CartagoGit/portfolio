@@ -2,10 +2,11 @@
 	display: block;
 	position: relative;
 	z-index: 1;
+	align-self: start;
 }
 .home-intro {
 	&__eyebrow {
-		margin: 0 0 1rem;
+		margin: 0 0 0.7rem;
 		color: var(--cyan);
 		font:
 			0.68rem 'DM Mono',
@@ -23,10 +24,10 @@
 	}
 	& h1 {
 		max-width: 620px;
-		margin: 0.1rem 0 1.2rem;
-		font-size: clamp(3rem, 6.3vw, 6rem);
+		margin: 0.1rem 0 0.7rem;
+		font-size: clamp(2.2rem, 4.6vw, 4rem);
 		letter-spacing: -0.065em;
-		line-height: 0.84;
+		line-height: 0.86;
 	}
 	& h1 em {
 		color: var(--cyan);
@@ -40,29 +41,29 @@
 	}
 	&__role {
 		max-width: 520px;
-		margin: 1.4rem 0 0.7rem;
-		font-size: clamp(1rem, 1.35vw, 1.2rem);
+		margin: 0.85rem 0 0.45rem;
+		font-size: clamp(0.92rem, 1.1vw, 1rem);
 		font-weight: 700;
 		line-height: 1.35;
 	}
 	&__description {
 		max-width: 510px;
 		color: var(--muted);
-		font-size: 0.85rem;
-		line-height: 1.7;
+		font-size: 0.78rem;
+		line-height: 1.55;
 	}
 	&__actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.65rem;
-		margin: 1.45rem 0;
+		gap: 0.55rem;
+		margin: 0.95rem 0;
 	}
 	&__actions a {
-		padding: 0.72rem 0.9rem;
+		padding: 0.55rem 0.8rem;
 		border: 1px solid var(--line);
 		border-radius: 10px;
 		color: var(--ink);
-		font-size: 0.72rem;
+		font-size: 0.7rem;
 		font-weight: 800;
 		text-decoration: none;
 		transition:

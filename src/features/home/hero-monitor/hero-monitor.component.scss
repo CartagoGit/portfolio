@@ -1,4 +1,4 @@
-@use '../../../styles/motion' as motion;
+@use 'motion' as motion;
 
 app-hero-monitor {
 	display: block;
@@ -888,6 +888,8 @@ app-hero-monitor .hero-composition {
 .orb-one {
 	animation: none !important;
 	opacity: 1;
+	width: 220px;
+	height: 220px;
 	transform: none;
 	translate: none;
 	rotate: none;
@@ -900,6 +902,8 @@ app-hero-monitor .hero-composition {
 		top 0.32s cubic-bezier(0.16, 0.94, 0.25, 1),
 		right 0.32s cubic-bezier(0.16, 0.94, 0.25, 1);
 	will-change: opacity, width, height;
+	cursor: pointer;
+	pointer-events: auto;
 }
 .orb-one::before,
 .orb-one::after {
@@ -922,10 +926,10 @@ app-hero-monitor .hero-composition {
 	z-index: 6;
 	animation: none !important;
 	opacity: 1;
-	width: 360px;
-	height: 360px;
-	top: -6rem;
-	right: -4rem;
+	width: 320px;
+	height: 320px;
+	top: -3.2rem;
+	right: -2.6rem;
 	pointer-events: auto;
 	cursor: grab;
 }
@@ -1122,8 +1126,8 @@ app-hero-monitor .interface-shell {
 
 app-hero-monitor .orb-one {
 	left: auto;
-	top: -1.2rem;
-	right: -0.5rem;
+	top: -1.4rem;
+	right: -0.4rem;
 	z-index: 1;
 }
 
@@ -1139,10 +1143,10 @@ app-hero-monitor .orb-one {
 		top: -2.4rem;
 	}
 	app-hero-monitor .orb-one.earth-front {
-		width: 280px;
-		height: 280px;
-		top: -4.6rem;
+		width: 240px;
+		height: 240px;
+		top: -2rem;
 		right: auto;
-		left: -3.4rem;
+		left: -1.4rem;
 	}
 }

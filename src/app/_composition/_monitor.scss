@@ -1,4 +1,4 @@
-@use '../../../styles/motion' as motion;
+@use 'motion' as motion;
 // Hero monitor live styles: the wide-monitor frame, technology rail,
 // technology marquee, site footer grid, and all the responsive overrides
 // that were appended to the original monolithic sheet.
@@ -356,10 +356,10 @@
 }
 .orb-one {
 	z-index: 3;
-	width: 150px;
-	height: 150px;
-	top: -1.2rem;
-	right: -0.5rem;
+	width: 220px;
+	height: 220px;
+	top: -1.4rem;
+	right: -0.4rem;
 	pointer-events: none;
 	transform: none;
 	transition:

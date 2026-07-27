@@ -48,3 +48,10 @@ Thumbs.db
 # mcp-vertex plugin artifacts
 /plugins/portfolio-content/node_modules/
 /plugins/portfolio-content/.dist/
+
+# Accidentally-named shell artifacts (commands redirected as filenames).
+# Examples observed in the repo history: `RC=0`, "*typecheck*".
+/RC=*
+*typecheck*
+* | head*
+* | grep*

@@ -1,4 +1,4 @@
-@use '../../../styles/motion' as motion;
+@use 'motion' as motion;
 // Telemetry dashboard (charts, summary, KPIs) and playground (drag-to-order
 // steps). The active visual is owned by `lab.page.scss`; this
 // partial covers the legacy sheet's selectors while the inline blocks

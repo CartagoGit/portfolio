@@ -1,3 +1,4 @@
+@use 'motion' as motion;
 // Operational section (workflow narrative), contact block, knowledge/demo/
 // docker grids, neon mini-game, keyer visual, command-dialog. These styles
 // are scoped to selectors rendered by inline `<section>` blocks in
@@ -275,7 +276,7 @@
 .demo-links a:hover {
 	border-color: var(--cyan);
 	transform: translateY(-5px);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 }
 .knowledge-grid article:hover::after,
 .demo-links a:hover::after {
@@ -364,7 +365,7 @@
 }
 .docker-terminal:hover {
 	border-color: var(--cyan);
-	box-shadow: var(--neon);
+	@include motion.neon-glow;
 	transform: translateY(-4px);
 }
 .neon-game {

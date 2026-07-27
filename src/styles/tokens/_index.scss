@@ -1,6 +1,6 @@
 // Aggregate the design tokens for a single import surface.
 //
-// Consumers `@use '../styles/tokens' as *;` and get the palette maps
+// Consumers `@use '../styles/tokens/index' as *;` and get the palette maps
 // plus the motion/easing vocabulary through one declaration.
 @forward './palette';
 @forward './durations';
