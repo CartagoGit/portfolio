@@ -109,7 +109,10 @@ export class HeroMonitorComponent implements OnDestroy {
 	 */
 	handleOrbClick(event: MouseEvent): void {
 		event.stopPropagation();
-		if (this._earth.state() === 'behind' || this._earth.state() === 'behind-ready') {
+		if (
+			this._earth.state() === 'behind' ||
+			this._earth.state() === 'behind-ready'
+		) {
 			this._earth.showInFront();
 		}
 	}

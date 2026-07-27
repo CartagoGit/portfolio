@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'keyframes' as *;
 // Hero monitor live styles: the wide-monitor frame, technology rail,
 // technology marquee, site footer grid, and all the responsive overrides
 // that were appended to the original monolithic sheet.
@@ -578,33 +579,4 @@
 	opacity: 1;
 	transform: scale(1) rotate(0);
 	animation: earth-axis 24s linear infinite;
-}
-
-@keyframes earth-axis {
-	0% {
-		transform: scale(1) rotateY(0deg);
-	}
-	25% {
-		transform: scale(1.025) rotateY(90deg);
-	}
-	50% {
-		transform: scale(1) rotateY(180deg);
-	}
-	75% {
-		transform: scale(1.025) rotateY(270deg);
-	}
-	100% {
-		transform: scale(1) rotateY(360deg);
-	}
-}
-@keyframes globe-spin {
-	to {
-		rotate: 360deg;
-	}
-}
-@keyframes monitor-pulse {
-	50% {
-		opacity: 0.42;
-		transform: scale(0.75);
-	}
 }

@@ -1,3 +1,5 @@
+@use 'motion' as motion;
+
 :host {
 	display: block;
 	position: relative;
@@ -79,7 +81,7 @@
 	&__actions a:hover {
 		border-color: var(--cyan);
 		color: var(--cyan);
-		box-shadow: var(--neon);
+		@include motion.neon-glow;
 		transform: translateY(-3px);
 	}
 	&__actions span {

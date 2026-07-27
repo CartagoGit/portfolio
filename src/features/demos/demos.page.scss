@@ -1,3 +1,5 @@
+@use 'motion' as motion;
+
 :host {
 	display: block;
 }
@@ -108,7 +110,7 @@
 		margin: auto;
 		border-radius: 50%;
 		background: var(--cyan);
-		box-shadow: 0 0 20px var(--cyan);
+		@include motion.cyan-glow(20px);
 	}
 }
 @media (max-width: 760px) {
