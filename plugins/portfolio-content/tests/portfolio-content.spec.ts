@@ -32,9 +32,7 @@ describe('@portfolio/mcp-vertex-portfolio-content', () => {
 			expect(result.data.contentPaths.length).toBeGreaterThan(0);
 			expect(result.data.forbiddenTerms).toEqual([]);
 			expect(result.data.perSeRoots).toEqual([]);
-			expect(result.data.scssAuditSourcePath).toBe(
-				'src/app/portfolio-page.scss',
-			);
+			expect(result.data.scssAuditSourcePath).toBe('src/app/page.scss');
 		});
 
 		it('accepts perSeRoots as a list of strings', () => {

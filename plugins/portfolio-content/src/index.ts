@@ -92,7 +92,7 @@ export const OptionsSchema = z.object({
 	 * stylesheet so the migration plan against `qs4` keeps the tool
 	 * useful without extra wiring.
 	 */
-	scssAuditSourcePath: z.string().default('src/app/portfolio-page.scss'),
+	scssAuditSourcePath: z.string().default('src/app/page.scss'),
 });
 
 export type PortfolioContentOptions = z.infer<typeof OptionsSchema>;
