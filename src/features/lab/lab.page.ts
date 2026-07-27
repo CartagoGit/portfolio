@@ -5,7 +5,11 @@ import {
 	output,
 	signal,
 } from '@angular/core';
-import { PLAYGROUND_STEPS, TELEMETRY } from '../../domain/data';
+import {
+	PLAYGROUND_ORDER,
+	PLAYGROUND_STEPS,
+	TELEMETRY,
+} from '../../domain/data';
 import type {
 	IChartType,
 	IPlaygroundStep,
@@ -46,12 +50,8 @@ export class LabPageComponent {
 	readonly chartType = signal<IChartType>('bars');
 	readonly playgroundRuns = signal(0);
 	readonly draggedStep = signal<IPlaygroundStep | null>(null);
-	readonly playgroundOrder = signal<IPlaygroundStep[]>([
-		'build',
-		'discover',
-		'verify',
-		'model',
-	]);
+	readonly playgroundOrder =
+		signal<readonly IPlaygroundStep[]>(PLAYGROUND_ORDER);
 	readonly selectedTelemetry = computed<ITelemetry>(
 		() =>
 			this.telemetry.find(({ id }) => id === this.activeTelemetry()) ??
@@ -97,7 +97,7 @@ export class LabPageComponent {
 		);
 	}
 	resetPlayground(): void {
-		this.playgroundOrder.set(['build', 'discover', 'verify', 'model']);
+		this.playgroundOrder.set(PLAYGROUND_ORDER);
 		this.draggedStep.set(null);
 	}
 }

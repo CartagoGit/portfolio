@@ -46,6 +46,7 @@ import type {
 	IHeroPanel,
 	ILanguageOption,
 	ILocale,
+	IPlaygroundStep,
 	IPlaygroundStepDefinition,
 	IPortfolioCopy,
 	IPublicLink,
@@ -294,6 +295,18 @@ export const PLAYGROUND_STEPS: readonly IPlaygroundStepDefinition[] = [
 		label: 'Verify',
 		hint: 'Test the journey before shipping.',
 	},
+];
+
+/**
+ * Canonical product-workflow order. The lab page renders the playground as a
+ * drag-and-drop list whose shipping-ready state is this exact sequence;
+ * keeping a single source here makes `lab.page.ts` declarative.
+ */
+export const PLAYGROUND_ORDER: readonly IPlaygroundStep[] = [
+	'build',
+	'discover',
+	'verify',
+	'model',
 ];
 
 export const TELEMETRY: readonly ITelemetry[] = [
