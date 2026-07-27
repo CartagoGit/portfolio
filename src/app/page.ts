@@ -38,7 +38,7 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	// Composition root: child components in the shell rely on a single
 	// global stylesheet for the layout / section chrome under
-	// src/styles/ and src/app/_composition/. ViewEncapsulation.None
+	// src/styles/ and src/styles/composition/. ViewEncapsulation.None
 	// keeps those rules reachable without re-declaring per component.
 	encapsulation: ViewEncapsulation.None,
 	host: {

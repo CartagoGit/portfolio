@@ -2,7 +2,7 @@
 // Portfolio composition root
 // -----------------------------------------------------------------------------
 // This file is the SCSS entry point for the global page chrome. Each concern
-// lives in its own partial under `_composition/` so the rules can grow
+// lives in its own partial under `../styles/composition/` so the rules can grow
 // without forcing this file to balloon. The composition root keeps the
 // ordering stable: layout tokens → hero → sections → capabilities → telemetry
 // → operational → footer → monitor (overrides) so cascade conflicts always
@@ -12,11 +12,11 @@
 // appropriate slot. Do not inline component selectors here.
 // =============================================================================
 
-@use './_composition/layout';
-@use './_composition/hero';
-@use './_composition/sections';
-@use './_composition/capabilities';
-@use './_composition/telemetry';
-@use './_composition/operational';
-@use './_composition/footer';
-@use './_composition/monitor';
+@use '../styles/composition/layout';
+@use '../styles/composition/hero';
+@use '../styles/composition/sections';
+@use '../styles/composition/capabilities';
+@use '../styles/composition/telemetry';
+@use '../styles/composition/operational';
+@use '../styles/composition/footer';
+@use '../styles/composition/monitor';
