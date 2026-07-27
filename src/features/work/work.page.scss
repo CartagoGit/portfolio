@@ -1,3 +1,4 @@
+@use 'keyframes' as *;
 @use 'motion' as motion;
 
 :host {
@@ -157,7 +158,7 @@
 		height: 11rem;
 		border: 1px solid #32c8ff66;
 		border-radius: 50%;
-		animation: work-orbit 9s linear infinite;
+		animation: orbit 9s linear infinite;
 	}
 	&__mcp-visual i:nth-of-type(1) {
 		transform: translate(-48%, -12%);
@@ -406,11 +407,6 @@
 	}
 }
 
-@keyframes work-orbit {
-	to {
-		transform: rotate(360deg);
-	}
-}
 @keyframes work-drift {
 	50% {
 		transform: rotate(-23deg) scale(1.06);
