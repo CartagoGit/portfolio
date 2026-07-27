@@ -1,7 +1,10 @@
+import { DOCUMENT } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	inject,
 	type OnDestroy,
+	type OnInit,
 	ViewEncapsulation,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
@@ -20,11 +23,17 @@ import type {
 	styleUrl: './hero-monitor.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
+	host: {
+		'(document:pointerdown)': 'onDocumentPointerDown($event)',
+	},
 })
-export class HeroMonitorComponent implements OnDestroy {
+export class HeroMonitorComponent implements OnDestroy, OnInit {
 	// Composition root: two facades that own the monitor's state.
 	private readonly _hero = new HeroMonitorFacade();
 	private readonly _earth = new EarthDepthFacade();
+	private readonly _document = inject(DOCUMENT);
+	private _returnTimer: ReturnType<typeof setTimeout> | null = null;
+	private _userInteracted = false;
 
 	// Public mirrors so the template can render the signals without exposing
 	// the private facades. The re-exported `Signal<T>` keeps the original
@@ -63,8 +72,34 @@ export class HeroMonitorComponent implements OnDestroy {
 		{ id: 'spectrum', symbol: '◈' },
 	];
 
+	ngOnInit(): void {
+		// Defensive: if a user clicks anywhere outside the monitor while the
+		// orb is on top, the globe should glide back behind. Using a document
+		// listener avoids the orb getting stuck after a stray click on the
+		// header, footer or the rest of the page.
+		this._document.addEventListener('pointerdown', this._onDocumentDown);
+	}
+
 	ngOnDestroy(): void {
 		this._hero.destroy();
+		this._cancelReturn();
+		this._document.removeEventListener('pointerdown', this._onDocumentDown);
+	}
+
+	private readonly _onDocumentDown = (event: PointerEvent): void => {
+		const target = event.target as Element | null;
+		if (!target) return;
+		if (target.closest('app-hero-monitor')) return;
+		if (this._earth.state() !== 'behind' && this._earth.state() !== 'behind-ready') {
+			this._userInteracted = false;
+		}
+		this._earth.returnBehind(target);
+	};
+
+	onDocumentPointerDown(event: PointerEvent): void {
+		// The host-level handler delegates to the same logic; kept as a method
+		// so Angular lifecycle / template binding stay obvious.
+		this._onDocumentDown(event);
 	}
 
 	selectPanel(panel: IHeroPanelId): void {
@@ -97,7 +132,26 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	showEarthInFront(event: MouseEvent): void {
 		event.stopPropagation();
+		this._cancelReturn();
+		this._userInteracted = true;
 		this._earth.showInFront();
+	}
+
+	/**
+	 * Pointerdown on the orb counts as the user wanting to interact with the
+	 * sphere itself; lock it in front so the subsequent mouseleave/drag does
+	 * not flip it back behind the monitor.
+	 */
+	lockGlobeInFront(event: PointerEvent): void {
+		event.stopPropagation();
+		this._cancelReturn();
+		if (
+			this._earth.state() === 'behind' ||
+			this._earth.state() === 'behind-ready'
+		) {
+			this._userInteracted = true;
+			this._earth.showInFront();
+		}
 	}
 
 	/**
@@ -113,6 +167,8 @@ export class HeroMonitorComponent implements OnDestroy {
 			this._earth.state() === 'behind' ||
 			this._earth.state() === 'behind-ready'
 		) {
+			this._cancelReturn();
+			this._userInteracted = true;
 			this._earth.showInFront();
 		}
 	}
@@ -123,9 +179,38 @@ export class HeroMonitorComponent implements OnDestroy {
 		event.stopPropagation();
 	}
 
-	returnEarthBehind(event?: MouseEvent): void {
-		if (this._isEarthTarget(event?.relatedTarget as Element | null)) return;
-		this._earth.returnBehind(event?.target);
+	/**
+	 * Returns the orb behind the monitor with a small grace period. The delay
+	 * gives the cursor time to slip to a neighbouring element (the orb when
+	 * the orb-on-top is hovered, the canvas while dragging, etc.) without the
+	 * depth flipping back and forth on every pixel.
+	 *
+	 * Skipped when the user has explicitly grabbed the globe — once you've
+	 * committed to looking at it we leave the orb on top until you dismiss
+	 * it via clicking on the monitor, the motion button, or somewhere else.
+	 */
+	scheduleReturnBehind(event?: MouseEvent): void {
+		if (event && this._isEarthTarget(event.relatedTarget as Element | null))
+			return;
+		if (this._userInteracted) return;
+		this._cancelReturn();
+		this._returnTimer = setTimeout(() => {
+			this._returnTimer = null;
+			this._earth.returnBehind(event?.target ?? null);
+		}, 180);
+	}
+	/**
+	 * Reset the lock once the globe has been dismissed so a future auto-return
+	 * is allowed.
+	 */
+	private _onEarthReturned(): void {
+		this._userInteracted = false;
+	}
+	private _cancelReturn(): void {
+		if (this._returnTimer !== null) {
+			clearTimeout(this._returnTimer);
+			this._returnTimer = null;
+		}
 	}
 
 	/**
@@ -141,6 +226,10 @@ export class HeroMonitorComponent implements OnDestroy {
 		if (target.closest('button')) return;
 		if (target.closest('a')) return;
 		if (target.closest('input, textarea, select')) return;
+		this._cancelReturn();
+		if (this._earth.state() !== 'behind' && this._earth.state() !== 'behind-ready') {
+			this._userInteracted = false;
+		}
 		this._earth.returnBehind(target);
 	}
 
