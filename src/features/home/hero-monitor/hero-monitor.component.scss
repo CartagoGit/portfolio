@@ -891,10 +891,7 @@ app-hero-monitor .hero-composition {
 .orb-one {
 	animation: none !important;
 	opacity: 1;
-	width: 320px;
-	height: 320px;
-	top: -1.6rem;
-	right: -1rem;
+	@include motion.orb-base;
 	transform: scale(1);
 	transform-origin: center center;
 	transition:

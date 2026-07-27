@@ -358,16 +358,9 @@
 }
 .orb-one {
 	z-index: 3;
-	width: 320px;
-	height: 320px;
-	top: -1.6rem;
-	right: -1rem;
+	@include motion.orb-base;
 	pointer-events: none;
 	transform: scale(1);
-	transition:
-		transform 0.55s tokens.$ease-emphasized,
-		top 0.55s tokens.$ease-emphasized,
-		right 0.55s tokens.$ease-emphasized;
 }
 .layer-list {
 	z-index: 4;

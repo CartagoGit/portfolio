@@ -47,3 +47,19 @@ $entrance-ease: tokens.$ease-emphasized;
 	border-color: var(--cyan);
 	box-shadow: var(--neon);
 }
+
+/// Base box for the hero orb: a fixed 320×320 layer positioned so the
+/// WebGL canvas keeps a stable resolution while `transform: scale()` (and
+/// `top` / `right`) animate the perceived size. The original physical
+/// dimensions stay constant so `getBoundingClientRect()` keeps feeding
+/// the renderer the right box for the sphere.
+@mixin orb-base {
+	width: 320px;
+	height: 320px;
+	top: -1.6rem;
+	right: -1rem;
+	transition:
+		transform 0.55s $entrance-ease,
+		top 0.55s $entrance-ease,
+		right 0.55s $entrance-ease;
+}
