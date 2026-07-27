@@ -1,5 +1,4 @@
 import { computed, signal } from '@angular/core';
-import { nextHeroPanelTransition } from '../../../core/motion/motion';
 import { HERO_PANELS } from '../../../domain/data';
 import type {
 	IChartType,
@@ -8,6 +7,34 @@ import type {
 	IHeroPanelId,
 	IHeroPanelTransition,
 } from '../../../domain/types';
+
+const HERO_PANEL_TRANSITIONS: readonly IHeroPanelTransition[] = [
+	'slide',
+	'flip',
+	'scan',
+];
+
+/**
+ * Picks a different `IHeroPanelTransition` than the one currently on
+ * the panel. The hero panel cycle has three transitions, so any
+ * choice returns one of the other two; `random` is injectable so
+ * the helper can be unit-tested deterministically.
+ */
+function nextHeroPanelTransition(
+	current: IHeroPanelTransition,
+	random: () => number = Math.random
+): IHeroPanelTransition {
+	const candidates = HERO_PANEL_TRANSITIONS.filter(
+		(transition) => transition !== current
+	);
+	const index = Math.min(
+		candidates.length - 1,
+		Math.floor(random() * candidates.length)
+	);
+	// `candidates` is never empty: we only filtered out the single
+	// `current` entry, and HERO_PANEL_TRANSITIONS has three members.
+	return candidates[index]!;
+}
 
 const CHART_VIEWBOX_HEIGHT = 118;
 const CHART_X_STEP = 90;
