@@ -36,8 +36,10 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 	templateUrl: './page.html',
 	styleUrl: './page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	// The legacy shell sheet still contains composition primitives used by the
-	// extracted monitor. Keep it global until every primitive has moved.
+	// Composition root: child components in the shell rely on a single
+	// global stylesheet for the layout / section chrome under
+	// src/styles/ and src/app/_composition/. ViewEncapsulation.None
+	// keeps those rules reachable without re-declaring per component.
 	encapsulation: ViewEncapsulation.None,
 	host: {
 		'(window:scroll)': 'onWindowScroll()',
