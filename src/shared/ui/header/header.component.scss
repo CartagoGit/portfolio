@@ -1,6 +1,6 @@
 @use 'motion' as motion;
 @use 'keyframes' as *;
-@use 'tokens/durations' as tokens;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -54,7 +54,7 @@
 	&__nav a {
 		padding: 0.45rem 0;
 		color: var(--muted);
-		font: 700 0.72rem 'DM Mono';
+		font: 700 0.72rem tokens.$font-mono;
 		letter-spacing: 0.02em;
 		text-decoration: none;
 	}
@@ -127,7 +127,7 @@
 	&__locale-menu small {
 		display: block;
 		color: var(--muted);
-		font: 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
 		margin-top: 0.15rem;
 	}
 	&__menu {

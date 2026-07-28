@@ -1,3 +1,5 @@
+@use 'tokens/index' as tokens;
+
 :host {
 	display: contents;
 }
@@ -39,7 +41,7 @@
 		gap: 0.5rem;
 		margin: 1rem 0;
 		color: var(--muted);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__search input {
 		padding: 0.75rem;
