@@ -1,8 +1,8 @@
 <div
-	class="hero-composition"
+	class="hero-monitor"
 	aria-label="Interactive representation of Mario's core frontend technologies">
 	<div
-		class="orb orb-one"
+		class="hero-monitor__orb hero-monitor__orb--one"
 		[class.earth-active]="earth.active()"
 		[class.earth-out-behind]="earthDepth() === 'out-behind'"
 		[class.earth-front-ready]="earthDepth() === 'front-ready'"
@@ -15,13 +15,13 @@
 			#earth
 			[depth]="earthDepth()" />
 	</div>
-	<div class="orb orb-two"></div>
+	<div class="hero-monitor__orb hero-monitor__orb--two"></div>
 	<div
-		class="interface-shell"
+		class="hero-monitor__interface"
 		[attr.data-chart]="chartType()"
 		(click)="handleShellInteraction($event)">
 		<div
-			class="monitor-chrome"
+			class="hero-monitor__chrome"
 			aria-hidden="true">
 			<span></span>
 			<span></span>
@@ -29,15 +29,15 @@
 			<i></i>
 			<b>cartago.system</b>
 		</div>
-		<div class="monitor-header">
+		<div class="hero-monitor__header">
 			<button
-				class="earth-motion-control"
+				class="hero-monitor__motion-control"
 				type="button"
 				[attr.aria-pressed]="earthDepth() === 'front'"
 				(click)="earth.changeMotion(); showEarthInFront($event)"
 				aria-label="Change the Earth's rotation"></button>
 			<a
-				class="monitor-banner-link"
+				class="hero-monitor__banner-link"
 				href="https://github.com/CartagoGit"
 				target="_blank"
 				rel="noreferrer"
@@ -47,19 +47,19 @@
 				(click)="guardMonitorBanner($event)"
 				aria-label="Open CartagoGit on GitHub">
 				<img
-					class="hero-banner"
+					class="hero-monitor__banner"
 					src="/images/cartagonova-banner-03-neon.png"
 					alt="CartagoNova banner" />
 			</a>
 		</div>
-		<div class="interface-body">
+		<div class="hero-monitor__body">
 			<div
-				class="monitor-selector"
+				class="hero-monitor__selector"
 				aria-label="Core technologies">
 				@for (panel of panels; track panel.id) {
 					<button
 						type="button"
-						[class.active]="activePanel() === panel.id"
+						[class.is-active]="activePanel() === panel.id"
 						(click)="hero.selectPanel(panel.id)">
 						@if (panel.iconAsset) {
 							<img
@@ -81,13 +81,13 @@
 				}
 			</div>
 			<div
-				class="interface-canvas"
+				class="hero-monitor__canvas"
 				[class.technology-open]="selectedPanel()">
 				<section
-					class="dashboard-view"
+					class="hero-monitor__dashboard"
 					[class.panel-hidden]="selectedPanel() || panelChanging()"
 					[class.swap-hidden]="panelChanging()">
-					<div class="canvas-heading">
+					<div class="hero-monitor__heading">
 						<span>
 							<i></i>
 							CartagoNova / system telemetry
@@ -95,24 +95,24 @@
 						<small>LIVE</small>
 					</div>
 					<div
-						class="hero-chart-switcher"
+						class="hero-monitor__chart-switcher"
 						aria-label="Dashboard chart type">
 						@for (chart of chartOptions; track chart.id) {
 							<button
 								type="button"
-								[class.active]="chartType() === chart.id"
+								[class.is-active]="chartType() === chart.id"
 								(click)="hero.setChart(chart.id)">
 								{{ chart.label }}
 							</button>
 						}
 					</div>
-					<p class="dashboard-caption">
+					<p class="hero-monitor__caption">
 						Choose a technology on the left to see its role. These
 						controls change the visualisation only.
 					</p>
-					<div class="chart-workspace">
+					<div class="hero-monitor__chart-workspace">
 						<div
-							class="canvas-chart"
+							class="hero-monitor__chart"
 							[attr.data-chart]="chartType()"
 							[attr.data-palette]="palette()">
 							@for (bar of chartBars(); track $index) {
@@ -131,7 +131,7 @@
 							<em>product signal / 2026</em>
 						</div>
 						<div
-							class="chart-symbols"
+							class="hero-monitor__chart-symbols"
 							aria-label="Randomise chart values">
 							@for (symbol of ['⌁', '◌', '✦']; track symbol) {
 								<button
@@ -142,9 +142,9 @@
 								</button>
 							}
 							<button
-								class="temperature-icon"
+								class="hero-monitor__temperature"
 								type="button"
-								[class.active]="palette() === 'heat'"
+								[class.is-active]="palette() === 'heat'"
 								(click)="hero.setTemperature()"
 								aria-label="Random temperature colours">
 								◉
@@ -154,7 +154,7 @@
 				</section>
 				@if (selectedPanel(); as panel) {
 					<article
-						class="technology-detail"
+						class="hero-monitor__detail"
 						[attr.data-effect]="effect()"
 						[attr.data-transition]="panelTransition()">
 						<div>
@@ -177,7 +177,7 @@
 							<p>{{ panel.detail }}</p>
 						</div>
 						<div
-							class="effect-controls"
+							class="hero-monitor__effects"
 							aria-label="Technology description effects">
 							@for (
 								effectOption of effectOptions;
@@ -192,7 +192,7 @@
 							}
 						</div>
 						<button
-							class="detail-retry"
+							class="hero-monitor__retry"
 							type="button"
 							(click)="hero.clearPanel()">
 							Retry ↻
@@ -202,7 +202,7 @@
 			</div>
 		</div>
 	</div>
-	<p class="hero-note">
+	<p class="hero-monitor__note">
 		Built with explicit state,
 		<br />
 		progressive enhancement and care.

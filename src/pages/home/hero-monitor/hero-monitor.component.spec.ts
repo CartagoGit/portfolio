@@ -9,7 +9,7 @@ describe('HeroMonitorComponent', () => {
 		const fixture = TestBed.createComponent(HeroMonitorComponent);
 		fixture.detectChanges();
 		expect(
-			fixture.nativeElement.querySelector('.interface-shell')
+			fixture.nativeElement.querySelector('.hero-monitor__interface')
 		).toBeTruthy();
 	});
 });
