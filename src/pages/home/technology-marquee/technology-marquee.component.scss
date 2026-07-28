@@ -12,7 +12,7 @@
 	width: min(100%, 480px);
 	max-width: 100%;
 	margin: 1.15rem 0 0.7rem;
-	padding: 1.45rem 1.3rem 0.55rem;
+	padding: 1.45rem var(--space-6) var(--space-2);
 	overflow: hidden;
 	user-select: none;
 
@@ -23,7 +23,7 @@
 		z-index: 2;
 		top: 0;
 		bottom: 0;
-		width: 1.3rem;
+		width: var(--space-6);
 		pointer-events: none;
 	}
 	&::before {
@@ -40,7 +40,7 @@
 		align-items: center;
 		gap: 0.8rem;
 		min-width: max-content;
-		padding: 0 0.05rem 0.1rem;
+		padding: 0 0.05rem var(--space-2xs);
 		animation: technology-scroll 82s linear infinite;
 	}
 	&:hover &__track {
@@ -66,13 +66,13 @@
 	&__token b {
 		position: absolute;
 		z-index: 4;
-		left: calc(100% + 0.35rem);
-		padding: 0.32rem 0.45rem;
+		left: calc(100% + var(--space-md));
+		padding: var(--space-sm) var(--space-xl);
 		border: var(--border-thin) solid var(--line);
-		border-radius: 6px;
+		border-radius: var(--radius-md);
 		background: var(--surface);
 		color: var(--ink);
-		@include tokens.mono-mixed(0.55rem);
+		@include tokens.mono-mixed(var(--label-sm));
 		white-space: nowrap;
 		opacity: 0;
 		transform: translateX(-6px);
@@ -99,7 +99,7 @@
 
 @media (max-width: 640px) {
 	.technology-marquee {
-		margin: 0.8rem 0 0.45rem;
+		margin: 0.8rem 0 var(--space-xl);
 		&__track {
 			gap: 0.6rem;
 			animation-duration: 88s;

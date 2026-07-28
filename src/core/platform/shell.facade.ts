@@ -1,11 +1,16 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { inject, PLATFORM_ID, signal } from '@angular/core';
+import { computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data';
-import type { ILocale, IPageComponentId, IThemeId } from '../../domain/types';
+import type {
+	ILanguageOption,
+	ILocale,
+	IPageComponentId,
+	IThemeId,
+} from '../../domain/types';
 import { TranslateService } from '../../lang/translate.service';
-import { detectPreferredLocale, persistLocale } from './locale';
+import { detectPreferredLocale, LOCALES, persistLocale } from './locale';
 import { buildDescription, buildTitle } from './seo';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
 import {
@@ -38,11 +43,30 @@ export class ShellFacade {
 	private readonly _platformId = inject(PLATFORM_ID);
 	private readonly _translate = inject(TranslateService);
 
-	readonly languages = [
-		{ id: 'en' as const, label: 'English', detail: 'US + UK' },
-		{ id: 'es' as const, label: 'Español', detail: 'España' },
-	];
-	readonly themes = THEMES;
+	readonly languages = computed<readonly ILanguageOption[]>(() => {
+		const t = this._translate.translations();
+		return LOCALES.map((locale) => ({
+			id: locale.id,
+			label: t.lang.languages[locale.id].label,
+			detail: t.lang.languages[locale.id].detail,
+			flag: locale.flag,
+		}));
+	});
+	/** Theme definitions surfaced to the dropdown; label/detail come from the
+	 * active locale's translation map so the swatch + copy stay in sync. */
+	readonly themes = computed<
+		ReadonlyArray<IThemeDefinition & {
+			label: string;
+			detail: string;
+		}>
+	>(() => {
+		const t = this._translate.translations();
+		return THEMES.map((theme) => ({
+			...theme,
+			label: t.lang.themes[theme.id].label,
+			detail: t.lang.themes[theme.id].detail,
+		}));
+	});
 	readonly publicLinks = PUBLIC_LINKS;
 	readonly technologyMarquee = TECHNOLOGY_MARQUEE;
 
@@ -81,7 +105,7 @@ export class ShellFacade {
 	 * the browser side via `localStorage` + a cookie so SSR
 	 * hydration matches.
 	 */
-	setTheme(theme: IThemeId | IThemeDefinition): void {
+	setTheme(theme: IThemeId | { readonly id: IThemeId }): void {
 		const id = typeof theme === 'string' ? theme : theme.id;
 		if (!isTheme(id)) return;
 		this.themeMenuOpen.set(false);

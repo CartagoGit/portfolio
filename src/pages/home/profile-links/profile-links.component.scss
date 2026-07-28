@@ -6,15 +6,15 @@
 .profile-links {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.45rem;
-	margin-top: 0.5rem;
+	gap: var(--space-xl);
+	margin-top: var(--space-2);
 	a {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.38rem;
-		padding: 0.38rem 0.5rem;
+		padding: 0.38rem var(--space-2);
 		border: var(--border-thin) solid var(--line);
-		border-radius: 8px;
+		border-radius: var(--radius-lg);
 		color: var(--muted);
 		@include tokens.mono-mixed(0.58rem);
 		text-decoration: none;

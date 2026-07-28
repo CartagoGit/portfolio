@@ -23,7 +23,7 @@
 	}
 	& h1 {
 		max-width: 620px;
-		margin: 0.1rem 0 0.7rem;
+		margin: var(--space-2xs) 0 0.7rem;
 		font-family: tokens.$font-body;
 		font-size: clamp(2.2rem, 4.6vw, 4rem);
 		font-weight: 800;
@@ -38,12 +38,12 @@
 	}
 	&__signature {
 		color: var(--cyan);
-		@include tokens.mono-mixed(0.62rem);
-		letter-spacing: 0.04em;
+		@include tokens.mono-mixed(var(--label-md));
+		letter-spacing: var(--letter-open);
 	}
 	&__role {
 		max-width: 520px;
-		margin: 0.85rem 0 0.45rem;
+		margin: 0.85rem 0 var(--space-xl);
 		font-family: tokens.$font-body;
 		font-size: clamp(0.92rem, 1.1vw, 1rem);
 		font-weight: 700;
@@ -53,18 +53,18 @@
 		max-width: 510px;
 		color: var(--muted);
 		font-size: 0.78rem;
-		line-height: 1.55;
+		line-height: var(--line-normal);
 	}
 	&__actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.55rem;
+		gap: var(--space-2);
 		margin: 0.95rem 0;
 	}
 	&__actions a {
-		padding: 0.55rem 0.8rem;
+		padding: var(--space-2) 0.8rem;
 		border: var(--border-thin) solid var(--line);
-		border-radius: 10px;
+		border-radius: var(--radius-xl);
 		color: var(--ink);
 		font-size: 0.7rem;
 		font-weight: 800;

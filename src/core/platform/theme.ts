@@ -30,9 +30,6 @@ export type IThemeId =
 
 export interface IThemeDefinition {
 	id: IThemeId;
-	label: string;
-	/** Short hint displayed under the label in the dropdown. */
-	detail: string;
 	/** Primary colour used as the swatch and as `--cyan` token. */
 	primary: string;
 	/** Accent colour used as the secondary token (`--lime`). */
@@ -44,64 +41,48 @@ export interface IThemeDefinition {
 export const THEMES: readonly IThemeDefinition[] = [
 	{
 		id: 'dark',
-		label: 'Midnight',
-		detail: 'Default · neon cyan',
 		primary: '#32c8ff',
 		accent: '#b9ef73',
 		scheme: 'dark',
 	},
 	{
 		id: 'light',
-		label: 'Paper',
-		detail: 'Bright · cobalt blue',
 		primary: '#0863e6',
 		accent: '#527b10',
 		scheme: 'light',
 	},
 	{
 		id: 'midnight',
-		label: 'Deep blue',
-		detail: 'Violet · cyan',
 		primary: '#7d5cff',
 		accent: '#32c8ff',
 		scheme: 'dark',
 	},
 	{
 		id: 'ocean',
-		label: 'Tidal',
-		detail: 'Teal · aqua',
 		primary: '#0fb4ff',
 		accent: '#a7ffeb',
 		scheme: 'dark',
 	},
 	{
 		id: 'forest',
-		label: 'Forest',
-		detail: 'Green · mustard',
 		primary: '#41c47c',
 		accent: '#ffd166',
 		scheme: 'dark',
 	},
 	{
 		id: 'sunset',
-		label: 'Sunset',
-		detail: 'Coral · amber',
 		primary: '#ff7a59',
 		accent: '#ffd166',
 		scheme: 'dark',
 	},
 	{
 		id: 'solar',
-		label: 'Solar',
-		detail: 'Amber · pink',
 		primary: '#ffb454',
 		accent: '#ff5d8f',
 		scheme: 'light',
 	},
 	{
 		id: 'mono',
-		label: 'Graphite',
-		detail: 'Greyscale · ink',
 		primary: '#9aa4b2',
 		accent: '#e8e8e8',
 		scheme: 'light',
@@ -151,9 +132,11 @@ export function detectPreferredTheme(
 
 /**
  * Persists the theme to localStorage + cookie. Browser-only path;
- * callers must guarantee `window` / `document` exist.
+ * the guard makes the call a no-op during SSR so the constructor
+ * can safely invoke this without crashing the prerender pipeline.
  */
 export function persistTheme(theme: IThemeId): void {
+	if (typeof window === 'undefined' || typeof document === 'undefined') return;
 	try {
 		window.localStorage.setItem(THEME_STORAGE_KEY, theme);
 	} catch {

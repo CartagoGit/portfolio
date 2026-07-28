@@ -38,14 +38,14 @@
 	position: fixed;
 	z-index: 30;
 	top: -60px;
-	left: 1rem;
+	left: var(--space-4);
 	background: var(--cyan);
 	color: #07101c;
-	padding: 0.7rem 1rem;
+	padding: 0.7rem var(--space-4);
 	font-weight: 800;
 	transition: top 0.2s;
 }
 
 .skip-link:focus {
-	top: 1rem;
+	top: var(--space-4);
 }

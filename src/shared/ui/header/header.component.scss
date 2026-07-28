@@ -147,7 +147,8 @@
 		width: 1rem;
 		height: 1rem;
 		border-radius: 50%;
-		border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+		border: var(--border-thin) solid
+			color-mix(in srgb, var(--ink) 25%, transparent);
 		box-shadow: 0 0 0 2px color-mix(in srgb, var(--canvas) 50%, transparent);
 		flex-shrink: 0;
 	}

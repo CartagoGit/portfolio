@@ -8,16 +8,16 @@
 .knowledge-page {
 	width: min(1380px, calc(100% - 3rem));
 	margin: 0 auto;
-	padding: clamp(3rem, 5vw, 5.5rem) 0;
+	padding: clamp(var(--space-12), 5vw, 5.5rem) 0;
 	&__heading {
 		display: grid;
 		grid-template-columns: 1fr 1.5fr 1fr;
-		gap: 1.25rem;
-		margin-bottom: 2rem;
+		gap: var(--space-5);
+		margin-bottom: var(--space-8);
 	}
 	&__heading > p:first-child {
 		color: var(--cyan);
-		@include tokens.mono(0.65rem);
+		@include tokens.mono(var(--label-lg));
 		text-transform: uppercase;
 	}
 	&__heading h2 {
@@ -31,15 +31,15 @@
 	}
 	&__heading > p:last-child {
 		margin: 0;
-		padding-top: 0.5rem;
+		padding-top: var(--space-2);
 		color: var(--muted);
 		font-size: 0.9rem;
-		line-height: 1.6;
+		line-height: var(--line-relaxed);
 	}
 	&__grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
+		gap: var(--space-4);
 		perspective: 1000px;
 		animation: page-rise-deep 0.52s 0.08s both;
 	}
@@ -47,7 +47,7 @@
 		position: relative;
 		min-height: 220px;
 		overflow: hidden;
-		padding: 1.4rem;
+		padding: var(--space-6);
 		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 		transform-style: preserve-3d;
@@ -79,11 +79,11 @@
 	&__grid span {
 		display: block;
 		color: var(--cyan);
-		@include tokens.mono(0.62rem);
+		@include tokens.mono(var(--label-md));
 	}
 	&__grid b {
 		display: block;
-		margin: 1.2rem 0 0.7rem;
+		margin: var(--space-5) 0 0.7rem;
 		font-size: 1.45rem;
 		letter-spacing: -0.055em;
 	}
@@ -91,7 +91,7 @@
 		max-width: 310px;
 		color: var(--muted);
 		font-size: 0.77rem;
-		line-height: 1.6;
+		line-height: var(--line-relaxed);
 	}
 	&__icon {
 		width: 44px;

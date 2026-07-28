@@ -195,8 +195,8 @@ export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = [
 ];
 
 export const LANGUAGES: readonly ILanguageOption[] = [
-	{ id: 'en', label: 'English', detail: 'US + UK' },
-	{ id: 'es', label: 'Español', detail: 'España' },
+	{ id: 'en', label: 'English', detail: 'US + UK', flag: '🇺🇸' },
+	{ id: 'es', label: 'Español', detail: 'España', flag: '🇪🇸' },
 ];
 
 /**
