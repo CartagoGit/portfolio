@@ -1,6 +1,6 @@
 @use 'motion' as motion;
 @use 'keyframes' as *;
-@use 'tokens/durations' as tokens;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -19,9 +19,7 @@
 	&__heading > p:first-child,
 	&__playground > div > p:first-child {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+		@include tokens.mono(0.65rem);
 	}
 	&__heading h2 {
 		margin: 0;
@@ -79,7 +77,7 @@
 		padding: 0.1rem 0.25rem;
 		border: 1px solid var(--line);
 		color: var(--muted);
-		font: 0.62rem 'DM Mono';
+		@include tokens.mono-mixed(0.62rem);
 	}
 	&__switcher {
 		align-items: center;
@@ -88,7 +86,7 @@
 	&__switcher > span {
 		margin-right: 0.35rem;
 		color: var(--muted);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__dashboard {
 		display: grid;
@@ -111,9 +109,8 @@
 	&__summary > span,
 	&__chart header span {
 		color: var(--cyan);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono(0.6rem, 400);
 		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 	&__summary > b {
 		margin: 1.4rem 0 0.35rem;
@@ -124,7 +121,7 @@
 	&__summary small,
 	&__chart footer {
 		color: var(--muted);
-		font: 0.7rem 'DM Mono';
+		@include tokens.mono-mixed(0.7rem);
 	}
 	&__summary p {
 		max-width: 250px;
@@ -160,7 +157,8 @@
 		padding: 0.3rem 0.4rem;
 		border: 1px solid color-mix(in srgb, var(--lime) 60%, transparent);
 		color: var(--lime);
-		font: normal 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
+		font-style: normal;
 	}
 	&__chart footer {
 		display: flex;
@@ -283,7 +281,7 @@
 	}
 	&__kpis span {
 		color: var(--muted);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__kpis i {
 		position: absolute;
@@ -325,7 +323,8 @@
 		gap: 0.5rem;
 		margin-top: 1.5rem;
 		color: var(--ice) !important;
-		font: 0.62rem/1.55 'DM Mono' !important;
+		@include tokens.mono-mixed(0.62rem);
+		line-height: 1.55 !important;
 	}
 	&__status span {
 		flex: none;
@@ -422,7 +421,7 @@
 	}
 	&__steps span {
 		color: var(--cyan);
-		font: 0.57rem 'DM Mono';
+		@include tokens.mono-mixed(0.57rem);
 	}
 	&__steps b {
 		font-size: 1rem;
@@ -446,7 +445,7 @@
 		align-items: center;
 		justify-content: space-between;
 		color: var(--muted);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__board footer button {
 		padding: 0.35rem 0.45rem;
@@ -468,7 +467,7 @@
 	&__motion-note {
 		margin: 1rem 0 0;
 		color: var(--muted);
-		font: 0.62rem 'DM Mono';
+		@include tokens.mono-mixed(0.62rem);
 	}
 	&__motion-note code {
 		color: var(--cyan);
