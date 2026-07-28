@@ -4,17 +4,8 @@ import {
 	computed,
 	signal,
 } from '@angular/core';
-import { CAPABILITIES } from '../../domain/data';
+import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data';
 import type { ICapability, ICapabilityId } from '../../domain/types';
-
-const FALLBACK_CAPABILITY: ICapability = {
-	id: 'product',
-	eyebrow: '',
-	title: '',
-	detail: '',
-	tools: [],
-	proof: '',
-};
 
 @Component({
 	selector: 'app-approach-page',

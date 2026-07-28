@@ -224,6 +224,21 @@ export const LANGUAGES: readonly ILanguageOption[] = [
 	{ id: 'es', label: 'Español', detail: 'España' },
 ];
 
+/**
+ * Default capability row used when the active signal doesn't match any
+ * declared capability. Keeps the selected-card chrome stable while the
+ * user navigates between capabilities; values render as muted
+ * placeholders rather than 'undefined'.
+ */
+export const FALLBACK_CAPABILITY: ICapability = {
+	id: 'product',
+	eyebrow: '',
+	title: '',
+	detail: '',
+	tools: [],
+	proof: '',
+};
+
 export const CAPABILITIES: readonly ICapability[] = [
 	{
 		id: 'product',
