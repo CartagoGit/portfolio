@@ -1,3 +1,5 @@
+@use 'tokens/index' as tokens;
+
 :host {
 	display: block;
 }
@@ -25,9 +27,7 @@
 	}
 	&__eyebrow {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+		@include tokens.mono(0.65rem);
 	}
 	h2 {
 		margin: 0.6rem 0 1rem;
@@ -55,7 +55,7 @@
 		background: transparent;
 		color: var(--ink);
 		padding: 0.55rem 0.7rem;
-		font: 0.62rem 'DM Mono';
+		@include tokens.mono-mixed(0.62rem);
 		text-decoration: none;
 	}
 	&__links a:hover,
@@ -72,7 +72,7 @@
 		display: grid;
 		gap: 0.4rem;
 		color: var(--muted);
-		font: 0.64rem 'DM Mono';
+		@include tokens.mono-mixed(0.64rem);
 	}
 	input,
 	textarea {
