@@ -5,4 +5,10 @@
 // declaration.
 @forward './palette';
 @forward './durations';
-@forward './typography';
+// The typography partial exposes both namespaced members ($font-body,
+// $font-mono, $font-accent) and two helper mixins (mono, mono-mixed).
+// Forward with 'show' so the mixins land directly on the 'tokens'
+// namespace at the call site, mirroring how the palette / durations
+// partials expose their top-level members.
+@forward './typography' show $font-body, $font-mono, $font-accent, mono,
+	mono-mixed;

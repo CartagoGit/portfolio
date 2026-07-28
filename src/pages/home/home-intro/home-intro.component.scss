@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -10,11 +11,7 @@
 	&__eyebrow {
 		margin: 0 0 0.7rem;
 		color: var(--cyan);
-		font:
-			0.68rem 'DM Mono',
-			monospace;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
+		@include tokens.mono(0.68rem);
 	}
 	&__eyebrow span {
 		display: inline-block;
@@ -27,23 +24,27 @@
 	& h1 {
 		max-width: 620px;
 		margin: 0.1rem 0 0.7rem;
+		font-family: tokens.$font-body;
 		font-size: clamp(2.2rem, 4.6vw, 4rem);
+		font-weight: 800;
 		letter-spacing: -0.065em;
 		line-height: 0.86;
 	}
 	& h1 em {
 		color: var(--cyan);
-		font-family: 'Playfair Display';
+		font-family: tokens.$font-accent;
+		font-style: italic;
 		font-weight: 600;
 	}
 	&__signature {
 		color: var(--cyan);
-		font: 0.62rem 'DM Mono';
+		@include tokens.mono-mixed(0.62rem);
 		letter-spacing: 0.04em;
 	}
 	&__role {
 		max-width: 520px;
 		margin: 0.85rem 0 0.45rem;
+		font-family: tokens.$font-body;
 		font-size: clamp(0.92rem, 1.1vw, 1rem);
 		font-weight: 700;
 		line-height: 1.35;
