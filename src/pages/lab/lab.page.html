@@ -15,7 +15,7 @@
 	<div class="lab-page__toolbar">
 		<div
 			role="group"
-			aria-label="Choose a dashboard perspective">
+			[attr.aria-label]="'pages.lab.metricPickerGroup' | translate">
 			@for (metric of telemetry; track metric.id) {
 				<button
 					type="button"
@@ -31,14 +31,14 @@
 			(click)="commandRequested.emit()">
 			<kbd>⌘</kbd>
 			<kbd>K</kbd>
-			Command palette
+			{{ 'pages.lab.commandPalette' | translate }}
 		</button>
 	</div>
 	<div
 		class="lab-page__switcher"
 		role="group"
-		aria-label="Choose a chart representation">
-		<span>Visualise as</span>
+		[attr.aria-label]="'pages.lab.chartPickerGroup' | translate">
+		<span>{{ 'pages.lab.visualiseAs' | translate }}</span>
 		@for (type of chartTypes; track type) {
 			<button
 				type="button"
@@ -62,18 +62,18 @@
 		<article class="lab-page__chart">
 			<header>
 				<div>
-					<span>8-week trend</span>
+					<span>{{ 'pages.lab.weekTrend' | translate }}</span>
 					<b>{{ selectedTelemetry().title }}</b>
 				</div>
-				<i>LIVE</i>
+				<i>{{ 'pages.lab.liveBadge' | translate }}</i>
 			</header>
 			<div
 				class="lab-page__bar-chart"
-				aria-label="Metric trend chart">
+				[attr.aria-label]="'pages.lab.weekTrend' | translate">
 				@for (bar of selectedTelemetry().bars; track $index) {
 					<span
 						[style.--bar]="bar + '%'"
-						[attr.aria-label]="bar + ' percent'"></span>
+						[attr.aria-label]="bar + '%'"></span>
 				}
 				<svg
 					viewBox="0 0 400 180"
@@ -84,8 +84,8 @@
 				</svg>
 			</div>
 			<footer>
-				<span>Week 01</span>
-				<span>Week 08</span>
+				<span>{{ 'pages.lab.weekStart' | translate }}</span>
+				<span>{{ 'pages.lab.weekEnd' | translate }}</span>
 			</footer>
 		</article>
 		<div class="lab-page__kpis">
@@ -144,22 +144,17 @@
 				}
 			</div>
 			<footer>
-				<span>
-					{{ playgroundRuns() }} completed
-					{{ playgroundRuns() === 1 ? 'loop' : 'loops' }}
-				</span>
+				<span>{{ completedLoopsLabel() }}</span>
 				<button
 					type="button"
 					(click)="resetPlayground()">
-					Reset
+					{{ 'pages.lab.resetButton' | translate }}
 					<i aria-hidden="true">↻</i>
 				</button>
 			</footer>
 		</div>
 	</section>
 	<p class="lab-page__motion-note">
-		Motion is optional. This page respects
-		<code>prefers-reduced-motion</code>
-		and remains fully usable without it.
+		{{ motionNote() }}
 	</p>
 </section>

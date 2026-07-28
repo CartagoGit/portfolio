@@ -15,7 +15,8 @@
 	<div class="approach-page__capabilities">
 		<div
 			class="approach-page__tabs"
-			role="tablist">
+			role="tablist"
+			[attr.aria-label]="'pages.approach.subtitle' | translate">
 			@for (
 				capability of capabilities;
 				track capability.id;
@@ -53,25 +54,26 @@
 </section>
 <section class="approach-page__experience">
 	<div>
-		<p>04 / Professional experience</p>
+		<p>
+			{{ 'pages.approach.experienceEyebrow' | translate }}
+		</p>
 		<h2>
-			Complex workflows,
+			{{ 'pages.approach.experienceTitleLead' | translate }}
 			<br />
-			quietly delivered.
+			<em>
+				{{ 'pages.approach.experienceTitleEmphasis' | translate }}
+			</em>
+			{{ 'pages.approach.experienceTitleTail' | translate }}
 		</h2>
 	</div>
 	<div>
 		<p>
-			I build repeated-use business interfaces where roles, long-lived
-			rules and complex forms need to remain understandable. I can discuss
-			the patterns and decisions without exposing client code, data or
-			product details.
+			{{ 'pages.approach.experienceDetail' | translate }}
 		</p>
 		<ul>
-			<li>Role-dependent actions and permissions</li>
-			<li>Web and Android delivery</li>
-			<li>Resilient forms and progressive validation</li>
-			<li>Architecture and testing practices that scale</li>
+			@for (bullet of experienceBullets().split('|'); track bullet) {
+				<li>{{ bullet }}</li>
+			}
 		</ul>
 	</div>
 </section>

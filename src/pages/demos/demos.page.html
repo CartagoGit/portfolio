@@ -21,21 +21,20 @@
 				<span>{{ demo.number }}</span>
 				<b>{{ demo.title }}</b>
 				<p>{{ demo.summary }}</p>
-				<i>Open demo ↗</i>
+				<i>{{ 'pages.demos.openDemo' | translate }}</i>
 			</a>
 		}
 	</div>
 	<section class="demos-page__game">
 		<div>
-			<p>Tiny pointless game</p>
-			<h3>Catch the neon signal.</h3>
-			<p>
-				Pure interaction design: the target moves on each successful
-				hit.
-			</p>
+			<p>{{ 'pages.demos.gameEyebrow' | translate }}</p>
+			<h3>{{ 'pages.demos.gameHeading' | translate }}</h3>
+			<p>{{ 'pages.demos.gameDetail' | translate }}</p>
 			<b>
 				{{ score() }}
-				<small>signals caught</small>
+				<small>
+					{{ 'pages.demos.gameSignalsLabel' | translate }}
+				</small>
 			</b>
 		</div>
 		<div class="demos-page__grid">

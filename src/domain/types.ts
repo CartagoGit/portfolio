@@ -74,6 +74,7 @@ export interface ILanguageOption {
 	id: ILocale;
 	label: string;
 	detail: string;
+	flag: string;
 }
 
 export interface IPlaygroundStepDefinition {

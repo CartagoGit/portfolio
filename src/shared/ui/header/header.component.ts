@@ -16,6 +16,12 @@ import type {
 } from '../../../domain/types';
 import type { IThemeDefinition } from '../../../core/platform/theme';
 
+/** Theme definition enriched with the localised label/detail. */
+export type IResolvedThemeDefinition = IThemeDefinition & {
+	label: string;
+	detail: string;
+};
+
 @Component({
 	selector: 'app-shell-header',
 	imports: [RouterLink, TranslatePipe],
@@ -31,7 +37,7 @@ export class HeaderComponent {
 	readonly localeMenuOpen = input.required<boolean>();
 	readonly localeMenuClosing = input.required<boolean>();
 	readonly theme = input.required<IThemeId>();
-	readonly themes = input.required<readonly IThemeDefinition[]>();
+	readonly themes = input.required<readonly IResolvedThemeDefinition[]>();
 	readonly themeMenuOpen = input.required<boolean>();
 	readonly themeMenuClosing = input.required<boolean>();
 	readonly navigate = output<IPageComponentId>();
@@ -42,7 +48,7 @@ export class HeaderComponent {
 	readonly themeSelect = output<IThemeId>();
 
 	/** Theme definition for the currently active theme; renders the swatch. */
-	readonly activeTheme = computed<IThemeDefinition>(() => {
+	readonly activeTheme = computed<IResolvedThemeDefinition>(() => {
 		const themes = this.themes();
 		const active = themes.find((entry) => entry.id === this.theme());
 		if (active !== undefined) return active;
@@ -54,6 +60,11 @@ export class HeaderComponent {
 		}
 		return fallback;
 	});
+
+	/** Locale option currently active; renders the flag on the opener button. */
+	readonly currentLanguage = computed<ILanguageOption | undefined>(() =>
+		this.languages().find((entry) => entry.id === this.locale())
+	);
 
 	readonly routeFor = (page: IPageComponentId): string[] =>
 		routeFor(page, this.locale());

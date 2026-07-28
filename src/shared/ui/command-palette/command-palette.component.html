@@ -9,39 +9,45 @@
 			aria-labelledby="command-title"
 			(click)="$event.stopPropagation()">
 			<div class="command-palette__heading">
-				<p id="command-title">Command palette</p>
+				<p id="command-title">
+					{{ 'chrome.commandPalette.title' | translate }}
+				</p>
 				<button
 					type="button"
 					(click)="close.emit()"
-					aria-label="Close command palette">
+					[attr.aria-label]="
+						'chrome.commandPalette.close' | translate
+					">
 					×
 				</button>
 			</div>
 			<label class="command-palette__search">
-				Search product commands
+				{{ 'chrome.commandPalette.searchLabel' | translate }}
 				<input
 					autofocus
-					placeholder="Try ‘work’ or ‘contact’" />
+					[attr.placeholder]="
+						'chrome.commandPalette.searchPlaceholder' | translate
+					" />
 			</label>
 			<a
 				[routerLink]="routeFor('work')"
 				(click)="select('work')">
 				<span>↗</span>
-				View selected work
+				{{ 'chrome.commandPalette.cmdViewWork' | translate }}
 				<kbd>↵</kbd>
 			</a>
 			<a
 				[routerLink]="routeFor('lab')"
 				(click)="select('lab')">
 				<span>✦</span>
-				Explore Frontend Lab
+				{{ 'chrome.commandPalette.cmdLab' | translate }}
 				<kbd>↵</kbd>
 			</a>
 			<a
 				[routerLink]="routeFor('contact')"
 				(click)="select('contact')">
 				<span>✉</span>
-				Start a conversation
+				{{ 'chrome.commandPalette.cmdContact' | translate }}
 				<kbd>↵</kbd>
 			</a>
 		</section>

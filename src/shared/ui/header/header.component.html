@@ -72,16 +72,15 @@
 				type="button"
 				(click)="localeToggle.emit()"
 				[attr.aria-expanded]="localeMenuOpen()"
+				[attr.aria-label]="'lang.languagesLabel' | translate"
 				aria-haspopup="listbox">
-				<img
-					[src]="
-						locale() === 'en'
-							? '/icons/flag-en.svg'
-							: '/icons/flag-es.svg'
-					"
-					width="24"
-					height="16"
-					alt="" />
+				@if (currentLanguage(); as lang) {
+					<img
+						[src]="lang.flag"
+						width="24"
+						height="16"
+						alt="" />
+				}
 				<span>{{ locale().toUpperCase() }}</span>
 				<i>⌄</i>
 			</button>
@@ -89,6 +88,7 @@
 				<div
 					class="header__locale-menu"
 					[class.is-closing]="localeMenuClosing()"
+					[attr.aria-label]="'lang.languagesLabel' | translate"
 					role="listbox">
 					@for (language of languages(); track language.id) {
 						<button
@@ -97,11 +97,7 @@
 							[attr.aria-selected]="locale() === language.id"
 							(click)="localeSelect.emit(language.id)">
 							<img
-								[src]="
-									language.id === 'en'
-										? '/icons/flag-en.svg'
-										: '/icons/flag-es.svg'
-								"
+								[src]="language.flag"
 								width="24"
 								height="16"
 								alt="" />
@@ -135,6 +131,7 @@
 				<div
 					class="header__theme-menu"
 					[class.is-closing]="themeMenuClosing()"
+					[attr.aria-label]="'lang.themeMenuLabel' | translate"
 					role="listbox">
 					@for (themeOption of themes(); track themeOption.id) {
 						<button

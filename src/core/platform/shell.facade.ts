@@ -55,10 +55,12 @@ export class ShellFacade {
 	/** Theme definitions surfaced to the dropdown; label/detail come from the
 	 * active locale's translation map so the swatch + copy stay in sync. */
 	readonly themes = computed<
-		ReadonlyArray<IThemeDefinition & {
-			label: string;
-			detail: string;
-		}>
+		ReadonlyArray<
+			IThemeDefinition & {
+				label: string;
+				detail: string;
+			}
+		>
 	>(() => {
 		const t = this._translate.translations();
 		return THEMES.map((theme) => ({

@@ -153,29 +153,29 @@
 	</div>
 
 	<div class="work-page__secondary">
-		<p>Also pinned</p>
+		<p>{{ 'pages.work.alsoPinnedHeading' | translate }}</p>
 		<a
 			href="https://github.com/CartagoGit/print-cv"
 			target="_blank"
 			rel="noreferrer">
-			Print CV
-			<span>Vue, validation and E2E · repository</span>
+			{{ 'pages.work.printCv' | translate }}
+			<span>{{ 'pages.work.printCvDetail' | translate }}</span>
 			↗
 		</a>
 		<a
 			href="https://github.com/CartagoGit/zoneless-calculator"
 			target="_blank"
 			rel="noreferrer">
-			Zoneless Calculator
-			<span>Angular signals and tests · repository</span>
+			{{ 'pages.work.zoneless' | translate }}
+			<span>{{ 'pages.work.zonelessDetail' | translate }}</span>
 			↗
 		</a>
 		<a
 			href="https://github.com/CartagoGit/NestGpt"
 			target="_blank"
 			rel="noreferrer">
-			NestGpt
-			<span>NestJS and GPT integration · repository</span>
+			{{ 'pages.work.nestgpt' | translate }}
+			<span>{{ 'pages.work.nestgptDetail' | translate }}</span>
 			↗
 		</a>
 	</div>
@@ -184,26 +184,30 @@
 		class="work-page__directory"
 		aria-labelledby="directory-title">
 		<div>
-			<p class="work-page__eyebrow">Public surface</p>
-			<h2 id="directory-title">
-				Code, packages
-				<br />
-				<em>and demos.</em>
-			</h2>
-			<p>
-				Direct public links grouped separately from the pinned
-				repositories above.
+			<p class="work-page__eyebrow">
+				{{ 'pages.work.directoryEyebrow' | translate }}
 			</p>
+			<h2 id="directory-title">
+				{{ 'pages.work.directoryTitleLead' | translate }}
+				<br />
+				<em>
+					{{ 'pages.work.directoryTitleEmphasis' | translate }}
+				</em>
+				{{ 'pages.work.directoryTitleTail' | translate }}
+			</h2>
+			<p>{{ 'pages.work.directorySubtitle' | translate }}</p>
 		</div>
 		<div class="work-page__directory-grid">
 			<a
 				href="https://github.com/CartagoGit"
 				target="_blank"
 				rel="noreferrer">
-				<span>01 / CODE</span>
-				<b>GitHub profile</b>
+				<span>
+					{{ 'pages.work.directoryCodeLabel' | translate }}
+				</span>
+				<b>{{ 'pages.work.directoryCodeTitle' | translate }}</b>
 				<small>
-					Repositories, pinned work and contribution history.
+					{{ 'pages.work.directoryCodeDetail' | translate }}
 				</small>
 				<i>↗</i>
 			</a>
@@ -211,27 +215,39 @@
 				href="https://hub.docker.com/u/cartagodocker"
 				target="_blank"
 				rel="noreferrer">
-				<span>02 / SHIP</span>
-				<b>Docker Hub</b>
-				<small>Public container images and delivery context.</small>
+				<span>
+					{{ 'pages.work.directoryShipLabel' | translate }}
+				</span>
+				<b>{{ 'pages.work.directoryShipTitle' | translate }}</b>
+				<small>
+					{{ 'pages.work.directoryShipDetail' | translate }}
+				</small>
 				<i>↗</i>
 			</a>
 			<a
 				href="https://deathblitz.netlify.app/"
 				target="_blank"
 				rel="noreferrer">
-				<span>03 / DEMO</span>
-				<b>DeathBlitz</b>
-				<small>Public interactive product experiment.</small>
+				<span>
+					{{ 'pages.work.directoryDemoLabel' | translate }}
+				</span>
+				<b>{{ 'pages.work.directoryDemoTitle' | translate }}</b>
+				<small>
+					{{ 'pages.work.directoryDemoDetail' | translate }}
+				</small>
 				<i>↗</i>
 			</a>
 			<a
 				href="https://cartago-tetris.netlify.app/"
 				target="_blank"
 				rel="noreferrer">
-				<span>04 / PLAY</span>
-				<b>Cartago Tetris</b>
-				<small>Keyboard interaction and game-loop state.</small>
+				<span>
+					{{ 'pages.work.directoryPlayLabel' | translate }}
+				</span>
+				<b>{{ 'pages.work.directoryPlayTitle' | translate }}</b>
+				<small>
+					{{ 'pages.work.directoryPlayDetail' | translate }}
+				</small>
 				<i>↗</i>
 			</a>
 		</div>

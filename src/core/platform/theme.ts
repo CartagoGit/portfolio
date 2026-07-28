@@ -136,7 +136,8 @@ export function detectPreferredTheme(
  * can safely invoke this without crashing the prerender pipeline.
  */
 export function persistTheme(theme: IThemeId): void {
-	if (typeof window === 'undefined' || typeof document === 'undefined') return;
+	if (typeof window === 'undefined' || typeof document === 'undefined')
+		return;
 	try {
 		window.localStorage.setItem(THEME_STORAGE_KEY, theme);
 	} catch {

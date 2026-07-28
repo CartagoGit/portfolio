@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { ILocale, IPublicLink } from '../../../domain/types';
 
 @Component({
 	selector: 'app-shell-footer',
-	imports: [RouterLink],
+	imports: [RouterLink, TranslatePipe],
 	templateUrl: './footer.component.html',
 	styleUrl: './footer.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

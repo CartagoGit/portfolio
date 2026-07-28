@@ -9,7 +9,14 @@ describe('HeaderComponent', () => {
 		const fixture = TestBed.createComponent(HeaderComponent);
 		fixture.componentRef.setInput('locale', 'en');
 		fixture.componentRef.setInput('page', 'work');
-		fixture.componentRef.setInput('languages', []);
+		fixture.componentRef.setInput('languages', [
+			{
+				id: 'en',
+				label: 'English',
+				detail: 'US + UK',
+				flag: '/icons/flag-en.svg',
+			},
+		]);
 		fixture.componentRef.setInput('menuOpen', false);
 		fixture.componentRef.setInput('localeMenuOpen', false);
 		fixture.componentRef.setInput('localeMenuClosing', false);

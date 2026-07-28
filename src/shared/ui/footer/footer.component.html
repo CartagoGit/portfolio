@@ -8,7 +8,7 @@
 	<p class="footer__copyright">© 2026 Mario Cabrero Volarich.</p>
 	<nav
 		class="footer__links"
-		aria-label="Public links">
+		[attr.aria-label]="'chrome.footer.connectLabel' | translate">
 		@for (link of links(); track link.href) {
 			<a
 				class="footer__link"
@@ -37,6 +37,6 @@
 	<a
 		class="footer__top"
 		href="#main-content">
-		Back to top ↑
+		{{ 'chrome.footer.backToTop' | translate }}
 	</a>
 </footer>

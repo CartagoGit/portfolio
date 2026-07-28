@@ -37,38 +37,41 @@
 				href="https://hub.docker.com/u/cartagodocker"
 				target="_blank"
 				rel="noreferrer">
-				Docker Hub
+				{{ 'pages.contact.ctaDockerHub' | translate }}
 				<span>↗</span>
 			</a>
 		</div>
 		<form
 			(submit)="submit($event)"
-			aria-label="Contact form">
+			[attr.aria-label]="'pages.contact.formAria' | translate">
 			<label>
-				Your email
+				{{ 'pages.contact.formEmailLabel' | translate }}
 				<input
 					type="email"
 					autocomplete="email"
-					placeholder="you@company.com"
+					[attr.placeholder]="
+						'pages.contact.formEmailPlaceholder' | translate
+					"
 					required />
 			</label>
 			<label>
-				What are you building?
+				{{ 'pages.contact.formMessageLabel' | translate }}
 				<textarea
 					rows="3"
-					placeholder="A few useful details…"
+					[attr.placeholder]="
+						'pages.contact.formMessagePlaceholder' | translate
+					"
 					required></textarea>
 			</label>
 			<button type="submit">
-				Send an introduction
+				{{ 'pages.contact.formSubmit' | translate }}
 				<span>↗</span>
 			</button>
 			@if (sent()) {
 				<p
 					class="contact-page__feedback"
 					role="status">
-					Thanks — this demo validates the interaction. Connect it to
-					your preferred email or form service before launch.
+					{{ 'pages.contact.formFeedback' | translate }}
 				</p>
 			}
 		</form>

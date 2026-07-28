@@ -6,11 +6,12 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { routeFor } from '../../../core/platform/routing';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { ILocale, IPageComponentId } from '../../../domain/types';
 
 @Component({
 	selector: 'app-command-palette',
-	imports: [RouterLink],
+	imports: [RouterLink, TranslatePipe],
 	templateUrl: './command-palette.component.html',
 	styleUrl: './command-palette.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

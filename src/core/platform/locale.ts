@@ -72,3 +72,15 @@ export function readLocaleCookie(doc: Document): string | null {
 		)?.[1] ?? null
 	);
 }
+
+/**
+ * Locale registry mirroring the canonical set the runtime supports.
+ * The translation map owns the display copy (label/detail); this
+ * module is the single source of truth for the runtime list so
+ * the shell facade, the SSR cookie layer and the UI dropdown can
+ * agree without duplicating the array.
+ */
+export const LOCALES = [
+	{ id: 'en' as const, flag: '/icons/flag-en.svg' },
+	{ id: 'es' as const, flag: '/icons/flag-es.svg' },
+] as const satisfies ReadonlyArray<{ id: ILocale; flag: string }>;

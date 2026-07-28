@@ -27,6 +27,16 @@ export const en: ITranslationMap = {
 			availability: 'Available for thoughtful product work',
 			connectLabel: 'Connect',
 			rights: 'All rights reserved.',
+			backToTop: 'Back to top ↑',
+		},
+		commandPalette: {
+			title: 'Command palette',
+			close: 'Close command palette',
+			searchLabel: 'Search product commands',
+			searchPlaceholder: 'Try ‘work’ or ‘contact’',
+			cmdViewWork: 'View selected work',
+			cmdLab: 'Explore Frontend Lab',
+			cmdContact: 'Start a conversation',
 		},
 	},
 	pages: {
@@ -109,6 +119,34 @@ export const en: ITranslationMap = {
 			keyerDescription:
 				'A published TypeScript CLI and library for managing secrets and configuration workflows with a cleaner developer experience.',
 			keyerBullets: 'CLI design|Node.js tooling|Published package',
+			alsoPinnedHeading: 'Also pinned',
+			printCv: 'Print CV',
+			printCvDetail: 'Vue, validation and E2E · repository',
+			zoneless: 'Zoneless Calculator',
+			zonelessDetail: 'Angular signals and tests · repository',
+			nestgpt: 'NestGpt',
+			nestgptDetail: 'NestJS and GPT integration · repository',
+			viewOnNpm: 'View on npm',
+			directoryEyebrow: 'Public surface',
+			directoryTitleLead: 'Code, packages',
+			directoryTitleEmphasis: 'and demos.',
+			directoryTitleTail: '',
+			directorySubtitle:
+				'Direct public links grouped separately from the pinned repositories above.',
+			directoryCodeLabel: '01 / CODE',
+			directoryCodeTitle: 'GitHub profile',
+			directoryCodeDetail:
+				'Repositories, pinned work and contribution history.',
+			directoryShipLabel: '02 / SHIP',
+			directoryShipTitle: 'Docker Hub',
+			directoryShipDetail:
+				'Public container images and delivery context.',
+			directoryDemoLabel: '03 / DEMO',
+			directoryDemoTitle: 'DeathBlitz',
+			directoryDemoDetail: 'Public interactive product experiment.',
+			directoryPlayLabel: '04 / PLAY',
+			directoryPlayTitle: 'Cartago Tetris',
+			directoryPlayDetail: 'Keyboard interaction and game-loop state.',
 		},
 		lab: {
 			eyebrow: '02 / Frontend lab',
@@ -132,6 +170,24 @@ export const en: ITranslationMap = {
 			stepVerifyLabel: 'Verify',
 			stepVerifyHint: 'Test the journey before shipping.',
 			demosHeading: 'Interactive demos',
+			chartPickerGroup: 'Choose a chart representation',
+			metricPickerGroup: 'Choose a dashboard perspective',
+			commandPalette: 'Command palette',
+			visualiseAs: 'Visualise as',
+			weekTrend: '8-week trend',
+			liveBadge: 'LIVE',
+			weekStart: 'Week 01',
+			weekEnd: 'Week 08',
+			completedCount: '{count} completed loops',
+			completedCountSingular: '{count} completed loop',
+			resetButton: 'Reset',
+			motionNote:
+				'Motion is optional. This page respects prefers-reduced-motion and remains fully usable without it.',
+			motionNoteCode: 'prefers-reduced-motion',
+			playgroundCompleteMessage:
+				'Loop complete — the product workflow is in a deliberate order.',
+			playgroundIncompleteMessage:
+				'Drag the steps into the order in which a product should be shipped.',
 		},
 		approach: {
 			eyebrow: '03 / Approach',
@@ -173,6 +229,14 @@ export const en: ITranslationMap = {
 			capabilityToolingDetail:
 				'Typed contracts, CLIs and MCP tooling turn repeated engineering work into dependable workflows for teams and agents.',
 			capabilityToolingProof: 'MCP Vertex · QuickModel · Keyer',
+			experienceEyebrow: '04 / Professional experience',
+			experienceTitleLead: 'Complex workflows,',
+			experienceTitleEmphasis: 'quietly delivered.',
+			experienceTitleTail: '',
+			experienceDetail:
+				'I build repeated-use business interfaces where roles, long-lived rules and complex forms need to remain understandable. I can discuss the patterns and decisions without exposing client code, data or product details.',
+			experienceBullets:
+				'Role-dependent actions and permissions|Web and Android delivery|Resilient forms and progressive validation|Architecture and testing practices that scale',
 		},
 		knowledge: {
 			eyebrow: '04 / Knowledge',
@@ -181,6 +245,30 @@ export const en: ITranslationMap = {
 			titleTail: '',
 			subtitle:
 				'Knowledge surfaced as searchable artefacts rather than transient blog posts.',
+			tileFrontendLabel: 'Frontend',
+			tileFrontendStack: 'Angular · TypeScript · SCSS',
+			tileFrontendDetail:
+				'Signals, SSR, responsive interfaces and accessible UI for real workflows.',
+			tileMobileLabel: 'Mobile',
+			tileMobileStack: 'Ionic · Capacitor · Android',
+			tileMobileDetail:
+				'One product system carried from web to touch-first releases.',
+			tileQualityLabel: 'Quality',
+			tileQualityStack: 'Vitest · Accessibility · Performance',
+			tileQualityDetail:
+				'Tests, semantics and performance budgets that expose risk early.',
+			tileToolingLabel: 'Tooling',
+			tileToolingStack: 'Node.js · MCP · Docker',
+			tileToolingDetail:
+				'CLIs, containers and typed agent workflows for repeatable delivery.',
+			tileSystemsLabel: 'Systems',
+			tileSystemsStack: 'CDK · Storybook · Tokens',
+			tileSystemsDetail:
+				'Reusable primitives that make a visual language scale without flattening it.',
+			tileBackendLabel: 'Backend edges',
+			tileBackendStack: 'NestJS · APIs · GPT',
+			tileBackendDetail:
+				'Clear integration boundaries when a frontend needs a dependable service layer.',
 		},
 		docker: {
 			eyebrow: '05 / Docker',
@@ -189,6 +277,13 @@ export const en: ITranslationMap = {
 			titleTail: '',
 			subtitle:
 				'Container images that hold product and tooling environments together across machines.',
+			terminalHeading: 'Docker Hub / cartagodocker',
+			terminalPull: '$ docker pull cartagodocker/<image>',
+			terminalStatus: 'public images available',
+			terminalOpen: 'Open Docker Hub ↗',
+			terminalAngular: 'Angular',
+			terminalNode: 'Node',
+			terminalDelivery: 'Delivery',
 		},
 		demos: {
 			eyebrow: '06 / Demos',
@@ -199,6 +294,12 @@ export const en: ITranslationMap = {
 				'Each demo is a self-contained interface designed to be poked at — keyboard, mouse, or touch.',
 			deprecatedNotice:
 				'Some demos below are older Netlify builds; they remain linked as long as the originals are reachable.',
+			openDemo: 'Open demo ↗',
+			gameEyebrow: 'Tiny pointless game',
+			gameHeading: 'Catch the neon signal.',
+			gameDetail:
+				'Pure interaction design: the target moves on each successful hit.',
+			gameSignalsLabel: 'signals caught',
 		},
 		contact: {
 			eyebrow: '07 / Contact',
@@ -210,6 +311,15 @@ export const en: ITranslationMap = {
 			ctaEmail: 'Email',
 			ctaLinkedin: 'LinkedIn',
 			ctaGithub: 'GitHub',
+			ctaDockerHub: 'Docker Hub',
+			formAria: 'Contact form',
+			formEmailLabel: 'Your email',
+			formEmailPlaceholder: 'you@company.com',
+			formMessageLabel: 'What are you building?',
+			formMessagePlaceholder: 'A few useful details…',
+			formSubmit: 'Send an introduction',
+			formFeedback:
+				'Thanks — this demo validates the interaction. Connect it to your preferred email or form service before launch.',
 		},
 	},
 	seo: {
@@ -219,5 +329,19 @@ export const en: ITranslationMap = {
 	lang: {
 		languagesLabel: 'Languages',
 		themeMenuLabel: 'Themes',
+		languages: {
+			en: { label: 'English', detail: 'US + UK' },
+			es: { label: 'Español', detail: 'España' },
+		},
+		themes: {
+			dark: { label: 'Midnight', detail: 'Default · neon cyan' },
+			light: { label: 'Paper', detail: 'Bright · cobalt blue' },
+			midnight: { label: 'Deep blue', detail: 'Violet · cyan' },
+			ocean: { label: 'Tidal', detail: 'Teal · aqua' },
+			forest: { label: 'Forest', detail: 'Green · mustard' },
+			sunset: { label: 'Sunset', detail: 'Coral · amber' },
+			solar: { label: 'Solar', detail: 'Amber · pink' },
+			mono: { label: 'Graphite', detail: 'Greyscale · ink' },
+		},
 	},
 };

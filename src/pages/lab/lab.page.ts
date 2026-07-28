@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	computed,
+	inject,
 	output,
 	signal,
 } from '@angular/core';
@@ -20,6 +21,7 @@ import type {
 	ITelemetryId,
 } from '../../domain/types';
 import { TranslatePipe } from '../../lang/translate.pipe';
+import { TranslateService } from '../../lang/translate.service';
 
 @Component({
 	selector: 'app-lab-page',
@@ -29,6 +31,7 @@ import { TranslatePipe } from '../../lang/translate.pipe';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabPageComponent {
+	private readonly _translate = inject(TranslateService);
 	readonly commandRequested = output<void>();
 	readonly telemetry = TELEMETRY;
 	readonly chartTypes: readonly IChartType[] = ['bars', 'line', 'area'];
@@ -50,10 +53,32 @@ export class LabPageComponent {
 			(step, index) => step === this.playgroundSteps[index]?.id
 		);
 	});
+	/** Completed-loop counter interpolating the singular/plural template. */
+	readonly completedLoopsLabel = computed(() => {
+		const count = this.playgroundRuns();
+		const template = this._translate.instant(
+			count === 1
+				? 'pages.lab.completedCountSingular'
+				: 'pages.lab.completedCount'
+		);
+		return template.replace('{count}', String(count));
+	});
+	/** Playground status message flips with the loop completion signal. */
 	readonly playgroundMessage = computed(() =>
-		this.playgroundComplete()
-			? 'Loop complete — the product workflow is in a deliberate order.'
-			: 'Drag the steps into the order in which a product should be shipped.'
+		this._translate.instant(
+			this.playgroundComplete()
+				? 'pages.lab.playgroundCompleteMessage'
+				: 'pages.lab.playgroundIncompleteMessage'
+		)
+	);
+	/** Motion note text with the `prefers-reduced-motion` snippet embedded. */
+	readonly motionNote = computed(() =>
+		this._translate
+			.instant('pages.lab.motionNote')
+			.replace(
+				'{code}',
+				this._translate.instant('pages.lab.motionNoteCode')
+			)
 	);
 
 	setTelemetry(metric: ITelemetryId): void {
