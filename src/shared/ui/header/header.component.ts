@@ -35,9 +35,8 @@ export class HeaderComponent {
 	readonly localeSelect = output<ILocale>();
 	readonly themeToggle = output<void>();
 
-	routeFor(page: IPageComponentId): string[] {
-		return routeFor(page, this.locale());
-	}
+	readonly routeFor = (page: IPageComponentId): string[] =>
+		routeFor(page, this.locale());
 	selectPage(page: IPageComponentId): void {
 		this.navigate.emit(page);
 	}

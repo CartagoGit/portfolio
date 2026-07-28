@@ -21,9 +21,8 @@ export class CommandPaletteComponent {
 	readonly close = output<void>();
 	readonly navigate = output<IPageComponentId>();
 
-	routeFor(page: IPageComponentId): string[] {
-		return routeFor(page, this.locale());
-	}
+	readonly routeFor = (page: IPageComponentId): string[] =>
+		routeFor(page, this.locale());
 
 	select(page: IPageComponentId): void {
 		this.navigate.emit(page);
