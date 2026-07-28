@@ -1,10 +1,7 @@
-import { DOCUMENT } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
-	inject,
 	type OnDestroy,
-	type OnInit,
 	ViewEncapsulation,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
@@ -35,10 +32,9 @@ import type { IChartOption, IEffectOption } from '../../../domain/types';
 		'(document:pointerdown)': '_onDocumentDown($event)',
 	},
 })
-export class HeroMonitorComponent implements OnDestroy, OnInit {
+export class HeroMonitorComponent implements OnDestroy {
 	readonly hero = new HeroMonitorFacade();
 	private readonly _earth = new EarthDepthFacade();
-	private readonly _document = inject(DOCUMENT);
 
 	readonly activePanel = this.hero.activePanel;
 	readonly chartType = this.hero.chartType;
@@ -70,14 +66,8 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		{ id: 'spectrum', symbol: '◈' },
 	];
 
-	ngOnInit(): void {
-		// Outside clicks dismiss the orb back behind.
-		this._document.addEventListener('pointerdown', this._onDocumentDown);
-	}
-
 	ngOnDestroy(): void {
 		this.hero.destroy();
-		this._document.removeEventListener('pointerdown', this._onDocumentDown);
 	}
 
 	protected readonly _onDocumentDown = (event: PointerEvent): void => {
