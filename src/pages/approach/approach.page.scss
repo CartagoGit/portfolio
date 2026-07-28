@@ -6,7 +6,7 @@
 .approach-page {
 	width: min(1180px, calc(100% - 3rem));
 	margin: auto;
-	padding: 2rem 0;
+	padding: var(--space-8) 0;
 	&__heading > p,
 	&__experience > div > p:first-child {
 		color: var(--cyan);
@@ -36,7 +36,7 @@
 		display: grid;
 		grid-template-columns: 2.4rem 1fr auto;
 		padding: 0.8rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: transparent;
 		color: var(--muted);
 		text-align: left;
@@ -47,8 +47,8 @@
 		color: var(--cyan);
 	}
 	&__detail {
-		padding: clamp(1.2rem, 4vw, 3rem);
-		border: 1px solid var(--line);
+		padding: clamp(1.2rem, 4vw, var(--space-12));
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 	}
 	&__detail > p:first-child,
@@ -58,7 +58,7 @@
 	}
 	&__detail h3 {
 		font-size: clamp(2rem, 4vw, 4rem);
-		margin: 0.5rem 0;
+		margin: var(--space-2) 0;
 	}
 	&__detail > p {
 		color: var(--muted);
@@ -71,7 +71,7 @@
 	}
 	&__detail span {
 		padding: 0.3rem 0.5rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		@include tokens.mono-mixed(0.55rem);
 	}
 	&__detail footer {

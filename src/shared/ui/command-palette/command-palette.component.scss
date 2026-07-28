@@ -17,7 +17,7 @@
 	&__dialog {
 		width: min(100%, 580px);
 		padding: 1rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 		box-shadow: 0 30px 100px #0009;
 	}
@@ -39,13 +39,13 @@
 	&__search {
 		display: grid;
 		gap: 0.5rem;
-		margin: 1rem 0;
+		margin: var(--space-4) 0;
 		color: var(--muted);
 		@include tokens.mono-mixed(0.6rem);
 	}
 	&__search input {
 		padding: 0.75rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		outline: 0;
 		color: var(--ink);
 		background: transparent;
@@ -57,7 +57,7 @@
 		display: grid;
 		grid-template-columns: 2rem 1fr auto;
 		align-items: center;
-		padding: 0.75rem 0.3rem;
+		padding: var(--space-3) 0.3rem;
 		border-top: 1px solid var(--line);
 		color: var(--ink);
 		font-size: 0.78rem;

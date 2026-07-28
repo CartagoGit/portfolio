@@ -2,19 +2,37 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-	LANGUAGES,
-	PORTFOLIO_COPY,
-	PUBLIC_LINKS,
-	TECHNOLOGY_MARQUEE,
-} from '../../domain/data';
-import type { ILocale, IPageComponentId } from '../../domain/types';
+import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data';
+import type {
+	ILocale,
+	IPageComponentId,
+	IThemeId,
+} from '../../domain/types';
+import { TranslateService } from '../../lang/translate.service';
 import { detectPreferredLocale, persistLocale } from './locale';
 import { buildDescription, buildTitle } from './seo';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
+import {
+	DEFAULT_THEME,
+	THEMES,
+	detectPreferredTheme,
+	isTheme,
+	persistTheme,
+	type IThemeDefinition,
+} from './theme';
 
 export { PAGE_ORDER, transitionDirection } from './routing';
 
+const THEME_TRANSITION_MS = 520;
+
+/**
+ * Composition root for the portfolio shell.
+ *
+ * Owns the active locale, theme, navigation state and the open/close
+ * signals for both dropdown menus. Pages and shared UI components
+ * bind to this facade rather than reaching into `ActivatedRoute`
+ * directly.
+ */
 export class ShellFacade {
 	private readonly _route = inject(ActivatedRoute);
 	private readonly _router = inject(Router);
@@ -22,27 +40,41 @@ export class ShellFacade {
 	private readonly _title = inject(Title);
 	private readonly _meta = inject(Meta);
 	private readonly _platformId = inject(PLATFORM_ID);
+	private readonly _translate = inject(TranslateService);
 
-	readonly locale = signal<ILocale>('en');
+	readonly languages = [
+		{ id: 'en' as const, label: 'English', detail: 'US + UK' },
+		{ id: 'es' as const, label: 'Español', detail: 'España' },
+	];
+	readonly themes = THEMES;
+	readonly publicLinks = PUBLIC_LINKS;
+	readonly technologyMarquee = TECHNOLOGY_MARQUEE;
+
+	readonly locale = this._translate.locale;
 	readonly page = signal<IPageComponentId>('home');
 	readonly menuOpen = signal(false);
 	readonly localeMenuOpen = signal(false);
 	readonly localeMenuClosing = signal(false);
-	readonly lightMode = signal(false);
-	readonly commandOpen = signal(false);
-	readonly publicLinks = PUBLIC_LINKS;
-	readonly technologyMarquee = TECHNOLOGY_MARQUEE;
-	readonly languages = LANGUAGES;
-	readonly copy = computed(() => PORTFOLIO_COPY[this.locale()]);
+	readonly themeMenuOpen = signal(false);
+	readonly themeMenuClosing = signal(false);
+
+	readonly theme = signal<IThemeId>(DEFAULT_THEME);
+	/**
+	 * Convenience boolean retained for legacy bindings that expect
+	 * a `lightMode` input on the header. New code should consume
+	 * `theme()` and look up the theme definition in `themes`.
+	 */
+	readonly lightMode = computed(() => this.theme() === 'light');
+
+	readonly copy = computed(() => this._translate.translations());
 
 	constructor() {
-		this.lightMode.set(
-			this._document.documentElement.getAttribute('data-theme') ===
-				'light'
-		);
+		this.theme.set(this._detectInitialTheme());
+		this._applyTheme(this.theme(), { animate: false });
 		this._route.paramMap.subscribe((params) => {
-			const locale = params.get('locale') === 'es' ? 'es' : 'en';
-			this.locale.set(locale);
+			const raw = params.get('locale');
+			const locale: ILocale = raw === 'es' ? 'es' : 'en';
+			this._translate.setLocale(locale);
 			this._document.documentElement.lang = locale;
 			this._refreshSeo();
 		});
@@ -53,13 +85,37 @@ export class ShellFacade {
 		this._applyPreferredLocale();
 	}
 
-	setTheme(): void {
-		const next = !this.lightMode();
-		this.lightMode.set(next);
-		this._document.documentElement.setAttribute(
-			'data-theme',
-			next ? 'light' : 'dark'
-		);
+	/**
+	 * Sets the active theme, applies the `data-theme` attribute and
+	 * triggers the cross-theme transition. Persists the choice on
+	 * the browser side via `localStorage` + a cookie so SSR
+	 * hydration matches.
+	 */
+	setTheme(theme: IThemeId | IThemeDefinition): void {
+		const id = typeof theme === 'string' ? theme : theme.id;
+		if (!isTheme(id)) return;
+		if (id === this.theme()) return;
+		this.theme.set(id);
+		this._applyTheme(id, { animate: true });
+	}
+
+	toggleThemeMenu(): void {
+		if (this.themeMenuOpen()) {
+			this.themeMenuClosing.set(true);
+			window.setTimeout(() => {
+				this.themeMenuOpen.set(false);
+				this.themeMenuClosing.set(false);
+			}, 180);
+			return;
+		}
+		this.themeMenuClosing.set(false);
+		this.themeMenuOpen.set(true);
+	}
+
+	closeMenus(): void {
+		this.menuOpen.set(false);
+		this.localeMenuOpen.set(false);
+		this.themeMenuOpen.set(false);
 	}
 
 	selectLocale(locale: ILocale): void {
@@ -88,8 +144,7 @@ export class ShellFacade {
 	setTransition(target: IPageComponentId): void {
 		this._document.documentElement.dataset['transitionDirection'] =
 			transitionDirection(this.page(), target);
-		this.menuOpen.set(false);
-		this.localeMenuOpen.set(false);
+		this.closeMenus();
 	}
 
 	private _asPage(page: unknown): IPageComponentId {
@@ -118,5 +173,28 @@ export class ShellFacade {
 
 	private _persistLocale(locale: ILocale): void {
 		persistLocale(this._document, locale);
+	}
+
+	private _detectInitialTheme(): IThemeId {
+		if (!isPlatformBrowser(this._platformId)) return DEFAULT_THEME;
+		return detectPreferredTheme(
+			window.localStorage,
+			document.cookie,
+			DEFAULT_THEME
+		);
+	}
+
+	private _applyTheme(id: IThemeId, { animate }: { animate: boolean }): void {
+		const root = this._document.documentElement;
+		root.setAttribute('data-theme', id);
+		if (!animate || !isPlatformBrowser(this._platformId)) {
+			persistTheme(id);
+			return;
+		}
+		root.setAttribute('data-theme-transition', '1');
+		window.setTimeout(() => {
+			root.removeAttribute('data-theme-transition');
+		}, THEME_TRANSITION_MS);
+		persistTheme(id);
 	}
 }

@@ -7,7 +7,7 @@
 .demos-page {
 	width: min(1180px, calc(100% - 3rem));
 	margin: auto;
-	padding: 2rem 0 5rem;
+	padding: var(--space-8) 0 5rem;
 	&__heading > p {
 		color: var(--muted);
 		line-height: 1.7;
@@ -30,14 +30,14 @@
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
-		margin: 3rem 0;
+		margin: var(--space-12) 0;
 	}
 	&__links a {
 		display: grid;
 		gap: 0.65rem;
 		min-height: 180px;
 		padding: 1.2rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		color: var(--ink);
 		text-decoration: none;
 		transition:
@@ -63,13 +63,13 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 2rem;
-		padding: clamp(1.3rem, 4vw, 3rem);
-		border: 1px solid var(--line);
+		padding: clamp(1.3rem, 4vw, var(--space-12));
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 	}
 	&__game h3 {
 		font-size: clamp(1.8rem, 3vw, 3rem);
-		margin: 0.5rem 0;
+		margin: var(--space-2) 0;
 	}
 	&__game p {
 		color: var(--muted);
@@ -89,7 +89,7 @@
 	}
 	&__grid button {
 		aspect-ratio: 1;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface-2);
 		transition:
 			transform 0.2s,

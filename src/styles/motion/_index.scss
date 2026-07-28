@@ -5,6 +5,7 @@
 // shared easing curves (`tokens.$ease-standard` / `tokens.$ease-emphasized`)
 // without having to add a second `@use` for them.
 @forward '../tokens/durations';
+@forward './theme-transition';
 @use '../tokens/durations' as tokens;
 
 $entrance-ease: tokens.$ease-emphasized;

@@ -3,7 +3,7 @@
 // Consumers `@use '../styles/tokens/index' as *;` and get the palette maps
 // plus the motion/easing vocabulary and the typography mixins through one
 // declaration.
-@forward './palette';
+@forward './themes';
 @forward './durations';
 // The typography partial exposes both namespaced members ($font-body,
 // $font-mono, $font-accent) and two helper mixins (mono, mono-mixed).

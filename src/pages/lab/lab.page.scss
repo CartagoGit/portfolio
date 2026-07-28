@@ -48,7 +48,7 @@
 	&__toolbar button,
 	&__switcher button {
 		padding: 0.55rem 0.7rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 10px;
 		background: transparent;
 		color: var(--muted);
@@ -75,7 +75,7 @@
 	}
 	&__command kbd {
 		padding: 0.1rem 0.25rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		color: var(--muted);
 		@include tokens.mono-mixed(0.62rem);
 	}
@@ -97,7 +97,7 @@
 	&__summary,
 	&__chart,
 	&__kpis article {
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 	}
 	&__summary {
@@ -155,7 +155,8 @@
 	}
 	&__chart header i {
 		padding: 0.3rem 0.4rem;
-		border: 1px solid color-mix(in srgb, var(--lime) 60%, transparent);
+		border: var(--border-thin) solid
+			color-mix(in srgb, var(--lime) 60%, transparent);
 		color: var(--lime);
 		@include tokens.mono-mixed(0.55rem);
 		font-style: normal;
@@ -184,7 +185,7 @@
 		width: 100%;
 		min-height: 8px;
 		height: var(--bar);
-		border: 1px solid #b5f1ff70;
+		border: var(--border-thin) solid #b5f1ff70;
 		background: linear-gradient(to top, var(--blue), var(--cyan));
 		box-shadow: 0 0 20px #32c8ff22;
 		transform-origin: bottom;
@@ -297,7 +298,7 @@
 		overflow: hidden;
 		margin-top: 1rem;
 		padding: 2rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 16px;
 		background: linear-gradient(
 			125deg,
@@ -307,7 +308,7 @@
 		animation: page-rise-deep 0.52s 0.08s both;
 	}
 	&__playground h3 {
-		margin: 0.5rem 0 1rem;
+		margin: var(--space-2) 0 1rem;
 		font-size: clamp(2rem, 3.5vw, 3.6rem);
 		line-height: 0.9;
 	}
@@ -342,7 +343,8 @@
 		display: grid;
 		gap: 1rem;
 		padding: 1.2rem;
-		border: 1px solid color-mix(in srgb, var(--cyan) 35%, var(--line));
+		border: var(--border-thin) solid
+			color-mix(in srgb, var(--cyan) 35%, var(--line));
 		background: #06112199;
 		transition:
 			border-color 0.3s,
@@ -388,7 +390,7 @@
 		align-items: flex-start;
 		gap: 0.55rem;
 		padding: 1rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 12px;
 		background: color-mix(in srgb, var(--surface) 90%, transparent);
 		color: var(--muted);
@@ -465,7 +467,7 @@
 		font-style: normal;
 	}
 	&__motion-note {
-		margin: 1rem 0 0;
+		margin: var(--space-4) 0 0;
 		color: var(--muted);
 		@include tokens.mono-mixed(0.62rem);
 	}

@@ -14,7 +14,7 @@
 	&__image {
 		overflow: hidden;
 		aspect-ratio: 4 / 5;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 	}
 	&__image img {
 		width: 100%;
@@ -50,7 +50,7 @@
 	}
 	&__links a,
 	button {
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 8px;
 		background: transparent;
 		color: var(--ink);
@@ -77,7 +77,7 @@
 	input,
 	textarea {
 		padding: 0.75rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: transparent;
 		color: var(--ink);
 		outline: 0;
@@ -103,7 +103,7 @@
 	.contact-page {
 		width: min(100% - 1.7rem, 560px);
 		grid-template-columns: 1fr;
-		padding: 2rem 0;
+		padding: var(--space-8) 0;
 		&__image {
 			max-height: 320px;
 		}

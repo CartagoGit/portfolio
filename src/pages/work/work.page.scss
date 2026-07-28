@@ -47,7 +47,7 @@
 		min-height: 410px;
 		overflow: hidden;
 		padding: 1.35rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 		text-decoration: none;
 		transition:
@@ -111,7 +111,7 @@
 	}
 	&__content li {
 		padding: 0.4rem 0.5rem;
-		border: 1px solid #fff3;
+		border: var(--border-thin) solid #fff3;
 		color: #fff9;
 		@include tokens.mono-mixed(0.58rem);
 	}
@@ -160,7 +160,7 @@
 		position: absolute;
 		width: 11rem;
 		height: 11rem;
-		border: 1px solid #32c8ff66;
+		border: var(--border-thin) solid #32c8ff66;
 		border-radius: 50%;
 		animation: orbit 9s linear infinite;
 	}
@@ -199,7 +199,7 @@
 		width: 60%;
 		min-width: 250px;
 		padding: 1.5rem;
-		border: 1px solid #8499ff66;
+		border: var(--border-thin) solid #8499ff66;
 		background: #0a0f27cc;
 		box-shadow: 15px 15px 0 #5663ff22;
 	}
@@ -210,7 +210,7 @@
 	}
 	&__screen strong {
 		display: block;
-		margin: 1rem 0;
+		margin: var(--space-4) 0;
 		font-family: tokens.$font-mono;
 		font-size: 3.5rem;
 		letter-spacing: -0.12em;
@@ -224,7 +224,7 @@
 	}
 	&__screen i {
 		padding: 0.3rem;
-		border: 1px solid #7887ff77;
+		border: var(--border-thin) solid #7887ff77;
 		color: #c9d0ff;
 		font-style: normal;
 	}
@@ -232,7 +232,7 @@
 		position: absolute;
 		width: 140%;
 		height: 140%;
-		border: 1px solid #7ae9ff44;
+		border: var(--border-thin) solid #7ae9ff44;
 		border-radius: 48%;
 		transform: rotate(-32deg);
 		animation: work-drift 10s ease-in-out infinite;
@@ -249,7 +249,7 @@
 		display: inline-block;
 		width: 8px;
 		height: 8px;
-		margin: 1rem 0 0 0.45rem;
+		margin: var(--space-4) 0 0 0.45rem;
 		border-radius: 50%;
 		background: var(--cyan);
 	}
@@ -283,8 +283,8 @@
 	&__actions a {
 		position: relative;
 		z-index: 2;
-		padding: 0.5rem 0.65rem;
-		border: 1px solid #fff4;
+		padding: var(--space-2) 0.65rem;
+		border: var(--border-thin) solid #fff4;
 		border-radius: 8px;
 		color: inherit;
 		@include tokens.mono-mixed(0.63rem);
@@ -299,7 +299,7 @@
 		display: grid;
 		grid-template-columns: 1fr repeat(3, 1fr);
 		gap: 1rem;
-		padding: 1rem 0;
+		padding: var(--space-4) 0;
 		border-bottom: 1px solid var(--line);
 	}
 	&__secondary p {
@@ -334,7 +334,7 @@
 		padding: 4rem 0 0;
 	}
 	&__directory h2 {
-		margin: 0.5rem 0 1rem;
+		margin: var(--space-2) 0 1rem;
 	}
 	&__directory h2 em {
 		color: var(--cyan);
@@ -354,7 +354,7 @@
 		gap: 0.65rem;
 		overflow: hidden;
 		padding: 1rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 12px;
 		background: var(--surface);
 		color: inherit;

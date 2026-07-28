@@ -58,7 +58,7 @@ app-hero-monitor .hero-monitor {
 	align-items: center;
 	gap: 0.38rem;
 	text-align: left;
-	padding: 0.25rem 0.35rem;
+	padding: var(--space-1) 0.35rem;
 }
 .hero-monitor__selector button span {
 	display: block;
@@ -126,7 +126,7 @@ app-hero-monitor .hero-monitor {
 	place-items: center;
 	min-height: 0;
 	flex: 1;
-	border: 1px solid var(--line);
+	border: var(--border-thin) solid var(--line);
 	border-radius: 6px;
 	background: var(--surface-2);
 	color: var(--cyan);
@@ -178,7 +178,7 @@ app-hero-monitor .hero-monitor {
 .hero-monitor__retry {
 	grid-column: 1/-1;
 	justify-self: end;
-	border: 1px solid var(--line);
+	border: var(--border-thin) solid var(--line);
 	border-radius: 7px;
 	background: transparent;
 	color: #fff;
@@ -280,7 +280,7 @@ app-hero-monitor .hero-monitor {
 		var(--neon);
 }
 .hero-monitor__canvas {
-	padding: 0.8rem 1rem 1rem;
+	padding: 0.8rem var(--space-4) 1rem;
 }
 .hero-monitor__chart path {
 	transition:
@@ -289,7 +289,7 @@ app-hero-monitor .hero-monitor {
 		transform 0.4s ease;
 }
 .hero-monitor__detail {
-	padding: 1rem 1rem 0.65rem;
+	padding: var(--space-4) var(--space-4) 0.65rem;
 	color: #fff;
 }
 .hero-monitor__detail p {
@@ -322,7 +322,7 @@ app-hero-monitor .hero-monitor {
 		transform: perspective(1200px) rotateY(0) rotateX(0);
 	}
 	.hero-monitor__canvas {
-		padding: 0.5rem 0.65rem 0.65rem;
+		padding: var(--space-2) 0.65rem 0.65rem;
 	}
 	.hero-monitor__detail {
 		padding: 0.65rem;
@@ -505,7 +505,7 @@ app-hero-monitor .hero-monitor {
 		padding: 5px;
 	}
 	.hero-monitor:hover .hero-monitor__selector button {
-		padding: 0.25rem 0.3rem;
+		padding: var(--space-1) 0.3rem;
 	}
 	.hero-monitor:hover .hero-monitor__selector button span {
 		font-size: 0.43rem;
@@ -1119,7 +1119,7 @@ app-hero-monitor .hero-monitor__orb--one {
 .hero-monitor__heading button {
 	width: 24px;
 	height: 22px;
-	border: 1px solid var(--line);
+	border: var(--border-thin) solid var(--line);
 	border-radius: 5px;
 	background: transparent;
 	color: var(--cyan);

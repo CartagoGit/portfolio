@@ -7,6 +7,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
 
+// The active palette is selected via `[data-theme="<id>"]` on `<html>`
+// (see `_themes.scss`). The declarations here cover the runtime scale
+// tokens and the page-level reset; component SCSS consumes
+// `var(--ink)` / `var(--cyan)` etc. through the theme partial.
+
 :root {
 	color-scheme: dark;
 	font-family: 'Manrope', Arial, sans-serif;
@@ -23,11 +28,39 @@ html {
 body {
 	margin: 0;
 	min-width: 320px;
-	background: #090a12;
-	transition: background 0.35s ease;
+	background: var(--canvas);
+	color: var(--ink);
+	transition:
+		background-color 0.35s ease,
+		color 0.35s ease;
 }
-body:has(.portfolio.light-mode) {
-	background: #f3f7ff;
+// Per-theme `color-scheme` declarations — these keep native form
+// controls, scrollbars and the canvas appearance coherent with the
+// active palette. The list mirrors `THEMES` in
+// `src/core/platform/theme.ts`.
+:root[data-theme='dark'] {
+	color-scheme: dark;
+}
+:root[data-theme='light'] {
+	color-scheme: light;
+}
+:root[data-theme='midnight'] {
+	color-scheme: dark;
+}
+:root[data-theme='ocean'] {
+	color-scheme: dark;
+}
+:root[data-theme='forest'] {
+	color-scheme: dark;
+}
+:root[data-theme='sunset'] {
+	color-scheme: dark;
+}
+:root[data-theme='solar'] {
+	color-scheme: light;
+}
+:root[data-theme='mono'] {
+	color-scheme: light;
 }
 button,
 a,

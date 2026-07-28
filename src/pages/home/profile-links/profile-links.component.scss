@@ -13,7 +13,7 @@
 		align-items: center;
 		gap: 0.38rem;
 		padding: 0.38rem 0.5rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 8px;
 		color: var(--muted);
 		@include tokens.mono-mixed(0.58rem);

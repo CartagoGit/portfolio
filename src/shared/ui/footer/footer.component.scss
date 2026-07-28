@@ -7,7 +7,7 @@
 .footer {
 	width: min(1380px, calc(100% - 3rem));
 	margin: auto;
-	padding: 1.5rem 0 2.5rem;
+	padding: var(--space-6) 0 2.5rem;
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr) auto;
 	grid-template-rows: auto auto;
@@ -47,7 +47,7 @@
 		align-items: center;
 		gap: 0.38rem;
 		padding: 0.32rem 0.45rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 7px;
 		color: var(--muted);
 		@include tokens.mono-mixed(0.55rem);
@@ -85,7 +85,7 @@
 		width: min(100% - 1.5rem, 560px);
 		display: flex;
 		flex-direction: column;
-		padding: 1.25rem 0 2rem;
+		padding: var(--space-5) 0 2rem;
 
 		&__links {
 			order: 2;

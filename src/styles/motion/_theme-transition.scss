@@ -1,0 +1,45 @@
+// Cross-theme transition layer.
+//
+// When the user picks a new theme from the header dropdown the
+// `data-theme` attribute on `<html>` flips and every CSS custom
+// property exposed in `_themes.scss` is recomputed. Without this
+// partial the browser would snap colours instantly; with it, every
+// colour, background, border and shadow animates over ~480 ms.
+//
+// `data-theme-transition="1"` is added by ShellFacade for the
+// duration of one transition and removed afterwards. Outside that
+// window the transition is dormant so page-level animations are not
+// held back by a permanent colour cross-fade.
+
+$theme-transition-duration: 480ms;
+$theme-transition-easing: cubic-bezier(0.22, 0.9, 0.25, 1);
+
+:root[data-theme-transition='1'],
+:root[data-theme-transition='1'] *,
+:root[data-theme-transition='1'] *::before,
+:root[data-theme-transition='1'] *::after {
+	transition:
+		background-color $theme-transition-duration $theme-transition-easing,
+		background $theme-transition-duration $theme-transition-easing,
+		color $theme-transition-duration $theme-transition-easing,
+		border-color $theme-transition-duration $theme-transition-easing,
+		border-top-color $theme-transition-duration $theme-transition-easing,
+		border-right-color $theme-transition-duration $theme-transition-easing,
+		border-bottom-color $theme-transition-duration $theme-transition-easing,
+		border-left-color $theme-transition-duration $theme-transition-easing,
+		box-shadow $theme-transition-duration $theme-transition-easing,
+		text-shadow $theme-transition-duration $theme-transition-easing,
+		fill $theme-transition-duration $theme-transition-easing,
+		stroke $theme-transition-duration $theme-transition-easing,
+		outline-color $theme-transition-duration $theme-transition-easing,
+		caret-color $theme-transition-duration $theme-transition-easing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root[data-theme-transition='1'],
+	:root[data-theme-transition='1'] *,
+	:root[data-theme-transition='1'] *::before,
+	:root[data-theme-transition='1'] *::after {
+		transition: none;
+	}
+}

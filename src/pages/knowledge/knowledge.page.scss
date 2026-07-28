@@ -48,7 +48,7 @@
 		min-height: 220px;
 		overflow: hidden;
 		padding: 1.4rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		background: var(--surface);
 		transform-style: preserve-3d;
 		transition:

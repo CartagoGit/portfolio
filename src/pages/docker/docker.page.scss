@@ -31,8 +31,8 @@
 	&__terminal {
 		display: grid;
 		gap: 1.4rem;
-		padding: clamp(1.4rem, 4vw, 3rem);
-		border: 1px solid var(--line);
+		padding: clamp(1.4rem, 4vw, var(--space-12));
+		border: var(--border-thin) solid var(--line);
 		background: linear-gradient(145deg, #071a2d, #06101d);
 		color: var(--ink);
 		text-decoration: none;
@@ -67,7 +67,7 @@
 	}
 	&__terminal em {
 		padding: 0.28rem 0.45rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		color: var(--muted);
 		@include tokens.mono-mixed(0.55rem);
 		font-style: normal;
@@ -77,6 +77,6 @@
 	.docker-page {
 		width: min(100% - 1.7rem, 560px);
 		grid-template-columns: 1fr;
-		padding: 2rem 0;
+		padding: var(--space-8) 0;
 	}
 }

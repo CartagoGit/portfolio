@@ -63,7 +63,7 @@
 	}
 	&__actions a {
 		padding: 0.55rem 0.8rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 10px;
 		color: var(--ink);
 		font-size: 0.7rem;

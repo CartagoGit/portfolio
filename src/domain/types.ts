@@ -1,5 +1,14 @@
 /** Shared domain contracts for the portfolio screens. */
 export type ILocale = 'en' | 'es';
+export type IThemeId =
+	| 'dark'
+	| 'light'
+	| 'midnight'
+	| 'ocean'
+	| 'forest'
+	| 'sunset'
+	| 'solar'
+	| 'mono';
 export type IPageComponentId =
 	| 'home'
 	| 'work'

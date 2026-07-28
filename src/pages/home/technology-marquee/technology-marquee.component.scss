@@ -68,7 +68,7 @@
 		z-index: 4;
 		left: calc(100% + 0.35rem);
 		padding: 0.32rem 0.45rem;
-		border: 1px solid var(--line);
+		border: var(--border-thin) solid var(--line);
 		border-radius: 6px;
 		background: var(--surface);
 		color: var(--ink);

@@ -1,0 +1,226 @@
+// Theme palettes exposed as CSS custom properties on `:root`.
+//
+// Every theme is a complete token set; components must consume
+// `var(--token)` rather than hardcoded values so theme switching
+// cascades through the entire UI without touching component SCSS.
+//
+// The active palette is selected by the `data-theme` attribute on
+// `<html>` (set by ShellFacade). Eight themes ship today; the
+// registry is mirrored in `src/core/platform/theme.ts`.
+
+// ---------------------------------------------------------------------------
+// Shared tokens
+// ---------------------------------------------------------------------------
+// The legacy `--ink` / `--canvas` etc. keys were promoted from
+// component-scoped variables; everything else is in `:root`. The
+// composition below applies each palette under its `data-theme`
+// selector so descendant components consume the active palette
+// automatically.
+
+/// Emits one CSS custom-property declaration per entry of the map.
+@mixin portfolio-tokens($map) {
+	@each $name, $value in $map {
+		#{$name}: #{$value};
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Midnight (default · the original "dark")
+// ---------------------------------------------------------------------------
+$portfolio-tokens-dark: (
+	'--ink': #eff7ff,
+	'--muted': #91a2b9,
+	'--canvas': #04070d,
+	'--surface': #08111d,
+	'--surface-2': #0c1827,
+	'--line': rgba(81, 157, 255, 0.2),
+	'--cyan': #32c8ff,
+	'--blue': #1678ff,
+	'--ice': #9aeaff,
+	'--lime': #b9ef73,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #1678ff 80%, transparent),
+		0 0 32px color-mix(in srgb, #32c8ff 28%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Paper (the original "light")
+// ---------------------------------------------------------------------------
+$portfolio-tokens-light: (
+	'--ink': #0a1b38,
+	'--muted': #536784,
+	'--canvas': #f3f7ff,
+	'--surface': #fff,
+	'--surface-2': #e8f1ff,
+	'--line': rgba(22, 114, 232, 0.2),
+	'--cyan': #0078bc,
+	'--blue': #0863e6,
+	'--ice': #155dc1,
+	'--lime': #527b10,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #0863e6 35%, transparent),
+		0 0 28px color-mix(in srgb, #0078bc 17%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Deep blue · violet + cyan
+// ---------------------------------------------------------------------------
+$portfolio-tokens-midnight: (
+	'--ink': #e8e6ff,
+	'--muted': #8a86b3,
+	'--canvas': #06051a,
+	'--surface': #0b0a2a,
+	'--surface-2': #14123d,
+	'--line': rgba(125, 92, 255, 0.28),
+	'--cyan': #7d5cff,
+	'--blue': #5a3df0,
+	'--ice': #b6a3ff,
+	'--lime': #32c8ff,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #7d5cff 80%, transparent),
+		0 0 32px color-mix(in srgb, #32c8ff 28%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Tidal · teal + aqua
+// ---------------------------------------------------------------------------
+$portfolio-tokens-ocean: (
+	'--ink': #e3fbff,
+	'--muted': #6db4c4,
+	'--canvas': #02141c,
+	'--surface': #06222e,
+	'--surface-2': #0b3142,
+	'--line': rgba(15, 180, 255, 0.25),
+	'--cyan': #0fb4ff,
+	'--blue': #0e7fb6,
+	'--ice': #a7ffeb,
+	'--lime': #a7ffeb,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #0fb4ff 80%, transparent),
+		0 0 32px color-mix(in srgb, #a7ffeb 32%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Forest · green + mustard
+// ---------------------------------------------------------------------------
+$portfolio-tokens-forest: (
+	'--ink': #ecfae8,
+	'--muted': #87a084,
+	'--canvas': #06180c,
+	'--surface': #0a2415,
+	'--surface-2': #103420,
+	'--line': rgba(65, 196, 124, 0.25),
+	'--cyan': #41c47c,
+	'--blue': #2a8a52,
+	'--ice': #b3f0c5,
+	'--lime': #ffd166,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #41c47c 80%, transparent),
+		0 0 32px color-mix(in srgb, #ffd166 28%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Sunset · coral + amber
+// ---------------------------------------------------------------------------
+$portfolio-tokens-sunset: (
+	'--ink': #fff1ea,
+	'--muted': #c79285,
+	'--canvas': #1c0805,
+	'--surface': #2a100a,
+	'--surface-2': #3a1a12,
+	'--line': rgba(255, 122, 89, 0.28),
+	'--cyan': #ff7a59,
+	'--blue': #d65a3d,
+	'--ice': #ffb39a,
+	'--lime': #ffd166,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #ff7a59 80%, transparent),
+		0 0 32px color-mix(in srgb, #ffd166 28%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Solar · amber + pink (light scheme)
+// ---------------------------------------------------------------------------
+$portfolio-tokens-solar: (
+	'--ink': #2a1d05,
+	'--muted': #8c6c2f,
+	'--canvas': #fff6e1,
+	'--surface': #fffaf0,
+	'--surface-2': #f5e6c1,
+	'--line': rgba(255, 180, 84, 0.35),
+	'--cyan': #ffb454,
+	'--blue': #e8941d,
+	'--ice': #ffd89b,
+	'--lime': #ff5d8f,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #e8941d 45%, transparent),
+		0 0 28px color-mix(in srgb, #ff5d8f 25%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Graphite · greyscale (light scheme)
+// ---------------------------------------------------------------------------
+$portfolio-tokens-mono: (
+	'--ink': #14181f,
+	'--muted': #5b6675,
+	'--canvas': #f4f6f8,
+	'--surface': #fff,
+	'--surface-2': #e6eaef,
+	'--line': rgba(20, 24, 31, 0.18),
+	'--cyan': #1f2933,
+	'--blue': #0b0f14,
+	'--ice': #5b6675,
+	'--lime': #9aa4b2,
+	'--neon': (
+		0 0 12px color-mix(in srgb, #1f2933 45%, transparent),
+		0 0 28px color-mix(in srgb, #5b6675 22%, transparent),
+	),
+);
+
+// ---------------------------------------------------------------------------
+// Active palette assignment
+// ---------------------------------------------------------------------------
+// The default `:root` block carries the Midnight palette so
+// SSR-rendered HTML has a coherent colour set before hydration
+// adds the visitor's `data-theme`. Every other theme is keyed by
+// `data-theme="<id>"` on `<html>`.
+
+:root,
+:root[data-theme='dark'] {
+	@include portfolio-tokens($portfolio-tokens-dark);
+}
+
+:root[data-theme='light'] {
+	@include portfolio-tokens($portfolio-tokens-light);
+}
+
+:root[data-theme='midnight'] {
+	@include portfolio-tokens($portfolio-tokens-midnight);
+}
+
+:root[data-theme='ocean'] {
+	@include portfolio-tokens($portfolio-tokens-ocean);
+}
+
+:root[data-theme='forest'] {
+	@include portfolio-tokens($portfolio-tokens-forest);
+}
+
+:root[data-theme='sunset'] {
+	@include portfolio-tokens($portfolio-tokens-sunset);
+}
+
+:root[data-theme='solar'] {
+	@include portfolio-tokens($portfolio-tokens-solar);
+}
+
+:root[data-theme='mono'] {
+	@include portfolio-tokens($portfolio-tokens-mono);
+}
