@@ -15,14 +15,14 @@
 		</p>
 	</div>
 	<div class="demos-page__links">
-		@for (demo of demos; track demo[1]) {
+		@for (demo of demos; track demo.title) {
 			<a
-				[href]="demo[3]"
+				[href]="demo.url"
 				target="_blank"
 				rel="noreferrer">
-				<span>{{ demo[0] }}</span>
-				<b>{{ demo[1] }}</b>
-				<p>{{ demo[2] }}</p>
+				<span>{{ demo.number }}</span>
+				<b>{{ demo.title }}</b>
+				<p>{{ demo.summary }}</p>
 				<i>Open demo ↗</i>
 			</a>
 		}

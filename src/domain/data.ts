@@ -43,6 +43,7 @@ import {
 } from 'simple-icons';
 import type {
 	ICapability,
+	IDemo,
 	IHeroPanel,
 	ILanguageOption,
 	ILocale,
@@ -353,3 +354,31 @@ export const TELEMETRY: readonly ITelemetry[] = [
 		note: 'Responsive product work considers the next device before it becomes a rewrite.',
 	},
 ];
+
+/** Interactive demos rendered as cards on the /demos page. */
+export const DEMOS: readonly IDemo[] = [
+	{
+		number: '01',
+		title: 'DeathBlitz',
+		summary: 'Stateful product interaction and persistent progression.',
+		url: 'https://deathblitz.netlify.app/',
+	},
+	{
+		number: '02',
+		title: 'Cartago Tetris',
+		summary: 'Keyboard interaction, game loop and responsive board state.',
+		url: 'https://cartago-tetris.netlify.app/',
+	},
+	{
+		number: '03',
+		title: 'Cartago Snake',
+		summary: 'Real-time movement, collision handling and state updates.',
+		url: 'https://cartago-snake.netlify.app/',
+	},
+	{
+		number: '04',
+		title: 'Minesweeper',
+		summary: 'Grid interaction, timers and information hierarchy.',
+		url: 'https://cartago-minesweeper.netlify.app/',
+	},
+] as const;

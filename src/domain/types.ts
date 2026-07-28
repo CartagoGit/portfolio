@@ -94,3 +94,11 @@ export interface ITelemetry {
 	bars: readonly number[];
 	note: string;
 }
+
+/** Interactive demo cards surfaced on the /demos page. */
+export interface IDemo {
+	number: string;
+	title: string;
+	summary: string;
+	url: string;
+}
