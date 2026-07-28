@@ -27,13 +27,17 @@ function nextHeroPanelTransition(
 	const candidates = HERO_PANEL_TRANSITIONS.filter(
 		(transition) => transition !== current
 	);
-	const index = Math.min(
-		candidates.length - 1,
-		Math.floor(random() * candidates.length)
-	);
-	// `candidates` is never empty: we only filtered out the single
+	// `candidates` is always non-empty: we filter out only the single
 	// `current` entry, and HERO_PANEL_TRANSITIONS has three members.
-	return candidates[index]!;
+	// The non-null assertion on `first` documents this invariant.
+	const [first] = candidates;
+	if (first === undefined) {
+		throw new Error(
+			'nextHeroPanelTransition: HERO_PANEL_TRANSITIONS invariant broken'
+		);
+	}
+	const index = Math.floor(random() * candidates.length);
+	return candidates[index] ?? first;
 }
 
 const CHART_VIEWBOX_HEIGHT = 118;
