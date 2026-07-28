@@ -3,7 +3,7 @@
 		class="header__brand"
 		[routerLink]="routeFor('home')"
 		(click)="selectPage('home')"
-		aria-label="Cartago home">
+		[attr.aria-label]="'chrome.header.brand' | translate">
 		<span class="header__mark">C.</span>
 		<span>Cartago</span>
 	</a>
@@ -22,48 +22,48 @@
 		class="header__nav"
 		id="site-navigation"
 		[class.header__nav--open]="menuOpen()"
-		aria-label="Main navigation">
+		[attr.aria-label]="'chrome.header.navWork' | translate">
 		<a
 			[routerLink]="routeFor('work')"
 			[class.is-active]="page() === 'work'"
 			(click)="selectPage('work')">
-			{{ copy().navWork }}
+			{{ 'chrome.header.navWork' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('lab')"
 			[class.is-active]="page() === 'lab'"
 			(click)="selectPage('lab')">
-			{{ copy().navLab }}
+			{{ 'chrome.header.navLab' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('approach')"
 			[class.is-active]="page() === 'approach'"
 			(click)="selectPage('approach')">
-			{{ copy().navAbout }}
+			{{ 'chrome.header.navAbout' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('knowledge')"
 			[class.is-active]="page() === 'knowledge'"
 			(click)="selectPage('knowledge')">
-			Knowledge
+			{{ 'chrome.header.navKnowledge' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('docker')"
 			[class.is-active]="page() === 'docker'"
 			(click)="selectPage('docker')">
-			Docker
+			{{ 'chrome.header.navDocker' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('demos')"
 			[class.is-active]="page() === 'demos'"
 			(click)="selectPage('demos')">
-			Demos
+			{{ 'chrome.header.navDemos' | translate }}
 		</a>
 		<a
 			[routerLink]="routeFor('contact')"
 			[class.is-active]="page() === 'contact'"
 			(click)="selectPage('contact')">
-			{{ copy().contact }}
+			{{ 'chrome.header.navContact' | translate }}
 		</a>
 	</nav>
 	<div class="header__actions">
@@ -117,12 +117,46 @@
 				</div>
 			}
 		</div>
-		<button
-			class="header__theme"
-			type="button"
-			(click)="themeToggle.emit()"
-			[attr.aria-pressed]="lightMode()">
-			<span>{{ lightMode() ? '☼' : '◐' }}</span>
-		</button>
+		<div class="header__theme">
+			<button
+				type="button"
+				(click)="themeToggle.emit()"
+				[attr.aria-expanded]="themeMenuOpen()"
+				[attr.aria-label]="'chrome.header.themeOpenLabel' | translate"
+				aria-haspopup="listbox">
+				<span
+					class="header__theme-swatch"
+					[style.background]="activeTheme().primary"
+					aria-hidden="true"></span>
+				<span>{{ activeTheme().label }}</span>
+				<i>⌄</i>
+			</button>
+			@if (themeMenuOpen() || themeMenuClosing()) {
+				<div
+					class="header__theme-menu"
+					[class.is-closing]="themeMenuClosing()"
+					role="listbox">
+					@for (themeOption of themes(); track themeOption.id) {
+						<button
+							type="button"
+							role="option"
+							[attr.aria-selected]="theme() === themeOption.id"
+							(click)="themeSelect.emit(themeOption.id)">
+							<span
+								class="header__theme-swatch"
+								[style.background]="themeOption.primary"
+								aria-hidden="true"></span>
+							<span>
+								{{ themeOption.label }}
+								<small>{{ themeOption.detail }}</small>
+							</span>
+							@if (theme() === themeOption.id) {
+								<b>✓</b>
+							}
+						</button>
+					}
+				</div>
+			}
+		</div>
 	</div>
 </header>

@@ -11,19 +11,21 @@
 	<p class="home-intro__signature">
 		Cartago / CartagoNova · frontend product engineer
 	</p>
-	<p class="home-intro__role">{{ copy().role }}</p>
-	<p class="home-intro__description">{{ copy().intro }}</p>
+	<p class="home-intro__role">{{ 'pages.home.role' | translate }}</p>
+	<p class="home-intro__description">
+		{{ 'pages.home.intro' | translate }}
+	</p>
 	<div class="home-intro__actions">
 		<a
-			[routerLink]="['/', locale(), 'demos']"
-			(click)="navigate.emit('demos')">
-			{{ copy().viewWork }}
+			[routerLink]="['/', locale(), 'work']"
+			(click)="navigate.emit('work')">
+			{{ 'pages.home.ctaWork' | translate }}
 			<span aria-hidden="true">↘</span>
 		</a>
 		<a
 			[routerLink]="['/', locale(), 'contact']"
 			(click)="navigate.emit('contact')">
-			{{ copy().contact }}
+			{{ 'pages.home.ctaContact' | translate }}
 			<span aria-hidden="true">→</span>
 		</a>
 	</div>

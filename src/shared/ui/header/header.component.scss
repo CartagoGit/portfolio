@@ -72,7 +72,7 @@
 		position: relative;
 	}
 	&__locale > button,
-	&__theme {
+	&__theme > button {
 		display: flex;
 		height: 2.35rem;
 		align-items: center;
@@ -85,7 +85,7 @@
 		color: var(--ink);
 	}
 	&__locale > button:hover,
-	&__theme:hover {
+	&__theme > button:hover {
 		border-color: var(--cyan);
 		color: var(--cyan);
 		@include motion.neon-glow;
@@ -94,11 +94,11 @@
 		width: 1.5rem;
 		border-radius: 3px;
 	}
-	&__locale-menu {
+	&__locale-menu,
+	&__theme-menu {
 		position: absolute;
 		right: 0;
 		top: calc(100% + 0.6rem);
-		width: 180px;
 		padding: 0.35rem;
 		border: var(--border-thin) solid var(--line);
 		border-radius: 16px;
@@ -108,11 +108,19 @@
 		transform-origin: top right;
 		animation: menu-in 0.2s tokens.$ease-standard both;
 	}
-	&__locale-menu.is-closing {
+	&__locale-menu {
+		width: 180px;
+	}
+	&__theme-menu {
+		width: 220px;
+	}
+	&__locale-menu.is-closing,
+	&__theme-menu.is-closing {
 		pointer-events: none;
 		animation: menu-out 0.18s ease both;
 	}
-	&__locale-menu button {
+	&__locale-menu button,
+	&__theme-menu button {
 		display: grid;
 		width: 100%;
 		grid-template-columns: 1.6rem 1fr auto;
@@ -124,11 +132,27 @@
 		color: var(--ink);
 		text-align: left;
 	}
-	&__locale-menu small {
+	&__locale-menu small,
+	&__theme-menu small {
 		display: block;
 		color: var(--muted);
 		@include tokens.mono-mixed(0.55rem);
 		margin-top: 0.15rem;
+	}
+	// The colour swatch shown in the theme button + each menu row.
+	// It's a 16 px circle that previews the theme's primary token so
+	// visitors can pick a palette without trial-and-error.
+	&__theme-swatch {
+		display: inline-block;
+		width: 1rem;
+		height: 1rem;
+		border-radius: 50%;
+		border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--canvas) 50%, transparent);
+		flex-shrink: 0;
+	}
+	&__theme {
+		position: relative;
 	}
 	&__menu {
 		display: none;

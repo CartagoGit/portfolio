@@ -1,21 +1,24 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
+	computed,
 	input,
 	output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { routeFor } from '../../../core/platform/routing';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 import type {
 	ILanguageOption,
 	ILocale,
 	IPageComponentId,
-	IPortfolioCopy,
+	IThemeId,
 } from '../../../domain/types';
+import type { IThemeDefinition } from '../../../core/platform/theme';
 
 @Component({
 	selector: 'app-shell-header',
-	imports: [RouterLink],
+	imports: [RouterLink, TranslatePipe],
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,17 +26,34 @@ import type {
 export class HeaderComponent {
 	readonly locale = input.required<ILocale>();
 	readonly page = input.required<IPageComponentId>();
-	readonly copy = input.required<IPortfolioCopy>();
 	readonly languages = input.required<readonly ILanguageOption[]>();
 	readonly menuOpen = input.required<boolean>();
 	readonly localeMenuOpen = input.required<boolean>();
 	readonly localeMenuClosing = input.required<boolean>();
-	readonly lightMode = input.required<boolean>();
+	readonly theme = input.required<IThemeId>();
+	readonly themes = input.required<readonly IThemeDefinition[]>();
+	readonly themeMenuOpen = input.required<boolean>();
+	readonly themeMenuClosing = input.required<boolean>();
 	readonly navigate = output<IPageComponentId>();
 	readonly menuToggle = output<void>();
 	readonly localeToggle = output<void>();
 	readonly localeSelect = output<ILocale>();
 	readonly themeToggle = output<void>();
+	readonly themeSelect = output<IThemeId>();
+
+	/** Theme definition for the currently active theme; renders the swatch. */
+	readonly activeTheme = computed<IThemeDefinition>(() => {
+		const themes = this.themes();
+		const active = themes.find((entry) => entry.id === this.theme());
+		if (active !== undefined) return active;
+		const fallback = themes[0];
+		if (fallback === undefined) {
+			throw new Error(
+				'HeaderComponent.activeTheme: at least one theme must be provided'
+			);
+		}
+		return fallback;
+	});
 
 	readonly routeFor = (page: IPageComponentId): string[] =>
 		routeFor(page, this.locale());

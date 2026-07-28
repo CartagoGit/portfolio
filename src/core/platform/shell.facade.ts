@@ -1,24 +1,20 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data';
-import type {
-	ILocale,
-	IPageComponentId,
-	IThemeId,
-} from '../../domain/types';
+import type { ILocale, IPageComponentId, IThemeId } from '../../domain/types';
 import { TranslateService } from '../../lang/translate.service';
 import { detectPreferredLocale, persistLocale } from './locale';
 import { buildDescription, buildTitle } from './seo';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
 import {
 	DEFAULT_THEME,
-	THEMES,
 	detectPreferredTheme,
 	isTheme,
-	persistTheme,
 	type IThemeDefinition,
+	persistTheme,
+	THEMES,
 } from './theme';
 
 export { PAGE_ORDER, transitionDirection } from './routing';
@@ -57,16 +53,10 @@ export class ShellFacade {
 	readonly localeMenuClosing = signal(false);
 	readonly themeMenuOpen = signal(false);
 	readonly themeMenuClosing = signal(false);
+	/** Command palette visibility — opened from the lab page. */
+	readonly commandOpen = signal(false);
 
 	readonly theme = signal<IThemeId>(DEFAULT_THEME);
-	/**
-	 * Convenience boolean retained for legacy bindings that expect
-	 * a `lightMode` input on the header. New code should consume
-	 * `theme()` and look up the theme definition in `themes`.
-	 */
-	readonly lightMode = computed(() => this.theme() === 'light');
-
-	readonly copy = computed(() => this._translate.translations());
 
 	constructor() {
 		this.theme.set(this._detectInitialTheme());
@@ -94,6 +84,8 @@ export class ShellFacade {
 	setTheme(theme: IThemeId | IThemeDefinition): void {
 		const id = typeof theme === 'string' ? theme : theme.id;
 		if (!isTheme(id)) return;
+		this.themeMenuOpen.set(false);
+		this.themeMenuClosing.set(false);
 		if (id === this.theme()) return;
 		this.theme.set(id);
 		this._applyTheme(id, { animate: true });

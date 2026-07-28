@@ -6,9 +6,11 @@ import {
 } from '@angular/core';
 import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data';
 import type { ICapability, ICapabilityId } from '../../domain/types';
+import { TranslatePipe } from '../../lang/translate.pipe';
 
 @Component({
 	selector: 'app-approach-page',
+	imports: [TranslatePipe],
 	templateUrl: './approach.page.html',
 	styleUrl: './approach.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

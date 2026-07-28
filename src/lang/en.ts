@@ -97,29 +97,18 @@ export const en: ITranslationMap = {
 			mcpTitle: 'MCP Vertex',
 			mcpDescription:
 				'An extensible MCP server core and plugin system for structured, repeatable agent workflows.',
-			mcpBullets: [
-				'Typed contracts',
-				'Plugin architecture',
-				'CLI tooling',
-			],
+			mcpBullets: 'Typed contracts|Plugin architecture|CLI tooling',
 			quickmodelNumber: '02 — TypeScript architecture',
 			quickmodelTitle: 'QuickModel',
 			quickmodelDescription:
 				'A TypeScript modelling and serialization library focused on explicit contracts and dependable data boundaries.',
-			quickmodelBullets: [
-				'Type-safe models',
-				'Serialization',
-				'Developer experience',
-			],
+			quickmodelBullets:
+				'Type-safe models|Serialization|Developer experience',
 			keyerNumber: '03 — Developer tooling',
 			keyerTitle: 'Keyer',
 			keyerDescription:
-				'A focused CLI for keystroke automation that turns repetitive editor work into dependable workflows.',
-			keyerBullets: [
-				'Keyboard macros',
-				'Repeatable flows',
-				'CLI delivery',
-			],
+				'A published TypeScript CLI and library for managing secrets and configuration workflows with a cleaner developer experience.',
+			keyerBullets: 'CLI design|Node.js tooling|Published package',
 		},
 		lab: {
 			eyebrow: '02 / Frontend lab',

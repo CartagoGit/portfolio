@@ -46,37 +46,12 @@ import type {
 	IDemo,
 	IHeroPanel,
 	ILanguageOption,
-	ILocale,
 	IPlaygroundStep,
 	IPlaygroundStepDefinition,
-	IPortfolioCopy,
 	IPublicLink,
 	ITechnology,
 	ITelemetry,
 } from './types';
-
-export const PORTFOLIO_COPY: Readonly<Record<ILocale, IPortfolioCopy>> = {
-	en: {
-		navWork: 'Selected work',
-		navLab: 'Frontend lab',
-		navAbout: 'Approach',
-		availability: 'Available for thoughtful product work',
-		viewWork: 'View examples',
-		contact: 'Start a conversation',
-		role: 'Frontend engineer building operational web and mobile products.',
-		intro: 'I combine product-focused frontend development with TypeScript architecture, testing and developer tooling.',
-	},
-	es: {
-		navWork: 'Trabajo seleccionado',
-		navLab: 'Laboratorio',
-		navAbout: 'Enfoque',
-		availability: 'Disponible para proyectos de producto',
-		viewWork: 'Ver ejemplos',
-		contact: 'Hablemos',
-		role: 'Frontend engineer que construye productos web y móviles operacionales.',
-		intro: 'Combino desarrollo frontend orientado a producto con arquitectura TypeScript, testing y tooling para developers.',
-	},
-};
 
 export const PUBLIC_LINKS: readonly IPublicLink[] = [
 	{

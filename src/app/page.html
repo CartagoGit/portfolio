@@ -8,17 +8,20 @@
 	<app-shell-header
 		[locale]="shell.locale()"
 		[page]="shell.page()"
-		[copy]="shell.copy()"
 		[languages]="shell.languages"
 		[menuOpen]="shell.menuOpen()"
 		[localeMenuOpen]="shell.localeMenuOpen()"
 		[localeMenuClosing]="shell.localeMenuClosing()"
-		[lightMode]="shell.lightMode()"
+		[theme]="shell.theme()"
+		[themes]="shell.themes"
+		[themeMenuOpen]="shell.themeMenuOpen()"
+		[themeMenuClosing]="shell.themeMenuClosing()"
 		(navigate)="shell.setTransition($event)"
 		(menuToggle)="shell.toggleMenu()"
 		(localeToggle)="shell.toggleLocaleMenu()"
 		(localeSelect)="shell.selectLocale($event)"
-		(themeToggle)="shell.setTheme()" />
+		(themeToggle)="shell.toggleThemeMenu()"
+		(themeSelect)="shell.setTheme($event)" />
 	<div class="route-stage">
 		@if (shell.page() === 'home') {
 			<section
@@ -26,7 +29,6 @@
 				class="hero"
 				aria-labelledby="hero-title">
 				<app-home-intro
-					[copy]="shell.copy()"
 					[locale]="shell.locale()"
 					[technologies]="shell.technologyMarquee"
 					[links]="shell.publicLinks"

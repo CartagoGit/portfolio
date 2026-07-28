@@ -70,17 +70,6 @@ export interface IPublicLink {
 	color?: string;
 }
 
-export interface IPortfolioCopy {
-	navWork: string;
-	navLab: string;
-	navAbout: string;
-	availability: string;
-	viewWork: string;
-	contact: string;
-	role: string;
-	intro: string;
-}
-
 export interface ILanguageOption {
 	id: ILocale;
 	label: string;

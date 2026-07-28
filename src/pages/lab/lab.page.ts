@@ -19,9 +19,11 @@ import type {
 	ITelemetry,
 	ITelemetryId,
 } from '../../domain/types';
+import { TranslatePipe } from '../../lang/translate.pipe';
 
 @Component({
 	selector: 'app-lab-page',
+	imports: [TranslatePipe],
 	templateUrl: './lab.page.html',
 	styleUrl: './lab.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

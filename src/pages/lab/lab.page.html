@@ -3,16 +3,14 @@
 	class="lab-page"
 	aria-labelledby="lab-title">
 	<div class="lab-page__heading">
-		<p>03 / Frontend lab</p>
+		<p>{{ 'pages.lab.eyebrow' | translate }}</p>
 		<h2 id="lab-title">
-			Product telemetry,
+			{{ 'pages.lab.titleLead' | translate }}
 			<br />
-			not UI filler.
+			<em>{{ 'pages.lab.titleEmphasis' | translate }}</em>
+			{{ 'pages.lab.titleTail' | translate }}
 		</h2>
-		<p>
-			Switch the perspective to see how KPIs, visual hierarchy and state
-			changes can explain a product decision.
-		</p>
+		<p>{{ 'pages.lab.subtitle' | translate }}</p>
 	</div>
 	<div class="lab-page__toolbar">
 		<div
@@ -104,12 +102,10 @@
 		class="lab-page__playground"
 		aria-labelledby="playground-title">
 		<div>
-			<p>04 / Interactive</p>
-			<h3 id="playground-title">Arrange the product loop.</h3>
-			<p>
-				Drag each stage into a deliberate order. The board validates the
-				complete workflow, rather than rewarding a sequence of clicks.
-			</p>
+			<h3 id="playground-title">
+				{{ 'pages.lab.playgroundHeading' | translate }}
+			</h3>
+			<p>{{ 'pages.lab.playgroundDescription' | translate }}</p>
 			<p
 				class="lab-page__status"
 				aria-live="polite">

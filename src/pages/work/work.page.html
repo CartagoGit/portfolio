@@ -3,13 +3,14 @@
 	class="work-page"
 	aria-labelledby="work-title">
 	<div class="work-page__heading">
-		<p class="work-page__eyebrow">01 / Selected work</p>
+		<p class="work-page__eyebrow">{{ 'pages.work.eyebrow' | translate }}</p>
 		<h2 id="work-title">
-			Pinned work, not
+			{{ 'pages.work.titleLead' | translate }}
 			<br />
-			filler examples.
+			<em>{{ 'pages.work.titleEmphasis' | translate }}</em>
+			{{ 'pages.work.titleTail' | translate }}
 		</h2>
-		<p>Open-source projects that best represent the technical focus.</p>
+		<p>{{ 'pages.work.subtitle' | translate }}</p>
 	</div>
 
 	<div class="work-page__grid">
@@ -32,21 +33,22 @@
 				<i></i>
 				<b>vertex</b>
 			</div>
-			<p class="work-page__number">01 — Agent infrastructure</p>
+			<p class="work-page__number">
+				{{ 'pages.work.mcpNumber' | translate }}
+			</p>
 			<div class="work-page__content">
-				<span class="work-page__label">Pinned project</span>
-				<h3>MCP Vertex</h3>
-				<p>
-					An extensible MCP server core and plugin system for
-					structured, repeatable agent workflows.
-				</p>
+				<span class="work-page__label">
+					{{ 'pages.work.pinnedLabel' | translate }}
+				</span>
+				<h3>{{ 'pages.work.mcpTitle' | translate }}</h3>
+				<p>{{ 'pages.work.mcpDescription' | translate }}</p>
 				<ul>
-					<li>Typed contracts</li>
-					<li>Plugin architecture</li>
-					<li>CLI tooling</li>
+					@for (bullet of mcpBullets().split('|'); track bullet) {
+						<li>{{ bullet }}</li>
+					}
 				</ul>
 				<span class="work-page__link">
-					Explore repository
+					{{ 'pages.work.exploreRepo' | translate }}
 					<span>↗</span>
 				</span>
 			</div>
@@ -78,21 +80,25 @@
 				</div>
 				<div class="work-page__signal-path"></div>
 			</div>
-			<p class="work-page__number">02 — TypeScript architecture</p>
+			<p class="work-page__number">
+				{{ 'pages.work.quickmodelNumber' | translate }}
+			</p>
 			<div class="work-page__content">
-				<span class="work-page__label">Pinned project</span>
-				<h3>QuickModel</h3>
-				<p>
-					A TypeScript modelling and serialization library focused on
-					explicit contracts and dependable data boundaries.
-				</p>
+				<span class="work-page__label">
+					{{ 'pages.work.pinnedLabel' | translate }}
+				</span>
+				<h3>{{ 'pages.work.quickmodelTitle' | translate }}</h3>
+				<p>{{ 'pages.work.quickmodelDescription' | translate }}</p>
 				<ul>
-					<li>Type-safe models</li>
-					<li>Serialization</li>
-					<li>Developer experience</li>
+					@for (
+						bullet of quickmodelBullets().split('|');
+						track bullet
+					) {
+						<li>{{ bullet }}</li>
+					}
 				</ul>
 				<span class="work-page__link">
-					Explore repository
+					{{ 'pages.work.exploreRepo' | translate }}
 					<span>↗</span>
 				</span>
 			</div>
@@ -114,26 +120,26 @@
 				</code>
 				<em>npm / typescript</em>
 			</div>
-			<p class="work-page__number">03 — Developer tooling</p>
+			<p class="work-page__number">
+				{{ 'pages.work.keyerNumber' | translate }}
+			</p>
 			<div class="work-page__content">
-				<span class="work-page__label">Pinned project</span>
-				<h3>Keyer</h3>
-				<p>
-					A published TypeScript CLI and library for managing secrets
-					and configuration workflows with a cleaner developer
-					experience.
-				</p>
+				<span class="work-page__label">
+					{{ 'pages.work.pinnedLabel' | translate }}
+				</span>
+				<h3>{{ 'pages.work.keyerTitle' | translate }}</h3>
+				<p>{{ 'pages.work.keyerDescription' | translate }}</p>
 				<ul>
-					<li>CLI design</li>
-					<li>Node.js tooling</li>
-					<li>Published package</li>
+					@for (bullet of keyerBullets().split('|'); track bullet) {
+						<li>{{ bullet }}</li>
+					}
 				</ul>
 				<div class="work-page__actions">
 					<a
 						href="https://github.com/CartagoGit/Keyer"
 						target="_blank"
 						rel="noreferrer">
-						Repository ↗
+						{{ 'pages.work.exploreRepo' | translate }} ↗
 					</a>
 					<a
 						href="https://www.npmjs.com/package/@cartago-git/keyer"

@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { TranslatePipe } from '../../lang/translate.pipe';
 
 @Component({
 	selector: 'app-contact-page',
+	imports: [TranslatePipe],
 	templateUrl: './contact.page.html',
 	styleUrl: './contact.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

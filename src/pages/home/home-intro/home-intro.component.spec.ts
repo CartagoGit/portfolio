@@ -12,16 +12,6 @@ describe('HomeIntroComponent', () => {
 		fixture.componentRef.setInput('locale', 'en');
 		fixture.componentRef.setInput('technologies', []);
 		fixture.componentRef.setInput('links', []);
-		fixture.componentRef.setInput('copy', {
-			navWork: 'Work',
-			navLab: 'Lab',
-			navAbout: 'About',
-			availability: '',
-			viewWork: 'Examples',
-			contact: 'Contact',
-			role: 'Role',
-			intro: 'Intro',
-		});
 		fixture.detectChanges();
 		expect(fixture.nativeElement.textContent).toContain('Mario Cabrero');
 	});

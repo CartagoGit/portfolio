@@ -3,16 +3,14 @@
 	class="demos-page"
 	aria-labelledby="demos-title">
 	<div class="demos-page__heading">
-		<p>Public experiments</p>
+		<p>{{ 'pages.demos.eyebrow' | translate }}</p>
 		<h2 id="demos-title">
-			Interaction you can
+			{{ 'pages.demos.titleLead' | translate }}
 			<br />
-			<em>actually try.</em>
+			<em>{{ 'pages.demos.titleEmphasis' | translate }}</em>
+			{{ 'pages.demos.titleTail' | translate }}
 		</h2>
-		<p>
-			Small public demos are kept distinct from the featured engineering
-			projects.
-		</p>
+		<p>{{ 'pages.demos.subtitle' | translate }}</p>
 	</div>
 	<div class="demos-page__links">
 		@for (demo of demos; track demo.title) {

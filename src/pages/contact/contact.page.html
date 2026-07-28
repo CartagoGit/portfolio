@@ -9,28 +9,28 @@
 			alt="Temporary portrait placeholder to be replaced with a professional photo of Mario" />
 	</div>
 	<div class="contact-page__content">
-		<p class="contact-page__eyebrow">05 / Contact</p>
-		<h2 id="contact-title">
-			Have a frontend problem worth
-			<em>solving?</em>
-		</h2>
-		<p>
-			I work on Angular product interfaces, mobile delivery, frontend
-			architecture and TypeScript tooling.
+		<p class="contact-page__eyebrow">
+			{{ 'pages.contact.eyebrow' | translate }}
 		</p>
+		<h2 id="contact-title">
+			{{ 'pages.contact.titleLead' | translate }}
+			<em>{{ 'pages.contact.titleEmphasis' | translate }}</em>
+			{{ 'pages.contact.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.contact.subtitle' | translate }}</p>
 		<div class="contact-page__links">
 			<a
 				href="https://github.com/CartagoGit"
 				target="_blank"
 				rel="noreferrer">
-				GitHub
+				{{ 'pages.contact.ctaGithub' | translate }}
 				<span>↗</span>
 			</a>
 			<a
 				href="https://www.linkedin.com/in/mario-cabrero-volarich"
 				target="_blank"
 				rel="noreferrer">
-				LinkedIn
+				{{ 'pages.contact.ctaLinkedin' | translate }}
 				<span>↗</span>
 			</a>
 			<a

@@ -88,15 +88,15 @@ export interface ITranslationMap {
 			mcpNumber: string;
 			mcpTitle: string;
 			mcpDescription: string;
-			mcpBullets: readonly string[];
+			mcpBullets: string;
 			quickmodelNumber: string;
 			quickmodelTitle: string;
 			quickmodelDescription: string;
-			quickmodelBullets: readonly string[];
+			quickmodelBullets: string;
 			keyerNumber: string;
 			keyerTitle: string;
 			keyerDescription: string;
-			keyerBullets: readonly string[];
+			keyerBullets: string;
 		};
 		lab: {
 			eyebrow: string;
