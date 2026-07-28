@@ -1,5 +1,5 @@
 @use 'motion' as motion;
-@use 'tokens/durations' as tokens;
+@use 'tokens/index' as tokens;
 
 app-hero-monitor {
 	display: block;
@@ -65,7 +65,7 @@ app-hero-monitor .hero-monitor {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font: 0.46rem 'DM Mono';
+	@include tokens.mono-mixed(0.46rem);
 	color: var(--muted);
 }
 .hero-monitor__selector .core-icon {
@@ -130,7 +130,7 @@ app-hero-monitor .hero-monitor {
 	border-radius: 6px;
 	background: var(--surface-2);
 	color: var(--cyan);
-	font: 0.72rem 'DM Mono';
+	@include tokens.mono-mixed(0.72rem);
 }
 .hero-monitor__chart-symbols button:hover,
 .hero-monitor__effects button:hover {
@@ -183,7 +183,7 @@ app-hero-monitor .hero-monitor {
 	background: transparent;
 	color: #fff;
 	padding: 0.35rem 0.5rem;
-	font: 0.56rem 'DM Mono';
+	@include tokens.mono-mixed(0.56rem);
 }
 .hero-monitor__retry:hover {
 	border-color: var(--cyan);
@@ -645,7 +645,7 @@ app-hero-monitor .hero-monitor {
 	border-right: 1px solid var(--line);
 	background: radial-gradient(circle at 35% 30%, #174d83, #07111d 67%);
 	color: #8eeaff;
-	font-family: 'DM Mono', monospace;
+	font-family: tokens.$font-mono, monospace;
 	cursor: pointer;
 }
 .hero-monitor__motion-control span {
@@ -1110,7 +1110,7 @@ app-hero-monitor .hero-monitor__orb--one {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	font-family: 'DM Mono';
+	font-family: tokens.$font-mono;
 	font-size: 0.62rem;
 	color: var(--muted);
 	text-transform: capitalize;
@@ -1136,7 +1136,7 @@ app-hero-monitor .hero-monitor__orb--one {
 	left: 0;
 	bottom: 0;
 	color: var(--muted);
-	font-family: 'DM Mono';
+	font-family: tokens.$font-mono;
 	font-size: 0.64rem;
 	line-height: 1.6;
 }

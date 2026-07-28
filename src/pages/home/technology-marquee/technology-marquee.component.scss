@@ -1,4 +1,5 @@
 @use 'keyframes' as *;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -71,7 +72,7 @@
 		border-radius: 6px;
 		background: var(--surface);
 		color: var(--ink);
-		font: 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
 		white-space: nowrap;
 		opacity: 0;
 		transform: translateX(-6px);

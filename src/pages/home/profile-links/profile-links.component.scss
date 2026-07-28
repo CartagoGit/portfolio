@@ -1,3 +1,5 @@
+@use 'tokens/index' as tokens;
+
 :host {
 	display: block;
 }
@@ -14,7 +16,7 @@
 		border: 1px solid var(--line);
 		border-radius: 8px;
 		color: var(--muted);
-		font: 0.58rem 'DM Mono';
+		@include tokens.mono-mixed(0.58rem);
 		text-decoration: none;
 		transition:
 			color 0.2s ease,
