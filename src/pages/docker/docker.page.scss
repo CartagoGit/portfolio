@@ -1,3 +1,5 @@
+@use 'tokens/index' as tokens;
+
 :host {
 	display: block;
 }
@@ -15,9 +17,7 @@
 	}
 	&__heading > p:first-child {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		@include tokens.mono(0.65rem);
 	}
 	h2 {
 		margin: 0.6rem 0 1rem;
@@ -47,11 +47,12 @@
 	}
 	&__terminal > span {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
+		@include tokens.mono-mixed(0.65rem);
 	}
 	code {
 		color: #d9ebff;
-		font: 0.8rem/2 'DM Mono';
+		@include tokens.mono-mixed(0.8rem);
+		line-height: 2;
 	}
 	code b {
 		color: var(--lime);
@@ -68,7 +69,7 @@
 		padding: 0.28rem 0.45rem;
 		border: 1px solid var(--line);
 		color: var(--muted);
-		font: 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
 		font-style: normal;
 	}
 }
