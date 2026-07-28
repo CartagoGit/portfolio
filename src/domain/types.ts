@@ -102,3 +102,15 @@ export interface IDemo {
 	summary: string;
 	url: string;
 }
+
+/** A chart-type picker button rendered inside the hero monitor. */
+export interface IChartOption {
+	id: IChartType;
+	label: string;
+}
+
+/** An effect-picker button rendered inside the hero monitor detail panel. */
+export interface IEffectOption {
+	id: Exclude<IHeroEffect, 'idle'>;
+	symbol: string;
+}

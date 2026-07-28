@@ -10,7 +10,7 @@ import {
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
-import type { IChartType, IHeroEffect } from '../../../domain/types';
+import type { IChartOption, IEffectOption } from '../../../domain/types';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -53,7 +53,7 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 	readonly earthDepth = this._earth.state;
 	readonly earthBlocksMonitor = this._earth.blocksMonitor;
 
-	readonly chartOptions: ReadonlyArray<{ id: IChartType; label: string }> = [
+	readonly chartOptions: readonly IChartOption[] = [
 		{ id: 'bars', label: 'Velocity' },
 		{ id: 'line', label: 'Signals' },
 		{ id: 'area', label: 'Coverage' },
@@ -63,10 +63,7 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		{ id: 'grid', label: 'Grid' },
 	];
 
-	readonly effectOptions: ReadonlyArray<{
-		id: Exclude<IHeroEffect, 'idle'>;
-		symbol: string;
-	}> = [
+	readonly effectOptions: readonly IEffectOption[] = [
 		{ id: 'shake', symbol: '≈' },
 		{ id: 'glitch', symbol: '⌘' },
 		{ id: 'float', symbol: '↟' },
