@@ -1,3 +1,5 @@
+@use 'tokens/index' as tokens;
+
 :host {
 	display: block;
 }
@@ -8,9 +10,7 @@
 	&__heading > p,
 	&__experience > div > p:first-child {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		@include tokens.mono(0.65rem);
 	}
 	&__heading h2,
 	&__experience h2 {
@@ -54,7 +54,7 @@
 	&__detail > p:first-child,
 	footer {
 		color: var(--cyan);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__detail h3 {
 		font-size: clamp(2rem, 4vw, 4rem);
@@ -72,7 +72,7 @@
 	&__detail span {
 		padding: 0.3rem 0.5rem;
 		border: 1px solid var(--line);
-		font: 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
 	}
 	&__detail footer {
 		margin-top: 2rem;
