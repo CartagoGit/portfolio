@@ -32,7 +32,7 @@ import type { IChartOption, IEffectOption } from '../../../domain/types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 	host: {
-		'(document:pointerdown)': 'onDocumentPointerDown($event)',
+		'(document:pointerdown)': '_onDocumentDown($event)',
 	},
 })
 export class HeroMonitorComponent implements OnDestroy, OnInit {
@@ -80,16 +80,12 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 		this._document.removeEventListener('pointerdown', this._onDocumentDown);
 	}
 
-	private readonly _onDocumentDown = (event: PointerEvent): void => {
+	protected readonly _onDocumentDown = (event: PointerEvent): void => {
 		const target = event.target as Element | null;
 		if (!target) return;
 		if (target.closest('app-hero-monitor')) return;
 		this._earth.returnBehind(target);
 	};
-
-	onDocumentPointerDown(event: PointerEvent): void {
-		this._onDocumentDown(event);
-	}
 
 	/**
 	 * Motion-control button: randomise the spin direction and bring the orb
