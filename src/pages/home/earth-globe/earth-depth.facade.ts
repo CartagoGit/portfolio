@@ -25,7 +25,7 @@ export class EarthDepthFacade {
 		if (this.state() !== 'front') return;
 		if (
 			target instanceof HTMLElement &&
-			target.closest('.earth-motion-control')
+			target.closest('.hero-monitor__motion-control')
 		)
 			return;
 		this.state.set('out-front');

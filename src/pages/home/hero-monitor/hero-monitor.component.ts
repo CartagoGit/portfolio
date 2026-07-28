@@ -132,8 +132,8 @@ export class HeroMonitorComponent implements OnDestroy, OnInit {
 	handleShellInteraction(event: MouseEvent): void {
 		const target = event.target as Element | null;
 		if (!target) return;
-		if (target.closest('.orb-one')) return;
-		if (target.closest('.earth-motion-control')) return;
+		if (target.closest('.hero-monitor__orb--one')) return;
+		if (target.closest('.hero-monitor__motion-control')) return;
 		if (target.closest('button')) return;
 		if (target.closest('a')) return;
 		if (target.closest('input, textarea, select')) return;

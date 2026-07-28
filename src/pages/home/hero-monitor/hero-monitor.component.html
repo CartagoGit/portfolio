@@ -3,12 +3,12 @@
 	aria-label="Interactive representation of Mario's core frontend technologies">
 	<div
 		class="hero-monitor__orb hero-monitor__orb--one"
-		[class.earth-active]="earth.active()"
-		[class.earth-out-behind]="earthDepth() === 'out-behind'"
-		[class.earth-front-ready]="earthDepth() === 'front-ready'"
-		[class.earth-front]="earthDepth() === 'front'"
-		[class.earth-out-front]="earthDepth() === 'out-front'"
-		[class.earth-behind-ready]="earthDepth() === 'behind-ready'"
+		[class.hero-monitor--active]="earth.active()"
+		[class.hero-monitor--out-behind]="earthDepth() === 'out-behind'"
+		[class.hero-monitor--front-ready]="earthDepth() === 'front-ready'"
+		[class.hero-monitor--front]="earthDepth() === 'front'"
+		[class.hero-monitor--out-front]="earthDepth() === 'out-front'"
+		[class.hero-monitor--behind-ready]="earthDepth() === 'behind-ready'"
 		(click)="handleOrbClick($event)"
 		aria-hidden="true">
 		<app-earth-globe

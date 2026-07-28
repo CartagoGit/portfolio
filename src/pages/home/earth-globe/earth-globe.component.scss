@@ -6,13 +6,13 @@
 	touch-action: none;
 	user-select: none;
 }
-.earth-globe-layer {
+.earth-globe__layer {
 	position: absolute;
 	inset: 0;
 	overflow: hidden;
 	border-radius: 50%;
 }
-.earth-canvas {
+.earth-globe__canvas {
 	position: absolute;
 	z-index: 1;
 	inset: 0;
@@ -23,6 +23,6 @@
 	transition: opacity 0.65s ease;
 	will-change: opacity;
 }
-.earth-canvas.is-active {
+.earth-globe__canvas.is-active {
 	opacity: 1;
 }

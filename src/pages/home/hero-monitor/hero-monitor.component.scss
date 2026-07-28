@@ -908,21 +908,21 @@ app-hero-monitor .hero-monitor {
 	content: none !important;
 	display: none !important;
 }
-.hero-monitor__orb--one.earth-out-behind {
+.hero-monitor__orb--one.hero-monitor--out-behind {
 	z-index: 1;
 	animation: none !important;
 	opacity: 0;
 	transform: scale(0.92);
 	pointer-events: none;
 }
-.hero-monitor__orb--one.earth-front-ready {
+.hero-monitor__orb--one.hero-monitor--front-ready {
 	z-index: 6;
 	animation: none !important;
 	opacity: 0;
 	transform: scale(0.92);
 	pointer-events: none;
 }
-.hero-monitor__orb--one.earth-front {
+.hero-monitor__orb--one.hero-monitor--front {
 	z-index: 6;
 	animation: none !important;
 	opacity: 1;
@@ -932,16 +932,16 @@ app-hero-monitor .hero-monitor {
 	pointer-events: auto;
 	cursor: grab;
 }
-.hero-monitor__orb--one.earth-front:active {
+.hero-monitor__orb--one.hero-monitor--front:active {
 	cursor: grabbing;
 }
-.hero-monitor__orb--one.earth-out-front {
+.hero-monitor__orb--one.hero-monitor--out-front {
 	z-index: 6;
 	animation: none !important;
 	opacity: 0;
 	pointer-events: none;
 }
-.hero-monitor__orb--one.earth-behind-ready {
+.hero-monitor__orb--one.hero-monitor--behind-ready {
 	z-index: 1;
 	animation: none !important;
 	opacity: 0;
@@ -1141,7 +1141,7 @@ app-hero-monitor .hero-monitor__orb--one {
 		right: auto;
 		top: -2.4rem;
 	}
-	app-hero-monitor .hero-monitor__orb--one.earth-front {
+	app-hero-monitor .hero-monitor__orb--one.hero-monitor--front {
 		transform: scale(1.5);
 		top: -2rem;
 		right: auto;
