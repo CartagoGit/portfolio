@@ -6,6 +6,8 @@ import {
 	signal,
 } from '@angular/core';
 import {
+	FALLBACK_PLAYGROUND_STEP,
+	FALLBACK_TELEMETRY,
 	PLAYGROUND_ORDER,
 	PLAYGROUND_STEPS,
 	TELEMETRY,
@@ -17,23 +19,6 @@ import type {
 	ITelemetry,
 	ITelemetryId,
 } from '../../domain/types';
-
-const FALLBACK_TELEMETRY: ITelemetry = {
-	id: 'product',
-	label: '',
-	title: '',
-	value: '',
-	valueLabel: '',
-	kpis: [],
-	bars: [],
-	note: '',
-};
-
-const FALLBACK_STEP: IPlaygroundStepDefinition = {
-	id: 'discover',
-	label: '',
-	hint: '',
-};
 
 @Component({
 	selector: 'app-lab-page',
@@ -93,7 +78,8 @@ export class LabPageComponent {
 	}
 	playgroundStep(step: IPlaygroundStep): IPlaygroundStepDefinition {
 		return (
-			this.playgroundSteps.find(({ id }) => id === step) ?? FALLBACK_STEP
+			this.playgroundSteps.find(({ id }) => id === step) ??
+			FALLBACK_PLAYGROUND_STEP
 		);
 	}
 	resetPlayground(): void {

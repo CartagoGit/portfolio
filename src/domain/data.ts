@@ -309,7 +309,33 @@ export const PLAYGROUND_ORDER: readonly IPlaygroundStep[] = [
 	'verify',
 	'model',
 ];
+/**
+ * Default telemetry row used when the active signal doesn't match any
+ * declared panel. Empty strings keep the dashboard chrome stable while
+ * the user navigates between perspectives; values render as muted
+ * placeholders rather than 'undefined'.
+ */
+export const FALLBACK_TELEMETRY: ITelemetry = {
+	id: 'product',
+	label: '',
+	title: '',
+	value: '',
+	valueLabel: '',
+	kpis: [],
+	bars: [],
+	note: '',
+};
 
+/**
+ * Default playground step definition, returned when a step id is no
+ * longer in the registered steps list. Keeps the rendered card from
+ * crashing if the order array references an unknown id.
+ */
+export const FALLBACK_PLAYGROUND_STEP: IPlaygroundStepDefinition = {
+	id: 'discover',
+	label: '',
+	hint: '',
+};
 export const TELEMETRY: readonly ITelemetry[] = [
 	{
 		id: 'product',
