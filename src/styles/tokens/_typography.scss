@@ -1,0 +1,43 @@
+// Shared typography vocabulary. Components should consume these tokens
+// instead of repeating 'DM Mono' + a font-size + a letter-spacing every
+// time a small-caps / numeric label appears.
+//
+// The palette tokens (`./_palette.scss`) cover colour; the durations
+// tokens (`./_durations.scss`) cover motion timing. Typography tokens
+// cover type scale and the recurring mono-numeric label pattern.
+//
+// Font choices:
+//   - 'Manrope' is the body / heading family, loaded via @import in
+//     src/styles.scss.
+//   - 'DM Mono' is the small-caps / numeric label family for meta
+//     eyebrows, KPIs, command chips and similar "machine" text.
+//   - 'Playfair Display' (italic) is reserved for accent phrases in
+//     headlines.
+
+/// Body / heading family (loaded in src/styles.scss).
+$font-body: 'Manrope', Arial, sans-serif;
+
+/// Mono-numeric family used for eyebrows, KPIs and command chips.
+$font-mono: 'DM Mono';
+
+/// Accent family used in a small number of headlines.
+$font-accent: 'Playfair Display', serif;
+
+/// Mono-numeric helper: produces the standard eyebrow / KPI label
+/// pattern at a configurable size. Usage: `@include typography.mono(0.65rem);`
+@mixin mono($size: 0.65rem, $weight: 400) {
+	font-family: $font-mono;
+	font-size: $size;
+	font-weight: $weight;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+/// Mono-numeric helper without the uppercase transformation, used
+/// when the label already carries natural casing (KPIs, percentages,
+/// command chip icons).
+@mixin mono-mixed($size: 0.62rem, $weight: 400) {
+	font-family: $font-mono;
+	font-size: $size;
+	font-weight: $weight;
+}
