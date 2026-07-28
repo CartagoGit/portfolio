@@ -46,6 +46,19 @@ a {
 	outline-offset: 4px;
 }
 
+/* Accessibility utility: hide visually but keep available to screen readers. */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
 /* The shell (including the fixed header) remains stable; only route content moves. */
 ::view-transition-old(root) {
 	animation: none;
