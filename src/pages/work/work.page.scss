@@ -1,5 +1,6 @@
 @use 'motion' as motion;
 @use 'keyframes' as *;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -30,9 +31,7 @@
 	}
 	&__eyebrow {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+		@include tokens.mono(0.65rem);
 	}
 	&__grid {
 		display: grid;
@@ -77,7 +76,7 @@
 	}
 	&__number,
 	&__label {
-		font: 0.64rem 'DM Mono';
+		@include tokens.mono(0.64rem);
 		letter-spacing: 0.08em;
 	}
 	&__number {
@@ -114,7 +113,7 @@
 		padding: 0.4rem 0.5rem;
 		border: 1px solid #fff3;
 		color: #fff9;
-		font: 0.58rem 'DM Mono';
+		@include tokens.mono-mixed(0.58rem);
 	}
 	&__link {
 		font-size: 0.78rem;
@@ -141,7 +140,10 @@
 	}
 	&__mcp-visual span {
 		color: #d8f6ff14;
-		font: 800 clamp(5rem, 16vw, 11rem)/1 'DM Mono';
+		font-family: tokens.$font-mono;
+		font-size: clamp(5rem, 16vw, 11rem);
+		font-weight: 800;
+		line-height: 1;
 		letter-spacing: -0.15em;
 	}
 	&__mcp-visual b {
@@ -149,7 +151,9 @@
 		right: 9%;
 		bottom: 12%;
 		color: var(--cyan);
-		font: 800 1.5rem 'DM Mono';
+		font-family: tokens.$font-mono;
+		font-size: 1.5rem;
+		font-weight: 800;
 		letter-spacing: 0.1em;
 	}
 	&__mcp-visual i {
@@ -202,12 +206,13 @@
 	&__screen small,
 	&__screen i {
 		color: #9daeff;
-		font: 0.55rem 'DM Mono';
+		@include tokens.mono-mixed(0.55rem);
 	}
 	&__screen strong {
 		display: block;
 		margin: 1rem 0;
-		font: 3.5rem 'DM Mono';
+		font-family: tokens.$font-mono;
+		font-size: 3.5rem;
 		letter-spacing: -0.12em;
 	}
 	&__screen strong span {
@@ -267,7 +272,7 @@
 		right: 10%;
 		bottom: 12%;
 		color: var(--cyan);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 	}
 	&__actions {
 		display: flex;
@@ -282,7 +287,7 @@
 		border: 1px solid #fff4;
 		border-radius: 8px;
 		color: inherit;
-		font: 0.63rem 'DM Mono';
+		@include tokens.mono-mixed(0.63rem);
 		text-decoration: none;
 	}
 	&__actions a:hover {
@@ -300,7 +305,7 @@
 	&__secondary p {
 		margin: 0.3rem 0;
 		color: var(--muted);
-		font: 0.64rem 'DM Mono';
+		@include tokens.mono-mixed(0.64rem);
 	}
 	&__secondary a {
 		color: inherit;
@@ -384,7 +389,7 @@
 	}
 	&__directory-grid span {
 		color: var(--cyan);
-		font: 0.57rem 'DM Mono';
+		@include tokens.mono(0.57rem);
 		letter-spacing: 0.08em;
 	}
 	&__directory-grid b {
