@@ -23,14 +23,6 @@ $entrance-ease: tokens.$ease-emphasized;
 		transform $duration $entrance-ease;
 }
 
-/// Slide-in entrance from below, paired with the `page-rise` keyframe.
-/// Deep pages can override just the `from` translate via `& { transform:
-/// translateY(16px) }` placed before the animation declaration to lift
-/// further while reusing the shared timing.
-@mixin page-rise($duration: tokens.$motion-base, $delay: 0s) {
-	animation: page-rise $duration $delay both;
-}
-
 /// The cyan glow used by interactive cards, panels and tabs.
 @mixin neon-glow {
 	box-shadow: var(--neon);
@@ -39,21 +31,6 @@ $entrance-ease: tokens.$ease-emphasized;
 /// Tighter cyan glow for icon-sized elements (kbd chips, status dots).
 @mixin cyan-glow($radius: 18px) {
 	box-shadow: 0 0 $radius var(--cyan);
-}
-
-/// Lift-and-glow transition used on every hoverable card/panel.
-/// Pairs with `:hover { @include lift-on-hover; }`.
-@mixin hover-lift-base {
-	transition:
-		transform tokens.$motion-base tokens.$ease-standard,
-		border-color tokens.$motion-base,
-		box-shadow tokens.$motion-base;
-}
-
-@mixin lift-on-hover($translate: -5px) {
-	transform: translateY($translate);
-	border-color: var(--cyan);
-	box-shadow: var(--neon);
 }
 
 /// Base box for the hero orb: a fixed 320×320 layer positioned so the
