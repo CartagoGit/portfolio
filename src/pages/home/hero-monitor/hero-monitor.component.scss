@@ -1148,3 +1148,58 @@ app-hero-monitor .orb-one {
 		left: -1.4rem;
 	}
 }
+
+// -----------------------------------------------------------------------------
+// Migrated from src/styles/composition/_hero.scss before that partial was
+// deleted: the classes below match elements in hero-monitor.component.html
+// (.orb-two / .canvas-heading / .hero-note) and the unprefixed `.orb`
+// container that wraps both orbs. Composition kept these as orphans that
+// the per-component SCSS never duplicated, so the styles would have been
+// lost on the deletion of composition/.
+// -----------------------------------------------------------------------------
+.orb {
+	width: 360px;
+	height: 360px;
+	bottom: -8%;
+	left: 0;
+	opacity: 0.3;
+}
+
+.orb-two {
+	background: radial-gradient(circle, var(--blue), transparent 67%);
+}
+
+.canvas-heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-family: 'DM Mono';
+	font-size: 0.62rem;
+	color: var(--muted);
+	text-transform: capitalize;
+}
+
+.canvas-heading button {
+	width: 24px;
+	height: 22px;
+	border: 1px solid var(--line);
+	border-radius: 5px;
+	background: transparent;
+	color: var(--cyan);
+	font-size: 0.8rem;
+}
+
+.canvas-heading button:hover {
+	background: color-mix(in srgb, var(--cyan) 12%, transparent);
+	transform: rotate(-45deg);
+}
+
+.hero-note {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	color: var(--muted);
+	font-family: 'DM Mono';
+	font-size: 0.64rem;
+	line-height: 1.6;
+}

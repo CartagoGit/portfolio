@@ -37,9 +37,12 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 	styleUrl: './page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	// Composition root: child components in the shell rely on a single
-	// global stylesheet for the layout / section chrome under
-	// src/styles/ and src/styles/composition/. ViewEncapsulation.None
-	// keeps those rules reachable without re-declaring per component.
+	// global stylesheet for the layout / palette chrome (the `.portfolio`
+	// container and `.skip-link` anchor) declared in src/app/page.scss.
+	// ViewEncapsulation.None keeps those rules reachable without
+	// re-declaring them per component. Per-section rules live next to
+	// each component (e.g. src/pages/approach/approach.page.scss owns
+	// every `.approach-page*` selector).
 	encapsulation: ViewEncapsulation.None,
 	host: {
 		'(window:scroll)': 'onWindowScroll()',

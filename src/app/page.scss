@@ -1,22 +1,51 @@
 // =============================================================================
 // Portfolio composition root
 // -----------------------------------------------------------------------------
-// This file is the SCSS entry point for the global page chrome. Each concern
-// lives in its own partial under `../styles/composition/` so the rules can grow
-// without forcing this file to balloon. The composition root keeps the
-// ordering stable: layout tokens → hero → sections → capabilities → telemetry
-// → operational → footer → monitor (overrides) so cascade conflicts always
-// resolve in the same direction.
+// This file owns the few global selectors that the shell (PageComponent,
+// ViewEncapsulation.None) renders: the `.portfolio` palette container, the
+// `.skip-link` keyboard-skip anchor and the `.light-mode` modifier. Every
+// other visual rule lives next to its component (e.g. `.approach-page*`
+// rules live in src/pages/approach/approach.page.scss) — those per-component
+// SCSS files own their selectors end to end and never depend on a shared
+// partial for global cascade.
 //
-// Adding a new section: create a sibling partial and `@use` it in the
-// appropriate slot. Do not inline component selectors here.
+// All token references resolve through `includePaths: ["src/styles"]`
+// declared in angular.json, so `@use 'tokens' as tokens;` reaches
+// `src/styles/tokens/_index.scss` without a relative path.
 // =============================================================================
 
-@use '../styles/composition/layout';
-@use '../styles/composition/hero';
-@use '../styles/composition/sections';
-@use '../styles/composition/capabilities';
-@use '../styles/composition/telemetry';
-@use '../styles/composition/operational';
-@use '../styles/composition/footer';
-@use '../styles/composition/monitor';
+@use 'tokens' as tokens;
+
+.portfolio {
+	@include tokens.portfolio-tokens(tokens.$portfolio-tokens-dark);
+	min-height: 100vh;
+	overflow-x: clip;
+	padding-top: 88px;
+	background:
+		radial-gradient(circle at 80% 0, #0a2d5738, transparent 28%),
+		var(--canvas);
+	color: var(--ink);
+	transition:
+		background 0.35s,
+		color 0.35s;
+}
+
+.portfolio.light-mode {
+	@include tokens.portfolio-tokens(tokens.$portfolio-tokens-light);
+}
+
+.skip-link {
+	position: fixed;
+	z-index: 30;
+	top: -60px;
+	left: 1rem;
+	background: var(--cyan);
+	color: #07101c;
+	padding: 0.7rem 1rem;
+	font-weight: 800;
+	transition: top 0.2s;
+}
+
+.skip-link:focus {
+	top: 1rem;
+}
