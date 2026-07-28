@@ -29,7 +29,6 @@ export class ShellFacade {
 	readonly localeMenuOpen = signal(false);
 	readonly localeMenuClosing = signal(false);
 	readonly lightMode = signal(false);
-	readonly scrolled = signal(false);
 	readonly commandOpen = signal(false);
 	readonly publicLinks = PUBLIC_LINKS;
 	readonly technologyMarquee = TECHNOLOGY_MARQUEE;
@@ -61,10 +60,6 @@ export class ShellFacade {
 			'data-theme',
 			next ? 'light' : 'dark'
 		);
-	}
-
-	setScrolled(scrolled: boolean): void {
-		this.scrolled.set(scrolled);
 	}
 
 	selectLocale(locale: ILocale): void {

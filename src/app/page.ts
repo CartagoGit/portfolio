@@ -44,14 +44,7 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 	// each component (e.g. src/pages/approach/approach.page.scss owns
 	// every `.approach-page*` selector).
 	encapsulation: ViewEncapsulation.None,
-	host: {
-		'(window:scroll)': 'onWindowScroll()',
-	},
 })
 export class PageComponent {
 	readonly shell = new ShellFacade();
-
-	onWindowScroll(): void {
-		this.shell.setScrolled(window.scrollY > 20);
-	}
 }

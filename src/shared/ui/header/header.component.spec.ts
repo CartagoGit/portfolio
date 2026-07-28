@@ -24,7 +24,6 @@ describe('HeaderComponent', () => {
 		fixture.componentRef.setInput('localeMenuOpen', false);
 		fixture.componentRef.setInput('localeMenuClosing', false);
 		fixture.componentRef.setInput('lightMode', false);
-		fixture.componentRef.setInput('scrolled', false);
 		fixture.detectChanges();
 		expect(
 			fixture.nativeElement.querySelector('.is-active')?.textContent

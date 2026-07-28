@@ -29,7 +29,6 @@ export class HeaderComponent {
 	readonly localeMenuOpen = input.required<boolean>();
 	readonly localeMenuClosing = input.required<boolean>();
 	readonly lightMode = input.required<boolean>();
-	readonly scrolled = input.required<boolean>();
 	readonly navigate = output<IPageComponentId>();
 	readonly menuToggle = output<void>();
 	readonly localeToggle = output<void>();
