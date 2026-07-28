@@ -1,6 +1,6 @@
 @use 'motion' as motion;
 @use 'keyframes' as *;
-@use 'tokens/durations' as tokens;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -17,8 +17,7 @@
 	}
 	&__heading > p:first-child {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		letter-spacing: 0.1em;
+		@include tokens.mono(0.65rem);
 		text-transform: uppercase;
 	}
 	&__heading h2 {
@@ -80,8 +79,7 @@
 	&__grid span {
 		display: block;
 		color: var(--cyan);
-		font: 0.62rem 'DM Mono';
-		text-transform: uppercase;
+		@include tokens.mono(0.62rem);
 	}
 	&__grid b {
 		display: block;
