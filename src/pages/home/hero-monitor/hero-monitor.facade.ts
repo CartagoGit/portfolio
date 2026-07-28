@@ -42,6 +42,34 @@ function nextHeroPanelTransition(
 
 const CHART_VIEWBOX_HEIGHT = 118;
 const CHART_X_STEP = 90;
+const CHART_BAR_COUNT = 5;
+const CHART_BAR_MIN = 28;
+const CHART_BAR_RANGE = 62;
+const CHART_BAR_BONUS_PER_INDEX = 1.5;
+const DEFAULT_CHART_BARS: readonly number[] = [42, 67, 52, 83, 71];
+
+/** Heat palette: each entry pairs a CSS-pixel breakpoint with the gradient
+ * applied to bars at or above it. Lower breakpoints fall through to the
+ * catch-all at the bottom of the heat branch. */
+const HEAT_PALETTE_GRADIENTS: ReadonlyArray<readonly [number, string]> = [
+	[80, 'linear-gradient(to top, #ff4d4d, #ffcf4a)'],
+	[60, 'linear-gradient(to top, #ff9f1c, #ffe16b)'],
+	[42, 'linear-gradient(to top, #24b6ff, #74e5ff)'],
+];
+const HEAT_PALETTE_FALLBACK = 'linear-gradient(to top, #2856a6, #48b8ff)';
+
+const PALETTE_GRADIENTS: Readonly<Record<IHeroPalette, string>> = {
+	ocean: 'linear-gradient(to top, #1678ff, #32c8ff)',
+	heat: HEAT_PALETTE_FALLBACK,
+	lime: 'linear-gradient(to top, #256c5d, #d8ff78)',
+};
+
+function gradientForHeat(value: number): string {
+	for (const [breakpoint, gradient] of HEAT_PALETTE_GRADIENTS) {
+		if (value >= breakpoint) return gradient;
+	}
+	return HEAT_PALETTE_FALLBACK;
+}
 
 /**
  * Builds the SVG path for the hero monitoring chart. The curve is
@@ -73,7 +101,7 @@ export class HeroMonitorFacade {
 	readonly panelTransition = signal<IHeroPanelTransition>('slide');
 	readonly panelChanging = signal(false);
 	readonly palette = signal<IHeroPalette>('ocean');
-	readonly chartBars = signal([42, 67, 52, 83, 71]);
+	readonly chartBars = signal<readonly number[]>(DEFAULT_CHART_BARS);
 	readonly selectedPanel = computed(() =>
 		this.panels.find(({ id }) => id === this.activePanel())
 	);
@@ -109,8 +137,12 @@ export class HeroMonitorFacade {
 	}
 	randomizeChart(): void {
 		this.chartBars.set(
-			Array.from({ length: 5 }, (_, index) =>
-				Math.round(28 + Math.random() * 62 + index * 1.5)
+			Array.from({ length: CHART_BAR_COUNT }, (_, index) =>
+				Math.round(
+					CHART_BAR_MIN +
+						Math.random() * CHART_BAR_RANGE +
+						index * CHART_BAR_BONUS_PER_INDEX
+				)
 			)
 		);
 	}
@@ -119,23 +151,16 @@ export class HeroMonitorFacade {
 		window.setTimeout(() => this.effect.set(effect), 24);
 	}
 	setTemperature(): void {
-		this.palette.set('heat');
-		this.randomizeChart();
+		this.setPalette('heat');
 	}
 	setPalette(palette: IHeroPalette): void {
 		this.palette.set(palette);
 		this.randomizeChart();
 	}
 	gradient(value: number): string {
-		if (this.palette() === 'heat') {
-			if (value >= 80) return 'linear-gradient(to top, #ff4d4d, #ffcf4a)';
-			if (value >= 60) return 'linear-gradient(to top, #ff9f1c, #ffe16b)';
-			if (value >= 42) return 'linear-gradient(to top, #24b6ff, #74e5ff)';
-			return 'linear-gradient(to top, #2856a6, #48b8ff)';
-		}
-		if (this.palette() === 'lime')
-			return 'linear-gradient(to top, #256c5d, #d8ff78)';
-		return 'linear-gradient(to top, #1678ff, #32c8ff)';
+		return this.palette() === 'heat'
+			? gradientForHeat(value)
+			: PALETTE_GRADIENTS[this.palette()];
 	}
 	destroy(): void {
 		if (this._panelTimer !== undefined)
