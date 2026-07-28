@@ -1,4 +1,5 @@
 @use 'motion' as motion;
+@use 'tokens/index' as tokens;
 
 :host {
 	display: block;
@@ -14,9 +15,7 @@
 	&__heading > p:first-child,
 	.demos-page__game > div > p:first-child {
 		color: var(--cyan);
-		font: 0.65rem 'DM Mono';
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		@include tokens.mono(0.65rem);
 	}
 	h2 {
 		margin: 0.6rem 0 1rem;
@@ -52,7 +51,7 @@
 	&__links span,
 	&__links i {
 		color: var(--cyan);
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 		font-style: normal;
 	}
 	&__links p {
@@ -80,7 +79,7 @@
 		font-size: 2.4rem;
 	}
 	&__game small {
-		font: 0.6rem 'DM Mono';
+		@include tokens.mono-mixed(0.6rem);
 		color: var(--muted);
 	}
 	&__grid {
