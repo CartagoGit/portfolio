@@ -28,7 +28,7 @@ This repository is the **front-end** of the work documented in [`CartagoGit`](ht
 7. [Stack and dependencies](#7-stack-and-dependencies)
 8. [i18n, accessibility, and performance](#8-i18n-accessibility-and-performance)
 9. [Design system](#9-design-system)
-10. [The `portfolio-content` plugin (MCP Vertex)](#10-the-portfolio-content-plugin-mcp-vertex)
+10. [The `portfolio-content` plugin (DelendAI)](#10-the-portfolio-content-plugin-delendai)
 11. [Run, validate, deploy](#11-run-validate-deploy)
 12. [Image placeholders](#12-image-placeholders)
 13. [Roadmap](#13-roadmap)
@@ -41,7 +41,7 @@ This repository is the **front-end** of the work documented in [`CartagoGit`](ht
 **Cartago Portfolio** is the public site that materialises Mario Cabrero Volarich's professional profile. It does four things a GitHub README cannot do well:
 
 - **Trajectory**: shows how production front-end is thought of and delivered, not just which libraries are listed on a CV.
-- **Independent work**: amplifies the public repositories (`mcp-vertex`, `quickmodel`, `keyer`, `print-cv`, `zoneless-calculator`, `nestgpt`) with narrative, decisions, and demos.
+- **Independent work**: amplifies the public repositories (`DelendAI`, `api-source-tanit`, `quickmodel`, `keyer`, `print-cv`, `steam-keys`, `zoneless-calculator`, `nestgpt`) with narrative, decisions, and demos.
 - **Lab**: hosts experimental pieces (visualisations, playgrounds, zoneless demos) that justify the Angular, RxJS, rendering, and motion chops.
 - **Availability**: offers a serious contact channel and an explicit declaration of what is accepted and what is not.
 
@@ -86,7 +86,7 @@ These are the non-negotiable principles of the project. If a change breaks one o
 12. **Layered architecture visible.** `app / core / domain / features / shared / styles` is a contract, not a suggestion. The `portfolio_architecture` plugin verifies it.
 13. **Typed domain contracts.** Pages, capabilities, panels, playground steps, etc., live in `src/domain/portfolio.types.ts`. Features do not redefine types; they import them.
 14. **Single source of truth for content.** `src/domain/portfolio.data.ts` centralises copy, links, technologies, telemetry. Pages read from there.
-15. **Local MCP plugin.** The repo includes a [`mcp-vertex`](https://github.com/CartagoGit/mcp-vertex) plugin that introspects the architecture, features, contracts, and audits the public content. This makes the repo *agent-readable* and shields it from drift.
+15. **Local MCP plugin.** The repo includes a [`DelendAI`](https://github.com/CartagoGit/DelendAI) plugin that introspects the architecture, features, contracts, and audits the public content. This makes the repo *agent-readable* and shields it from drift.
 16. **The portfolio audits itself.** If the plugin finds a forbidden term, a per-se root, a temporary image without marker, or a declared component that does not exist on disk, the build fails.
 
 ---
@@ -161,7 +161,7 @@ Removing a per-se root is a **breaking editorial change** and must be justified 
 ```
 portfolio/
 ├── README.md                  ← this file
-├── package.json               ← Angular 22 + Bun + local MCP Vertex
+├── package.json               ← Angular 22 + Bun + local DelendAI
 ├── angular.json               ← Angular CLI config
 ├── tsconfig.{json,app,spec}   ← three independent tsconfigs
 ├── eslint.config.mjs          ← eslint + typescript-eslint
@@ -215,11 +215,11 @@ src/
 
 ### `plugins/portfolio-content/` — the plugin that audits this repo
 
-It is a [`mcp-vertex`](https://github.com/CartagoGit/mcp-vertex) plugin that lives inside the project itself. That is intentional: the repo audits itself. See [section 10](#10-the-portfolio-content-plugin-mcp-vertex).
+It is a [`DelendAI`](https://github.com/CartagoGit/DelendAI) plugin that lives inside the project itself. That is intentional: the repo audits itself. See [section 10](#10-the-portfolio-content-plugin-delendai).
 
 ### `docs/mcp-vertex/` — knowledge and proposals
 
-When the plugin needs to learn something new about the project (e.g. a new boundary rule), the human writes it as a knowledge entry here. Proposals follow the `mcp-vertex` cycle (work → ready → done).
+When the plugin needs to learn something new about the project (e.g. a new boundary rule), the human writes it as a knowledge entry here. Proposals follow the `DelendAI` cycle (work → ready → done).
 
 ---
 
@@ -250,7 +250,7 @@ The home is the most carefully crafted piece. It has three coordinated component
 
 Curated list of pinned repos on `CartagoGit`:
 
-1. `mcp-vertex` — the most technically deep piece.
+1. `DelendAI` — the most technically deep piece.
 2. `quickmodel` — TypeScript library with validation, security, MCP.
 3. `Keyer` — published npm utility.
 4. `print-cv` — Vue/TypeScript with E2E.
@@ -347,8 +347,8 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Stack decisions
 
-- **Bun** for install, scripts, and plugin tests. It is the same runtime as the `mcp-vertex` repo, which reduces friction when developing both.
-- **Zod** in plugins and models. It is the same validator that `mcp-vertex` and `quickmodel` already use.
+- **Bun** for install, scripts, and plugin tests. It is the same runtime as the `DelendAI` repo, which reduces friction when developing both.
+- **Zod** in plugins and models. It is the same validator that `DelendAI` and `quickmodel` already use.
 - **simple-icons** for all brand SVGs. Avoids pasted, poorly-licensed SVGs in `public/`.
 - **No UI library** (Angular Material, PrimeNG, etc.). The project uses only SCSS and tokens. Deliberate: the home is specific enough that a UI library would only add weight.
 
@@ -417,9 +417,9 @@ The theme toggle sits in the header and persists in the session. The transition 
 
 ---
 
-## 10. The `portfolio-content` plugin (MCP Vertex)
+## 10. The `portfolio-content` plugin (DelendAI)
 
-This repo is one of the few that **includes its own MCP plugin** inside itself. That makes the portfolio an *agent-readable* repository: any tool that speaks MCP can ask `mcp-vertex` how the site is organised without reading every file.
+This repo is one of the few that **includes its own MCP plugin** inside itself. That makes the portfolio an *agent-readable* repository: any tool that speaks MCP can ask the runtime how the site is organised without reading every file.
 
 ### Tools exposed
 
@@ -511,7 +511,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`mcp-vertex` is not yet published. Meanwhile, both `mcp-vertex.config.json` and `.vscode/mcp.json` point at the local checkout at `../mcp-vertex`. **Do not change that path until the package is published.**
+`DelendAI` is not yet published to npm. Meanwhile, both `mcp-vertex.config.json` and `.vscode/mcp.json` point at the local checkout at `../mcp-vertex`. **Do not change that path until the package is published.**
 
 ---
 
@@ -521,7 +521,7 @@ bun run mcp:all           # all three in order
 
 - **Bun ≥ 1.3.14** (declared in `packageManager`).
 - **Node.js ≥ 22** (Angular 22 peer).
-- Local checkout of `mcp-vertex` at `../mcp-vertex` (plugin only).
+- Local checkout of `DelendAI` at `../mcp-vertex` (plugin only).
 
 ### Install and start
 
@@ -578,7 +578,7 @@ A site without images sells less. Stock + `TODO(image)` is an honest middle grou
 
 ## 13. Roadmap
 
-Open work, grouped by area. It moves as `mcp-vertex` and my own projects evolve.
+Open work, grouped by area. It moves as `DelendAI` and my own projects evolve.
 
 ### Immediate (next release)
 
@@ -623,7 +623,7 @@ The portfolio code is **private**. The copy, the structure, and the editorial di
 ### Acknowledgements
 
 - [Angular](https://angular.dev) for a framework that still takes render and change detection seriously.
-- [mcp-vertex](https://github.com/CartagoGit/mcp-vertex) for letting a repo audit itself.
+- [DelendAI](https://github.com/CartagoGit/DelendAI) for letting a repo audit itself.
 - [Bun](https://bun.sh) for using the right runtime in each context.
 - The reviewers of every PR linked from `/work` — the discipline of this portfolio is heir to those reviews.
 
@@ -632,7 +632,7 @@ The portfolio code is **private**. The copy, the structure, and the editorial di
 <details>
 <summary><strong>Executive summary — one screen</strong></summary>
 
-**Cartago Portfolio** is the public site of Mario Cabrero Volarich. It is **Angular 22 zoneless with SSR**, **i18n `en`/`es`**, **view transitions**, **`OnPush` everywhere**, **a local mcp-vertex plugin** that audits content and architecture, and an **editorial discipline that forbids client terms per se** — including Beateam, which is rejected in every form, case-insensitive, with separators collapsed.
+**Cartago Portfolio** is the public site of Mario Cabrero Volarich. It is **Angular 22 zoneless with SSR**, **i18n `en`/`es`**, **view transitions**, **`OnPush` everywhere**, **a local DelendAI plugin** that audits content and architecture, and an **editorial discipline that forbids client terms per se** — including Beateam, which is rejected in every form, case-insensitive, with separators collapsed.
 
 The promise is: what you see on screen is exactly what is in `src/`, no CMS, no surprises, no third-party names. If you come from the `CartagoGit` repo, everything is here, but running. If you come from outside, this is the site that replaces a PDF CV.
 
@@ -641,5 +641,5 @@ The promise is: what you see on screen is exactly what is in `src/`, no CMS, no 
 ---
 
 <p align="center">
-  <sub>Built with Angular 22, Bun, mcp-vertex, and zero zone.js. By Mario Cabrero Volarich, in Seville.</sub>
+  <sub>Built with Angular 22, Bun, DelendAI, and zero zone.js. By Mario Cabrero Volarich, in Seville.</sub>
 </p>
