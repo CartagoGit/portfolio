@@ -1,5 +1,4 @@
 import {
-	ChangeDetectorRef,
 	inject,
 	Pipe,
 	type PipeTransform,
@@ -26,13 +25,12 @@ import { TranslateService } from './translate.service';
 })
 export class TranslatePipe implements PipeTransform {
 	private readonly _service = inject(TranslateService);
-	private readonly _cdr = inject(ChangeDetectorRef);
 
 	transform(key: string, args?: Record<string, unknown>): string {
-		const signal = this._service.t(key, args);
-		// Mark the host for check on every read so the pure pipe
-		// refreshes whenever the underlying signal changes.
-		queueMicrotask(() => this._cdr.markForCheck());
-		return signal();
+		// The signal is read while the template renders, so Angular tracks
+		// it and refreshes the host when the locale changes. Scheduling
+		// `markForCheck` from here would re-dirty the view on every pass
+		// and never settle (NG0103, a hung SSR render).
+		return this._service.t(key, args)();
 	}
 }
