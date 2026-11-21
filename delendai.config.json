@@ -1,5 +1,5 @@
 {
-	"$schema": "../delendai/packages/core/schema/delendai.config.schema.json",
+	"$schema": "/home/cartago/.local/share/delendai/stable/packages/core/schema/delendai.config.schema.json",
 	"cacheDir": ".cache/delendai",
 	"docsDir": "docs/delendai",
 	"plugins": {
@@ -72,9 +72,9 @@
 		}
 	},
 	"development": {
-		"profile": "shared-checkout-merge",
+		"profile": "shared-direct",
 		"branches": {
-			"integration": "main",
+			"integration": "develop",
 			"release": "main"
 		}
 	}

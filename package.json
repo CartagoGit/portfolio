@@ -50,12 +50,12 @@
 		"@angular/platform-server": "^22.0.0",
 		"@angular/router": "^22.0.0",
 		"@angular/ssr": "^22.0.8",
-		"@delendai/core": "file:../delendai/packages/core",
+		"@delendai/core": "file:/home/cartago/.local/share/delendai/stable/packages/core",
 		"express": "^5.1.0",
 		"rxjs": "~7.8.0",
 		"simple-icons": "^16.27.0",
 		"tslib": "^2.3.0",
-		"zod": "^4.4.3"
+		"zod": "^4.6.7"
 	},
 	"devDependencies": {
 		"@angular/build": "^22.0.8",
@@ -74,5 +74,10 @@
 		"typescript": "6.0.1-rc",
 		"typescript-eslint": "^8.65.0",
 		"vitest": "^4.0.8"
+	},
+	"overrides": {
+		"@delendai/contracts": "file:/home/cartago/.local/share/delendai/stable/packages/contracts",
+		"@delendai/sqlite": "file:/home/cartago/.local/share/delendai/stable/packages/sqlite",
+		"@delendai/state": "file:/home/cartago/.local/share/delendai/stable/packages/state"
 	}
 }

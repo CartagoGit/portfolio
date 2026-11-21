@@ -1,10 +1,10 @@
 {
 	"servers": {
-		"delendai-local": {
+		"delendai": {
 			"type": "stdio",
-			"command": "bun",
+			"command": "delendai-stable",
 			"args": [
-				"/home/cartago/_projects/delendai/tools/scripts/host/host-server.script.ts",
+				"__serve",
 				"--workspace=${workspaceFolder}",
 				"--config=${workspaceFolder}/delendai.config.json",
 				"--preset=swarm"
