@@ -1,7 +1,7 @@
 {
-	"$schema": "../mcp-vertex/packages/core/schema/mcp-vertex.config.schema.json",
-	"cacheDir": ".cache/mcp-vertex",
-	"docsDir": "docs/mcp-vertex",
+	"$schema": "../delendai/packages/core/schema/delendai.config.schema.json",
+	"cacheDir": ".cache/delendai",
+	"docsDir": "docs/delendai",
 	"plugins": {
 		"proposals": {
 			"prefix": "work",
@@ -69,6 +69,13 @@
 				"perSeRoots": ["beateam"],
 				"locale": "en"
 			}
+		}
+	},
+	"development": {
+		"profile": "shared-checkout-merge",
+		"branches": {
+			"integration": "main",
+			"release": "main"
 		}
 	}
 }
