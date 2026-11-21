@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { assembleCliConfig, parseCliArgs } from '@delendai/core/public';
 
 const args = parseCliArgs(
@@ -5,11 +6,16 @@ const args = parseCliArgs(
   process.cwd(),
 );
 const { loadResult } = await assembleCliConfig(args);
-const loaded = loadResult.loaded.map(({ plugin }) => plugin.name);
+const declared = JSON.parse(readFileSync('delendai.config.json', 'utf8')).plugins ?? {};
+const localPath = declared['portfolio-content']?.path;
+const errors = [...loadResult.errors, ...loadResult.registerErrors].map((error) => error.message ?? String(error));
+if (!localPath || !existsSync(localPath)) {
+  errors.push(`portfolio-content plugin path is missing: ${localPath ?? '(not declared)'}`);
+}
 
-if (loadResult.errors.length > 0) {
-  console.error(JSON.stringify({ ok: false, errors: loadResult.errors.map(({ message }) => message) }, null, 2));
+if (errors.length > 0) {
+  console.error(JSON.stringify({ ok: false, errors }, null, 2));
   process.exitCode = 1;
 } else {
-  console.log(JSON.stringify({ ok: true, loaded, localPlugin: loaded.includes('portfolio-content') }, null, 2));
+  console.log(JSON.stringify({ ok: true, declared: Object.keys(declared), localPlugin: true }, null, 2));
 }

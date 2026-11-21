@@ -6,7 +6,6 @@
  */
 
 import type {
-	IMcpPlugin,
 	IMcpPluginContext,
 	IMcpPluginRegistrations,
 	IToolRegistration,
@@ -41,7 +40,9 @@ export const makeFakeContext = (
 	}) satisfies IMcpPluginContext;
 
 export const captureHandlers = async (
-	plugin: IMcpPlugin,
+	plugin: {
+		register(ctx: IMcpPluginContext): IMcpPluginRegistrations | Promise<IMcpPluginRegistrations>;
+	},
 	ctx: IMcpPluginContext,
 ): Promise<{
 	toolIds: string[];
