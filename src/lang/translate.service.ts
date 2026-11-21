@@ -9,6 +9,8 @@ import { isPlatformBrowser } from '@angular/common';
 import type { ILocale } from '../domain/types';
 import { en } from './en';
 import { es } from './es';
+import { fr } from './fr';
+import { de } from './de';
 import type { ITranslationMap } from './types';
 
 /**
@@ -22,6 +24,8 @@ import type { ITranslationMap } from './types';
 const TRANSLATIONS: Readonly<Record<ILocale, ITranslationMap>> = {
 	en,
 	es,
+	fr,
+	de,
 };
 
 /**

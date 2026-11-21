@@ -1,0 +1,86 @@
+import type { ITranslationMap } from './types';
+import { en } from './en';
+
+/** German copy for the public shell; untranslated deep pages safely keep English. */
+export const de: ITranslationMap = {
+	...en,
+	chrome: {
+		...en.chrome,
+		header: {
+			...en.chrome.header,
+			brand: 'Cartago',
+			navWork: 'Ausgewählte Arbeit',
+			navLab: 'Frontend-Labor',
+			navAbout: 'Ansatz',
+			navKnowledge: 'Wissen',
+			navDocker: 'Docker',
+			navDemos: 'Demos',
+			navContact: 'Kontakt',
+			themeOpenLabel: 'Themen öffnen',
+		},
+		footer: {
+			...en.chrome.footer,
+			availability: 'Verfügbar für Produktarbeit',
+			connectLabel: 'Vernetzen',
+			backToTop: 'Nach oben ↑',
+		},
+	},
+	pages: {
+		...en.pages,
+		home: {
+			...en.pages.home,
+			eyebrow: 'Frontend-Entwickler · Angular + SCSS',
+			role: 'Ich baue Frontends für Systeme, die den ganzen Tag genutzt werden: Web, Android und interaktive Terminals.',
+			intro: 'ERP, Logistik, Lager und Personal mit Rollenrechten, Geschäftsregeln und wartbaren Architekturen. Angular + SCSS, Ionic für Android.',
+			ctaWork: 'Projekte ansehen',
+			ctaContact: 'Kontakt aufnehmen',
+		},
+		demos: {
+			...en.pages.demos,
+			eyebrow: '06 / Demos',
+			titleLead: 'Kleine Experimente,',
+			titleEmphasis: 'echte Interaktionen.',
+			gameEyebrow: 'Interaktionslabor',
+			gameHeading: 'Reflexe und direktes Feedback testen.',
+			gameDetail: 'Triff das aktive Signal und beobachte die Zustandsänderung ohne Neuladen.',
+			reactionHeading: 'Warten, beobachten, drücken.',
+			memoryHeading: 'Finde alle sechs Paare.',
+			memoryEyebrow: 'Verteilter Zustand',
+			memoryDetail: 'Jede Karte behält ihren offenen, passenden oder verdeckten Zustand.',
+			tabReflex: 'Reflexe',
+			tabReaction: 'Reaktion',
+			tabMemory: 'Gedächtnis',
+			reactionStart: 'Start',
+			reactionWait: 'Warten…',
+			reactionNow: 'Jetzt!',
+			reactionEarly: 'Zu früh · wiederholen',
+			reactionAgain: 'nochmal',
+			reactionBest: 'Bestzeit',
+			memoryReset: 'Zurücksetzen',
+			memoryMoves: 'Züge',
+		},
+		contact: {
+			...en.pages.contact,
+			eyebrow: '07 / Kontakt',
+			titleLead: 'Beginnen wir ein',
+			titleEmphasis: 'sinnvolles Gespräch.',
+			formEmailLabel: 'Deine E-Mail',
+			formMessageLabel: 'Was baust du?',
+			formSubmit: 'Vorstellung senden',
+		},
+	},
+	seo: {
+		description: 'Portfolio von Mario Cabrero Volarich: Frontend Engineering mit Angular, TypeScript, Mobil und Werkzeugen.',
+	},
+	lang: {
+		...en.lang,
+		languagesLabel: 'Sprachen',
+		themeMenuLabel: 'Themen',
+		languages: {
+			en: { label: 'English', detail: 'US + UK' },
+			es: { label: 'Español', detail: 'Spanien' },
+			fr: { label: 'Français', detail: 'Frankreich' },
+			de: { label: 'Deutsch', detail: 'Deutschland' },
+		},
+	},
+};

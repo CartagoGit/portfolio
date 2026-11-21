@@ -26,25 +26,61 @@
 		}
 	</div>
 	<section class="demos-page__game">
-		<div>
-			<p>{{ 'pages.demos.gameEyebrow' | translate }}</p>
-			<h3>{{ 'pages.demos.gameHeading' | translate }}</h3>
-			<p>{{ 'pages.demos.gameDetail' | translate }}</p>
-			<b>
-				{{ score() }}
-				<small>
-					{{ 'pages.demos.gameSignalsLabel' | translate }}
-				</small>
-			</b>
-		</div>
-		<div class="demos-page__grid">
-			@for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
+		<header class="demos-page__tabs" aria-label="Interactive games">
+			@for (game of games; track game.id) {
 				<button
 					type="button"
-					[class.is-target]="target() === cell"
-					(click)="hit(cell)">
-					<i></i>
+					[class.is-active]="activeGame() === game.id"
+					(click)="selectGame(game.id)">
+					{{ game.labelKey | translate }}
 				</button>
+			}
+		</header>
+		<div class="demos-page__game-stage" [attr.data-game]="activeGame()">
+			@switch (activeGame()) {
+				@case ('reflex') {
+					<div class="demos-page__game-copy">
+						<p>{{ 'pages.demos.gameEyebrow' | translate }}</p>
+						<h3>{{ 'pages.demos.gameHeading' | translate }}</h3>
+						<p>{{ 'pages.demos.gameDetail' | translate }}</p>
+						<b>{{ score() }}<small>{{ 'pages.demos.gameSignalsLabel' | translate }}</small></b>
+					</div>
+					<div class="demos-page__grid">
+						@for (cell of [0, 1, 2, 3, 4, 5, 6, 7, 8]; track cell) {
+							<button type="button" [class.is-target]="target() === cell" (click)="hit(cell)"><i></i></button>
+						}
+					</div>
+				}
+				@case ('reaction') {
+					<div class="demos-page__game-copy">
+						<p>{{ 'pages.demos.reactionEyebrow' | translate }}</p>
+						<h3>{{ 'pages.demos.reactionHeading' | translate }}</h3>
+						<p>{{ 'pages.demos.reactionDetail' | translate }}</p>
+						@if (bestReaction(); as best) { <small>{{ 'pages.demos.reactionBest' | translate }}: {{ best }} ms</small> }
+					</div>
+					<button class="demos-page__reaction" type="button" [attr.data-phase]="reactionPhase()" (click)="pressReaction()">
+						@if (reactionPhase() === 'idle') { {{ 'pages.demos.reactionStart' | translate }} }
+						@if (reactionPhase() === 'waiting') { {{ 'pages.demos.reactionWait' | translate }} }
+						@if (reactionPhase() === 'ready') { {{ 'pages.demos.reactionNow' | translate }} }
+						@if (reactionPhase() === 'early') { {{ 'pages.demos.reactionEarly' | translate }} }
+						@if (reactionPhase() === 'result') { {{ reactionTime() }} ms · {{ 'pages.demos.reactionAgain' | translate }} }
+					</button>
+				}
+				@case ('memory') {
+					<div class="demos-page__game-copy">
+						<p>{{ 'pages.demos.memoryEyebrow' | translate }}</p>
+						<h3>{{ 'pages.demos.memoryHeading' | translate }}</h3>
+						<p>{{ 'pages.demos.memoryDetail' | translate }}</p>
+						<button type="button" (click)="resetMemory()">{{ 'pages.demos.memoryReset' | translate }} · {{ memoryMoves() }} {{ 'pages.demos.memoryMoves' | translate }}</button>
+					</div>
+					<div class="demos-page__memory-grid">
+						@for (value of memoryValues(); track $index) {
+							<button type="button" [class.is-open]="memoryOpen().includes($index)" [class.is-matched]="memoryMatched().includes($index)" [disabled]="memoryMatched().includes($index)" (click)="openMemory($index)">
+								@if (memoryOpen().includes($index) || memoryMatched().includes($index)) { {{ value + 1 }} }
+							</button>
+						}
+					</div>
+				}
 			}
 		</div>
 	</section>

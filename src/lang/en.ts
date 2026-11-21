@@ -47,8 +47,8 @@ export const en: ITranslationMap = {
 			titleTail: 'who ship every day.',
 			subtitle:
 				'Angular, TypeScript and mobile delivery, organised around workflows rather than vanity metrics.',
-			role: 'Frontend engineer building operational web and mobile products.',
-			intro: 'I combine product-focused frontend development with TypeScript architecture, testing and developer tooling.',
+			role: 'I build the frontend of systems people use all day: web, Android and interactive terminals.',
+			intro: 'ERP, logistics, inventory and workforce products with role-based permissions, business rules and frontend architectures built to remain maintainable for years. Angular + SCSS, Ionic when Android is needed, Material for the design system.',
 			ctaWork: 'View work',
 			ctaContact: 'Start a conversation',
 			capabilitiesTitle: 'Capabilities',
@@ -106,8 +106,8 @@ export const en: ITranslationMap = {
 			mcpNumber: '01 — Agent infrastructure',
 			mcpTitle: 'DelendAI',
 			mcpDescription:
-				'An extensible MCP server core and plugin system for structured, repeatable agent workflows.',
-			mcpBullets: 'Typed contracts|Plugin architecture|CLI tooling',
+				'An MCP server and plugin system that gives each project concrete capabilities for reproducible agent workflows.',
+			mcpBullets: '62 capabilities|Plugin architecture|CLI + CI gates',
 			quickmodelNumber: '02 — TypeScript architecture',
 			quickmodelTitle: 'QuickModel',
 			quickmodelDescription:
@@ -295,11 +295,30 @@ export const en: ITranslationMap = {
 			deprecatedNotice:
 				'Some demos below are older Netlify builds; they remain linked as long as the originals are reachable.',
 			openDemo: 'Open demo ↗',
-			gameEyebrow: 'Tiny pointless game',
-			gameHeading: 'Catch the neon signal.',
+			gameEyebrow: 'Interaction lab',
+			gameHeading: 'Test reflex and immediate feedback.',
 			gameDetail:
-				'Pure interaction design: the target moves on each successful hit.',
+				'Catch the active signal and watch the state change without reloading the interface.',
 			gameSignalsLabel: 'signals caught',
+			reactionEyebrow: 'Response time',
+			reactionHeading: 'Wait, watch and press.',
+			reactionDetail:
+				'A single surface measures a simple action and keeps the best time in this session.',
+			memoryEyebrow: 'Distributed state',
+			memoryHeading: 'Match all six pairs.',
+			memoryDetail:
+				'Each card keeps its open, matched or hidden state during the session.',
+			tabReflex: 'Reflex',
+			tabReaction: 'Reaction',
+			tabMemory: 'Memory',
+			reactionStart: 'Start',
+			reactionWait: 'Wait…',
+			reactionNow: 'Now!',
+			reactionEarly: 'Too soon · retry',
+			reactionAgain: 'again',
+			reactionBest: 'Best',
+			memoryReset: 'Reset',
+			memoryMoves: 'moves',
 		},
 		contact: {
 			eyebrow: '07 / Contact',
@@ -331,7 +350,9 @@ export const en: ITranslationMap = {
 		themeMenuLabel: 'Themes',
 		languages: {
 			en: { label: 'English', detail: 'US + UK' },
-			es: { label: 'Español', detail: 'España' },
+			es: { label: 'Español', detail: 'Spain' },
+			fr: { label: 'Français', detail: 'France' },
+			de: { label: 'Deutsch', detail: 'Deutschland' },
 		},
 		themes: {
 			dark: { label: 'Midnight', detail: 'Default · neon cyan' },

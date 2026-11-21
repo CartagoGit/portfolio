@@ -1,5 +1,5 @@
 /** Shared domain contracts for the portfolio screens. */
-export type ILocale = 'en' | 'es';
+export type ILocale = 'en' | 'es' | 'fr' | 'de';
 export type IThemeId =
 	| 'dark'
 	| 'light'
@@ -54,6 +54,7 @@ export interface IHeroPanel {
 	iconPath: string;
 	color: string;
 	iconAsset?: string;
+	href?: string;
 }
 
 export interface ITechnology {

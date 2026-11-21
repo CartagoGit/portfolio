@@ -166,10 +166,6 @@ const sharedTsRules = {
 			// and rely on the inline refactor to object-args where it fits.
 		},
 	],
-	'@typescript-eslint/max-params': [
-		'warn',
-		{ max: 2, countVoidThis: false },
-	],
 	// Orden estable de imports (mismo grupo, alfabético dentro).
 	'sort-imports': [
 		'warn',

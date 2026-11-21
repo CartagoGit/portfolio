@@ -1,0 +1,86 @@
+import type { ITranslationMap } from './types';
+import { en } from './en';
+
+/** French copy for the public shell; untranslated deep pages safely keep English. */
+export const fr: ITranslationMap = {
+	...en,
+	chrome: {
+		...en.chrome,
+		header: {
+			...en.chrome.header,
+			brand: 'Cartago',
+			navWork: 'Travaux sélectionnés',
+			navLab: 'Laboratoire frontend',
+			navAbout: 'Approche',
+			navKnowledge: 'Compétences',
+			navDocker: 'Docker',
+			navDemos: 'Démos',
+			navContact: 'Contact',
+			themeOpenLabel: 'Ouvrir les thèmes',
+		},
+		footer: {
+			...en.chrome.footer,
+			availability: 'Disponible pour des projets produit',
+			connectLabel: 'Me retrouver',
+			backToTop: 'Retour en haut ↑',
+		},
+	},
+	pages: {
+		...en.pages,
+		home: {
+			...en.pages.home,
+			eyebrow: 'Ingénieur frontend · Angular + SCSS',
+			role: 'Je construis le frontend de systèmes utilisés toute la journée : web, Android et terminaux interactifs.',
+			intro: 'ERP, logistique, inventaire et gestion du personnel avec permissions par rôle, règles métier et architectures maintenables. Angular + SCSS, Ionic pour Android.',
+			ctaWork: 'Voir les projets',
+			ctaContact: 'Discutons',
+		},
+		demos: {
+			...en.pages.demos,
+			eyebrow: '06 / Démos',
+			titleLead: 'Petites expériences,',
+			titleEmphasis: 'réellement utilisables.',
+			gameEyebrow: 'Laboratoire d’interaction',
+			gameHeading: 'Testez les réflexes et le retour immédiat.',
+			gameDetail: 'Attrapez le signal actif et observez le changement d’état sans recharger.',
+			reactionHeading: 'Attendez, observez et appuyez.',
+			memoryHeading: 'Associez les six paires.',
+			memoryEyebrow: 'État distribué',
+			memoryDetail: 'Chaque carte conserve son état ouvert, associé ou caché.',
+			 tabReflex: 'Réflexes',
+			tabReaction: 'Réaction',
+			tabMemory: 'Mémoire',
+			reactionStart: 'Démarrer',
+			reactionWait: 'Attendez…',
+			reactionNow: 'Maintenant !',
+			reactionEarly: 'Trop tôt · réessayer',
+			reactionAgain: 'encore',
+			reactionBest: 'Meilleur',
+			memoryReset: 'Réinitialiser',
+			memoryMoves: 'coups',
+		},
+		contact: {
+			...en.pages.contact,
+			eyebrow: '07 / Contact',
+			titleLead: 'Commençons une',
+			titleEmphasis: 'conversation utile.',
+			formEmailLabel: 'Votre e-mail',
+			formMessageLabel: 'Que construisez-vous ?',
+			formSubmit: 'Envoyer une présentation',
+		},
+	},
+	seo: {
+		description: 'Portfolio de Mario Cabrero Volarich : ingénierie frontend Angular, TypeScript, mobile et outillage.',
+	},
+	lang: {
+		...en.lang,
+		languagesLabel: 'Langues',
+		themeMenuLabel: 'Thèmes',
+		languages: {
+			en: { label: 'English', detail: 'US + UK' },
+			es: { label: 'Español', detail: 'Espagne' },
+			fr: { label: 'Français', detail: 'France' },
+			de: { label: 'Deutsch', detail: 'Allemagne' },
+		},
+	},
+};

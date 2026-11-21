@@ -257,6 +257,23 @@ export interface ITranslationMap {
 			gameHeading: string;
 			gameDetail: string;
 			gameSignalsLabel: string;
+			reactionEyebrow: string;
+			reactionHeading: string;
+			reactionDetail: string;
+			memoryEyebrow: string;
+			memoryHeading: string;
+			memoryDetail: string;
+			tabReflex: string;
+			tabReaction: string;
+			tabMemory: string;
+			reactionStart: string;
+			reactionWait: string;
+			reactionNow: string;
+			reactionEarly: string;
+			reactionAgain: string;
+			reactionBest: string;
+			memoryReset: string;
+			memoryMoves: string;
 		};
 		contact: {
 			eyebrow: string;
@@ -286,6 +303,8 @@ export interface ITranslationMap {
 		languages: {
 			en: { label: string; detail: string };
 			es: { label: string; detail: string };
+			fr: { label: string; detail: string };
+			de: { label: string; detail: string };
 		};
 		themes: {
 			dark: { label: string; detail: string };

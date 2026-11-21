@@ -17,10 +17,12 @@
 @use 'tokens' as tokens;
 
 .portfolio {
-	@include tokens.portfolio-tokens(tokens.$portfolio-tokens-dark);
-	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	min-height: 100dvh;
 	overflow-x: clip;
 	padding-top: 88px;
+	padding-bottom: 78px;
 	background:
 		radial-gradient(circle at 80% 0, #0a2d5738, transparent 28%),
 		var(--canvas);
@@ -31,7 +33,7 @@
 }
 
 .portfolio.light-mode {
-	@include tokens.portfolio-tokens(tokens.$portfolio-tokens-light);
+	color-scheme: light;
 }
 
 .skip-link {
@@ -48,4 +50,57 @@
 
 .skip-link:focus {
 	top: var(--space-4);
+}
+
+.route-stage {
+	view-transition-name: route-content;
+	min-width: 0;
+	flex: 1 0 auto;
+}
+
+.route-stage:has(.hero) {
+	min-height: 0;
+}
+
+.hero {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	gap: clamp(2rem, 5vw, 5.5rem);
+	width: min(1380px, calc(100% - 3rem));
+	height: auto;
+	min-height: 0;
+	margin-inline: auto;
+	align-items: center;
+	padding: clamp(1rem, 3vh, 2.5rem) 0;
+}
+
+.hero::before {
+	position: absolute;
+	z-index: -1;
+	inset: 0 -10vw;
+	content: '';
+	pointer-events: none;
+	background:
+		radial-gradient(circle at 74% 45%, #0867b52b, transparent 25%),
+		linear-gradient(90deg, transparent 49.8%, #76d7ff0a 50%, transparent 50.2%),
+		linear-gradient(0deg, transparent 49.8%, #76d7ff0a 50%, transparent 50.2%);
+	background-size:
+		auto,
+		80px 80px,
+		80px 80px;
+	mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+
+@media (max-width: 900px) {
+	.portfolio {
+		padding-bottom: 62px;
+	}
+	.hero {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.25rem;
+		width: min(100%, calc(100% - 1.7rem));
+		min-height: 0;
+		padding: 2.5rem 0 4rem;
+	}
 }

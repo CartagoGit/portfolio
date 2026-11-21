@@ -8,5 +8,7 @@
 export type { ITranslationMap } from './types';
 export { en } from './en';
 export { es } from './es';
+export { fr } from './fr';
+export { de } from './de';
 export { TranslateService } from './translate.service';
 export { TranslatePipe } from './translate.pipe';

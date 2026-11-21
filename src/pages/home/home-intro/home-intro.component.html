@@ -1,16 +1,22 @@
 <div class="home-intro">
 	<p class="home-intro__eyebrow">
 		<span></span>
-		CartagoNova / personal frontend systems
+		{{ 'pages.home.eyebrow' | translate }}
 	</p>
-	<h1 id="hero-title">
-		Mario Cabrero
-		<br />
-		<em>Volarich</em>
-	</h1>
-	<p class="home-intro__signature">
-		Cartago / CartagoNova · frontend product engineer
-	</p>
+	<div class="home-intro__identity">
+		<img
+			class="home-intro__mark"
+			src="/icons/cartago.svg"
+			alt=""
+			width="88"
+			height="88" />
+		<h1 id="hero-title">
+			Mario Cabrero
+			<br />
+			<em>Volarich</em>
+		</h1>
+	</div>
+	<p class="home-intro__signature">Cartago · Angular · TypeScript · Ionic</p>
 	<p class="home-intro__role">{{ 'pages.home.role' | translate }}</p>
 	<p class="home-intro__description">
 		{{ 'pages.home.intro' | translate }}

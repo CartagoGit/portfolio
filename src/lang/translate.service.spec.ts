@@ -2,8 +2,25 @@ import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { TranslateService } from './translate.service';
 
+const storage = new Map<string, string>();
+const localStorageStub: Storage = {
+	get length() {
+		return storage.size;
+	},
+	clear: () => storage.clear(),
+	getItem: (key) => storage.get(key) ?? null,
+	key: (index) => Array.from(storage.keys())[index] ?? null,
+	removeItem: (key) => storage.delete(key),
+	setItem: (key, value) => storage.set(key, String(value)),
+};
+
 describe('TranslateService', () => {
 	beforeEach(() => {
+		storage.clear();
+		Object.defineProperty(window, 'localStorage', {
+			configurable: true,
+			value: localStorageStub,
+		});
 		// Clear any persisted locale so each test starts from a
 		// deterministic English baseline.
 		try {

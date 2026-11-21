@@ -3,6 +3,7 @@ import {
 	type AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
+	effect,
 	type ElementRef,
 	inject,
 	input,
@@ -55,6 +56,10 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		targetAxisZ: 0.28,
 	};
 	readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
+	private readonly _depthSync = effect(() => {
+		if (this.depth() === 'front') this.start();
+		if (this.depth() === 'behind') this.stop();
+	});
 
 	ngAfterViewInit(): void {
 		this._canvas = this.canvasRef()?.nativeElement;
@@ -82,7 +87,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this._motion.targetAxisX = -0.78 + Math.random() * 1.56;
 		this._motion.targetAxisY = -0.84 + Math.random() * 1.68;
 		this._motion.targetAxisZ = -0.68 + Math.random() * 1.36;
-		this.start();
+		if (this.depth() === 'front') this.start();
 	}
 
 	beginDrag(event: PointerEvent): void {
@@ -157,6 +162,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.stop();
+		this._depthSync.destroy();
 	}
 	private _prepare(): void {
 		if (

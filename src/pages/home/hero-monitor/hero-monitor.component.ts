@@ -108,6 +108,11 @@ export class HeroMonitorComponent implements OnDestroy {
 		event.stopPropagation();
 	}
 
+	dismissEarth(event: MouseEvent): void {
+		event.stopPropagation();
+		this._earth.returnBehind(event.currentTarget);
+	}
+
 	/**
 	 * Click on the monitor shell (chromium or dashboard area) outside the
 	 * globe and the motion button triggers a return.

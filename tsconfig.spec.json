@@ -3,8 +3,10 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
+		"composite": true,
+		"rootDir": "src",
 		"outDir": "./out-tsc/spec",
 		"types": ["vitest/globals"]
 	},
-	"include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
+	"include": ["src/**/*.ts", "src/**/*.d.ts"]
 }

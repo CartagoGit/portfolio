@@ -41,11 +41,11 @@ export const es: ITranslationMap = {
 			eyebrow: 'Frontend product engineer',
 			titleLead: 'Frontend operacional para',
 			titleEmphasis: 'equipos de producto',
-			titleTail: 'que shippean todos los días.',
+			titleTail: 'que entregan todos los días.',
 			subtitle:
 				'Angular, TypeScript y entrega móvil, organizados en torno a workflows y no métricas de vanidad.',
-			role: 'Frontend engineer que construye productos web y móviles operacionales.',
-			intro: 'Combino desarrollo frontend orientado a producto con arquitectura TypeScript, testing y tooling para developers.',
+			role: 'Construyo el frontend de sistemas que se usan todo el día: web, Android y puntos de interacción.',
+			intro: 'ERP, logística, inventario y personal con permisos por rol, reglas de negocio y arquitecturas frontend que pueden mantenerse durante años. Angular + SCSS, Ionic cuando hace falta Android, Material para el sistema de diseño.',
 			ctaWork: 'Ver trabajo',
 			ctaContact: 'Hablemos',
 			capabilitiesTitle: 'Capacidades',
@@ -104,8 +104,8 @@ export const es: ITranslationMap = {
 			mcpNumber: '01 — Infraestructura de agentes',
 			mcpTitle: 'DelendAI',
 			mcpDescription:
-				'Un núcleo de servidor MCP extensible y sistema de plugins para workflows estructurados y repetibles de agentes.',
-			mcpBullets: 'Contratos tipados|Arquitectura de plugins|CLI tooling',
+				'Un servidor MCP y sistema de plugins que da a cada proyecto capacidades concretas para workflows de agentes reproducibles.',
+			mcpBullets: '62 capacidades|Arquitectura de plugins|CLI + controles CI',
 			quickmodelNumber: '02 — Arquitectura TypeScript',
 			quickmodelTitle: 'QuickModel',
 			quickmodelDescription:
@@ -294,11 +294,30 @@ export const es: ITranslationMap = {
 			deprecatedNotice:
 				'Algunas demos siguientes son builds antiguas en Netlify; permanecen enlazadas mientras los originales sigan accesibles.',
 			openDemo: 'Abrir demo ↗',
-			gameEyebrow: 'Mini juego inútil',
-			gameHeading: 'Atrapa la señal neón.',
+			gameEyebrow: 'Laboratorio de interacción',
+			gameHeading: 'Prueba reflejos y feedback inmediato.',
 			gameDetail:
-				'Diseño de interacción puro: el objetivo se mueve con cada acierto.',
+				'Pulsa la señal activa y observa cómo cambia el estado sin recargar la interfaz.',
 			gameSignalsLabel: 'señales atrapadas',
+			reactionEyebrow: 'Tiempo de respuesta',
+			reactionHeading: 'Espera, observa y pulsa.',
+			reactionDetail:
+				'Una superficie mide una acción simple y muestra el mejor tiempo de reacción de la sesión.',
+			memoryEyebrow: 'Estado distribuido',
+			memoryHeading: 'Encuentra las seis parejas.',
+			memoryDetail:
+				'Cada carta conserva su estado abierto, emparejado u oculto durante la sesión.',
+			tabReflex: 'Reflejos',
+			tabReaction: 'Reacción',
+			tabMemory: 'Memoria',
+			reactionStart: 'Empezar',
+			reactionWait: 'Espera…',
+			reactionNow: '¡Ahora!',
+			reactionEarly: 'Muy pronto · repetir',
+			reactionAgain: 'otra vez',
+			reactionBest: 'Mejor',
+			memoryReset: 'Reiniciar',
+			memoryMoves: 'movimientos',
 		},
 		contact: {
 			eyebrow: '07 / Contacto',
@@ -331,6 +350,8 @@ export const es: ITranslationMap = {
 		languages: {
 			en: { label: 'English', detail: 'US + UK' },
 			es: { label: 'Español', detail: 'España' },
+			fr: { label: 'Français', detail: 'Francia' },
+			de: { label: 'Deutsch', detail: 'Alemania' },
 		},
 		themes: {
 			dark: { label: 'Medianoche', detail: 'Por defecto · cian neón' },

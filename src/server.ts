@@ -42,16 +42,15 @@ function localeMiddleware(ctx: {
 	next: express.NextFunction;
 }): void {
 	const { req, res, next } = ctx;
-	const match = req.path.match(/^\/(en|es)(\/.*)?$/);
+	const match = req.path.match(/^\/(en|es|fr|de)(\/.*)?$/);
 	if (!match) return next();
 	const stored = req.headers.cookie?.match(
-		/(?:^|;\s*)cartago_locale=(en|es)/
+		/(?:^|;\s*)cartago_locale=(en|es|fr|de)/
 	)?.[1];
-	const accepted = req.headers['accept-language']
-		?.toLowerCase()
-		.startsWith('es')
-		? 'es'
-		: 'en';
+	const acceptedLocale = req.headers['accept-language']
+		?.match(/(?:^|[, ])(es|en|fr|de)(?:[-,;]|$)/i)?.[1]
+		?.toLowerCase();
+	const accepted = acceptedLocale ?? 'en';
 	const preferred = stored ?? accepted;
 	if (preferred !== match[1])
 		return res.redirect(302, `/${preferred}${match[2] ?? ''}`);

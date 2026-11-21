@@ -121,3 +121,114 @@
 		}
 	}
 }
+
+.demos-page__game {
+	display: block;
+	padding: 0;
+	overflow: hidden;
+}
+.demos-page__tabs {
+	display: flex;
+	gap: 0.35rem;
+	padding: 0.6rem;
+	border-bottom: var(--border-thin) solid var(--line);
+	background: color-mix(in srgb, var(--surface-2) 72%, transparent);
+}
+.demos-page__tabs button {
+	flex: 1;
+	padding: 0.65rem 0.8rem;
+	border: var(--border-thin) solid transparent;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--muted);
+	@include tokens.mono-mixed(0.62rem);
+}
+.demos-page__tabs button.is-active {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 11%, transparent);
+	color: var(--cyan);
+}
+.demos-page__game-stage {
+	display: grid;
+	grid-template-columns: minmax(240px, 0.8fr) minmax(300px, 1.2fr);
+	gap: clamp(1.5rem, 4vw, 4rem);
+	align-items: center;
+	min-height: 360px;
+	padding: clamp(1.3rem, 4vw, 3rem);
+	animation: demo-stage-in 0.28s ease both;
+}
+@keyframes demo-stage-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.demos-page__game-copy {
+	min-width: 0;
+}
+.demos-page__game-copy > button {
+	margin-top: 1rem;
+	padding: 0.55rem 0.75rem;
+	border: var(--border-thin) solid var(--line);
+	background: transparent;
+	color: var(--ink);
+}
+.demos-page__reaction {
+	width: 100%;
+	min-height: 220px;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 18px;
+	background: var(--surface-2);
+	color: var(--ink);
+	font: 800 clamp(2rem, 5vw, 4rem) tokens.$font-body;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+.demos-page__reaction[data-phase='ready'] {
+	border-color: var(--lime);
+	background: color-mix(in srgb, var(--lime) 75%, var(--surface));
+	color: #07100b;
+	transform: scale(1.015);
+}
+.demos-page__reaction[data-phase='early'] {
+	border-color: #ff7a59;
+	color: #ff7a59;
+}
+.demos-page__memory-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0.65rem;
+}
+.demos-page__memory-grid button {
+	aspect-ratio: 1;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 10px;
+	background: var(--surface-2);
+	color: var(--ink);
+	font: 800 1.35rem tokens.$font-mono;
+	transition: transform 0.2s ease, background 0.2s ease;
+}
+.demos-page__memory-grid button.is-open {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 22%, var(--surface));
+	transform: rotateY(180deg);
+}
+.demos-page__memory-grid button.is-matched {
+	border-color: var(--lime);
+	background: color-mix(in srgb, var(--lime) 16%, var(--surface));
+	color: var(--lime);
+}
+
+@media (max-width: 760px) {
+	.demos-page__game-stage {
+		grid-template-columns: 1fr;
+		min-height: 0;
+		padding: 1.15rem;
+	}
+	.demos-page__tabs button {
+		padding: 0.55rem 0.35rem;
+	}
+}

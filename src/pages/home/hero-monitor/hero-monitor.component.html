@@ -1,6 +1,13 @@
 <div
 	class="hero-monitor"
-	aria-label="Interactive representation of Mario's core frontend technologies">
+	aria-label="Interactive showcase of Mario's public projects">
+	@if (earthDepth() !== 'behind') {
+		<button
+			class="hero-monitor__globe-scrim"
+			type="button"
+			(click)="dismissEarth($event)"
+			aria-label="Return the Earth to the dashboard"></button>
+	}
 	<div
 		class="hero-monitor__orb hero-monitor__orb--one"
 		[class.hero-monitor--out-behind]="earthDepth() === 'out-behind'"
@@ -48,13 +55,13 @@
 				<img
 					class="hero-monitor__banner"
 					src="/images/cartagonova-banner-03-neon.png"
-					alt="CartagoNova banner" />
+					alt="Cartago frontend engineer banner" />
 			</a>
 		</div>
 		<div class="hero-monitor__body">
 			<div
 				class="hero-monitor__selector"
-				aria-label="Core technologies">
+				aria-label="Featured public projects">
 				@for (panel of panels; track panel.id) {
 					<button
 						type="button"
@@ -87,7 +94,7 @@
 					<div class="hero-monitor__heading">
 						<span>
 							<i></i>
-							CartagoNova / system telemetry
+							Cartago / system telemetry
 						</span>
 						<small>LIVE</small>
 					</div>
@@ -104,8 +111,8 @@
 						}
 					</div>
 					<p class="hero-monitor__caption">
-						Choose a technology on the left to see its role. These
-						controls change the visualisation only.
+						Choose a project to inspect its role. The controls below
+						change the visualisation only.
 					</p>
 					<div class="hero-monitor__chart-workspace">
 						<div
@@ -172,6 +179,9 @@
 							}
 							<h3>{{ panel.label }}</h3>
 							<p>{{ panel.detail }}</p>
+							@if (panel.href) {
+								<a [href]="panel.href" target="_blank" rel="noreferrer" class="hero-monitor__project-link">Open project ↗</a>
+							}
 						</div>
 						<div
 							class="hero-monitor__effects"

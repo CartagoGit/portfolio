@@ -4,7 +4,13 @@
 		[routerLink]="routeFor('home')"
 		(click)="selectPage('home')"
 		[attr.aria-label]="'chrome.header.brand' | translate">
-		<span class="header__mark">C.</span>
+		<span class="header__mark">
+			<img
+				src="/icons/cartago.svg"
+				alt=""
+				width="32"
+				height="32" />
+		</span>
 		<span>Cartago</span>
 	</a>
 	<button
@@ -74,15 +80,9 @@
 				[attr.aria-expanded]="localeMenuOpen()"
 				[attr.aria-label]="'lang.languagesLabel' | translate"
 				aria-haspopup="listbox">
-				@if (currentLanguage(); as lang) {
-					<img
-						[src]="lang.flag"
-						width="24"
-						height="16"
-						alt="" />
+				@if (currentLanguage(); as language) {
+					<img [src]="language.flag" width="24" height="16" alt="" />
 				}
-				<span>{{ locale().toUpperCase() }}</span>
-				<i>⌄</i>
 			</button>
 			@if (localeMenuOpen() || localeMenuClosing()) {
 				<div
@@ -120,12 +120,7 @@
 				[attr.aria-expanded]="themeMenuOpen()"
 				[attr.aria-label]="'chrome.header.themeOpenLabel' | translate"
 				aria-haspopup="listbox">
-				<span
-					class="header__theme-swatch"
-					[style.background]="activeTheme().primary"
-					aria-hidden="true"></span>
 				<span>{{ activeTheme().label }}</span>
-				<i>⌄</i>
 			</button>
 			@if (themeMenuOpen() || themeMenuClosing()) {
 				<div

@@ -12,7 +12,7 @@ export const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 export const LOCALE_COOKIE_ATTRS =
 	`Path=/; Max-Age=${LOCALE_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax` as const;
 
-const SUPPORTED_LOCALES: readonly ILocale[] = ['en', 'es'];
+const SUPPORTED_LOCALES: readonly ILocale[] = ['en', 'es', 'fr', 'de'];
 
 export function isLocale(value: unknown): value is ILocale {
 	return (
@@ -41,8 +41,9 @@ export function detectPreferredLocale(doc: Document): ILocale | null {
 		navigator.languages
 			.find(
 				(language) =>
-					language.toLowerCase().startsWith('es') ||
-					language.toLowerCase().startsWith('en')
+					['es', 'en', 'fr', 'de'].includes(
+						language.toLowerCase().slice(0, 2)
+					)
 			)
 			?.slice(0, 2) ??
 		null;
@@ -83,4 +84,6 @@ export function readLocaleCookie(doc: Document): string | null {
 export const LOCALES = [
 	{ id: 'en' as const, flag: '/icons/flag-en.svg' },
 	{ id: 'es' as const, flag: '/icons/flag-es.svg' },
+	{ id: 'fr' as const, flag: '/icons/flag-fr.svg' },
+	{ id: 'de' as const, flag: '/icons/flag-de.svg' },
 ] as const satisfies ReadonlyArray<{ id: ILocale; flag: string }>;

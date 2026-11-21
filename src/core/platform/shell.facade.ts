@@ -10,7 +10,7 @@ import type {
 	IThemeId,
 } from '../../domain/types';
 import { TranslateService } from '../../lang/translate.service';
-import { detectPreferredLocale, LOCALES, persistLocale } from './locale';
+import { detectPreferredLocale, isLocale, LOCALES, persistLocale } from './locale';
 import { buildDescription, buildTitle } from './seo';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
 import {
@@ -89,7 +89,7 @@ export class ShellFacade {
 		this._applyTheme(this.theme(), { animate: false });
 		this._route.paramMap.subscribe((params) => {
 			const raw = params.get('locale');
-			const locale: ILocale = raw === 'es' ? 'es' : 'en';
+			const locale: ILocale = isLocale(raw) ? raw : 'en';
 			this._translate.setLocale(locale);
 			this._document.documentElement.lang = locale;
 			this._refreshSeo();
