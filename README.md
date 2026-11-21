@@ -343,7 +343,7 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Plugins and orchestration
 
-`delendai` (local, via `file:~/.local/share/delendai/0.3.0/packages/core`). The `portfolio-content` plugin depends on `@delendai/core` as a `peerDependency` and on `zod` to define the input/output schemas of its tools.
+`delendai` (local, via `file:/home/cartago/.local/share/delendai/stable/packages/core`). The `portfolio-content` plugin depends on `@delendai/core` as a `peerDependency` and on `zod` to define the input/output schemas of its tools.
 
 ### Stack decisions
 
@@ -511,7 +511,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not published to npm. Projects use the fixed local 0.3.0 install at `~/.local/share/delendai/0.3.0`.
+`DelendAI` is not published to npm. Projects use the fixed local 0.3.0 install at `~/.local/share/delendai/stable`.
 
 ---
 
@@ -521,7 +521,7 @@ bun run mcp:all           # all three in order
 
 - **Bun ≥ 1.3.14** (declared in `packageManager`).
 - **Node.js ≥ 22** (Angular 22 peer).
-- Local checkout of `DelendAI` at `~/.local/share/delendai/0.3.0` (plugin only).
+- Local checkout of `DelendAI` at `~/.local/share/delendai/stable` (plugin only).
 
 ### Install and start
 

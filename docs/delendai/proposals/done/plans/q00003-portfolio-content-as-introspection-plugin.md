@@ -2,7 +2,7 @@
 id: q00003
 type: plan
 status: done
-track: mcp-vertex-plugin-architecture
+track: delendai-plugin-architecture
 closureGate:
   requirePeerReview: false
   requireAllSlicesDone: true
@@ -13,7 +13,7 @@ closureGate:
 
 ## Outcome
 
-The local mcp-vertex plugin lives at the canonical
+The local delendai plugin lives at the canonical
 `plugins/portfolio-content/` location (matching the monorepo's
 `plugins/<name>/` shape) and its value to an agent is **answering
 questions about the portfolio codebase**, not just scanning public
@@ -34,7 +34,7 @@ gating.
 
 - **Canonical location** — `plugins/portfolio-content/`, mirroring
   `plugins/deps/`, `plugins/audit/`, and the monorepo's flat
-  `plugins/<name>/` convention. `tools/mcp-vertex/portfolio-content/`
+  `plugins/<name>/` convention. `tools/delendai/portfolio-content/`
   is gone.
 - **Pure engines, DI everywhere** — every engine takes an
   `IFileSystem` interface so tests run against an in-memory map and
@@ -48,7 +48,7 @@ gating.
   the *real* `src/`, validating the engine reads the workspace
   correctly.
 - **No legacy** — the previous single-file plugin and the previous
-  `tools/mcp-vertex/portfolio-content/` location are both deleted
+  `tools/delendai/portfolio-content/` location are both deleted
   outright. No `_legacy/`, no archive.
 
 ## Slices
@@ -56,7 +56,7 @@ gating.
 - id: q3s1
   title: Relocate plugin to `plugins/portfolio-content/`
   status: done
-  doneWhen: Plugin loads from `plugins/portfolio-content/src/index.ts`; old `tools/mcp-vertex/portfolio-content/` removed.
+  doneWhen: Plugin loads from `plugins/portfolio-content/src/index.ts`; old `tools/delendai/portfolio-content/` removed.
 - id: q3s2
   title: Refocus plugin on codebase introspection
   status: done
@@ -68,7 +68,7 @@ gating.
 - id: q3s4
   title: Wire tests + scripts + config
   status: done
-  doneWhen: 17 vitest specs; `bun run mcp:{check,test,typecheck,all}` green; `mcp-vertex.config.json` points at the canonical path; `.gitignore` excludes plugin `node_modules/`.
+  doneWhen: 17 vitest specs; `bun run mcp:{check,test,typecheck,all}` green; `delendai.config.json` points at the canonical path; `.gitignore` excludes plugin `node_modules/`.
 - id: q3s5
   title: Smoke test against real workspace
   status: done
@@ -81,14 +81,14 @@ gating.
 ## Evidence
 
 - 2026-07-26: Plugin relocated to `plugins/portfolio-content/`. Old
-  path `tools/mcp-vertex/portfolio-content/` removed; `.gitignore`
+  path `tools/delendai/portfolio-content/` removed; `.gitignore`
   updated to exclude the new location's `node_modules/`. The
-  `mcp-vertex.config.json` `path:` now points at
+  `delendai.config.json` `path:` now points at
   `plugins/portfolio-content/src/index.ts`.
 - 2026-07-26: 17/17 vitest specs green (architecture engine, features
   engine, domain engine, audit engine, registration shape, all four
   tools via fake context).
-- 2026-07-26: `bun tools/check-mcp-vertex.mjs` boots the host with
+- 2026-07-26: `bun tools/check-delendai.mjs` boots the host with
   22 plugins loaded; `localPlugin: true` for `portfolio-content`.
 - 2026-07-26: Smoke test (`plugins/portfolio-content/scripts/smoke.ts`)
   exercises the three introspection tools against the *live* tree:

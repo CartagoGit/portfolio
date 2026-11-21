@@ -2,7 +2,7 @@
 id: q00004
 type: plan
 status: done
-track: mcp-vertex-plugin-architecture
+track: delendai-plugin-architecture
 closureGate:
   requirePeerReview: false
   requireAllSlicesDone: true
@@ -45,7 +45,7 @@ no manual mapping table per descendant.
   not considered a separate migration target. The *containing*
   selector (`.hero`) is the one to migrate; the descendants follow.
 - **Default option** — `options.scssAuditSourcePath` defaults to
-  `src/app/portfolio-page.scss` so `mcp-vertex` users get the legacy
+  `src/app/portfolio-page.scss` so `delendai` users get the legacy
   shell report on first run without extra wiring.
 
 ## Slices

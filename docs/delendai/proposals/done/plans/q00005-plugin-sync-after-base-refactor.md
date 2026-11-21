@@ -2,7 +2,7 @@
 id: q00005
 type: plan
 status: done
-track: mcp-vertex-plugin-architecture
+track: delendai-plugin-architecture
 closureGate:
   requirePeerReview: false
   requireAllSlicesDone: true
@@ -23,7 +23,7 @@ into `src/app/page.{ts,html,scss}` + eight siblings under
 - `scripts/scss-smoke.ts` audits every shell partial and prints a
   per-file ownership report plus a roll-up;
 - the spec file is updated to the new default;
-- the `mcp-vertex.config.json` `contentPaths` already pointed at
+- the `delendai.config.json` `contentPaths` already pointed at
   `src/app/page.html` (the rename was already integrated by the
   refactor commit).
 
@@ -60,7 +60,7 @@ slices (`qs4a` … `qs4f`) line up with the per-partial granularity.
   status: done
   doneWhen: `tests/portfolio-content.spec.ts` asserts the new default.
 - id: q5s4
-  title: Update the `mcp-vertex.config.json` contentPaths
+  title: Update the `delendai.config.json` contentPaths
   status: done
   doneWhen: The `contentPaths` entry for the audit tool uses `src/app/page.html` (already integrated by `e7bbf13`).
 

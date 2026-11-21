@@ -67,7 +67,7 @@ The route shell in `src/app` only composes route views. Every public page belong
   status: pending
   doneWhen: `src/app/portfolio-page.scss` ≤ 200 lines, holds only `:host`, design tokens, `.portfolio` / `.route-stage` / `.skip-link` / `.hero` / `.section` / `.section-heading` selectors; the style budget warning is resolved.
 - id: qs5
-  title: Finalize quality gates and MCP Vertex evidence
+  title: Finalize quality gates and DelendAI evidence
   status: pending
   doneWhen: `mcp:check`, `check`, build and tests pass; content audit covers every public feature; proposal evidence is recorded.
 
