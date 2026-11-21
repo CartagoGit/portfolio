@@ -102,7 +102,7 @@ export const es: ITranslationMap = {
 			pinnedLabel: 'Proyecto destacado',
 			exploreRepo: 'Explorar repositorio',
 			mcpNumber: '01 — Infraestructura de agentes',
-			mcpTitle: 'MCP Vertex',
+			mcpTitle: 'DelendAI',
 			mcpDescription:
 				'Un núcleo de servidor MCP extensible y sistema de plugins para workflows estructurados y repetibles de agentes.',
 			mcpBullets: 'Contratos tipados|Arquitectura de plugins|CLI tooling',
@@ -227,7 +227,7 @@ export const es: ITranslationMap = {
 			capabilityToolingTitle: 'El frontend tiene una sala de máquinas.',
 			capabilityToolingDetail:
 				'Contratos tipados, CLIs y tooling MCP convierten el trabajo repetitivo de ingeniería en workflows fiables para equipos y agentes.',
-			capabilityToolingProof: 'MCP Vertex · QuickModel · Keyer',
+			capabilityToolingProof: 'DelendAI · QuickModel · Keyer',
 			experienceEyebrow: '04 / Experiencia profesional',
 			experienceTitleLead: 'Workflows complejos,',
 			experienceTitleEmphasis: 'entregados en silencio.',

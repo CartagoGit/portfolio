@@ -1,9 +1,9 @@
 {
-	"name": "@portfolio/mcp-vertex-portfolio-content",
+	"name": "@portfolio/delendai-portfolio-content",
 	"version": "0.3.0",
 	"type": "module",
 	"private": true,
-	"description": "Local mcp-vertex plugin for the public portfolio. Provides architectural introspection (layers, features, domain contracts) and a public-content audit. Read-only.",
+	"description": "Local delendai plugin for the public portfolio. Provides architectural introspection (layers, features, domain contracts) and a public-content audit. Read-only.",
 	"main": "./src/index.ts",
 	"module": "./src/index.ts",
 	"types": "./src/index.ts",
@@ -28,7 +28,7 @@
 		"test": "vitest run"
 	},
 	"peerDependencies": {
-		"@mcp-vertex/core": "*"
+		"@delendai/core": "*"
 	},
 	"dependencies": {
 		"zod": "^4.4.3"

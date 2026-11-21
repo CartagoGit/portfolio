@@ -45,7 +45,7 @@ Thumbs.db
 
 /.cache/
 
-# mcp-vertex plugin artifacts
+# delendai plugin artifacts
 /plugins/portfolio-content/node_modules/
 /plugins/portfolio-content/.dist/
 

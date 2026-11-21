@@ -71,9 +71,9 @@ export const PUBLIC_LINKS: readonly IPublicLink[] = [
 		color: '#cb3837',
 	},
 	{
-		label: 'MCP Vertex',
-		href: 'https://github.com/CartagoGit/mcp-vertex',
-		imageSrc: '/icons/mcp-vertex.svg',
+		label: 'DelendAI',
+		href: 'https://github.com/CartagoGit/delendai',
+		imageSrc: '/icons/delendai.svg',
 	},
 	{
 		label: 'QuickModel',
@@ -261,7 +261,7 @@ export const CAPABILITIES: readonly ICapability[] = [
 		title: 'The frontend has an engine room.',
 		detail: 'Typed contracts, CLIs and MCP tooling turn repeated engineering work into dependable workflows for teams and agents.',
 		tools: ['TypeScript', 'MCP', 'Docker'],
-		proof: 'MCP Vertex · QuickModel · Keyer',
+		proof: 'DelendAI · QuickModel · Keyer',
 	},
 ];
 

@@ -8,7 +8,7 @@ describe('WorkPageComponent', () => {
 		}).compileComponents();
 		const fixture = TestBed.createComponent(WorkPageComponent);
 		fixture.detectChanges();
-		expect(fixture.nativeElement.textContent).toContain('MCP Vertex');
+		expect(fixture.nativeElement.textContent).toContain('DelendAI');
 		expect(
 			fixture.nativeElement.querySelectorAll('a[target="_blank"]').length
 		).toBeGreaterThan(5);

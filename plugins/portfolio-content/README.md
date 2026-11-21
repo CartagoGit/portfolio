@@ -1,6 +1,6 @@
-# `@portfolio/mcp-vertex-portfolio-content`
+# `@portfolio/delendai-portfolio-content`
 
-Local mcp-vertex plugin for the public portfolio. Loads at the
+Local delendai plugin for the public portfolio. Loads at the
 canonical `plugins/portfolio-content/` path (the workspace has only
 this one plugin, kept local on purpose).
 
@@ -62,7 +62,7 @@ plugins/portfolio-content/
     └── portfolio-content.spec.ts
 ```
 
-## Configuration (`mcp-vertex.config.json`)
+## Configuration (`delendai.config.json`)
 
 ```jsonc
 "plugins": {

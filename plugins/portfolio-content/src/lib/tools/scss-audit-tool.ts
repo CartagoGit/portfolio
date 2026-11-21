@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 
-import { toolJson, type IToolRegistration } from '@mcp-vertex/core/public';
+import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
 import { runScssAudit } from '../services/scss-audit';
 import type { IFileSystem } from '../contracts/interfaces/fs.interface';

@@ -1,5 +1,5 @@
 /**
- * Public barrel for `@portfolio/mcp-vertex-portfolio-content`. Mirrors
+ * Public barrel for `@portfolio/delendai-portfolio-content`. Mirrors
  * the canonical `plugins/<name>/src/public/index.ts` shape: the
  * default export is the loadable plugin; this barrel exposes the
  * engines + types for programmatic reuse.

@@ -1,5 +1,5 @@
 /**
- * `@portfolio/mcp-vertex-portfolio-content` — local mcp-vertex plugin
+ * `@portfolio/delendai-portfolio-content` — local delendai plugin
  * for the public portfolio.
  *
  * The plugin's job is to **answer questions about the portfolio
@@ -26,7 +26,7 @@
  * Knowledge entries (bilingual) cover the public-content boundary
  * and a runbook explaining when to call each tool.
  *
- * Activation (host `mcp-vertex.config.json`):
+ * Activation (host `delendai.config.json`):
  *
  *   {
  *     "plugins": {
@@ -40,7 +40,7 @@
 
 import { z } from 'zod';
 
-import { definePlugin } from '@mcp-vertex/core/public';
+import { definePlugin } from '@delendai/core/public';
 
 import { buildArchitectureTool } from './lib/tools/architecture-tool';
 import { buildAuditTool } from './lib/tools/audit-tool';
@@ -305,7 +305,7 @@ export default definePlugin({
 	optionsSchema: OptionsSchema,
 	configExample: {
 		summary:
-			'Default config for the public portfolio host. Drop the whole block into `mcp-vertex.config.json` under `plugins.portfolio-content.options`.',
+			'Default config for the public portfolio host. Drop the whole block into `delendai.config.json` under `plugins.portfolio-content.options`.',
 		options: {
 			contentPaths: [
 				'src/app/portfolio-page.html',

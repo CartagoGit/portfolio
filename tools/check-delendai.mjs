@@ -1,7 +1,7 @@
-import { assembleCliConfig, parseCliArgs } from '@mcp-vertex/core/public';
+import { assembleCliConfig, parseCliArgs } from '@delendai/core/public';
 
 const args = parseCliArgs(
-  ['--workspace=.', '--config=mcp-vertex.config.json', '--preset=swarm'],
+  ['--workspace=.', '--config=delendai.config.json', '--preset=swarm'],
   process.cwd(),
 );
 const { loadResult } = await assembleCliConfig(args);

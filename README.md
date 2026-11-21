@@ -148,7 +148,7 @@ If the audit returns a `per-se-root` error, the publish is blocked. The output i
 
 ### Adding a new per-se root
 
-1. Add the root to `mcp-vertex.config.json` under `plugins.portfolio-content.options.perSeRoots`.
+1. Add the root to `delendai.config.json` under `plugins.portfolio-content.options.perSeRoots`.
 2. Run `bun run mcp:check`. Existing templates must come back clean.
 3. Document the new root in the team's editorial rules (this README or the project's contribution guide).
 
@@ -166,14 +166,14 @@ portfolio/
 ├── tsconfig.{json,app,spec}   ← three independent tsconfigs
 ├── eslint.config.mjs          ← eslint + typescript-eslint
 ├── .prettierrc.json
-├── mcp-vertex.config.json     ← local plugin config (per-se roots live here)
+├── delendai.config.json     ← local plugin config (per-se roots live here)
 ├── public/                    ← static assets (icons, images, favicon)
 ├── src/                       ← the app
-├── plugins/portfolio-content/ ← local MCP-vertex plugin
-├── docs/mcp-vertex/           ← knowledge entries and proposals
+├── plugins/portfolio-content/ ← local DelendAI plugin
+├── docs/delendai/           ← knowledge entries and proposals
 └── tools/
-    ├── check-mcp-vertex.mjs   ← MCP-vertex host gate
-    └── mcp-vertex/            ← auxiliary scripts
+    ├── check-delendai.mjs   ← DelendAI host gate
+    └── delendai/            ← auxiliary scripts
 ```
 
 ### `src/` — the app in layers
@@ -217,7 +217,7 @@ src/
 
 It is a [`DelendAI`](https://github.com/CartagoGit/DelendAI) plugin that lives inside the project itself. That is intentional: the repo audits itself. See [section 10](#10-the-portfolio-content-plugin-delendai).
 
-### `docs/mcp-vertex/` — knowledge and proposals
+### `docs/delendai/` — knowledge and proposals
 
 When the plugin needs to learn something new about the project (e.g. a new boundary rule), the human writes it as a knowledge entry here. Proposals follow the `DelendAI` cycle (work → ready → done).
 
@@ -343,7 +343,7 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Plugins and orchestration
 
-`mcp-vertex` (local, via `file:../mcp-vertex/packages/core`). The `portfolio-content` plugin depends on `@mcp-vertex/core` as a `peerDependency` and on `zod` to define the input/output schemas of its tools.
+`delendai` (local, via `file:~/.local/share/delendai/0.3.0/packages/core`). The `portfolio-content` plugin depends on `@delendai/core` as a `peerDependency` and on `zod` to define the input/output schemas of its tools.
 
 ### Stack decisions
 
@@ -445,7 +445,7 @@ The audit emits findings with stable `id`s. The CI gate and the agent runbook ke
 
 ### Knowledge entries
 
-The plugin also loads procedural knowledge in `docs/mcp-vertex/knowledge/`:
+The plugin also loads procedural knowledge in `docs/delendai/knowledge/`:
 
 - `portfolio-architecture` — layer rules and dependencies.
 - `portfolio-features` — how to add a feature without breaking the boundary.
@@ -455,7 +455,7 @@ The plugin also loads procedural knowledge in `docs/mcp-vertex/knowledge/`:
 
 ### Configuration
 
-`mcp-vertex.config.json` declares:
+`delendai.config.json` declares:
 
 ```jsonc
 {
@@ -511,7 +511,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not yet published to npm. Meanwhile, both `mcp-vertex.config.json` and `.vscode/mcp.json` point at the local checkout at `../mcp-vertex`. **Do not change that path until the package is published.**
+`DelendAI` is not published to npm. Projects use the fixed local 0.3.0 install at `~/.local/share/delendai/0.3.0`.
 
 ---
 
@@ -521,7 +521,7 @@ bun run mcp:all           # all three in order
 
 - **Bun ≥ 1.3.14** (declared in `packageManager`).
 - **Node.js ≥ 22** (Angular 22 peer).
-- Local checkout of `DelendAI` at `../mcp-vertex` (plugin only).
+- Local checkout of `DelendAI` at `~/.local/share/delendai/0.3.0` (plugin only).
 
 ### Install and start
 
@@ -568,7 +568,7 @@ The SSR server listens on `http://localhost:4000` by default. The output of `dis
 
 ### Current inventory
 
-The home images live in `public/images/`. Some pieces (avatar, demo captures) are marked with `TODO(image)`. The replacement proposal lives in `docs/mcp-vertex/proposals/`. When a proprietary image is produced, it is substituted *in the same file* and the TODO is closed.
+The home images live in `public/images/`. Some pieces (avatar, demo captures) are marked with `TODO(image)`. The replacement proposal lives in `docs/delendai/proposals/`. When a proprietary image is produced, it is substituted *in the same file* and the TODO is closed.
 
 ### Why stock and not nothing
 

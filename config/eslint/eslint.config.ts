@@ -198,7 +198,7 @@ const config = [
 			'build/**',
 			'**/*.d.ts',
 			'plugins/**',
-			'tools/mcp-vertex/**',
+			'tools/delendai/**',
 			'.angular/**',
 			'.cache/angular/**',
 			'.cache/eslint/**',

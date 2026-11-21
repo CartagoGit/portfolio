@@ -10,7 +10,7 @@ import type {
 	IMcpPluginContext,
 	IMcpPluginRegistrations,
 	IToolRegistration,
-} from '@mcp-vertex/core/public';
+} from '@delendai/core/public';
 
 export type ToolHandler = (
 	args: Record<string, unknown>,
@@ -27,14 +27,14 @@ export const makeFakeContext = (
 	({
 		workspace: { root: '/ws', resolve: (p: string) => `/ws/${p}` },
 		corePaths: {
-			cacheDir: '.cache/mcp-vertex',
-			docsDir: 'docs/mcp-vertex',
+			cacheDir: '.cache/delendai',
+			docsDir: 'docs/delendai',
 		},
-		cacheDir: '.cache/mcp-vertex',
-		docsDir: 'docs/mcp-vertex',
+		cacheDir: '.cache/delendai',
+		docsDir: 'docs/delendai',
 		keepLegacy: false,
-		pluginCacheDir: '.cache/mcp-vertex/portfolio-content',
-		pluginDocsDir: 'docs/mcp-vertex/portfolio-content',
+		pluginCacheDir: '.cache/delendai/portfolio-content',
+		pluginDocsDir: 'docs/delendai/portfolio-content',
 		namespacePrefix,
 		options,
 		args: {},

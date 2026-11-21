@@ -22,7 +22,7 @@ const inMemoryFs = (
 	files: Record<string, string> = {},
 ) => buildInMemoryFs({ dirs, files });
 
-describe('@portfolio/mcp-vertex-portfolio-content', () => {
+describe('@portfolio/delendai-portfolio-content', () => {
 	describe('options schema', () => {
 		it('accepts the canonical host shape with defaults', () => {
 			const result = OptionsSchema.safeParse({});
