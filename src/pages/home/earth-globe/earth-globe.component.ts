@@ -29,6 +29,7 @@ import type { IEarthDepth } from '../../../domain/types';
 })
 export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	readonly depth = input.required<IEarthDepth>();
+	readonly preview = input(false);
 	private readonly _document = inject(DOCUMENT);
 	private readonly _platformId = inject(PLATFORM_ID);
 	private _canvas?: HTMLCanvasElement;
@@ -38,6 +39,8 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	private _angle = 0;
 	private _loading = false;
 	private _spinning = false;
+	private _idleSpeed = 0.00016;
+	private _dragVelocity = 0;
 	private _drag?: {
 		pointerId: number;
 		x: number;
@@ -57,8 +60,10 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	};
 	readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 	private readonly _depthSync = effect(() => {
-		if (this.depth() === 'front') this.start();
-		if (this.depth() === 'behind') this.stop();
+		if (this.depth() === 'front-ready' || this.depth() === 'front' || this.preview())
+			this.start();
+		if ((this.depth() === 'behind-ready' || this.depth() === 'behind') && !this.preview())
+			this.stop();
 	});
 
 	ngAfterViewInit(): void {
@@ -82,8 +87,9 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	}
 	changeMotion(): void {
 		const direction = this._motion.targetSpeed >= 0 ? -1 : 1;
-		this._motion.targetSpeed =
+		this._idleSpeed =
 			direction * (0.00014 + Math.random() * 0.00032);
+		this._motion.targetSpeed = this._idleSpeed;
 		this._motion.targetAxisX = -0.78 + Math.random() * 1.56;
 		this._motion.targetAxisY = -0.84 + Math.random() * 1.68;
 		this._motion.targetAxisZ = -0.68 + Math.random() * 1.36;
@@ -115,29 +121,29 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		const distance = Math.hypot(deltaX, deltaY);
 		if (distance < 0.5) return;
 		const elapsed = Math.max(8, event.timeStamp - this._drag.at);
-		const dominant =
-			Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : -deltaY;
-		const direction = Math.sign(dominant) || 1;
-		const intensity = Math.min(
-			0.0028,
-			Math.max(0.00018, (distance / elapsed) * 0.012)
-		);
-		this._motion.targetSpeed = direction * intensity;
+		const host = event.currentTarget;
+		const radius = host instanceof HTMLElement
+			? Math.max(80, host.getBoundingClientRect().width / 2)
+			: 240;
+		const instantaneousVelocity = deltaX / elapsed;
+		this._dragVelocity = this._dragVelocity * 0.68 + instantaneousVelocity * 0.32;
+		this._angle += deltaX / radius;
+		this._motion.targetSpeed = this._clamp({
+			value: this._dragVelocity * 0.0032,
+			min: -0.0018,
+			max: 0.0018,
+		});
 		this._motion.targetAxisX = this._clamp({
-			value: -deltaY / distance,
+			value: -deltaY / Math.max(1, distance),
 			min: -0.88,
 			max: 0.88,
 		});
 		this._motion.targetAxisY = this._clamp({
-			value: deltaX / distance,
+			value: deltaX / Math.max(1, distance),
 			min: -0.96,
 			max: 0.96,
 		});
-		this._motion.targetAxisZ = this._clamp({
-			value: (deltaX + deltaY) / distance / 2,
-			min: -0.62,
-			max: 0.62,
-		});
+		this._motion.targetAxisZ = 0.18;
 		this._drag = {
 			pointerId: event.pointerId,
 			x: event.clientX,
@@ -158,6 +164,12 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		)
 			host.releasePointerCapture(event.pointerId);
 		this._drag = undefined;
+		this._motion.targetSpeed = this._clamp({
+			value: this._dragVelocity * 0.0032,
+			min: -0.0018,
+			max: 0.0018,
+		});
+		this._dragVelocity = 0;
 	}
 
 	ngOnDestroy(): void {
@@ -176,8 +188,8 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		image.src = '/images/cartagonova-earth-texture-hd.png';
 		image.onload = () => {
 			const source = this._document.createElement('canvas');
-			source.width = 2048;
-			source.height = 1024;
+			source.width = 4096;
+			source.height = 2048;
 			const context = source.getContext('2d');
 			if (!context) return;
 			context.imageSmoothingEnabled = true;
@@ -216,6 +228,10 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this._motion.axisX /= length;
 		this._motion.axisY /= length;
 		this._motion.axisZ /= length;
+		if (!this._drag) {
+			this._motion.targetSpeed +=
+				(this._idleSpeed - this._motion.targetSpeed) * Math.min(0.055, delta / 1800);
+		}
 		this._angle += this._motion.speed * delta;
 		if (this._canvas && this._texture)
 			renderEarthFrame({

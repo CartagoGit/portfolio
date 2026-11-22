@@ -12,7 +12,7 @@ export const en: ITranslationMap = {
 	chrome: {
 		header: {
 			brand: 'Cartago',
-			navWork: 'Selected work',
+			navWork: 'Projects',
 			navLab: 'Frontend lab',
 			navAbout: 'Approach',
 			navKnowledge: 'Knowledge',
@@ -95,7 +95,7 @@ export const en: ITranslationMap = {
 				'Responsive product work considers the next device before it becomes a rewrite.',
 		},
 		work: {
-			eyebrow: '01 / Selected work',
+			eyebrow: '01 / Projects',
 			titleLead: 'Pinned work, not',
 			titleEmphasis: 'filler examples.',
 			titleTail: '',

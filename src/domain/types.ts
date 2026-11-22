@@ -51,6 +51,8 @@ export interface IHeroPanel {
 	label: string;
 	metric: string;
 	detail: string;
+	status: string;
+	stack: readonly string[];
 	iconPath: string;
 	color: string;
 	iconAsset?: string;
@@ -61,11 +63,26 @@ export interface ITechnology {
 	label: string;
 	iconPath: string;
 	color: string;
+	detail?: string;
 }
 
 export interface IPublicLink {
 	label: string;
 	href: string;
+	group: 'platform' | 'project';
+	detail?: string;
+	imageSrc?: string;
+	iconPath?: string;
+	color?: string;
+}
+
+export interface IMonitorPreview {
+	kind: 'platform' | 'project' | 'technology';
+	label: string;
+	detail: string;
+	href?: string;
+	status?: string;
+	stack: readonly string[];
 	imageSrc?: string;
 	iconPath?: string;
 	color?: string;

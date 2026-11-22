@@ -67,6 +67,8 @@
 html {
 	scroll-behavior: smooth;
 	overflow-x: clip;
+	overflow-y: scroll;
+	scrollbar-gutter: stable both-edges;
 }
 body {
 	margin: 0;
@@ -179,4 +181,28 @@ html[data-transition-direction='backward']::view-transition-new(route-content) {
 	::view-transition-new(route-content) {
 		animation: none;
 	}
+}
+::view-transition-group(root),
+::view-transition-image-pair(root) {
+	z-index: 0;
+}
+::view-transition-group(route-content),
+::view-transition-image-pair(route-content) {
+	isolation: isolate;
+	z-index: 10;
+}
+::view-transition-old(shell-header),
+::view-transition-new(shell-header),
+::view-transition-old(shell-footer),
+::view-transition-new(shell-footer) {
+	animation: none;
+	mix-blend-mode: normal;
+	opacity: 1;
+}
+::view-transition-group(shell-header),
+::view-transition-image-pair(shell-header),
+::view-transition-group(shell-footer),
+::view-transition-image-pair(shell-footer) {
+	z-index: 1000;
+	animation: none;
 }

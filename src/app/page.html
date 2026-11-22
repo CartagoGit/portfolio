@@ -32,8 +32,9 @@
 					[locale]="shell.locale()"
 					[technologies]="shell.technologyMarquee"
 					[links]="shell.publicLinks"
+					(preview)="setMonitorPreview($event)"
 					(navigate)="shell.setTransition($event)" />
-				<app-hero-monitor />
+				<app-hero-monitor [preview]="monitorPreview()" />
 			</section>
 		}
 
@@ -68,7 +69,7 @@
 
 	<app-shell-footer
 		[locale]="shell.locale()"
-		[links]="shell.publicLinks" />
+		[links]="shell.platformLinks" />
 
 	<app-command-palette
 		[open]="shell.commandOpen()"

@@ -1,5 +1,6 @@
 <div
 	class="hero-monitor"
+	[class.hero-monitor--expanded]="monitorExpanded()"
 	aria-label="Interactive showcase of Mario's public projects">
 	@if (earthDepth() !== 'behind') {
 		<button
@@ -15,25 +16,31 @@
 		[class.hero-monitor--front]="earthDepth() === 'front'"
 		[class.hero-monitor--out-front]="earthDepth() === 'out-front'"
 		[class.hero-monitor--behind-ready]="earthDepth() === 'behind-ready'"
+		(mouseenter)="enterOrb()"
+		(mouseleave)="leaveOrb()"
+		(focusin)="enterOrb()"
+		(focusout)="leaveOrb()"
 		(click)="handleOrbClick($event)"
 		aria-hidden="true">
 		<app-earth-globe
 			#earth
-			[depth]="earthDepth()" />
+			[depth]="earthDepth()"
+			[preview]="earthPreview()" />
 	</div>
 	<div class="hero-monitor__orb hero-monitor__orb--two"></div>
 	<div
 		class="hero-monitor__interface"
+		(mouseenter)="enterMonitor()"
+		(mouseleave)="leaveMonitor()"
 		[attr.data-chart]="chartType()"
 		(click)="handleShellInteraction($event)">
 		<div
 			class="hero-monitor__chrome"
 			aria-hidden="true">
-			<span></span>
-			<span></span>
-			<span></span>
-			<i></i>
 			<b>cartago.system</b>
+			<span>interactive project console</span>
+			<i></i>
+			<small>LIVE</small>
 		</div>
 		<div class="hero-monitor__header">
 			<button
@@ -111,8 +118,7 @@
 						}
 					</div>
 					<p class="hero-monitor__caption">
-						Choose a project to inspect its role. The controls below
-						change the visualisation only.
+						Choose a project for verified scope and status. Use the display controls to inspect the visual data demo.
 					</p>
 					<div class="hero-monitor__chart-workspace">
 						<div
@@ -136,12 +142,12 @@
 						</div>
 						<div
 							class="hero-monitor__chart-symbols"
-							aria-label="Randomise chart values">
+							aria-label="Visual data controls">
 							@for (symbol of ['⌁', '◌', '✦']; track symbol) {
 								<button
 									type="button"
 									(click)="hero.randomizeChart()"
-									aria-label="Refresh chart values">
+									aria-label="Generate new demo values">
 									{{ symbol }}
 								</button>
 							}
@@ -150,7 +156,7 @@
 								type="button"
 								[class.is-active]="palette() === 'heat'"
 								(click)="hero.setTemperature()"
-								aria-label="Random temperature colours">
+								aria-label="Apply heat palette">
 								◉
 							</button>
 						</div>
@@ -178,24 +184,15 @@
 								</svg>
 							}
 							<h3>{{ panel.label }}</h3>
+							<p class="hero-monitor__project-status">{{ panel.status }}</p>
 							<p>{{ panel.detail }}</p>
+							<div class="hero-monitor__stack" aria-label="Project technologies">
+								@for (technology of panel.stack; track technology) {
+									<span>{{ technology }}</span>
+								}
+							</div>
 							@if (panel.href) {
-								<a [href]="panel.href" target="_blank" rel="noreferrer" class="hero-monitor__project-link">Open project ↗</a>
-							}
-						</div>
-						<div
-							class="hero-monitor__effects"
-							aria-label="Technology description effects">
-							@for (
-								effectOption of effectOptions;
-								track effectOption.id
-							) {
-								<button
-									type="button"
-									(click)="hero.setEffect(effectOption.id)"
-									[attr.aria-label]="effectOption.id">
-									{{ effectOption.symbol }}
-								</button>
+								<a [href]="panel.href" target="_blank" rel="noreferrer" class="hero-monitor__project-link">Open public project ↗</a>
 							}
 						</div>
 						<button

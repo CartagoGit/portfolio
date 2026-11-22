@@ -1,5 +1,6 @@
 <div
 	class="technology-marquee"
+	[class.technology-marquee--reverse]="reverse()"
 	aria-label="Technology index from the CartagoGit profile">
 	@for (duplicate of [false, true]; track duplicate) {
 		<div
@@ -9,6 +10,10 @@
 				<span
 					class="technology-marquee__token"
 					[attr.tabindex]="duplicate ? -1 : 0"
+					(mouseenter)="showTooltip(technology, $event)"
+					(mouseleave)="hideTooltip()"
+					(focusin)="showTooltip(technology, $event)"
+					(focusout)="hideTooltip()"
 					[style.--label-width.px]="technology.label.length * 8 + 44">
 					<svg
 						viewBox="0 0 24 24"
@@ -23,3 +28,12 @@
 		</div>
 	}
 </div>
+@if (tooltip(); as activeTooltip) {
+	<div
+		class="technology-marquee__tooltip"
+		role="tooltip"
+		[style.left.px]="tooltipX()"
+		[style.top.px]="tooltipY()">
+		{{ activeTooltip.label }}
+	</div>
+}

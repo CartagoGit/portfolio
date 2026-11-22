@@ -11,6 +11,7 @@ describe('ProfileLinksComponent', () => {
 				label: 'GitHub',
 				href: 'https://github.com/CartagoGit',
 				iconPath: 'M0 0',
+				group: 'platform',
 			},
 		]);
 		fixture.detectChanges();

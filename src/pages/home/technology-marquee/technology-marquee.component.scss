@@ -11,8 +11,8 @@
 	display: flex;
 	width: min(100%, 480px);
 	max-width: 100%;
-	margin: 1.15rem 0 0.7rem;
-	padding: 1.45rem var(--space-6) var(--space-2);
+	margin: 0.65rem 0 0.85rem;
+	padding: 0.72rem var(--space-6) 0.62rem;
 	overflow: hidden;
 	user-select: none;
 	border: var(--border-thin) solid color-mix(in srgb, var(--line) 70%, transparent);
@@ -46,6 +46,7 @@
 		gap: 0.8rem;
 		min-width: max-content;
 		padding: 0 0.05rem var(--space-2xs);
+		padding-bottom: 0;
 		animation: technology-scroll 82s linear infinite;
 	}
 	&:hover &__track {
@@ -54,52 +55,56 @@
 	&__token {
 		position: relative;
 		display: grid;
-		width: 27px;
+		width: 29px;
 		height: 27px;
 		flex: none;
 		place-items: center;
 		outline: 0;
 		transition: width 0.25s ease;
+
+		& svg {
+			width: 22px;
+			height: 22px;
+			transition:
+				transform 0.22s ease,
+				filter 0.22s ease;
+		}
+
+		& b {
+			display: none;
+		}
+
+		&:hover,
+		&:focus {
+			width: var(--label-width);
+
+			& svg {
+				transform: scale(1.18);
+				filter: drop-shadow(0 0 8px var(--cyan));
+			}
+
+			& b {
+				opacity: 1;
+				transform: translate(-50%, 0);
+			}
+		}
 	}
-	&__token svg {
-		width: 22px;
-		height: 22px;
-		transition:
-			transform 0.22s ease,
-			filter 0.22s ease;
-	}
-	&__token b {
-		position: absolute;
-		z-index: 4;
+
+	&__tooltip {
+		position: fixed;
+		z-index: 120;
 		left: 50%;
-		bottom: calc(100% + 0.35rem);
-		padding: var(--space-sm) var(--space-xl);
-		border: var(--border-thin) solid var(--line);
+		top: 1rem;
+		transform: translate(-50%, -100%);
+		padding: 0.4rem 0.65rem;
+		border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 52%, var(--line));
 		border-radius: var(--radius-md);
-		background: var(--surface);
+		background: color-mix(in srgb, var(--surface) 96%, transparent);
+		box-shadow: 0 10px 32px #0008;
 		color: var(--ink);
 		@include tokens.mono-mixed(var(--label-sm));
 		white-space: nowrap;
-		opacity: 0;
-		transform: translate(-50%, 5px);
 		pointer-events: none;
-		transition:
-			opacity 0.2s ease,
-			transform 0.2s ease;
-	}
-	&__token:hover,
-	&__token:focus {
-		width: var(--label-width);
-	}
-	&__token:hover svg,
-	&__token:focus svg {
-		transform: scale(1.18);
-		filter: drop-shadow(0 0 8px var(--cyan));
-	}
-	&__token:hover b,
-	&__token:focus b {
-		opacity: 1;
-		transform: translate(-50%, 0);
 	}
 }
 
@@ -110,22 +115,27 @@
 
 @media (max-width: 640px) {
 	.technology-marquee {
-		margin: 0.8rem 0 var(--space-xl);
-		&__track {
-			gap: 0.6rem;
-			animation-duration: 88s;
-		}
-		&__token {
-			width: 23px;
-			height: 25px;
-		}
-		&__token svg {
-			width: 19px;
-			height: 19px;
-		}
-		.technology-marquee__token:hover,
-		.technology-marquee__token:focus {
-			width: 23px;
-		}
+		margin: 0.65rem 0 1rem;
+		padding: 0.62rem 1.2rem;
+	}
+	.technology-marquee__track {
+		gap: 0.6rem;
+		animation-duration: 88s;
+	}
+	.technology-marquee__token,
+	.technology-marquee__token:hover,
+	.technology-marquee__token:focus {
+		width: 25px;
+	}
+	.technology-marquee__token svg {
+		width: 19px;
+		height: 19px;
+	}
+}
+
+.technology-marquee--reverse {
+	&__track {
+		animation-direction: reverse;
+		animation-delay: -24s;
 	}
 }

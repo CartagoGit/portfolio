@@ -2,12 +2,14 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	type OnDestroy,
+	signal,
 	ViewEncapsulation,
+	input,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
-import type { IChartOption, IEffectOption } from '../../../domain/types';
+import type { IChartOption, IEffectOption, IMonitorPreview } from '../../../domain/types';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -33,6 +35,8 @@ import type { IChartOption, IEffectOption } from '../../../domain/types';
 	},
 })
 export class HeroMonitorComponent implements OnDestroy {
+	readonly preview = input<IMonitorPreview | null>(null);
+	readonly activePreview = signal<IMonitorPreview | null>(null);
 	readonly hero = new HeroMonitorFacade();
 	private readonly _earth = new EarthDepthFacade();
 
@@ -48,11 +52,17 @@ export class HeroMonitorComponent implements OnDestroy {
 	readonly panels = this.hero.panels;
 	readonly earthDepth = this._earth.state;
 	readonly earthBlocksMonitor = this._earth.blocksMonitor;
+	readonly monitorExpanded = signal(false);
+	readonly earthPreview = signal(false);
+	private _monitorHovered = false;
+	private _monitorOpening = false;
+	private _monitorOpenTimer?: number;
+	private _monitorCloseTimer?: number;
 
 	readonly chartOptions: readonly IChartOption[] = [
-		{ id: 'bars', label: 'Velocity' },
-		{ id: 'line', label: 'Signals' },
-		{ id: 'area', label: 'Coverage' },
+		{ id: 'bars', label: 'Bars' },
+		{ id: 'line', label: 'Line' },
+		{ id: 'area', label: 'Area' },
 		{ id: 'dots', label: 'Dots' },
 		{ id: 'pulse', label: 'Pulse' },
 		{ id: 'wave', label: 'Wave' },
@@ -68,6 +78,36 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	ngOnDestroy(): void {
 		this.hero.destroy();
+		this._earth.destroy();
+		if (this._monitorOpenTimer !== undefined)
+			window.clearTimeout(this._monitorOpenTimer);
+		if (this._monitorCloseTimer !== undefined)
+			window.clearTimeout(this._monitorCloseTimer);
+	}
+
+	enterMonitor(): void {
+		this._monitorHovered = true;
+		if (this._monitorCloseTimer !== undefined)
+			window.clearTimeout(this._monitorCloseTimer);
+		if (this.monitorExpanded()) return;
+		this._monitorOpening = true;
+		this.monitorExpanded.set(true);
+		this._monitorOpenTimer = window.setTimeout(() => {
+			this._monitorOpenTimer = undefined;
+			this._monitorOpening = false;
+			if (!this._monitorHovered) this.leaveMonitor();
+		}, 720);
+	}
+
+	leaveMonitor(): void {
+		this._monitorHovered = false;
+		if (this._monitorOpening) return;
+		if (this._monitorCloseTimer !== undefined)
+			window.clearTimeout(this._monitorCloseTimer);
+		this._monitorCloseTimer = window.setTimeout(() => {
+			if (!this._monitorHovered) this.monitorExpanded.set(false);
+			this._monitorCloseTimer = undefined;
+		}, 180);
 	}
 
 	protected readonly _onDocumentDown = (event: PointerEvent): void => {
@@ -102,6 +142,14 @@ export class HeroMonitorComponent implements OnDestroy {
 		}
 	}
 
+	enterOrb(): void {
+		this.earthPreview.set(true);
+	}
+
+	leaveOrb(): void {
+		this.earthPreview.set(false);
+	}
+
 	guardMonitorBanner(event: MouseEvent): void {
 		if (!this.earthBlocksMonitor()) return;
 		event.preventDefault();
@@ -126,5 +174,11 @@ export class HeroMonitorComponent implements OnDestroy {
 		if (target.closest('a')) return;
 		if (target.closest('input, textarea, select')) return;
 		this._earth.returnBehind(target);
+	}
+
+	showPreview(preview: IMonitorPreview | null): void {
+		this.activePreview.set(preview);
+		if (preview) this.enterMonitor();
+		else this.leaveMonitor();
 	}
 }

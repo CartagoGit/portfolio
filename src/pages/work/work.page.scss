@@ -297,35 +297,51 @@
 	}
 	&__secondary {
 		display: grid;
-		grid-template-columns: 1fr repeat(3, 1fr);
-		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+		gap: 0.75rem;
 		padding: var(--space-4) 0;
 		border-bottom: 1px solid var(--line);
-	}
-	&__secondary p {
-		margin: 0.3rem 0;
-		color: var(--muted);
-		@include tokens.mono-mixed(0.64rem);
-	}
-	&__secondary a {
-		color: inherit;
-		font-size: 0.86rem;
-		font-weight: 800;
-		text-decoration: none;
-		transition:
-			color 0.25s,
-			transform 0.25s;
-	}
-	&__secondary a:hover {
-		color: var(--cyan);
-		transform: translateX(4px);
-	}
-	&__secondary a span {
-		display: block;
-		margin-top: 0.35rem;
-		color: var(--muted);
-		font-size: 0.68rem;
-		font-weight: 500;
+
+		p {
+			grid-column: 1 / -1;
+			margin: 0 0 0.35rem;
+			color: var(--cyan);
+			@include tokens.mono-mixed(0.64rem);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+		}
+
+		a {
+			display: grid;
+			min-height: 94px;
+			align-content: center;
+			padding: 1rem;
+			border: var(--border-thin) solid var(--line);
+			border-radius: 12px;
+			background:
+				linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, var(--cyan)), var(--surface));
+			color: var(--ink);
+			font-size: 0.9rem;
+			font-weight: 800;
+			text-decoration: none;
+			transition: color 0.25s, transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+
+			&:hover {
+				color: var(--cyan);
+				border-color: var(--cyan);
+				transform: translateY(-3px);
+				box-shadow: 0 16px 38px #0005;
+			}
+
+			span {
+				display: block;
+				margin-top: 0.35rem;
+				color: var(--muted);
+				font-size: 0.68rem;
+				font-weight: 500;
+				line-height: 1.45;
+			}
+		}
 	}
 	&__directory {
 		display: grid;

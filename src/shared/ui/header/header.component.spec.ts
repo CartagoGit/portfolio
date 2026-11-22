@@ -36,6 +36,6 @@ describe('HeaderComponent', () => {
 		fixture.detectChanges();
 		expect(
 			fixture.nativeElement.querySelector('.is-active')?.textContent
-		).toContain('Selected work');
+		).toContain('Projects');
 	});
 });

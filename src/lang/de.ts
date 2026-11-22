@@ -9,7 +9,7 @@ export const de: ITranslationMap = {
 		header: {
 			...en.chrome.header,
 			brand: 'Cartago',
-			navWork: 'Ausgewählte Arbeit',
+			navWork: 'Projekte',
 			navLab: 'Frontend-Labor',
 			navAbout: 'Ansatz',
 			navKnowledge: 'Wissen',

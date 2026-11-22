@@ -13,12 +13,13 @@ describe('FooterComponent', () => {
 			{
 				label: 'GitHub',
 				href: 'https://github.com/CartagoGit',
+				group: 'platform',
 				iconPath: 'M0 0',
 			},
 		]);
 		fixture.detectChanges();
 		expect(
-			fixture.nativeElement.querySelector('.footer__link')?.textContent
+			fixture.nativeElement.querySelector('.profile-links__badge')?.textContent
 		).toContain('GitHub');
 	});
 });

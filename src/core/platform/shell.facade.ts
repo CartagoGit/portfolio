@@ -70,6 +70,9 @@ export class ShellFacade {
 		}));
 	});
 	readonly publicLinks = PUBLIC_LINKS;
+	readonly platformLinks = PUBLIC_LINKS.filter(
+		(link) => link.group === 'platform'
+	);
 	readonly technologyMarquee = TECHNOLOGY_MARQUEE;
 
 	readonly locale = this._translate.locale;

@@ -35,6 +35,14 @@
 			<span aria-hidden="true">→</span>
 		</a>
 	</div>
-	<app-technology-marquee [technologies]="technologies()" />
-	<app-profile-links [links]="links()" />
+	<app-technology-marquee
+		[technologies]="technologies()"
+		(preview)="preview.emit($event)" />
+	<app-profile-links
+		[links]="links()"
+		(preview)="preview.emit($event)" />
+	<app-technology-marquee
+		[technologies]="technologies()"
+		[reverse]="true"
+		(preview)="preview.emit($event)" />
 </div>

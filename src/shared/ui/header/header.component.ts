@@ -4,6 +4,7 @@ import {
 	computed,
 	input,
 	output,
+	signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { routeFor } from '../../../core/platform/routing';
@@ -28,8 +29,13 @@ export type IResolvedThemeDefinition = IThemeDefinition & {
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: {
+		'(window:scroll)': '_onScroll()',
+		'[class.header-host--scrolled]': 'scrolled()',
+	},
 })
 export class HeaderComponent {
+	readonly scrolled = signal(false);
 	readonly locale = input.required<ILocale>();
 	readonly page = input.required<IPageComponentId>();
 	readonly languages = input.required<readonly ILanguageOption[]>();
@@ -71,4 +77,8 @@ export class HeaderComponent {
 	selectPage(page: IPageComponentId): void {
 		this.navigate.emit(page);
 	}
+
+	protected readonly _onScroll = (): void => {
+		this.scrolled.set(window.scrollY > 8);
+	};
 }

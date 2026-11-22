@@ -1,3 +1,4 @@
+@use 'sass:meta';
 @use 'motion' as motion;
 @use 'tokens/index' as tokens;
 
@@ -8,20 +9,36 @@ app-hero-monitor {
 }
 
 app-hero-monitor .hero-monitor {
+	position: relative;
+	isolation: isolate;
+	min-height: 0;
+	padding-top: 4.5rem;
 	width: 100%;
 	min-width: 0;
 }
+
 /* Interactive monitor states: technology rail, telemetry dashboard and animated detail panel. */
 .hero-monitor__interface {
-	width: min(calc(100% - 76px), 600px);
-	aspect-ratio: 16 / 10;
-	transform: perspective(1500px) rotateY(-26deg) rotateX(7deg)
-		rotateZ(-1.5deg);
+	position: relative;
+	z-index: 2;
+	width: min(calc(100% + 72px), 780px);
+	max-width: none;
+	height: auto;
+	aspect-ratio: auto;
+	margin: 0 0 0 -3rem;
 	transform-origin: center right;
+	transform: perspective(1600px) rotateY(-30deg) rotateX(8deg) rotateZ(-1.5deg);
+	transition: transform 0.68s tokens.$ease-emphasized, box-shadow 0.4s ease;
+	overflow: hidden;
+	clip-path: inset(0 round 16px);
+	border: var(--border-thin) solid var(--line);
+	border-radius: 16px;
+	background: linear-gradient(145deg, var(--surface), var(--surface-2));
+	box-shadow: 0 24px 70px #0007, inset 0 1px 0 #fff1;
 }
 .hero-monitor:hover .hero-monitor__interface {
-	width: min(calc(100% - 76px), 600px);
-	transform: perspective(1500px) rotateY(0) rotateX(0) rotateZ(0) scale(1.045);
+	transform: perspective(1600px) rotateY(0) rotateX(0) rotateZ(0) !important;
+	box-shadow: 0 34px 90px #0008, var(--neon);
 }
 .hero-monitor__header {
 	display: block;
@@ -114,6 +131,81 @@ app-hero-monitor .hero-monitor {
 .hero-monitor__chart-workspace .hero-monitor__chart {
 	min-height: 0;
 	height: 100%;
+	--chart-low: #1678ff;
+	--chart-high: #32c8ff;
+	position: relative;
+	display: flex;
+	align-items: end;
+	justify-content: space-around;
+	gap: 0.45rem;
+	overflow: hidden;
+	padding: 0.8rem 0.7rem 1.1rem;
+	border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+	border-radius: 8px;
+	background:
+		repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in srgb, var(--line) 55%, transparent) 32px),
+		linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 92%, transparent), var(--surface));
+}
+.hero-monitor__chart[data-palette='heat'] { --chart-low: #7f1d1d; --chart-high: #ffcf4a; }
+.hero-monitor__chart[data-palette='lime'] { --chart-low: #256c5d; --chart-high: #d8ff78; }
+.hero-monitor__chart > span {
+	position: relative;
+	z-index: 1;
+	flex: 1;
+	max-width: 46px;
+	min-width: 10px;
+	border-radius: 4px 4px 2px 2px;
+	background: linear-gradient(to top, var(--chart-low), var(--chart-high));
+	transition: height 0.55s tokens.$ease-standard, transform 0.35s ease, opacity 0.35s ease;
+}
+.hero-monitor__chart svg {
+	position: absolute;
+	z-index: 2;
+	inset: 0.65rem 0.65rem 1rem;
+	width: calc(100% - 1.3rem);
+	height: calc(100% - 1.65rem);
+	overflow: visible;
+}
+.hero-monitor__chart path {
+	fill: none;
+	stroke: var(--chart-high) !important;
+	stroke-width: 3;
+	vector-effect: non-scaling-stroke;
+	filter: drop-shadow(0 0 4px color-mix(in srgb, var(--chart-high) 55%, transparent));
+}
+.hero-monitor__chart em {
+	position: absolute;
+	z-index: 3;
+	left: 0.65rem;
+	bottom: 0.25rem;
+	font: 500 0.5rem tokens.$font-mono, monospace;
+	color: var(--muted);
+}
+.hero-monitor__chart[data-chart='line'] > span,
+.hero-monitor__chart[data-chart='area'] > span { opacity: 0.12; }
+.hero-monitor__chart[data-chart='area'] path { fill: color-mix(in srgb, var(--chart-high) 18%, transparent); }
+.hero-monitor__chart[data-chart='dots'] > span {
+	width: 13px;
+	min-width: 13px;
+	max-width: 13px;
+	min-height: 13px;
+	border-radius: 50%;
+	background: var(--chart-high);
+	box-shadow: 0 0 10px color-mix(in srgb, var(--chart-high) 55%, transparent);
+}
+.hero-monitor__chart[data-chart='dots'] svg,
+.hero-monitor__chart[data-chart='pulse'] svg,
+.hero-monitor__chart[data-chart='grid'] svg { display: none; }
+.hero-monitor__chart[data-chart='pulse'] > span {
+	border-radius: 999px;
+	animation: chart-pulse 1.7s ease-in-out infinite;
+}
+.hero-monitor__chart[data-chart='pulse'] > span:nth-child(2) { animation-delay: 0.15s; }
+.hero-monitor__chart[data-chart='pulse'] > span:nth-child(3) { animation-delay: 0.3s; }
+.hero-monitor__chart[data-chart='pulse'] > span:nth-child(4) { animation-delay: 0.45s; }
+.hero-monitor__chart[data-chart='pulse'] > span:nth-child(5) { animation-delay: 0.6s; }
+@keyframes chart-pulse {
+	50% { filter: brightness(1.45); transform: scaleY(0.9); transform-origin: bottom; }
 }
 .hero-monitor__chart-symbols {
 	display: flex;
@@ -267,7 +359,7 @@ app-hero-monitor .hero-monitor {
 @media (max-width: 900px) {
 	app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready,
 	app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front,
-	app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--out-front {
+	app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
 		width: min(88vw, 520px);
 		height: min(88vw, 520px);
 	}
@@ -286,7 +378,7 @@ app-hero-monitor .hero-monitor__interface .hero-monitor__caption {
 	font-size: 0.68rem;
 	line-height: 1.45;
 }
-app-hero-monitor .hero-monitor__selector button span {
+app-hero-monitor .hero.monitor__selector button span {
 	font-size: 0.52rem;
 }
 app-hero-monitor .hero-monitor__chart-switcher button {
@@ -645,7 +737,7 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface :is(button, a):foc
 .hero-monitor__selector button {
 	width: 100%;
 }
-.hero.monitor__selector button span {
+.hero-monitor__selector button span {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -684,14 +776,14 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface :is(button, a):foc
 	z-index: 6;
 	animation: none !important;
 	opacity: 0;
-	transform: scale(0.92);
+	transform: scale(0.58);
 	pointer-events: none;
 }
 .hero-monitor__orb--one.hero-monitor--front {
 	z-index: 6;
 	animation: none !important;
 	opacity: 1;
-	transform: scale(1.75);
+	transform: scale(1);
 	top: -7rem;
 	right: -5rem;
 	pointer-events: auto;
@@ -707,8 +799,8 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface :is(button, a):foc
 	transform: translate(-50%, -50%) scale(0.82);
 }
 app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready,
-app-hero-monitor .hero-monitor .hero.monitor__orb--one.hero-monitor--front,
-app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--out-front {
+app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front,
+app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
 	position: fixed;
 	z-index: 51;
 	top: 50%;
@@ -718,23 +810,16 @@ app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--out-front {
 	width: min(68vmin, 680px);
 	height: min(68vmin, 680px);
 }
-app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready {
-	transform: translate(-50%, -50%) scale(0.78);
+app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--front-ready {
+	transform: translate(-50%, -50%) scale(0.58);
 }
 app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--front {
 	transform: translate(-50%, -50%) scale(1);
 }
-app-hero-monitor .hero-monitor .hero.monitor__orb--one.hero-monitor--out-front {
+app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
 	transform: translate(-50%, -50%) scale(0.82);
 }
-app-hero-monitor .hero-monitor .hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front) {
-	position: absolute;
-	left: auto;
-	right: -0.4rem;
-	top: -1.4rem;
-	bottom: auto;
-}
-app-hero-monitor .hero-monitor .hero-monitor__orb--two,
+app-hero-monitor .hero.monitor .hero-monitor__orb--two,
 app-hero-monitor .hero.monitor .hero-monitor__note {
 	position: absolute;
 }
@@ -750,56 +835,51 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface {
 	transform-origin: center;
 	background: linear-gradient(145deg, var(--surface), var(--surface-2));
 }
-app-hero-monitor .hero-monitor .hero-monitor__body {
-	min-height: 290px;
-}
-app-hero-monitor .hero.monitor .hero-monitor__note {
-	left: 0.5rem;
-	bottom: -0.75rem;
-	margin: 0;
-}
-app-hero-monitor .hero-monitor {
-	position: relative;
-	isolation: isolate;
-	min-height: 0;
-}
-app-hero-monitor .hero-monitor .hero-monitor__interface {
-	overflow: hidden;
-	clip-path: inset(0 round 16px);
-}
-app-hero-monitor .hero-monitor .hero-monitor__note {
-	position: absolute;
-	z-index: 3;
+.hero-monitor__globe-scrim {
+	position: fixed !important;
+	z-index: 50 !important;
+	inset: 0 !important;
 }
 
 /* Final state contract (last-wins): no inherited scale, all layers are fixed. */
 app-hero-monitor .hero-monitor .hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front) {
 	position: absolute !important;
-	top: -1.4rem !important;
+	top: 0 !important;
 	left: auto !important;
-	right: -0.4rem !important;
+	right: -0.75rem !important;
 	bottom: auto !important;
-	width: 320px !important;
-	height: 320px !important;
+	width: 300px !important;
+	height: 300px !important;
 	transform: none !important;
+	overflow: hidden;
+}
+.hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front)::before {
+	content: '' !important;
+	display: block !important;
+	position: absolute;
+	inset: -8%;
 	border-radius: 50%;
 	background:
-		radial-gradient(circle at 34% 28%, #c8f8ff77 0 5%, transparent 22%),
-		radial-gradient(circle at 38% 34%, #167aa9, #062842 55%, #010a14 78%) !important;
-	box-shadow: inset -34px -24px 60px #000b, 0 22px 55px #0006;
+		repeating-linear-gradient(90deg, color-mix(in srgb, var(--cyan) 62%, transparent) 0 1px, transparent 1px 28px),
+		repeating-linear-gradient(0deg, color-mix(in srgb, var(--cyan) 34%, transparent) 0 1px, transparent 1px 28px);
+	animation: globe-idle-spin 3.8s linear infinite;
+	pointer-events: none;
 }
-app-hero-monitor .hero-monitor .hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front)::before {
-	content: '';
+.hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front)::after {
+	content: '' !important;
+	display: block !important;
 	position: absolute;
 	inset: 0;
 	border-radius: 50%;
-	background: conic-gradient(from 30deg, transparent 0 35%, #8defff4f 46%, transparent 58% 100%);
-	animation: globe-idle-turn 8s linear infinite;
+	background:
+		radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--ice) 55%, transparent) 0 6%, transparent 32%),
+		radial-gradient(circle at 50% 50%, transparent 52%, color-mix(in srgb, var(--canvas) 82%, transparent) 80%);
 	pointer-events: none;
 }
-app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready,
-app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--front,
-app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
+@keyframes globe-idle-spin {
+	to { background-position: 56px 0, 0 0; }
+}
+app-hero-monitor .hero.monitor .hero.monitor__orb--one:is(.hero-monitor--front-ready, .hero-monitor--front, .hero-monitor--out-front) {
 	position: fixed !important;
 	z-index: 51 !important;
 	top: 50% !important;
@@ -812,33 +892,96 @@ app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
 	background: transparent !important;
 	box-shadow: none !important;
 }
-app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready {
-	transform: translate(-50%, -50%) scale(0.78) !important;
-}
-app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front {
-	transform: translate(-50%, -50%) scale(1) !important;
-}
-app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
-	transform: translate(-50%, -50%) scale(0.82) !important;
-}
-app-hero-monitor .hero-monitor .hero-monitor__globe-scrim {
+[class~='hero-monitor--front-ready'] { transform: translate(-50%, -50%) scale(0.78) !important; }
+[class~='hero-monitor--front']:not([class~='hero-monitor--front-ready']) { transform: translate(-50%, -50%) scale(1) !important; }
+[class~='hero-monitor--out-front'] { transform: translate(-50%, -50%) scale(0.82) !important; }
+.hero-monitor__globe-scrim {
 	position: fixed !important;
 	z-index: 50 !important;
 	inset: 0 !important;
 }
 app-hero-monitor .hero-monitor .hero-monitor__note {
 	position: relative !important;
+	z-index: 3;
 	left: auto !important;
 	bottom: auto !important;
-	margin: 0.65rem 0.5rem 0 !important;
-	font-size: 0.68rem;
-	line-height: 1.35;
+	margin: 1.15rem 0.5rem 0 !important;
+	color: var(--muted);
+	font-family: tokens.$font-mono, monospace;
+	font-size: 0.75rem;
+	line-height: 1.55;
 }
+
 @media (max-width: 900px) {
-	app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready,
-	app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--front,
+	app-hero-monitor .hero-monitor .hero-monitor__orb--one:not(.hero-monitor--front):not(.hero-monitor--front-ready):not(.hero-monitor--out-front) {
+		width: 240px !important;
+		height: 240px !important;
+		right: -0.5rem !important;
+	}
+	app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--front-ready,
+	app-hero-monitor .hero.monitor .hero.monitor__orb--one.hero-monitor--front,
 	app-hero-monitor .hero.monitor .hero-monitor__orb--one.hero-monitor--out-front {
 		width: min(88vw, 520px) !important;
 		height: min(88vw, 520px) !important;
 	}
 }
+
+.hero-monitor__chrome {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	height: 28px;
+	padding: 0 0.7rem;
+	background: color-mix(in srgb, var(--surface-2) 92%, #07111d);
+	border-bottom: 1px solid var(--line);
+	font: 600 0.58rem tokens.$font-mono, monospace;
+	color: var(--muted);
+}
+.hero-monitor__chrome > span {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+}
+.hero-monitor__chrome > span:first-child { background: #ff6b6b; }
+.hero-monitor__chrome > span:nth-child(2) { background: #ffd166; }
+.hero-monitor__chrome > span:nth-child(3) { background: #55d6be; }
+.hero-monitor__chrome > i { flex: 1; }
+.hero-monitor__chrome > b { font: inherit; color: var(--cyan); }
+.hero-monitor__heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	font: 600 0.58rem tokens.$font-mono, monospace;
+	color: var(--muted);
+}
+.hero-monitor__heading > span { display: flex; align-items: center; gap: 0.35rem; }
+.hero-monitor__heading i {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--lime);
+	box-shadow: 0 0 8px var(--lime);
+}
+.hero-monitor__heading small { font: inherit; color: var(--lime); }
+.hero-monitor__selector button.is-active,
+.hero-monitor__chart-switcher button.is-active {
+	border-color: color-mix(in srgb, var(--cyan) 72%, var(--line));
+	background: color-mix(in srgb, var(--cyan) 14%, var(--surface-2));
+	box-shadow: inset 3px 0 0 var(--cyan);
+	color: var(--ink);
+}
+.hero-monitor__selector button.is-active span { color: var(--ink); }
+.hero-monitor__chart-symbols .hero-monitor__temperature.is-active {
+	box-shadow: 0 0 0 1px #fff, 0 0 15px #ffb84d;
+}
+.hero-monitor__detail[data-transition='slide'] { animation: detail-slide 0.42s tokens.$ease-emphasized both; }
+.hero-monitor__detail[data-transition='flip'] { animation: detail-flip 0.48s tokens.$ease-emphasized both; }
+.hero-monitor__detail[data-transition='scan'] { animation: detail-scan 0.48s tokens.$ease-emphasized both; }
+@keyframes detail-slide { from { opacity: 0; transform: translateX(24px); } }
+@keyframes detail-flip { from { opacity: 0; transform: perspective(700px) rotateY(-18deg); } }
+@keyframes detail-scan { from { opacity: 0; clip-path: inset(0 100% 0 0); } }
+.hero-monitor__detail[data-effect='spectrum'] > div:first-child { animation: technology-spectrum 1.1s ease-in-out; }
+@keyframes technology-spectrum { 50% { filter: hue-rotate(170deg) saturate(1.8); } }
+
+@include meta.load-css('home-refinement');

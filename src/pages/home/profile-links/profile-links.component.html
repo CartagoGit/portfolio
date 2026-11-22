@@ -1,25 +1,74 @@
-<nav
-	class="profile-links"
-	aria-label="Public profiles and featured projects">
-	@for (link of links(); track link.href) {
-		<a
-			[href]="link.href"
-			target="_blank"
-			rel="noreferrer">
-			@if (link.imageSrc) {
-				<img
-					[src]="link.imageSrc"
-					alt="" />
-			} @else {
-				<svg
-					viewBox="0 0 24 24"
-					aria-hidden="true">
-					<path
-						[attr.d]="link.iconPath"
-						[attr.fill]="link.color ?? 'currentColor'" />
-				</svg>
+<div class="profile-links">
+	<section class="profile-links__section profile-links__section--platforms">
+		<p class="profile-links__label">Platforms & contact</p>
+		<nav
+			class="profile-links__list"
+			aria-label="Public profiles and deployment platforms">
+			@for (link of platformLinks(); track link.href) {
+				<a
+					class="profile-links__badge"
+					[href]="link.href"
+					(mouseenter)="showPreview(link)"
+					(mouseleave)="clearPreview()"
+					(focusin)="showPreview(link)"
+					(focusout)="clearPreview()"
+					target="_blank"
+					rel="noreferrer">
+					@if (link.imageSrc) {
+						<img
+							class="profile-links__icon"
+							[src]="link.imageSrc"
+							alt="" />
+					} @else {
+						<svg
+							class="profile-links__icon"
+							viewBox="0 0 24 24"
+							aria-hidden="true">
+							<path
+								[attr.d]="link.iconPath"
+								[attr.fill]="link.color ?? 'currentColor'" />
+						</svg>
+					}
+					<span>{{ link.label }}</span>
+				</a>
 			}
-			<span>{{ link.label }}</span>
-		</a>
+		</nav>
+	</section>
+	@if (projectLinks().length) {
+		<section class="profile-links__section profile-links__section--projects">
+			<p class="profile-links__label">Featured projects</p>
+			<nav
+				class="profile-links__list"
+				aria-label="Featured public projects">
+				@for (link of projectLinks(); track link.href) {
+					<a
+						class="profile-links__badge"
+						[href]="link.href"
+						(mouseenter)="showPreview(link)"
+						(mouseleave)="clearPreview()"
+						(focusin)="showPreview(link)"
+						(focusout)="clearPreview()"
+						target="_blank"
+						rel="noreferrer">
+						@if (link.imageSrc) {
+							<img
+								class="profile-links__icon"
+								[src]="link.imageSrc"
+								alt="" />
+						} @else {
+							<svg
+								class="profile-links__icon"
+								viewBox="0 0 24 24"
+								aria-hidden="true">
+								<path
+									[attr.d]="link.iconPath"
+									[attr.fill]="link.color ?? 'currentColor'" />
+							</svg>
+						}
+						<span>{{ link.label }}</span>
+					</a>
+				}
+			</nav>
+		</section>
 	}
-</nav>
+</div>

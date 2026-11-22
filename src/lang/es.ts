@@ -9,7 +9,7 @@ export const es: ITranslationMap = {
 	chrome: {
 		header: {
 			brand: 'Cartago',
-			navWork: 'Trabajo seleccionado',
+			navWork: 'Proyectos',
 			navLab: 'Laboratorio',
 			navAbout: 'Enfoque',
 			navKnowledge: 'Conocimientos',
@@ -93,7 +93,7 @@ export const es: ITranslationMap = {
 				'El producto responsive piensa en el siguiente dispositivo antes de que se convierta en reescritura.',
 		},
 		work: {
-			eyebrow: '01 / Trabajo seleccionado',
+			eyebrow: '01 / Proyectos',
 			titleLead: 'Trabajo destacado, no',
 			titleEmphasis: 'relleno.',
 			titleTail: '',

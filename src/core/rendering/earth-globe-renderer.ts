@@ -60,7 +60,7 @@ export function renderEarthFrame(args: {
 	frame: IEarthFrame;
 }): void {
 	const { canvas, image, frame } = args;
-	const deviceScale = Math.min(window.devicePixelRatio || 1, 2.4);
+	const deviceScale = Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.8);
 	// Use the rendered CSS box (post-transform) so the WebGL sphere follows
 	// width/height transitions, not the unscaled clientWidth.
 	const rect = canvas.getBoundingClientRect();
@@ -69,8 +69,8 @@ export function renderEarthFrame(args: {
 		Math.round(rect.width || canvas.clientWidth || 300)
 	);
 	const size = Math.min(
-		1024,
-		Math.max(320, Math.round(cssSize * deviceScale))
+		1536,
+		Math.max(512, Math.round(cssSize * deviceScale))
 	);
 	if (canvas.width !== size || canvas.height !== size) {
 		canvas.width = size;

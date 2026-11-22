@@ -1,38 +1,87 @@
 import { computed, signal } from '@angular/core';
 import type { IEarthDepth } from '../../../domain/types';
 
+const DEPTH_TRANSITION_MS = 560;
+const PAINT_FALLBACK_MS = 50;
+
 export class EarthDepthFacade {
 	readonly state = signal<IEarthDepth>('behind');
 	readonly blocksMonitor = computed(() => this.state() !== 'behind');
+	private _generation = 0;
+	private _transitionTimer?: number;
+	private _paintFrame?: number;
+	private _paintFallback?: number;
 
 	showInFront(): void {
-		// Idempotent: snap to a fresh transition chain regardless of the current
-		// state. Without this, any hover/move during an in-flight transition is
-		// silently dropped.
 		if (this.state() === 'front') return;
+		const generation = this._restartTransition();
 		this.state.set('out-behind');
-		window.setTimeout(() => {
-			if (this.state() !== 'out-behind') return;
+		this._transitionTimer = window.setTimeout(() => {
+			if (generation !== this._generation) return;
 			this.state.set('front-ready');
-			requestAnimationFrame(() => this.state.set('front'));
-		}, 140);
+			this._completeAfterPaint({
+				generation,
+				expected: 'front-ready',
+				complete: 'front',
+			});
+		}, DEPTH_TRANSITION_MS);
 	}
 
 	returnBehind(target?: EventTarget | null): void {
-		// Only return when the orb is fully on top; the brief grace transitions
-		// are owned by the orchestrator (typically `_cancelReturn`) and we must
-		// not interrupt them with a competing return.
-		if (this.state() !== 'front') return;
+		if (this.state() === 'behind') return;
 		if (
 			target instanceof HTMLElement &&
 			target.closest('.hero-monitor__motion-control')
 		)
 			return;
+		const generation = this._restartTransition();
 		this.state.set('out-front');
-		window.setTimeout(() => {
-			if (this.state() !== 'out-front') return;
+		this._transitionTimer = window.setTimeout(() => {
+			if (generation !== this._generation) return;
 			this.state.set('behind-ready');
-			requestAnimationFrame(() => this.state.set('behind'));
-		}, 140);
+			this._completeAfterPaint({
+				generation,
+				expected: 'behind-ready',
+				complete: 'behind',
+			});
+		}, DEPTH_TRANSITION_MS);
+	}
+
+	destroy(): void {
+		this._restartTransition();
+	}
+
+	private _restartTransition(): number {
+		this._generation += 1;
+		if (this._transitionTimer !== undefined)
+			window.clearTimeout(this._transitionTimer);
+		if (this._paintFrame !== undefined)
+			cancelAnimationFrame(this._paintFrame);
+		if (this._paintFallback !== undefined)
+			window.clearTimeout(this._paintFallback);
+		this._transitionTimer = undefined;
+		this._paintFrame = undefined;
+		this._paintFallback = undefined;
+		return this._generation;
+	}
+
+	private _completeAfterPaint(transition: {
+		generation: number;
+		expected: Exclude<IEarthDepth, 'behind' | 'front'>;
+		complete: 'behind' | 'front';
+	}): void {
+		const complete = (): void => {
+			if (transition.generation !== this._generation) return;
+			if (this.state() !== transition.expected) return;
+			this.state.set(transition.complete);
+			if (this._paintFrame !== undefined)
+				cancelAnimationFrame(this._paintFrame);
+			if (this._paintFallback !== undefined)
+				window.clearTimeout(this._paintFallback);
+			this._paintFrame = undefined;
+			this._paintFallback = undefined;
+		};
+		this._paintFrame = requestAnimationFrame(complete);
+		this._paintFallback = window.setTimeout(complete, PAINT_FALLBACK_MS);
 	}
 }

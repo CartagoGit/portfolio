@@ -40,16 +40,14 @@ describe('TranslateService', () => {
 	it('defaults to English when no persisted locale exists', () => {
 		const service = TestBed.inject(TranslateService);
 		expect(service.locale()).toBe('en');
-		expect(service.instant('chrome.header.navWork')).toBe('Selected work');
+		expect(service.instant('chrome.header.navWork')).toBe('Projects');
 	});
 
 	it('returns the Spanish string when the locale flips to es', () => {
 		const service = TestBed.inject(TranslateService);
 		service.setLocale('es');
 		expect(service.locale()).toBe('es');
-		expect(service.instant('chrome.header.navWork')).toBe(
-			'Trabajo seleccionado'
-		);
+		expect(service.instant('chrome.header.navWork')).toBe('Proyectos');
 	});
 
 	it('falls back to English for keys missing in the active locale', () => {
@@ -68,9 +66,9 @@ describe('TranslateService', () => {
 	it('exposes a signal-based t() that updates on locale change', () => {
 		const service = TestBed.inject(TranslateService);
 		const signal = service.t('chrome.header.navWork');
-		expect(signal()).toBe('Selected work');
+		expect(signal()).toBe('Projects');
 		service.setLocale('es');
-		expect(signal()).toBe('Trabajo seleccionado');
+		expect(signal()).toBe('Proyectos');
 	});
 
 	it('persists the locale to localStorage on setLocale', () => {

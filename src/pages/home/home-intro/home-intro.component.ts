@@ -11,6 +11,7 @@ import type {
 	IPageComponentId,
 	IPublicLink,
 	ITechnology,
+	IMonitorPreview,
 } from '../../../domain/types';
 import { ProfileLinksComponent } from '../profile-links/profile-links.component';
 import { TechnologyMarqueeComponent } from '../technology-marquee/technology-marquee.component';
@@ -32,4 +33,5 @@ export class HomeIntroComponent {
 	readonly technologies = input.required<readonly ITechnology[]>();
 	readonly links = input.required<readonly IPublicLink[]>();
 	readonly navigate = output<IPageComponentId>();
+	readonly preview = output<IMonitorPreview | null>();
 }

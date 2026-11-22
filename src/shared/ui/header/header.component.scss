@@ -4,6 +4,34 @@
 
 :host {
 	display: block;
+	position: fixed;
+	inset: 0 0 auto;
+	z-index: 140;
+	height: 88px;
+	view-transition-name: shell-header;
+	transition: background 0.25s ease, box-shadow 0.25s ease;
+	background: transparent;
+
+	&.header-host--scrolled {
+		background: color-mix(in srgb, var(--canvas) 96%, transparent);
+		backdrop-filter: blur(30px) saturate(165%);
+		-webkit-backdrop-filter: blur(30px) saturate(165%);
+		box-shadow: 0 12px 32px color-mix(in srgb, var(--canvas) 62%, transparent);
+	}
+}
+@media (max-width: 900px) {
+	:host {
+		position: fixed;
+		inset: 0 0 auto;
+		height: 72px;
+		background: color-mix(in srgb, var(--canvas) 96%, transparent);
+		backdrop-filter: blur(24px) saturate(145%);
+		-webkit-backdrop-filter: blur(24px) saturate(145%);
+		border-bottom: 1px solid color-mix(in srgb, var(--line) 90%, transparent);
+	}
+	.header {
+		height: 72px;
+	}
 }
 
 .header {
@@ -168,6 +196,7 @@
 @media (max-width: 900px) {
 	.header {
 		width: calc(100% - 1.7rem);
+		height: 72px;
 		&__menu {
 			display: grid;
 			gap: 4px;

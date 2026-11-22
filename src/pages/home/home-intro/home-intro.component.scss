@@ -43,17 +43,17 @@
 	}
 	&__role {
 		max-width: 520px;
-		margin: 0.85rem 0 var(--space-xl);
+		margin: 0.85rem 0 1rem;
 		font-family: tokens.$font-body;
-		font-size: clamp(0.92rem, 1.1vw, 1rem);
+		font-size: clamp(1rem, 1.2vw, 1.12rem);
 		font-weight: 700;
-		line-height: 1.35;
+		line-height: 1.42;
 	}
 	&__description {
-		max-width: 510px;
-		color: var(--muted);
-		font-size: 0.78rem;
-		line-height: var(--line-normal);
+		max-width: 540px;
+		color: color-mix(in srgb, var(--muted) 88%, var(--ink));
+		font-size: 0.92rem;
+		line-height: 1.65;
 	}
 	&__actions {
 		display: flex;
@@ -117,5 +117,11 @@
 	.home-intro__mark {
 		width: 3.5rem;
 		height: 3.5rem;
+	}
+}
+
+@media (max-width: 640px) {
+	.home-intro__description {
+		font-size: 0.88rem;
 	}
 }

@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	ViewEncapsulation,
+	signal,
 } from '@angular/core';
 import { ContactPageComponent } from '../pages/contact/contact.page';
 import { DockerPageComponent } from '../pages/docker/docker.page';
@@ -16,6 +17,7 @@ import { ShellFacade } from '../core/platform/shell.facade';
 import { FooterComponent } from '../shared/ui/footer/footer.component';
 import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
+import type { IMonitorPreview } from '../domain/types';
 
 @Component({
 	selector: 'app-root',
@@ -47,4 +49,9 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 })
 export class PageComponent {
 	readonly shell = new ShellFacade();
+	readonly monitorPreview = signal<IMonitorPreview | null>(null);
+
+	setMonitorPreview(preview: IMonitorPreview | null): void {
+		this.monitorPreview.set(preview);
+	}
 }

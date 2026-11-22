@@ -4,35 +4,95 @@
 	display: block;
 }
 .profile-links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-xl);
-	margin-top: var(--space-2);
-	a {
+	display: grid;
+	gap: 0.65rem;
+	margin-top: 0.65rem;
+
+	&__section {
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	&__label {
+		margin: 0;
+		color: var(--muted);
+		@include tokens.mono-mixed(0.55rem);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+
+	&__badge {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.38rem;
-		padding: 0.38rem var(--space-2);
-		border: var(--border-thin) solid var(--line);
+		gap: 0.45rem;
+		padding: 0.3rem 0.68rem;
+		border: var(--border-thin) solid color-mix(in srgb, var(--line) 82%, transparent);
 		border-radius: var(--radius-lg);
-		color: var(--muted);
-		@include tokens.mono-mixed(0.58rem);
+		background: color-mix(in srgb, var(--surface) 82%, transparent);
+		backdrop-filter: blur(10px);
+		color: color-mix(in srgb, var(--ink) 82%, var(--muted));
+		@include tokens.mono-mixed(0.74rem);
+		line-height: 1;
 		text-decoration: none;
-		transition:
-			color 0.2s ease,
-			border-color 0.2s ease,
-			transform 0.2s ease;
+		transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--cyan);
+			border-color: var(--cyan);
+			transform: translateY(-2px);
+		}
 	}
-	a:hover {
-		color: var(--cyan);
-		border-color: var(--cyan);
-		transform: translateY(-2px);
-	}
-	svg,
-	img {
-		width: 15px;
-		height: 15px;
+
+	&__icon {
+		width: 19px;
+		height: 19px;
 		flex: none;
 		object-fit: contain;
+	}
+}
+
+:host(.profile-links-host--compact) {
+	.profile-links {
+		margin: 0;
+
+		&__section {
+			display: block;
+		}
+
+		&__label {
+			display: none;
+		}
+
+		&__list {
+			flex-wrap: nowrap;
+			gap: 0.3rem;
+		}
+	}
+}
+
+@media (max-width: 640px) {
+	:host(.profile-links-host--compact) .profile-links {
+		&__badge {
+			width: 34px;
+			height: 34px;
+			justify-content: center;
+			padding: 0;
+			border-radius: 10px;
+
+			span {
+				display: none;
+			}
+		}
+		&__icon {
+			width: 20px;
+			height: 20px;
+		}
 	}
 }

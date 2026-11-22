@@ -22,7 +22,7 @@
 	min-height: 100dvh;
 	overflow-x: clip;
 	padding-top: 88px;
-	padding-bottom: 78px;
+	padding-bottom: 51px;
 	background:
 		radial-gradient(circle at 80% 0, #0a2d5738, transparent 28%),
 		var(--canvas);
@@ -94,6 +94,7 @@
 
 @media (max-width: 900px) {
 	.portfolio {
+		padding-top: 72px;
 		padding-bottom: 62px;
 	}
 	.hero {
@@ -102,5 +103,18 @@
 		width: min(100%, calc(100% - 1.7rem));
 		min-height: 0;
 		padding: 2.5rem 0 4rem;
+	}
+}
+
+@media (max-width: 1180px) and (min-width: 901px) {
+	.hero {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 3rem;
+		width: min(920px, calc(100% - 3rem));
+		padding-bottom: 4rem;
+	}
+	.hero > app-hero-monitor {
+		width: min(760px, 100%);
+		justify-self: center;
 	}
 }
