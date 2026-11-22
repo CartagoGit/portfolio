@@ -66,29 +66,36 @@
 					alt="Cartago frontend engineer banner" />
 			</a>
 			<nav class="hero-monitor__platform-rail" aria-label="Cartago deployment platforms">
-				@for (link of platformLinks; track link.href) {
-					<a
-						[href]="link.href"
-						(click)="$event.preventDefault(); showLinkPreview(link)"
-						(mouseenter)="showLinkPreview(link)"
-						(focusin)="showLinkPreview(link)"
-						target="_blank"
-						rel="noreferrer"
-						[attr.aria-label]="link.label">
-						@if (link.imageSrc) {
-							<img [src]="link.imageSrc" alt="" />
-						} @else {
-							<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" /></svg>
-						}
-					</a>
-				}
-				<button
-					class="hero-monitor__technology-toggle"
-					type="button"
-					[class.is-active]="activeSection() === 'technologies'"
-					(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
-					{{ 'pages.home.monitorTechnologies' | translate }}
-				</button>
+				<div class="hero-monitor__platform-row">
+					@for (link of platformLinks; track link.href) {
+						<a
+							[href]="link.href"
+							(click)="$event.preventDefault(); showLinkPreview(link)"
+							(mouseenter)="showLinkPreview(link)"
+							(focusin)="showLinkPreview(link)"
+							target="_blank"
+							rel="noreferrer"
+							[attr.aria-label]="link.label">
+							@if (link.imageSrc) {
+								<img [src]="link.imageSrc" alt="" />
+							} @else {
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" /></svg>
+							}
+						</a>
+					}
+					<button
+						class="hero-monitor__technology-toggle"
+						type="button"
+						[class.is-active]="activeSection() === 'technologies'"
+						(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
+						{{ 'pages.home.monitorTechnologies' | translate }}
+					</button>
+				</div>
+				<div class="hero-monitor__console-effects" aria-label="Console effects">
+					@for (consoleEffect of consoleEffects; track consoleEffect.id) {
+						<button type="button" (click)="triggerConsoleEffect(consoleEffect.id)" [attr.aria-label]="consoleEffect.label">{{ consoleEffect.symbol }}</button>
+					}
+				</div>
 			</nav>
 		</div>
 		<div class="hero-monitor__body">
@@ -115,7 +122,7 @@
 					}
 				}
 			</div>
-			<div class="hero-monitor__canvas">
+			<div class="hero-monitor__canvas" [attr.data-console-effect]="consoleEffect()">
 				@if (activePreview(); as contextualPreview) {
 					@for (item of previewItems(); track item.label) {
 						<article class="hero-monitor__preview" [attr.data-effect]="effect()">
@@ -135,11 +142,6 @@
 								</div>
 							</div>
 							<div class="hero-monitor__preview-actions">
-								<div class="hero-monitor__preview-effects" aria-label="Preview effects">
-									@for (effectOption of effectOptions; track effectOption.id) {
-										<button type="button" (click)="hero.setEffect(effectOption.id)" [attr.aria-label]="effectOption.id">{{ effectOption.symbol }}</button>
-									}
-								</div>
 								@if (item.href) {
 									<a [href]="item.href" target="_blank" rel="noreferrer">{{ 'pages.home.monitorOpen' | translate }}</a>
 								}

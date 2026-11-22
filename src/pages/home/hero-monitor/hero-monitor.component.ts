@@ -121,6 +121,16 @@ export class HeroMonitorComponent implements OnDestroy {
 	];
 
 	readonly platformLinks = PUBLIC_LINKS.filter((link) => link.group === 'platform');
+	readonly consoleEffects = [
+		{ id: 'palette', symbol: '◉', label: 'Cycle colour' },
+		{ id: 'shake', symbol: '≈', label: 'Shake' },
+		{ id: 'glitch', symbol: '⌘', label: 'Glitch' },
+		{ id: 'float', symbol: '↟', label: 'Float' },
+		{ id: 'blur', symbol: '◌', label: 'Blur pulse' },
+		{ id: 'pulse', symbol: '✦', label: 'Glow pulse' },
+		{ id: 'spectrum', symbol: '◈', label: 'Spectrum' },
+	] as const;
+	readonly consoleEffect = signal('none');
 
 	ngOnDestroy(): void {
 		this.hero.destroy();
@@ -321,5 +331,15 @@ export class HeroMonitorComponent implements OnDestroy {
 				? 'pages.home.monitorTechnologies'
 				: 'pages.home.monitorPlatforms';
 		return this._translate.instant(key);
+	}
+
+	triggerConsoleEffect(id: string): void {
+		if (id === 'palette') {
+			this.hero.setPalette(this.palette() === 'ocean' ? 'heat' : this.palette() === 'heat' ? 'lime' : 'ocean');
+			return;
+		}
+		this.consoleEffect.set('none');
+		window.setTimeout(() => this.consoleEffect.set(id), 20);
+		this.consoleEffect.set(id);
 	}
 }
