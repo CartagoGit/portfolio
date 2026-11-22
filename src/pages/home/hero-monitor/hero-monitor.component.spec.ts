@@ -7,9 +7,14 @@ describe('HeroMonitorComponent', () => {
 			imports: [HeroMonitorComponent],
 		}).compileComponents();
 		const fixture = TestBed.createComponent(HeroMonitorComponent);
+		fixture.componentRef.setInput('locale', 'es');
+		fixture.componentRef.setInput('technologies', []);
 		fixture.detectChanges();
 		expect(
 			fixture.nativeElement.querySelector('.hero-monitor__interface')
+		).toBeTruthy();
+		expect(
+			fixture.nativeElement.querySelector('.hero-monitor__destinations')
 		).toBeTruthy();
 	});
 });

@@ -78,6 +78,11 @@ export interface ITranslationMap {
 			monitorProjects: string;
 			monitorTechnologies: string;
 			monitorPlatforms: string;
+			monitorDestinations: string;
+			monitorRepository: string;
+			monitorDocumentation: string;
+			monitorWebsite: string;
+			monitorOpenSource: string;
 			monitorChoose: string;
 			monitorOpen: string;
 			monitorProjectStatus: string;

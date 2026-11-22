@@ -72,6 +72,7 @@
 					@for (link of platformLinks; track link.href) {
 						<a
 							[href]="link.href"
+							[class.is-active]="activePreview()?.label === link.label"
 							(click)="$event.preventDefault(); showLinkPreview(link)"
 							(mouseenter)="showLinkPreview(link)"
 							(focusin)="showLinkPreview(link)"
@@ -107,7 +108,7 @@
 				aria-label="Console item selection">
 				@if (activeSection() === 'projects') {
 					@for (panel of panels; track panel.id) {
-						<button type="button" [class.is-active]="activePanel() === panel.id" (click)="previewProject(panel.id)">
+						<button type="button" [class.is-active]="activePreview()?.label === panel.label" (click)="previewProject(panel.id)">
 							@if (panel.iconAsset) {
 								<img class="core-icon" [src]="panel.iconAsset" alt="" />
 							} @else {
@@ -118,7 +119,7 @@
 					}
 				} @else if (activeSection() === 'technologies') {
 					@for (technology of technologies(); track technology.label) {
-						<button type="button" (click)="previewTechnology(technology, $event)">
+						<button type="button" [class.is-active]="activePreview()?.label === technology.label" (click)="previewTechnology(technology, $event)">
 							<svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg>
 							<span>{{ technology.label }}</span>
 						</button>
@@ -126,135 +127,170 @@
 				}
 			</div>
 			<div class="hero-monitor__canvas" [attr.data-console-effect]="consoleEffect()">
-				@if (activePreview(); as contextualPreview) {
-					@for (item of previewItems(); track item.label) {
-						<article class="hero-monitor__preview" [attr.data-effect]="effect()">
-							<div class="hero-monitor__preview-copy">
-								<div class="hero-monitor__preview-title">
-									@if (item.imageSrc) {
-										<img [src]="item.imageSrc" alt="" />
-									} @else if (item.iconPath) {
-										<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="item.iconPath" [attr.fill]="item.color ?? 'currentColor'" /></svg>
-									}
-									<div><p>{{ previewKindLabel(item.kind) }}</p><h3>{{ item.label }}</h3></div>
+				<div class="hero-monitor__screen">
+					@if (activePreview(); as contextualPreview) {
+						@for (item of previewItems(); track item.label) {
+							<article class="hero-monitor__preview" [attr.data-effect]="effect()">
+								<div class="hero-monitor__preview-copy">
+									<div class="hero-monitor__preview-meta">
+										<p>{{ previewKindLabel(item.kind) }}</p>
+										<span>{{ item.status }}</span>
+									</div>
+									<div class="hero-monitor__preview-title">
+										<div class="hero-monitor__preview-icon" [style.--preview-accent]="item.color ?? 'var(--cyan)'">
+											@if (item.imageSrc) {
+												<img [src]="item.imageSrc" alt="" />
+											} @else if (item.iconPath) {
+												<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="item.iconPath" [attr.fill]="item.color ?? 'currentColor'" /></svg>
+											}
+										</div>
+										<h3>{{ item.label }}</h3>
+									</div>
+									<p class="hero-monitor__preview-detail">{{ item.detail }}</p>
+									<div class="hero-monitor__preview-stack" aria-label="Related technologies">
+										@for (technology of item.stack; track technology) { <b>{{ technology }}</b> }
+									</div>
 								</div>
-								<span>{{ item.status }}</span>
-								<p>{{ item.detail }}</p>
-								<div class="hero-monitor__preview-stack">
-									@for (technology of item.stack; track technology) { <b>{{ technology }}</b> }
-								</div>
-							</div>
-							<div class="hero-monitor__preview-actions">
-								@if (item.href) {
-									<a [href]="item.href" target="_blank" rel="noreferrer">{{ 'pages.home.monitorOpen' | translate }}</a>
-								}
-							</div>
-						</article>
-					}
-				} @else {
-					<section
-						class="hero-monitor__dashboard"
-						[class.panel-hidden]="selectedPanel() || panelChanging()"
-						[class.swap-hidden]="panelChanging()">
-						<div
-							class="hero-monitor__chart-switcher"
-							aria-label="Dashboard chart type">
-							@for (chart of chartOptions; track chart.id) {
-								<button
-									type="button"
-									[class.is-active]="chartType() === chart.id"
-									(click)="hero.setChart(chart.id)">
-									{{ chart.label }}
-								</button>
-							}
-						</div>
-						<p class="hero-monitor__caption">
-							{{ 'pages.home.monitorChoose' | translate }}
-						</p>
-						<div class="hero-monitor__chart-workspace">
+							</article>
+						}
+					} @else {
+						<section
+							class="hero-monitor__dashboard"
+							[class.panel-hidden]="selectedPanel() || panelChanging()"
+							[class.swap-hidden]="panelChanging()">
 							<div
-								class="hero-monitor__chart"
-								[attr.data-chart]="chartType()"
-								[attr.data-palette]="palette()">
-								@for (bar of chartBars(); track $index) {
-									<span
-										[style.height.%]="bar"
-										[style.background]="
-											hero.gradient(bar)
-										"></span>
-								}
-								<svg
-									viewBox="0 0 360 120"
-									preserveAspectRatio="none"
-									aria-label="Portfolio dashboard chart">
-									<path [attr.d]="chartPath()" />
-								</svg>
-								<em>product signal / 2026</em>
-							</div>
-							<div
-								class="hero-monitor__chart-symbols"
-								aria-label="Visual data controls">
-								@for (symbol of ['⌁', '◌', '✦']; track symbol) {
+								class="hero-monitor__chart-switcher"
+								aria-label="Dashboard chart type">
+								@for (chart of chartOptions; track chart.id) {
 									<button
 										type="button"
-										(click)="hero.randomizeChart()"
-										aria-label="Generate new demo values">
-										{{ symbol }}
+										[class.is-active]="chartType() === chart.id"
+										(click)="hero.setChart(chart.id)">
+										{{ chart.label }}
 									</button>
 								}
-								<button
-									class="hero-monitor__temperature"
-									type="button"
-									[class.is-active]="palette() === 'heat'"
-									(click)="hero.setTemperature()"
-									aria-label="Apply heat palette">
-									◉
-								</button>
 							</div>
-						</div>
-					</section>
-				}
-				@if (selectedPanel(); as panel) {
-					<article
-						class="hero-monitor__detail"
-						[attr.data-effect]="effect()"
-						[attr.data-transition]="panelTransition()">
-						<div>
-							@if (panel.iconAsset) {
-								<img
-									class="core-icon"
-									[src]="panel.iconAsset"
-									alt="" />
-							} @else {
-								<svg
-									class="core-icon"
-									viewBox="0 0 24 24"
-									aria-hidden="true">
-									<path
-										[attr.d]="panel.iconPath"
-										[attr.fill]="panel.color" />
-								</svg>
-							}
-							<h3>{{ panel.label }}</h3>
-							<p class="hero-monitor__project-status">{{ panel.status }}</p>
-							<p>{{ panel.detail }}</p>
-							<div class="hero-monitor__stack" aria-label="Project technologies">
-								@for (technology of panel.stack; track technology) {
-									<span>{{ technology }}</span>
+							<p class="hero-monitor__caption">
+								{{ 'pages.home.monitorChoose' | translate }}
+							</p>
+							<div class="hero-monitor__chart-workspace">
+								<div
+									class="hero-monitor__chart"
+									[attr.data-chart]="chartType()"
+									[attr.data-palette]="palette()">
+									@for (bar of chartBars(); track $index) {
+										<span
+											[style.height.%]="bar"
+											[style.background]="
+												hero.gradient(bar)
+											"></span>
+									}
+									<svg
+										viewBox="0 0 360 120"
+										preserveAspectRatio="none"
+										aria-label="Portfolio dashboard chart">
+										<path [attr.d]="chartPath()" />
+									</svg>
+									<em>product signal / 2026</em>
+								</div>
+								<div
+									class="hero-monitor__chart-symbols"
+									aria-label="Visual data controls">
+									@for (symbol of ['⌁', '◌', '✦']; track symbol) {
+										<button
+											type="button"
+											(click)="hero.randomizeChart()"
+											aria-label="Generate new demo values">
+											{{ symbol }}
+										</button>
+									}
+									<button
+										class="hero-monitor__temperature"
+										type="button"
+										[class.is-active]="palette() === 'heat'"
+										(click)="hero.setTemperature()"
+										aria-label="Apply heat palette">
+										◉
+									</button>
+								</div>
+							</div>
+						</section>
+					}
+					@if (selectedPanel(); as panel) {
+						<article
+							class="hero-monitor__detail"
+							[attr.data-effect]="effect()"
+							[attr.data-transition]="panelTransition()">
+							<div>
+								@if (panel.iconAsset) {
+									<img
+										class="core-icon"
+										[src]="panel.iconAsset"
+										alt="" />
+								} @else {
+									<svg
+										class="core-icon"
+										viewBox="0 0 24 24"
+										aria-hidden="true">
+										<path
+											[attr.d]="panel.iconPath"
+											[attr.fill]="panel.color" />
+									</svg>
 								}
+								<h3>{{ panel.label }}</h3>
+								<p class="hero-monitor__project-status">{{ panel.status }}</p>
+								<p>{{ panel.detail }}</p>
+								<div class="hero-monitor__stack" aria-label="Project technologies">
+									@for (technology of panel.stack; track technology) {
+										<span>{{ technology }}</span>
+									}
+								</div>
 							</div>
-							@if (panel.href) {
-								<a [href]="panel.href" target="_blank" rel="noreferrer" class="hero-monitor__project-link">Open public project ↗</a>
-							}
-						</div>
-						<button
-							class="hero-monitor__retry"
-							type="button"
-							(click)="hero.clearPanel()">
-							Retry ↻
-						</button>
-					</article>
-				}
+							<button
+								class="hero-monitor__retry"
+								type="button"
+								(click)="hero.clearPanel()">
+								Retry ↻
+							</button>
+						</article>
+					}
+				</div>
+				<aside
+					class="hero-monitor__destinations"
+					[attr.aria-label]="'pages.home.monitorDestinations' | translate">
+					<header>
+						<span>{{ 'pages.home.monitorDestinations' | translate }}</span>
+						<strong>{{ activePreview()?.label ?? 'GitHub' }}</strong>
+					</header>
+					@if (activePreview(); as destinationPreview) {
+						@if (destinationPreview.href; as destinationHref) {
+							<a
+								class="hero-monitor__destination-primary"
+								[href]="destinationHref"
+								target="_blank"
+								rel="noreferrer">
+								<span>{{ previewDestinationLabel(destinationPreview) }}</span>
+								<b>{{ destinationPreview.label }}</b>
+								<i aria-hidden="true">↗</i>
+							</a>
+						}
+					} @else {
+						<a
+							class="hero-monitor__destination-primary"
+							href="https://github.com/CartagoGit"
+							target="_blank"
+							rel="noreferrer">
+							<span>{{ 'pages.home.monitorRepository' | translate }}</span>
+							<b>GitHub</b>
+							<i aria-hidden="true">↗</i>
+						</a>
+					}
+					<nav class="hero-monitor__destination-links" [attr.aria-label]="'pages.home.monitorDestinations' | translate">
+						<a [href]="'/' + locale() + '/work'">{{ 'chrome.header.navWork' | translate }} <span>→</span></a>
+						<a [href]="'/' + locale() + '/demos'">{{ 'chrome.header.navDemos' | translate }} <span>→</span></a>
+						<a [href]="'/' + locale() + '/contact'">{{ 'chrome.header.navContact' | translate }} <span>→</span></a>
+					</nav>
+				</aside>
 			</div>
 		</div>
 	</div>

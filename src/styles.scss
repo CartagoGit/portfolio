@@ -108,6 +108,44 @@ body {
 :root[data-theme='mono'] {
 	color-scheme: light;
 }
+
+/* Theme-aware scrollbars are shared by every route and nested scroll region. */
+:root {
+	--scrollbar-track: color-mix(in srgb, var(--canvas) 82%, var(--surface-2));
+	--scrollbar-thumb: color-mix(in srgb, var(--cyan) 52%, var(--line));
+	--scrollbar-thumb-hover: color-mix(in srgb, var(--cyan) 82%, var(--ink));
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	border-radius: 999px;
+	background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+	border: 2px solid var(--scrollbar-track);
+	border-radius: 999px;
+	background: linear-gradient(180deg, var(--scrollbar-thumb), color-mix(in srgb, var(--scrollbar-thumb) 68%, var(--surface-2)));
+	background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+	background: var(--scrollbar-track);
+}
+
 button,
 a,
 input,

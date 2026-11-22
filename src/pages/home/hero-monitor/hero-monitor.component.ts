@@ -252,7 +252,9 @@ export class HeroMonitorComponent implements OnDestroy {
 			detail: link.detail ?? `Open ${link.label}.`,
 			href: link.href,
 			status: link.group === 'platform' ? 'Public platform' : 'Featured project',
-			stack: link.group === 'platform' ? ['Public profile'] : ['Open source'],
+			stack: link.group === 'platform'
+				? [this._translate.instant('pages.home.monitorPublicProfile')]
+				: [this._translate.instant('pages.home.monitorOpenSource')],
 			imageSrc: link.imageSrc,
 			iconPath: link.iconPath,
 			color: link.color,
@@ -331,6 +333,16 @@ export class HeroMonitorComponent implements OnDestroy {
 				? 'pages.home.monitorTechnologies'
 				: 'pages.home.monitorPlatforms';
 		return this._translate.instant(key);
+	}
+
+	previewDestinationLabel(preview: IMonitorPreview): string {
+		if (preview.kind === 'platform')
+			return this._translate.instant('pages.home.monitorPublicProfile');
+		if (preview.href?.includes('github.com'))
+			return this._translate.instant('pages.home.monitorRepository');
+		if (preview.kind === 'technology')
+			return this._translate.instant('pages.home.monitorDocumentation');
+		return this._translate.instant('pages.home.monitorWebsite');
 	}
 
 	triggerConsoleEffect(id: string): void {
