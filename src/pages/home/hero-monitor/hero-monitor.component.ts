@@ -55,7 +55,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	readonly technologies = input.required<readonly ITechnology[]>();
 	readonly preview = input<IMonitorPreview | null>(null);
 	readonly activePreview = signal<IMonitorPreview | null>(null);
-	readonly activeSection = signal<'projects' | 'technologies' | 'platforms'>('projects');
+	readonly activeSection = signal<'projects' | 'technologies'>('projects');
 	readonly previewItems = computed(() => {
 		const active = this.activePreview();
 		if (!active) return [];
@@ -150,6 +150,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	leaveMonitor(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
 		this._monitorHovered = false;
+		if (this.activePreview()) return;
 		if (this._monitorOpening) return;
 		if (this._monitorCloseTimer !== undefined)
 			window.clearTimeout(this._monitorCloseTimer);
@@ -248,9 +249,10 @@ export class HeroMonitorComponent implements OnDestroy {
 		});
 	}
 
-	selectSection(section: 'projects' | 'technologies' | 'platforms'): void {
+	selectSection(section: 'projects' | 'technologies'): void {
 		this.activeSection.set(section);
-		if (section !== 'projects') this.hero.clearPanel();
+		this.activePreview.set(null);
+		if (section === 'technologies') this.hero.clearPanel();
 	}
 
 	previewTechnology(technology: ITechnology, event?: Event): void {

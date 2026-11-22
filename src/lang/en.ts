@@ -90,6 +90,8 @@ export const en: ITranslationMap = {
 			monitorPlatformDetail: '{label} is a public destination for my work, releases, source or direct professional contact.',
 			monitorTechnologyDetail: '{label} is part of the frontend and delivery toolkit used to build, test and ship these projects.',
 			monitorPublicProfile: 'Public profile',
+			monitorNoteLead: 'Built with explicit state,',
+			monitorNoteTail: 'progressive enhancement and care.',
 			telemetryProductLabel: 'Product signal',
 			telemetryProductTitle: 'A dashboard should reveal a decision.',
 			telemetryProductValueLabel: 'workflow clarity',

@@ -86,6 +86,8 @@ export interface ITranslationMap {
 			monitorPlatformDetail: string;
 			monitorTechnologyDetail: string;
 			monitorPublicProfile: string;
+			monitorNoteLead: string;
+			monitorNoteTail: string;
 			telemetryProductLabel: string;
 			telemetryProductTitle: string;
 			telemetryProductValueLabel: string;

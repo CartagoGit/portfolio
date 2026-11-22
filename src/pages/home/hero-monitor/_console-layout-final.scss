@@ -1,0 +1,64 @@
+@use 'tokens/index' as tokens;
+
+@media (min-width: 901px) {
+  app-hero-monitor .hero-monitor {
+    > .hero-monitor__interface {
+      width: 100% !important;
+      max-height: 560px;
+      min-height: 500px;
+      margin: 0;
+      transform-origin: 50% 50%;
+    }
+  }
+
+  app-hero-monitor .hero-monitor.hero-monitor--expanded > .hero-monitor__interface {
+    transform: perspective(1600px) rotateY(0) rotateX(0) rotateZ(0) !important;
+  }
+}
+
+app-hero-monitor .hero-monitor {
+  &__platform-rail {
+    height: 86px;
+    grid-template-columns: repeat(4, 42px);
+    grid-template-rows: 42px 30px;
+    align-content: center;
+    overflow: visible;
+  }
+
+  &__technology-toggle {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  &__header {
+    height: 86px;
+    min-height: 86px;
+    grid-template-columns: var(--earth-control-width) minmax(0, 1fr) auto;
+  }
+
+  &__banner-link,
+  &__banner {
+    height: 86px;
+    min-height: 86px;
+    max-height: 86px;
+  }
+
+  &__banner {
+    object-fit: contain !important;
+  }
+
+  &__selector {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 900px) {
+  app-hero-monitor .hero-monitor {
+    &__platform-rail {
+      height: auto;
+      grid-template-rows: auto auto;
+    }
+    &__header { height: auto; min-height: 0; }
+  }
+}

@@ -2,8 +2,8 @@
 	class="hero-monitor"
 	[class.hero-monitor--expanded]="monitorExpanded()"
 	[attr.data-preview]="activePreview()?.kind ?? null"
-	(mouseenter)="showPreview(preview())"
-	(mouseleave)="showPreview(null)"
+	(mouseenter)="enterMonitor()"
+	(mouseleave)="leaveMonitor()"
 	aria-label="Interactive showcase of Mario's public projects">
 	@if (earthDepth() !== 'behind') {
 		<button
@@ -33,8 +33,6 @@
 	<div class="hero-monitor__orb hero-monitor__orb--two"></div>
 	<div
 		class="hero-monitor__interface"
-		(mouseenter)="enterMonitor()"
-		(mouseleave)="leaveMonitor()"
 		[attr.data-chart]="chartType()"
 		(click)="handleShellInteraction($event)">
 		<div
@@ -84,13 +82,15 @@
 						}
 					</a>
 				}
+				<button
+					class="hero-monitor__technology-toggle"
+					type="button"
+					[class.is-active]="activeSection() === 'technologies'"
+					(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
+					{{ 'pages.home.monitorTechnologies' | translate }}
+				</button>
 			</nav>
 		</div>
-		<nav class="hero-monitor__section-tabs" aria-label="Console sections">
-			<button type="button" [class.is-active]="activeSection() === 'projects'" (click)="selectSection('projects')">{{ 'pages.home.monitorProjects' | translate }}</button>
-			<button type="button" [class.is-active]="activeSection() === 'technologies'" (click)="selectSection('technologies')">{{ 'pages.home.monitorTechnologies' | translate }}</button>
-			<button type="button" [class.is-active]="activeSection() === 'platforms'" (click)="selectSection('platforms')">{{ 'pages.home.monitorPlatforms' | translate }}</button>
-		</nav>
 		<div class="hero-monitor__body">
 			<div
 				class="hero-monitor__selector"
@@ -111,17 +111,6 @@
 						<button type="button" (click)="previewTechnology(technology, $event)">
 							<svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg>
 							<span>{{ technology.label }}</span>
-						</button>
-					}
-				} @else {
-					@for (link of platformLinks; track link.href) {
-						<button type="button" (click)="showLinkPreview(link)">
-							@if (link.imageSrc) {
-								<img class="core-icon" [src]="link.imageSrc" alt="" />
-							} @else {
-								<svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="link.iconPath" [attr.fill]="link.color ?? 'currentColor'" /></svg>
-							}
-							<span>{{ link.label }}</span>
 						</button>
 					}
 				}
@@ -272,8 +261,8 @@
 		</div>
 	</div>
 	<p class="hero-monitor__note">
-		Built with explicit state,
+		{{ 'pages.home.monitorNoteLead' | translate }}
 		<br />
-		progressive enhancement and care.
+		{{ 'pages.home.monitorNoteTail' | translate }}
 	</p>
 </div>

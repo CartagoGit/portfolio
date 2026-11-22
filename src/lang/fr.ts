@@ -46,6 +46,8 @@ export const fr: ITranslationMap = {
 			monitorPlatformDetail: '{label} est une destination publique pour mon travail, mes publications, mon code ou mon contact professionnel.',
 			monitorTechnologyDetail: '{label} fait partie du toolkit frontend et de livraison utilisé pour construire, tester et publier ces projets.',
 			monitorPublicProfile: 'Profil public',
+			monitorNoteLead: 'Construit avec un état explicite,',
+			monitorNoteTail: 'une amélioration progressive et du soin.',
 			panelOverviewDetail: 'Serveur MCP agnostique avec capacités explicites et workflows de plugins pour agents.',
 			panelWorkflowsDetail: 'Analyse statique de sources API avec exports Postman, Bruno, Insomnia, HAR, OpenAPI et cURL.',
 			panelQualityDetail: 'Bibliothèque TypeScript de modélisation, transformation et validation avec une couverture Vitest exhaustive.',
