@@ -185,6 +185,8 @@ export class ShellFacade {
 
 	private _applyPreferredLocale(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
+		const routeLocale = this._route.snapshot.paramMap.get('locale');
+		if (isLocale(routeLocale)) return;
 		const locale = detectPreferredLocale(this._document);
 		if (!locale || locale === this.locale()) return;
 		queueMicrotask(

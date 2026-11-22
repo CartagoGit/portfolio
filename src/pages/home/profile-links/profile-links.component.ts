@@ -5,10 +5,12 @@ import {
 	input,
 	output,
 } from '@angular/core';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { IMonitorPreview, IPublicLink } from '../../../domain/types';
 
 @Component({
 	selector: 'app-profile-links',
+	imports: [TranslatePipe],
 	templateUrl: './profile-links.component.html',
 	styleUrl: './profile-links.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +44,6 @@ export class ProfileLinksComponent {
 	}
 
 	clearPreview(): void {
-		// The contextual monitor intentionally keeps the last preview active.
+		this.preview.emit(null);
 	}
 }

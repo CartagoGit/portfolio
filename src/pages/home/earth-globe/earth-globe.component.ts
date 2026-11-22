@@ -13,7 +13,39 @@ import {
 	viewChild,
 } from '@angular/core';
 import { renderEarthFrame } from '../../../core/rendering/earth-globe-renderer';
-import type { IEarthDepth } from '../../../domain/types';
+import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types';
+
+type IQuaternion = readonly [x: number, y: number, z: number, w: number];
+
+const DEFAULT_IDLE_SPEED = 0.00016;
+const MAX_ANGULAR_SPEED = 0.0038;
+const TEXTURE_WIDTH = 4096;
+const TEXTURE_HEIGHT = 2048;
+
+function quaternionFromAxis(
+	axis: readonly [x: number, y: number, z: number],
+	angle: number
+): IQuaternion {
+	const half = angle / 2;
+	const sine = Math.sin(half);
+	return [axis[0] * sine, axis[1] * sine, axis[2] * sine, Math.cos(half)];
+}
+
+function multiplyQuaternion(left: IQuaternion, right: IQuaternion): IQuaternion {
+	const [lx, ly, lz, lw] = left;
+	const [rx, ry, rz, rw] = right;
+	return [
+		lw * rx + lx * rw + ly * rz - lz * ry,
+		lw * ry - lx * rz + ly * rw + lz * rx,
+		lw * rz + lx * ry - ly * rx + lz * rw,
+		lw * rw - lx * rx - ly * ry - lz * rz,
+	];
+}
+
+function normalizeQuaternion(value: IQuaternion): IQuaternion {
+	const length = Math.hypot(...value) || 1;
+	return [value[0] / length, value[1] / length, value[2] / length, value[3] / length];
+}
 
 @Component({
 	selector: 'app-earth-globe',
@@ -30,34 +62,26 @@ import type { IEarthDepth } from '../../../domain/types';
 export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	readonly depth = input.required<IEarthDepth>();
 	readonly preview = input(false);
+	readonly textureStyle = input<IEarthTextureStyle>('natural');
 	private readonly _document = inject(DOCUMENT);
 	private readonly _platformId = inject(PLATFORM_ID);
 	private _canvas?: HTMLCanvasElement;
 	private _texture?: HTMLCanvasElement;
 	private _frame?: number;
 	private _lastAt?: number;
-	private _angle = 0;
 	private _loading = false;
 	private _spinning = false;
-	private _idleSpeed = 0.00016;
-	private _dragVelocity = 0;
+	private _idleSpeed = DEFAULT_IDLE_SPEED;
+	private _rotation: IQuaternion = [0, 0, 0, 1];
+	private _angularVelocity = { x: 0, y: DEFAULT_IDLE_SPEED };
 	private _drag?: {
 		pointerId: number;
 		x: number;
 		y: number;
 		at: number;
+		radius: number;
 	};
 	readonly active = signal(false);
-	private readonly _motion = {
-		speed: 0.00016,
-		targetSpeed: 0.00016,
-		axisX: 0.13,
-		axisY: -0.95,
-		axisZ: 0.28,
-		targetAxisX: 0.13,
-		targetAxisY: -0.95,
-		targetAxisZ: 0.28,
-	};
 	readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 	private readonly _depthSync = effect(() => {
 		if (this.depth() === 'front-ready' || this.depth() === 'front' || this.preview())
@@ -68,8 +92,9 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 
 	ngAfterViewInit(): void {
 		this._canvas = this.canvasRef()?.nativeElement;
-		if (this._canvas) this._prepare();
+		if (this._spinning) this.start();
 	}
+
 	start(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
 		this._spinning = true;
@@ -78,6 +103,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		if (this._texture && this._frame === undefined)
 			this._animate(performance.now());
 	}
+
 	stop(): void {
 		this._spinning = false;
 		this.active.set(false);
@@ -85,14 +111,14 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this._frame = undefined;
 		this._lastAt = undefined;
 	}
+
 	changeMotion(): void {
-		const direction = this._motion.targetSpeed >= 0 ? -1 : 1;
-		this._idleSpeed =
-			direction * (0.00014 + Math.random() * 0.00032);
-		this._motion.targetSpeed = this._idleSpeed;
-		this._motion.targetAxisX = -0.78 + Math.random() * 1.56;
-		this._motion.targetAxisY = -0.84 + Math.random() * 1.68;
-		this._motion.targetAxisZ = -0.68 + Math.random() * 1.36;
+		const direction = this._idleSpeed >= 0 ? -1 : 1;
+		this._idleSpeed = direction * (0.00013 + Math.random() * 0.0002);
+		this._angularVelocity.x += -0.00015 + Math.random() * 0.0003;
+		this._angularVelocity.y = this._clampVelocity({
+			value: this._angularVelocity.y * 0.45 + this._idleSpeed * 0.55,
+		});
 		if (this.depth() === 'front') this.start();
 	}
 
@@ -100,15 +126,16 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		if (!this._isInteractive()) return;
 		event.preventDefault();
 		event.stopPropagation();
+		const host = event.currentTarget;
+		if (!(host instanceof HTMLElement)) return;
 		this._drag = {
 			pointerId: event.pointerId,
 			x: event.clientX,
 			y: event.clientY,
 			at: event.timeStamp,
+			radius: Math.max(120, host.getBoundingClientRect().width / 2),
 		};
-		const host = event.currentTarget;
-		if (host instanceof HTMLElement)
-			host.setPointerCapture(event.pointerId);
+		host.setPointerCapture(event.pointerId);
 		this.start();
 	}
 
@@ -118,38 +145,22 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		event.stopPropagation();
 		const deltaX = event.clientX - this._drag.x;
 		const deltaY = event.clientY - this._drag.y;
-		const distance = Math.hypot(deltaX, deltaY);
-		if (distance < 0.5) return;
-		const elapsed = Math.max(8, event.timeStamp - this._drag.at);
-		const host = event.currentTarget;
-		const radius = host instanceof HTMLElement
-			? Math.max(80, host.getBoundingClientRect().width / 2)
-			: 240;
-		const instantaneousVelocity = deltaX / elapsed;
-		this._dragVelocity = this._dragVelocity * 0.68 + instantaneousVelocity * 0.32;
-		this._angle += deltaX / radius;
-		this._motion.targetSpeed = this._clamp({
-			value: this._dragVelocity * 0.0032,
-			min: -0.0018,
-			max: 0.0018,
-		});
-		this._motion.targetAxisX = this._clamp({
-			value: -deltaY / Math.max(1, distance),
-			min: -0.88,
-			max: 0.88,
-		});
-		this._motion.targetAxisY = this._clamp({
-			value: deltaX / Math.max(1, distance),
-			min: -0.96,
-			max: 0.96,
-		});
-		this._motion.targetAxisZ = 0.18;
-		this._drag = {
-			pointerId: event.pointerId,
-			x: event.clientX,
-			y: event.clientY,
-			at: event.timeStamp,
-		};
+		if (Math.hypot(deltaX, deltaY) < 0.25) return;
+		const elapsed = Math.max(6, event.timeStamp - this._drag.at);
+		const yaw = deltaX / this._drag.radius;
+		const pitch = -deltaY / this._drag.radius;
+		const immediateX = this._clampVelocity({ value: pitch / elapsed });
+		const immediateY = this._clampVelocity({ value: yaw / elapsed });
+		this._angularVelocity.x = this._angularVelocity.x * 0.32 + immediateX * 0.68;
+		this._angularVelocity.y = this._angularVelocity.y * 0.32 + immediateY * 0.68;
+		const rotationDelta = multiplyQuaternion(
+			quaternionFromAxis([1, 0, 0], pitch),
+			quaternionFromAxis([0, 1, 0], yaw)
+		);
+		this._rotation = normalizeQuaternion(multiplyQuaternion(rotationDelta, this._rotation));
+		this._drag.x = event.clientX;
+		this._drag.y = event.clientY;
+		this._drag.at = event.timeStamp;
 		this.start();
 	}
 
@@ -158,40 +169,36 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		event.preventDefault();
 		event.stopPropagation();
 		const host = event.currentTarget;
-		if (
-			host instanceof HTMLElement &&
-			host.hasPointerCapture(event.pointerId)
-		)
+		if (host instanceof HTMLElement && host.hasPointerCapture(event.pointerId))
 			host.releasePointerCapture(event.pointerId);
+		if (event.timeStamp - this._drag.at > 90) {
+			this._angularVelocity.x = 0;
+			this._angularVelocity.y = this._idleSpeed;
+		}
 		this._drag = undefined;
-		this._motion.targetSpeed = this._clamp({
-			value: this._dragVelocity * 0.0032,
-			min: -0.0018,
-			max: 0.0018,
-		});
-		this._dragVelocity = 0;
 	}
 
 	ngOnDestroy(): void {
 		this.stop();
 		this._depthSync.destroy();
 	}
+
 	private _prepare(): void {
-		if (
-			!isPlatformBrowser(this._platformId) ||
-			this._texture ||
-			this._loading
-		)
+		if (!isPlatformBrowser(this._platformId) || this._texture || this._loading)
 			return;
 		this._loading = true;
 		const image = new Image();
-		image.src = '/images/cartagonova-earth-texture-hd.png';
+		image.decoding = 'async';
+		image.src = '/images/earth-blue-marble-4k.webp';
 		image.onload = () => {
 			const source = this._document.createElement('canvas');
-			source.width = 4096;
-			source.height = 2048;
+			source.width = TEXTURE_WIDTH;
+			source.height = TEXTURE_HEIGHT;
 			const context = source.getContext('2d');
-			if (!context) return;
+			if (!context) {
+				this._loading = false;
+				return;
+			}
 			context.imageSmoothingEnabled = true;
 			context.imageSmoothingQuality = 'high';
 			context.drawImage(image, 0, 0, source.width, source.height);
@@ -201,9 +208,14 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 				this._animate(performance.now());
 		};
 		image.onerror = () => {
+			if (image.src.endsWith('earth-blue-marble-4k.webp')) {
+				image.src = '/images/cartagonova-earth-texture-hd.png';
+				return;
+			}
 			this._loading = false;
 		};
 	}
+
 	private _animate(now: number): void {
 		if (!this._spinning) {
 			this._frame = undefined;
@@ -211,40 +223,29 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		}
 		const delta = Math.min(48, now - (this._lastAt ?? now));
 		this._lastAt = now;
-		const blend = 1 - Math.exp(-delta / 620);
-		this._motion.speed +=
-			(this._motion.targetSpeed - this._motion.speed) * blend;
-		this._motion.axisX +=
-			(this._motion.targetAxisX - this._motion.axisX) * blend;
-		this._motion.axisY +=
-			(this._motion.targetAxisY - this._motion.axisY) * blend;
-		this._motion.axisZ +=
-			(this._motion.targetAxisZ - this._motion.axisZ) * blend;
-		const length = Math.hypot(
-			this._motion.axisX,
-			this._motion.axisY,
-			this._motion.axisZ
-		);
-		this._motion.axisX /= length;
-		this._motion.axisY /= length;
-		this._motion.axisZ /= length;
 		if (!this._drag) {
-			this._motion.targetSpeed +=
-				(this._idleSpeed - this._motion.targetSpeed) * Math.min(0.055, delta / 1800);
+			this._angularVelocity.x *= Math.exp(-delta / 820);
+			this._angularVelocity.y +=
+				(this._idleSpeed - this._angularVelocity.y) *
+				(1 - Math.exp(-delta / 1900));
+			const rotationDelta = multiplyQuaternion(
+				quaternionFromAxis([1, 0, 0], this._angularVelocity.x * delta),
+				quaternionFromAxis([0, 1, 0], this._angularVelocity.y * delta)
+			);
+			this._rotation = normalizeQuaternion(multiplyQuaternion(rotationDelta, this._rotation));
 		}
-		this._angle += this._motion.speed * delta;
 		if (this._canvas && this._texture)
 			renderEarthFrame({
 				canvas: this._canvas,
 				image: this._texture,
 				frame: {
-					angle: this._angle,
-					axisX: this._motion.axisX,
-					axisY: this._motion.axisY,
-					axisZ: this._motion.axisZ,
-					foreground: ['front-ready', 'front', 'out-front'].includes(
-						this.depth()
-					),
+					angle: 0,
+					axisX: 0,
+					axisY: 1,
+					axisZ: 0,
+					rotation: this._rotation,
+					textureStyle: this.textureStyle(),
+					foreground: ['front-ready', 'front', 'out-front'].includes(this.depth()),
 				},
 			});
 		this._frame = requestAnimationFrame((time) => this._animate(time));
@@ -254,7 +255,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		return isPlatformBrowser(this._platformId) && this.depth() === 'front';
 	}
 
-	private _clamp(range: { value: number; min: number; max: number }): number {
-		return Math.min(range.max, Math.max(range.min, range.value));
+	private _clampVelocity(range: { value: number }): number {
+		return Math.min(MAX_ANGULAR_SPEED, Math.max(-MAX_ANGULAR_SPEED, range.value));
 	}
 }

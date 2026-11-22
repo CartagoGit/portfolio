@@ -18,5 +18,9 @@ describe('ProfileLinksComponent', () => {
 		expect(fixture.nativeElement.querySelector('a')?.textContent).toContain(
 			'GitHub'
 		);
+		const previews: unknown[] = [];
+		fixture.componentInstance.preview.subscribe((preview) => previews.push(preview));
+		fixture.componentInstance.clearPreview();
+		expect(previews).toEqual([null]);
 	});
 });

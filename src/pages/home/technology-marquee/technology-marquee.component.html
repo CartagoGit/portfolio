@@ -1,7 +1,7 @@
 <div
 	class="technology-marquee"
 	[class.technology-marquee--reverse]="reverse()"
-	aria-label="Technology index from the CartagoGit profile">
+	[attr.aria-label]="'pages.home.technologyIndexAria' | translate">
 	@for (duplicate of [false, true]; track duplicate) {
 		<div
 			class="technology-marquee__track"

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import type { ILocale } from '../domain/types';
+import { isLocale } from '../core/platform/locale';
 import { en } from './en';
 import { es } from './es';
 import { fr } from './fr';
@@ -128,20 +129,16 @@ export class TranslateService {
 		if (!isPlatformBrowser(this._platformId)) return 'en';
 		try {
 			const stored = window.localStorage.getItem('cartago-locale');
-			if (stored === 'en' || stored === 'es') return stored;
+			if (isLocale(stored)) return stored;
 		} catch {
 			/* Storage may be blocked; fall through to the cookie. */
 		}
 		const match = document.cookie.match(/(?:^|;\s*)cartago_locale=([^;]+)/);
 		const cookie = match?.[1];
-		if (cookie === 'en' || cookie === 'es') return cookie;
+		if (isLocale(cookie)) return cookie;
 		const candidate = navigator.languages
-			.find(
-				(language) =>
-					language.toLowerCase().startsWith('es') ||
-					language.toLowerCase().startsWith('en')
-			)
-			?.slice(0, 2);
-		return candidate === 'es' ? 'es' : 'en';
+			.map((language) => language.toLowerCase().slice(0, 2))
+			.find(isLocale);
+		return candidate ?? 'en';
 	}
 }

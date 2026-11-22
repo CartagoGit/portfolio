@@ -358,10 +358,10 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### i18n
 
-- Supported locales: `en`, `es`.
-- Routes: `/:locale/{page}`. Default redirect is `en`.
+- Supported locales: `en`, `es`, `fr`, `de`.
+- Routes: `/:locale/{page}`. The explicit route locale wins; the default redirect is `en`.
 - Per-locale copy in `src/domain/portfolio.data.ts`.
-- The locale does not pollute the shell URL (no `?lang=`, no expiring cookie): navigation is by prefix, as SSR requires.
+- The locale does not pollute the shell URL (no `?lang=`): navigation is by prefix, as SSR requires.
 
 ### Accessibility
 

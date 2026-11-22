@@ -29,6 +29,7 @@ export type IChartType =
 export type IHeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 export type IHeroPalette = 'ocean' | 'heat' | 'lime';
 export type IHeroPanelTransition = 'slide' | 'flip' | 'scan';
+export type IEarthTextureStyle = 'natural' | 'terrain' | 'infrared';
 export type IEarthDepth =
 	| 'behind'
 	| 'out-behind'
@@ -36,6 +37,13 @@ export type IEarthDepth =
 	| 'front'
 	| 'out-front'
 	| 'behind-ready';
+export type IMonitorDestinationKind =
+	| 'website'
+	| 'repository'
+	| 'documentation'
+	| 'package'
+	| 'release'
+	| 'profile';
 
 export interface ICapability {
 	id: ICapabilityId;
@@ -57,6 +65,7 @@ export interface IHeroPanel {
 	color: string;
 	iconAsset?: string;
 	href?: string;
+	destinations?: readonly IMonitorDestination[];
 }
 
 export interface ITechnology {
@@ -64,6 +73,7 @@ export interface ITechnology {
 	iconPath: string;
 	color: string;
 	detail?: string;
+	destinations?: readonly IMonitorDestination[];
 }
 
 export interface IPublicLink {
@@ -74,6 +84,7 @@ export interface IPublicLink {
 	imageSrc?: string;
 	iconPath?: string;
 	color?: string;
+	destinations?: readonly IMonitorDestination[];
 }
 
 export interface IMonitorPreview {
@@ -86,6 +97,7 @@ export interface IMonitorPreview {
 	imageSrc?: string;
 	iconPath?: string;
 	color?: string;
+	destinations?: readonly IMonitorDestination[];
 }
 
 export interface ILanguageOption {
@@ -130,4 +142,10 @@ export interface IChartOption {
 export interface IEffectOption {
 	id: Exclude<IHeroEffect, 'idle'>;
 	symbol: string;
+}
+
+export interface IMonitorDestination {
+	kind: IMonitorDestinationKind;
+	label: string;
+	href: string;
 }

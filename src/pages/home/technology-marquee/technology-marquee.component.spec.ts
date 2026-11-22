@@ -14,5 +14,9 @@ describe('TechnologyMarqueeComponent', () => {
 		expect(
 			fixture.nativeElement.querySelectorAll('.technology-marquee__token')
 		).toHaveLength(2);
+		const previews: unknown[] = [];
+		fixture.componentInstance.preview.subscribe((preview) => previews.push(preview));
+		fixture.componentInstance.hideTooltip();
+		expect(previews).toEqual([null]);
 	});
 });

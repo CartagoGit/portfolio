@@ -4,13 +4,13 @@
 	[attr.data-preview]="activePreview()?.kind ?? null"
 	(mouseenter)="enterMonitor()"
 	(mouseleave)="leaveMonitor()"
-	aria-label="Interactive showcase of Mario's public projects">
+	[attr.aria-label]="'pages.home.monitorAriaLabel' | translate">
 	@if (earthDepth() !== 'behind') {
 		<button
 			class="hero-monitor__globe-scrim"
 			type="button"
 			(click)="dismissEarth($event)"
-			aria-label="Return the Earth to the dashboard"></button>
+			[attr.aria-label]="'pages.home.earthClose' | translate"></button>
 	}
 	<div
 		class="hero-monitor__orb hero-monitor__orb--one"
@@ -28,8 +28,36 @@
 		<app-earth-globe
 			#earth
 			[depth]="earthDepth()"
-			[preview]="earthPreview()" />
+			[preview]="earthPreview()"
+			[textureStyle]="earthTexture()" />
 	</div>
+	@if (earthDepth() === 'front') {
+		<section
+			class="hero-monitor__earth-controls"
+			[attr.aria-label]="'pages.home.earthControlsLabel' | translate">
+			<div
+				class="hero-monitor__earth-textures"
+				role="group"
+				[attr.aria-label]="'pages.home.earthTextureLabel' | translate">
+				@for (texture of earthTextureOptions; track texture.id) {
+					<button
+						type="button"
+						[class.is-active]="earthTexture() === texture.id"
+						[attr.aria-pressed]="earthTexture() === texture.id"
+						(click)="selectEarthTexture(texture.id, $event)">
+						{{ texture.labelKey | translate }}
+					</button>
+				}
+			</div>
+			<p>{{ 'pages.home.earthDragHint' | translate }}</p>
+			<button
+				class="hero-monitor__earth-close"
+				type="button"
+				(click)="dismissEarth($event)">
+				{{ 'pages.home.earthClose' | translate }}
+			</button>
+		</section>
+	}
 	<div class="hero-monitor__orb hero-monitor__orb--two"></div>
 	<div
 		class="hero-monitor__interface"
@@ -41,7 +69,7 @@
 			<b>cartago.system</b>
 			<span>{{ 'pages.home.monitorChrome' | translate }}</span>
 			<i></i>
-			<small>LIVE</small>
+			<small>{{ 'pages.home.monitorLive' | translate }}</small>
 		</div>
 		<div class="hero-monitor__header">
 			<button
@@ -49,7 +77,7 @@
 				type="button"
 				[attr.aria-pressed]="earthDepth() === 'front'"
 				(click)="earth.changeMotion(); showEarthInFront($event)"
-				aria-label="Change the Earth's rotation"></button>
+				[attr.aria-label]="'pages.home.earthOpen' | translate"></button>
 			<a
 				class="hero-monitor__banner-link"
 				href="https://github.com/CartagoGit"
@@ -59,15 +87,15 @@
 				[attr.tabindex]="earthBlocksMonitor() ? -1 : null"
 				[class.is-disabled]="earthBlocksMonitor()"
 				(click)="guardMonitorBanner($event)"
-				aria-label="Open CartagoGit on GitHub">
+				[attr.aria-label]="'pages.home.monitorBannerAria' | translate">
 				<img
 					class="hero-monitor__banner"
 					src="/images/cartagonova-banner-monitor.webp"
 					width="1023"
 					height="300"
-					alt="Cartago frontend engineer banner" />
+					[attr.alt]="'pages.home.monitorBannerAlt' | translate" />
 			</a>
-			<nav class="hero-monitor__platform-rail" aria-label="Cartago deployment platforms">
+			<nav class="hero-monitor__platform-rail" [attr.aria-label]="'pages.home.monitorPlatformsAria' | translate">
 				<div class="hero-monitor__platform-row">
 					@for (link of platformLinks; track link.href) {
 						<a
@@ -87,16 +115,27 @@
 						</a>
 					}
 					<button
+						class="hero-monitor__dashboard-control"
+						type="button"
+						[class.is-active]="!activePreview()"
+						(click)="showDashboard()"
+						[attr.aria-label]="'pages.home.monitorDashboard' | translate">
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M4 19V11h3v8H4Zm6 0V5h3v14h-3Zm6 0V8h3v11h-3Z" fill="currentColor" />
+						</svg>
+					</button>
+					<button
 						class="hero-monitor__technology-toggle"
 						type="button"
 						[class.is-active]="activeSection() === 'technologies'"
 						(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
-						{{ (activeSection() === 'technologies' ? 'pages.home.monitorProjects' : 'pages.home.monitorTechnologies') | translate }}
+						<span>{{ (activeSection() === 'technologies' ? 'pages.home.monitorProjects' : 'pages.home.monitorTechnologies') | translate }}</span>
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7 4-4 4 4h-3v10h3l-4 4-4-4h3V7H8Z" fill="currentColor" /></svg>
 					</button>
 				</div>
-				<div class="hero-monitor__console-effects" aria-label="Console effects">
+				<div class="hero-monitor__console-effects" [attr.aria-label]="'pages.home.monitorEffectsAria' | translate">
 					@for (consoleEffect of consoleEffects; track consoleEffect.id) {
-						<button type="button" (click)="triggerConsoleEffect(consoleEffect.id)" [attr.aria-label]="consoleEffect.label">{{ consoleEffect.symbol }}</button>
+						<button type="button" (click)="triggerConsoleEffect(consoleEffect.id)" [attr.aria-label]="consoleEffect.labelKey | translate">{{ consoleEffect.symbol }}</button>
 					}
 				</div>
 			</nav>
@@ -105,7 +144,7 @@
 			<div
 				class="hero-monitor__selector"
 				[attr.data-section]="activeSection()"
-				aria-label="Console item selection">
+				[attr.aria-label]="'pages.home.monitorSelectorAria' | translate">
 				@if (activeSection() === 'projects') {
 					@for (panel of panels; track panel.id) {
 						<button type="button" [class.is-active]="activePreview()?.label === panel.label" (click)="previewProject(panel.id)">
@@ -147,8 +186,14 @@
 										<h3>{{ item.label }}</h3>
 									</div>
 									<p class="hero-monitor__preview-detail">{{ item.detail }}</p>
-									<div class="hero-monitor__preview-stack" aria-label="Related technologies">
-										@for (technology of item.stack; track technology) { <b>{{ technology }}</b> }
+									<div class="hero-monitor__preview-stack" [attr.aria-label]="'pages.home.monitorRelatedLinks' | translate">
+										@for (technology of item.stack; track technology) {
+											@if (technologyHref(technology); as href) {
+												<a [href]="href" target="_blank" rel="noreferrer">{{ technology }} ↗</a>
+											} @else {
+												<b>{{ technology }}</b>
+											}
+										}
 									</div>
 								</div>
 							</article>
@@ -160,13 +205,13 @@
 							[class.swap-hidden]="panelChanging()">
 							<div
 								class="hero-monitor__chart-switcher"
-								aria-label="Dashboard chart type">
+								[attr.aria-label]="'pages.home.monitorChartTypesAria' | translate">
 								@for (chart of chartOptions; track chart.id) {
 									<button
 										type="button"
 										[class.is-active]="chartType() === chart.id"
 										(click)="hero.setChart(chart.id)">
-										{{ chart.label }}
+										{{ chartLabel(chart.id) }}
 									</button>
 								}
 							</div>
@@ -188,19 +233,19 @@
 									<svg
 										viewBox="0 0 360 120"
 										preserveAspectRatio="none"
-										aria-label="Portfolio dashboard chart">
+										[attr.aria-label]="'pages.home.monitorChartAria' | translate">
 										<path [attr.d]="chartPath()" />
 									</svg>
-									<em>product signal / 2026</em>
+									<em>{{ 'pages.home.monitorChartSignal' | translate }}</em>
 								</div>
 								<div
 									class="hero-monitor__chart-symbols"
-									aria-label="Visual data controls">
+									[attr.aria-label]="'pages.home.monitorVisualControlsAria' | translate">
 									@for (symbol of ['⌁', '◌', '✦']; track symbol) {
 										<button
 											type="button"
 											(click)="hero.randomizeChart()"
-											aria-label="Generate new demo values">
+											[attr.aria-label]="'pages.home.monitorRandomizeAria' | translate">
 											{{ symbol }}
 										</button>
 									}
@@ -209,7 +254,7 @@
 										type="button"
 										[class.is-active]="palette() === 'heat'"
 										(click)="hero.setTemperature()"
-										aria-label="Apply heat palette">
+										[attr.aria-label]="'pages.home.monitorHeatAria' | translate">
 										◉
 									</button>
 								</div>
@@ -240,7 +285,7 @@
 								<h3>{{ panel.label }}</h3>
 								<p class="hero-monitor__project-status">{{ panel.status }}</p>
 								<p>{{ panel.detail }}</p>
-								<div class="hero-monitor__stack" aria-label="Project technologies">
+								<div class="hero-monitor__stack" [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
 									@for (technology of panel.stack; track technology) {
 										<span>{{ technology }}</span>
 									}
@@ -250,7 +295,7 @@
 								class="hero-monitor__retry"
 								type="button"
 								(click)="hero.clearPanel()">
-								Retry ↻
+								{{ 'pages.home.monitorRetry' | translate }}
 							</button>
 						</article>
 					}
@@ -260,36 +305,25 @@
 					[attr.aria-label]="'pages.home.monitorDestinations' | translate">
 					<header>
 						<span>{{ 'pages.home.monitorDestinations' | translate }}</span>
-						<strong>{{ activePreview()?.label ?? 'GitHub' }}</strong>
+						<strong>{{ activePreview()?.label ?? ('pages.home.monitorPublicDestinations' | translate) }}</strong>
 					</header>
-					@if (activePreview(); as destinationPreview) {
-						@if (destinationPreview.href; as destinationHref) {
+					<div class="hero-monitor__destination-list">
+						@for (destination of activeDestinations(); track destination.href) {
 							<a
 								class="hero-monitor__destination-primary"
-								[href]="destinationHref"
+								[attr.data-kind]="destination.kind"
+								[href]="destination.href"
 								target="_blank"
 								rel="noreferrer">
-								<span>{{ previewDestinationLabel(destinationPreview) }}</span>
-								<b>{{ destinationPreview.label }}</b>
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+									<path [attr.d]="destinationIconPath(destination.kind)" fill="currentColor" />
+								</svg>
+								<span>{{ destinationKindLabel(destination.kind) }}</span>
+								<b>{{ destinationDisplayLabel(destination) }}</b>
 								<i aria-hidden="true">↗</i>
 							</a>
 						}
-					} @else {
-						<a
-							class="hero-monitor__destination-primary"
-							href="https://github.com/CartagoGit"
-							target="_blank"
-							rel="noreferrer">
-							<span>{{ 'pages.home.monitorRepository' | translate }}</span>
-							<b>GitHub</b>
-							<i aria-hidden="true">↗</i>
-						</a>
-					}
-					<nav class="hero-monitor__destination-links" [attr.aria-label]="'pages.home.monitorDestinations' | translate">
-						<a [href]="'/' + locale() + '/work'">{{ 'chrome.header.navWork' | translate }} <span>→</span></a>
-						<a [href]="'/' + locale() + '/demos'">{{ 'chrome.header.navDemos' | translate }} <span>→</span></a>
-						<a [href]="'/' + locale() + '/contact'">{{ 'chrome.header.navContact' | translate }} <span>→</span></a>
-					</nav>
+					</div>
 				</aside>
 			</div>
 		</div>

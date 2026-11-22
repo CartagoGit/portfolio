@@ -1,9 +1,9 @@
 <div class="profile-links">
 	<section class="profile-links__section profile-links__section--platforms">
-		<p class="profile-links__label">Platforms & contact</p>
+		<p class="profile-links__label">{{ 'pages.home.profilePlatformsLabel' | translate }}</p>
 		<nav
 			class="profile-links__list"
-			aria-label="Public profiles and deployment platforms">
+			[attr.aria-label]="'pages.home.profilePlatformsAria' | translate">
 			@for (link of platformLinks(); track link.href) {
 				<a
 					class="profile-links__badge"
@@ -36,10 +36,10 @@
 	</section>
 	@if (projectLinks().length) {
 		<section class="profile-links__section profile-links__section--projects">
-			<p class="profile-links__label">Featured projects</p>
+			<p class="profile-links__label">{{ 'pages.home.profileProjectsLabel' | translate }}</p>
 			<nav
 				class="profile-links__list"
-				aria-label="Featured public projects">
+				[attr.aria-label]="'pages.home.profileProjectsAria' | translate">
 				@for (link of projectLinks(); track link.href) {
 					<a
 						class="profile-links__badge"

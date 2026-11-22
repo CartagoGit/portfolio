@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { IMonitorPreview, ITechnology } from '../../../domain/types';
 
 @Component({
 	selector: 'app-technology-marquee',
+	imports: [TranslatePipe],
 	templateUrl: './technology-marquee.component.html',
 	styleUrl: './technology-marquee.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,5 +37,6 @@ export class TechnologyMarqueeComponent {
 
 	hideTooltip(): void {
 		this.tooltip.set(null);
+		this.preview.emit(null);
 	}
 }

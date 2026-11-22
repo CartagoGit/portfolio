@@ -50,6 +50,16 @@ describe('TranslateService', () => {
 		expect(service.instant('chrome.header.navWork')).toBe('Proyectos');
 	});
 
+	it.each([
+		['fr', 'Projets'],
+		['de', 'Projekte'],
+	] as const)('restores the %s persisted locale', (locale, expected) => {
+		window.localStorage.setItem('cartago-locale', locale);
+		const service = TestBed.inject(TranslateService);
+		expect(service.locale()).toBe(locale);
+		expect(service.instant('chrome.header.navWork')).toBe(expected);
+	});
+
 	it('falls back to English for keys missing in the active locale', () => {
 		const service = TestBed.inject(TranslateService);
 		service.setLocale('es');

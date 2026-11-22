@@ -44,16 +44,9 @@ function localeMiddleware(ctx: {
 	const { req, res, next } = ctx;
 	const match = req.path.match(/^\/(en|es|fr|de)(\/.*)?$/);
 	if (!match) return next();
-	const stored = req.headers.cookie?.match(
-		/(?:^|;\s*)cartago_locale=(en|es|fr|de)/
-	)?.[1];
-	const acceptedLocale = req.headers['accept-language']
-		?.match(/(?:^|[, ])(es|en|fr|de)(?:[-,;]|$)/i)?.[1]
-		?.toLowerCase();
-	const accepted = acceptedLocale ?? 'en';
-	const preferred = stored ?? accepted;
-	if (preferred !== match[1])
-		return res.redirect(302, `/${preferred}${match[2] ?? ''}`);
+	const locale = match[1];
+	if (!locale) return next();
+	res.setHeader('Content-Language', locale);
 	return next();
 }
 
@@ -71,10 +64,7 @@ function renderAngular(ctx: {
 		.catch(next);
 }
 
-/**
- * Keep the locale server-aware. A saved cookie wins; otherwise Accept-Language
- * chooses Spanish or English before Angular renders the route.
- */
+/** The path owns the locale; cookies remain a storage convenience, not a redirect. */
 app.use((req, res, next) => localeMiddleware({ req, res, next }));
 
 /**
