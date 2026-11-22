@@ -62,7 +62,9 @@
 				aria-label="Open CartagoGit on GitHub">
 				<img
 					class="hero-monitor__banner"
-					src="/images/cartagonova-banner-03-neon.png"
+					src="/images/cartagonova-banner-monitor.webp"
+					width="1023"
+					height="300"
 					alt="Cartago frontend engineer banner" />
 			</a>
 			<nav class="hero-monitor__platform-rail" aria-label="Cartago deployment platforms">
@@ -88,7 +90,7 @@
 						type="button"
 						[class.is-active]="activeSection() === 'technologies'"
 						(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
-						{{ 'pages.home.monitorTechnologies' | translate }}
+						{{ (activeSection() === 'technologies' ? 'pages.home.monitorProjects' : 'pages.home.monitorTechnologies') | translate }}
 					</button>
 				</div>
 				<div class="hero-monitor__console-effects" aria-label="Console effects">
@@ -101,6 +103,7 @@
 		<div class="hero-monitor__body">
 			<div
 				class="hero-monitor__selector"
+				[attr.data-section]="activeSection()"
 				aria-label="Console item selection">
 				@if (activeSection() === 'projects') {
 					@for (panel of panels; track panel.id) {
@@ -153,13 +156,6 @@
 						class="hero-monitor__dashboard"
 						[class.panel-hidden]="selectedPanel() || panelChanging()"
 						[class.swap-hidden]="panelChanging()">
-						<div class="hero-monitor__heading">
-							<span>
-								<i></i>
-								{{ 'pages.home.monitorChrome' | translate }}
-							</span>
-							<small>LIVE</small>
-						</div>
 						<div
 							class="hero-monitor__chart-switcher"
 							aria-label="Dashboard chart type">
