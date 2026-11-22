@@ -26,6 +26,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Use the existing token/theme system and shared shell primitives; do not hardcode route-specific palettes.
 - Keep the monitor as one state machine: section choice changes the selector, while the active preview/dashboard remains stable unless the user explicitly changes the view.
 - Use semantic destination metadata (`website`, `repository`, `documentation`, `package`, `release`, `profile`) rather than guessing URLs or icons in templates.
+- Technology descriptions must explain what the technology is, the problem it solves and how it is used in the visible portfolio work; generic “part of the toolkit” copy is not acceptable.
 - Keep globe texture changes GPU-local and lazy. Earth uses a high-quality cloud texture; planets, exoplanets and sports/random spheres use deterministic procedural shaders so the catalogue grows without dozens of large downloads.
 - Treat contact delivery as an integration boundary: use a configured static-safe endpoint; when unconfigured, expose a truthful fallback rather than simulating success.
 - Prefer data-driven cards and examples. Project ordering, stack evidence, route animations and preview destinations remain centralized in domain data.
@@ -55,7 +56,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Status**: pending
 - **Files**: `src/domain/monitor-destinations.ts`, `src/domain/data.ts`, `src/domain/monitor-destinations.spec.ts`
 - **Gate**: destination validation tests + link-shape audit
-- **Acceptance**: every highlighted technology has official website/docs/package/repository links where they exist; projects expose repository/site/package/docs/release links verified from public metadata; technologies are alphabetically sorted and projects use curated importance order; every URL is HTTPS; no guessed route is rendered.
+- **Acceptance**: every highlighted technology has official website/docs/package/repository links where they exist; projects expose repository/site/package/docs/release links verified from public metadata; each technology has specific explanatory copy describing its purpose and relevance, alphabetically ordered; projects use curated importance order; every URL is HTTPS; no guessed route is rendered.
 
 ### S3 — Shell, header, footer and back-to-top
 - **Status**: pending
@@ -149,6 +150,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 ## acceptance
 
 - All requested monitor behaviours are correct: stable preview across section switching, iconized toggle, two chart rows, readable destination links, richer globe presets, visible close action, truthful lower monitor stacking and no active-hover residue.
+- Technology previews provide a real definition and practical use statement per technology, not generic filler text.
 - The globe offers real-cloud Earth, existing Earth variants, Sun/Moon and all planets (including Pluto), exoplanet presets and sports/random balls; presets switch without replacing the rotation state or causing layout shift.
 - Work, Approach, Knowledge, Docker, Demos, Lab and Contact are complete, responsive, theme-correct and coherent as one product.
 - Public profile evidence is current enough to support the curated order and copy; every destination is verified or intentionally omitted with a truthful reason.
