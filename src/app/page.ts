@@ -1,8 +1,8 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
-	ViewEncapsulation,
 	signal,
+	ViewEncapsulation,
 } from '@angular/core';
 import { ContactPageComponent } from '../pages/contact/contact.page';
 import { DockerPageComponent } from '../pages/docker/docker.page';

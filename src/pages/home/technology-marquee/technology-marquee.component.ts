@@ -35,6 +35,5 @@ export class TechnologyMarqueeComponent {
 
 	hideTooltip(): void {
 		this.tooltip.set(null);
-		this.preview.emit(null);
 	}
 }

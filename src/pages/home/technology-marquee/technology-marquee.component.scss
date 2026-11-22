@@ -133,9 +133,13 @@
 	}
 }
 
-.technology-marquee--reverse {
-	&__track {
-		animation-direction: reverse;
-		animation-delay: -24s;
+.technology-marquee {
+	&--reverse {
+		margin-top: 0.45rem;
+
+		.technology-marquee__track {
+			animation-direction: reverse;
+			animation-delay: -41s;
+		}
 	}
 }

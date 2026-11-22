@@ -74,6 +74,18 @@ export interface ITranslationMap {
 			panelDeliveryLabel: string;
 			panelDeliveryMetric: string;
 			panelDeliveryDetail: string;
+			monitorChrome: string;
+			monitorProjects: string;
+			monitorTechnologies: string;
+			monitorPlatforms: string;
+			monitorChoose: string;
+			monitorOpen: string;
+			monitorProjectStatus: string;
+			monitorPlatformStatus: string;
+			monitorTechnologyStatus: string;
+			monitorPlatformDetail: string;
+			monitorTechnologyDetail: string;
+			monitorPublicProfile: string;
 			telemetryProductLabel: string;
 			telemetryProductTitle: string;
 			telemetryProductValueLabel: string;

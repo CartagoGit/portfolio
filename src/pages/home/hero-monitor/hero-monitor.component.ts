@@ -1,15 +1,31 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	computed,
+	effect,
+	inject,
+	input,
 	type OnDestroy,
+	PLATFORM_ID,
 	signal,
 	ViewEncapsulation,
-	input,
 } from '@angular/core';
 import { EarthGlobeComponent } from '../earth-globe/earth-globe.component';
 import { EarthDepthFacade } from '../earth-globe/earth-depth.facade';
 import { HeroMonitorFacade } from './hero-monitor.facade';
-import type { IChartOption, IEffectOption, IMonitorPreview } from '../../../domain/types';
+import { PUBLIC_LINKS } from '../../../domain/data';
+import { TranslatePipe } from '../../../lang/translate.pipe';
+import { TranslateService } from '../../../lang/translate.service';
+import type {
+	IChartOption,
+	IEffectOption,
+	IHeroPanelId,
+	ILocale,
+	IMonitorPreview,
+	IPublicLink,
+	ITechnology,
+} from '../../../domain/types';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -25,7 +41,7 @@ import type { IChartOption, IEffectOption, IMonitorPreview } from '../../../doma
  */
 @Component({
 	selector: 'app-hero-monitor',
-	imports: [EarthGlobeComponent],
+	imports: [EarthGlobeComponent, TranslatePipe],
 	templateUrl: './hero-monitor.component.html',
 	styleUrl: './hero-monitor.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,8 +51,36 @@ import type { IChartOption, IEffectOption, IMonitorPreview } from '../../../doma
 	},
 })
 export class HeroMonitorComponent implements OnDestroy {
+	readonly locale = input.required<ILocale>();
+	readonly technologies = input.required<readonly ITechnology[]>();
 	readonly preview = input<IMonitorPreview | null>(null);
 	readonly activePreview = signal<IMonitorPreview | null>(null);
+	readonly activeSection = signal<'projects' | 'technologies' | 'platforms'>('projects');
+	readonly previewItems = computed(() => {
+		const active = this.activePreview();
+		if (!active) return [];
+		const panel = this.panels.find(({ label }) => label === active.label);
+		const projectDetailKey = panel ? this._projectDetailKey(panel.id) : null;
+		return [{
+			...active,
+			detail: projectDetailKey
+				? this._translate.instant(projectDetailKey)
+				: active.kind === 'technology'
+					? this._translate.instant('pages.home.monitorTechnologyDetail', { label: active.label })
+					: this._translate.instant('pages.home.monitorPlatformDetail', { label: active.label }),
+			status: active.kind === 'project'
+				? this._translate.instant('pages.home.monitorProjectStatus')
+				: active.kind === 'platform'
+					? this._translate.instant('pages.home.monitorPlatformStatus')
+					: this._translate.instant('pages.home.monitorTechnologyStatus'),
+		}];
+	});
+	private readonly _platformId = inject(PLATFORM_ID);
+	private readonly _translate = inject(TranslateService);
+	private readonly _previewSync = effect(() => {
+		if (!isPlatformBrowser(this._platformId)) return;
+		this.showPreview(this.preview());
+	});
 	readonly hero = new HeroMonitorFacade();
 	private readonly _earth = new EarthDepthFacade();
 
@@ -76,6 +120,8 @@ export class HeroMonitorComponent implements OnDestroy {
 		{ id: 'spectrum', symbol: '◈' },
 	];
 
+	readonly platformLinks = PUBLIC_LINKS.filter((link) => link.group === 'platform');
+
 	ngOnDestroy(): void {
 		this.hero.destroy();
 		this._earth.destroy();
@@ -83,9 +129,11 @@ export class HeroMonitorComponent implements OnDestroy {
 			window.clearTimeout(this._monitorOpenTimer);
 		if (this._monitorCloseTimer !== undefined)
 			window.clearTimeout(this._monitorCloseTimer);
+		this._previewSync.destroy();
 	}
 
 	enterMonitor(): void {
+		if (!isPlatformBrowser(this._platformId)) return;
 		this._monitorHovered = true;
 		if (this._monitorCloseTimer !== undefined)
 			window.clearTimeout(this._monitorCloseTimer);
@@ -100,6 +148,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	leaveMonitor(): void {
+		if (!isPlatformBrowser(this._platformId)) return;
 		this._monitorHovered = false;
 		if (this._monitorOpening) return;
 		if (this._monitorCloseTimer !== undefined)
@@ -177,8 +226,98 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	showPreview(preview: IMonitorPreview | null): void {
-		this.activePreview.set(preview);
-		if (preview) this.enterMonitor();
-		else this.leaveMonitor();
+		if (preview) {
+			this.activePreview.set(preview);
+			this.enterMonitor();
+			return;
+		}
+		this.leaveMonitor();
+	}
+
+	showLinkPreview(link: IPublicLink): void {
+		this.showPreview({
+			kind: link.group,
+			label: link.label,
+			detail: link.detail ?? `Open ${link.label}.`,
+			href: link.href,
+			status: link.group === 'platform' ? 'Public platform' : 'Featured project',
+			stack: link.group === 'platform' ? ['Public profile'] : ['Open source'],
+			imageSrc: link.imageSrc,
+			iconPath: link.iconPath,
+			color: link.color,
+		});
+	}
+
+	selectSection(section: 'projects' | 'technologies' | 'platforms'): void {
+		this.activeSection.set(section);
+		if (section !== 'projects') this.hero.clearPanel();
+	}
+
+	previewTechnology(technology: ITechnology, event?: Event): void {
+		event?.preventDefault();
+		this.showPreview({
+			kind: 'technology',
+			label: technology.label,
+			detail: technology.detail ?? '',
+			href: this._technologyHref(technology.label),
+			status: this._translate.instant('pages.home.monitorTechnologyStatus'),
+			stack: [technology.label],
+			iconPath: technology.iconPath,
+			color: technology.color,
+		});
+	}
+
+	previewProject(panelId: IHeroPanelId): void {
+		const panel = this.panels.find(({ id }) => id === panelId);
+		if (!panel) return;
+		this.showPreview({
+			kind: 'project',
+			label: panel.label,
+			detail: this._translate.instant(this._projectDetailKey(panel.id)),
+			href: panel.href,
+			status: this._translate.instant('pages.home.monitorProjectStatus'),
+			stack: panel.stack,
+			imageSrc: panel.iconAsset,
+			color: panel.color,
+		});
+	}
+
+	private _projectDetailKey(id: IHeroPanelId): string {
+		const keys: Record<IHeroPanelId, string> = {
+			overview: 'pages.home.panelOverviewDetail',
+			workflows: 'pages.home.panelWorkflowsDetail',
+			quality: 'pages.home.panelQualityDetail',
+			mobile: 'pages.home.panelMobileDetail',
+			tooling: 'pages.home.panelToolingDetail',
+			delivery: 'pages.home.panelDeliveryDetail',
+		};
+		return keys[id];
+	}
+
+	private _technologyHref(label: string): string {
+		const urls: Record<string, string> = {
+			Angular: 'https://angular.dev',
+			TypeScript: 'https://www.typescriptlang.org',
+			RxJS: 'https://rxjs.dev',
+			Ionic: 'https://ionicframework.com',
+			Capacitor: 'https://capacitorjs.com',
+			Sass: 'https://sass-lang.com',
+			Bun: 'https://bun.sh',
+			Docker: 'https://www.docker.com',
+			Vitest: 'https://vitest.dev',
+			Jest: 'https://jestjs.io',
+			Vue: 'https://vuejs.org',
+			React: 'https://react.dev',
+		};
+		return urls[label] ?? 'https://github.com/CartagoGit';
+	}
+
+	previewKindLabel(kind: IMonitorPreview['kind']): string {
+		const key = kind === 'project'
+			? 'pages.home.monitorProjects'
+			: kind === 'technology'
+				? 'pages.home.monitorTechnologies'
+				: 'pages.home.monitorPlatforms';
+		return this._translate.instant(key);
 	}
 }

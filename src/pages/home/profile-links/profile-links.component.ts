@@ -42,6 +42,6 @@ export class ProfileLinksComponent {
 	}
 
 	clearPreview(): void {
-		this.preview.emit(null);
+		// The contextual monitor intentionally keeps the last preview active.
 	}
 }

@@ -34,7 +34,10 @@
 					[links]="shell.publicLinks"
 					(preview)="setMonitorPreview($event)"
 					(navigate)="shell.setTransition($event)" />
-				<app-hero-monitor [preview]="monitorPreview()" />
+				<app-hero-monitor
+					[locale]="shell.locale()"
+					[technologies]="shell.technologyMarquee"
+					[preview]="monitorPreview()" />
 			</section>
 		}
 
