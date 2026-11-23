@@ -234,7 +234,7 @@ export class HeroMonitorComponent implements OnDestroy {
 			detail: projectDetailKey
 				? this._translate.instant(projectDetailKey)
 				: active.kind === 'technology'
-					? this._translate.instant('pages.home.monitorTechnologyDetail', { label: active.label })
+					? active.detail || this._translate.instant('pages.home.monitorTechnologyDetail', { label: active.label })
 					: active.kind === 'project'
 						? active.detail
 						: this._translate.instant('pages.home.monitorPlatformDetail', { label: active.label }),

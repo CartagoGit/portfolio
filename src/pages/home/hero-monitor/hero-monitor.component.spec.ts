@@ -72,4 +72,23 @@ describe('HeroMonitorComponent', () => {
 		expect(component.earthTexture()).toBe('saturn');
 		expect(component.earthTextureCategory()).toBe('planets');
 	});
+
+	it('keeps the curated technology definition in the preview', async () => {
+		await TestBed.configureTestingModule({
+			imports: [HeroMonitorComponent],
+		}).compileComponents();
+		const fixture = TestBed.createComponent(HeroMonitorComponent);
+		const technology = {
+			label: 'TypeScript',
+			iconPath: '',
+			color: '#3178c6',
+			detail: 'Tipa contratos de dominio, renderizado y herramientas en este portfolio.',
+		};
+		fixture.componentRef.setInput('locale', 'es');
+		fixture.componentRef.setInput('technologies', [technology]);
+		fixture.detectChanges();
+
+		fixture.componentInstance.previewTechnology(technology);
+		expect(fixture.componentInstance.previewItems()[0]?.detail).toBe(technology.detail);
+	});
 });

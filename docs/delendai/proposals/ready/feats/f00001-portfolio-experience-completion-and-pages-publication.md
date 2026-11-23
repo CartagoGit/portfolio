@@ -63,7 +63,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S2 — Project and technology destination data
 - **Status**: pending
-- **Files**: `src/domain/monitor-destinations.ts`, `src/domain/data.ts`, `src/domain/monitor-destinations.spec.ts`
+- **Files**: `src/domain/monitor-destinations.ts`, `src/domain/data.ts`, `src/domain/monitor-destinations.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`
 - **Gate**: destination validation tests + link-shape audit
 - **Acceptance**: every highlighted technology has official website/docs/package/repository links where they exist; projects expose repository/site/package/docs/release links verified from public metadata; each technology has specific explanatory copy describing its purpose and relevance, alphabetically ordered; projects use curated importance order; every URL is HTTPS; no guessed route is rendered.
 

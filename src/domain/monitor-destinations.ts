@@ -37,7 +37,6 @@ const PROJECT_DESTINATIONS: Readonly<
 	Record<string, readonly IMonitorDestination[]>
 > = {
 	DelendAI: [
-		destination('website', 'cartagogit.github.io/DelendAI', 'https://cartagogit.github.io/DelendAI/'),
 		destination('documentation', 'docs/delendai', 'https://github.com/CartagoGit/DelendAI/blob/develop/docs/delendai/README.md'),
 		destination('repository', 'CartagoGit/DelendAI', 'https://github.com/CartagoGit/DelendAI'),
 		destination('release', 'CartagoGit/DelendAI/releases', 'https://github.com/CartagoGit/DelendAI/releases'),
@@ -45,7 +44,6 @@ const PROJECT_DESTINATIONS: Readonly<
 	Tanit: [
 		destination('repository', 'CartagoGit/api-source-tanit', 'https://github.com/CartagoGit/api-source-tanit'),
 		destination('documentation', 'api-source-tanit/docs/INSTALL.md', 'https://github.com/CartagoGit/api-source-tanit/blob/main/docs/INSTALL.md'),
-		destination('release', 'api-source-tanit/releases', 'https://github.com/CartagoGit/api-source-tanit/releases'),
 	],
 	QuickModel: [
 		destination('website', 'cartagogit.github.io/quickmodel', 'https://cartagogit.github.io/quickmodel/'),

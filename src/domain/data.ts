@@ -53,7 +53,22 @@ import type {
 	ITelemetry,
 } from './types';
 
-export const PUBLIC_LINKS: readonly IPublicLink[] = [
+const CURATED_PROJECT_ORDER = [
+	'DelendAI',
+	'Tanit',
+	'QuickModel',
+	'Print CV',
+	'Steam Keys',
+	'Keyer',
+] as const;
+
+function projectPriority(label: string): number {
+	const normalized = label === 'API Source Tanit' ? 'Tanit' : label;
+	const index = CURATED_PROJECT_ORDER.findIndex((project) => project === normalized);
+	return index < 0 ? Number.MAX_SAFE_INTEGER : index;
+}
+
+const PUBLIC_LINK_ITEMS: readonly IPublicLink[] = [
 	{
 		label: 'LinkedIn',
 		href: 'https://www.linkedin.com/in/mario-cabrero-volarich',
@@ -91,38 +106,50 @@ export const PUBLIC_LINKS: readonly IPublicLink[] = [
 		detail: 'MCP server and plugin system for structured agent workflows with explicit capabilities.',
 	},
 	{
-		label: 'QuickModel',
-		href: 'https://github.com/CartagoGit/quickmodel',
-		group: 'project',
-		imageSrc: '/icons/quickmodel.png',
-	},
-	{
 		label: 'API Source Tanit',
 		href: 'https://github.com/CartagoGit/api-source-tanit',
 		group: 'project',
 		imageSrc: '/icons/projects/tanit.svg',
+		detail: 'Static API discovery across popular backend frameworks with portable export formats.',
 	},
 	{
-		label: 'Keyer',
-		href: 'https://github.com/CartagoGit/Keyer',
+		label: 'QuickModel',
+		href: 'https://github.com/CartagoGit/quickmodel',
 		group: 'project',
-		imageSrc: '/icons/projects/keyer.svg',
+		imageSrc: '/icons/quickmodel.png',
+		detail: 'Typed serialization and validation library built around SOLID transformation adapters.',
 	},
 	{
 		label: 'Print CV',
 		href: 'https://cartagogit.github.io/print-cv/',
 		group: 'project',
 		imageSrc: '/icons/projects/print-cv.svg',
+		detail: 'Bilingual Vue CV builder with validation, tests and a deliberate paper layout.',
 	},
 	{
 		label: 'Steam Keys',
 		href: 'https://github.com/CartagoGit/steam-keys',
 		group: 'project',
 		imageSrc: '/icons/projects/steam-keys.svg',
+		detail: 'Local-first Tauri desktop manager for private game-key records.',
+	},
+	{
+		label: 'Keyer',
+		href: 'https://github.com/CartagoGit/Keyer',
+		group: 'project',
+		imageSrc: '/icons/projects/keyer.svg',
+		detail: 'Published CLI and library for encrypting secrets and environment files.',
 	},
 ];
 
-export const HERO_PANELS: readonly IHeroPanel[] = [
+export const PUBLIC_LINKS: readonly IPublicLink[] = Object.freeze([
+	...PUBLIC_LINK_ITEMS.filter(({ group }) => group === 'platform'),
+	...PUBLIC_LINK_ITEMS.filter(({ group }) => group === 'project').sort(
+		(left, right) => projectPriority(left.label) - projectPriority(right.label)
+	),
+]);
+
+const HERO_PANEL_ITEMS: readonly IHeroPanel[] = [
 	{
 		id: 'overview',
 		label: 'DelendAI',
@@ -197,7 +224,13 @@ export const HERO_PANELS: readonly IHeroPanel[] = [
 	},
 ];
 
-export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = [
+export const HERO_PANELS: readonly IHeroPanel[] = Object.freeze(
+	[...HERO_PANEL_ITEMS].sort(
+		(left, right) => projectPriority(left.label) - projectPriority(right.label)
+	)
+);
+
+const TECHNOLOGY_ITEMS = [
 	{ label: 'TypeScript', iconPath: siTypescript.path, color: '#3178c6' },
 	{ label: 'Angular', iconPath: siAngular.path, color: '#ff2d95' },
 	{ label: 'RxJS', iconPath: siReactivex.path, color: '#b7178c' },
@@ -255,7 +288,62 @@ export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = [
 	{ label: 'ESLint', iconPath: siEslint.path, color: '#4b32c3' },
 	{ label: 'Prettier', iconPath: siPrettier.path, color: '#f7b93e' },
 	{ label: 'GitHub', iconPath: siGithub.path, color: '#ffffff' },
-];
+] as const satisfies ReadonlyArray<Omit<ITechnology, 'detail' | 'destinations'>>;
+
+const TECHNOLOGY_DESCRIPTIONS: Readonly<
+	Record<(typeof TECHNOLOGY_ITEMS)[number]['label'], string>
+> = {
+	Angular: 'Framework for typed standalone applications. It structures this portfolio, its lazy routes, SSR and signal-driven interaction state.',
+	'Angular Material': 'Accessible component primitives for complex product screens. I use its design-system patterns for dense forms, tables and keyboard-ready controls.',
+	Bun: 'Fast JavaScript runtime and package manager for TypeScript CLIs, tests and local scripts. It powers the portfolio and DelendAI validation workflows.',
+	Capacitor: 'Bridge that packages web code as native Android/iOS applications. I use it when an operational web workflow also needs device APIs and store delivery.',
+	Claude: 'Language-model assistant used in agentic development experiments and structured reviews. It is an external collaboration tool, not a portfolio runtime dependency.',
+	Docker: 'Container packaging for reproducible environments and delivery. Public images and commands appear in the Docker catalogue to make setup repeatable.',
+	Electron: 'Desktop shell for TypeScript interfaces that need OS APIs and local packaging. It represents a desktop delivery option alongside the newer Tauri work.',
+	ESLint: 'Static-analysis engine for shared correctness rules. It prevents unsafe or inconsistent TypeScript and Angular patterns from reaching this codebase.',
+	Firebase: 'Managed application services for authentication, storage and realtime data. I use it when a product needs a fast backend boundary without rebuilding those primitives.',
+	Git: 'Distributed version control for traceable changes. It underpins the public project history, release workflow and direct collaboration model shown here.',
+	GitHub: 'Source, issue, action and Pages platform for the public portfolio ecosystem. It is the primary evidence and publication surface for the projects displayed here.',
+	'GitHub Actions': 'CI/CD automation for repeatable checks and deployments. This portfolio targets a gated preparation → tests → build → deploy workflow on Actions.',
+	'GitHub Copilot': 'AI coding assistant used to implement, inspect and review this portfolio in an agent-aware workflow. It accelerates work without replacing typecheck, tests or review.',
+	'GitLab CI': 'Pipeline runner for projects hosted outside GitHub. I use its jobs, rules and artifacts when a delivery pipeline belongs to a GitLab repository.',
+	Grok: 'Research-oriented language-model service evaluated for code and product exploration. It remains an external tool rather than a browser dependency.',
+	Ionic: 'Mobile UI components and navigation patterns for hybrid applications. It is used when the same operational workflow must work well on touch and Android.',
+	Jest: 'JavaScript test runner with snapshots and mocks. I use it where an existing ecosystem expects Jest or where legacy behaviour needs regression coverage.',
+	Kotlin: 'Typed JVM/Android language for native integrations and backend-adjacent work. It complements Ionic applications when platform code belongs outside TypeScript.',
+	Linux: 'Primary development and deployment environment for the portfolio toolchain. It anchors shell automation, containers, permissions and reproducible builds.',
+	MiniMax: 'Multimodal AI platform evaluated for text, image and media generation experiments. It is documented as an external creation tool, not bundled in the client.',
+	'Model Context Protocol': 'Standard for exposing typed tools, resources and prompts to agents. DelendAI uses it to isolate capabilities and report public, structured errors.',
+	MongoDB: 'Document database for product data with evolving schemas. It is useful when aggregate-shaped operational records benefit from flexible persistence.',
+	Mongoose: 'Typed application layer over MongoDB for schemas, validation and persistence queries. It keeps Node services from scattering ad hoc document rules.',
+	NestJS: 'Structured Node backend framework with modules, dependency injection and validation. It fits APIs that share typed contracts with Angular and MCP tooling.',
+	'Node.js': 'JavaScript server runtime and API foundation. It hosts Angular SSR tooling and general package ecosystems where Bun is not the target runtime.',
+	npm: 'Package registry and distribution client. Published tooling such as Keyer is consumed from npm, while project packages and docs remain centrally linked.',
+	Nx: 'Monorepo orchestration with task graphs, caching and dependency boundaries. I use it when several applications and libraries need one explicit build system.',
+	OpenCode: 'AI coding agent used to exercise repository workflows and compare agent behaviour. It is part of engineering experimentation, not shipped application code.',
+	Prettier: 'Deterministic formatter for stable reviews and low-noise diffs. It keeps TypeScript, templates and configuration readable across contributors and agents.',
+	PrimeNG: 'Angular component library for operational UIs such as tables, forms and overlays. It is useful when product delivery needs mature, themeable controls quickly.',
+	Prisma: 'Typed database toolkit with schema-driven clients and migrations. It keeps data access and relational contracts explicit in TypeScript backend services.',
+	React: 'Component library used for interface experiments and projects such as Steam Keys. Its role here is evidenced in public work rather than this Angular runtime.',
+	RxJS: 'Observable stream model for cancellable, composable async work. Angular integrations and interactive data flows use it where event sequencing matters.',
+	Sass: 'Structured CSS language with tokens, partials and reusable rules. It owns this portfolio’s visual layers, including responsive monitor and overlay contracts.',
+	Storybook: 'Isolated component workbench for states, themes and accessibility checks. It supports reusable UI libraries without requiring a full application journey.',
+	'Tailwind CSS': 'Utility-first CSS system for rapidly composed interfaces. I use it when project constraints favour tokenised utility composition over component SCSS ownership.',
+	TypeScript: 'Typed JavaScript for frontend, backend and tooling contracts. It enforces the domain, renderer, proposal and component boundaries throughout this portfolio.',
+	Vite: 'Fast frontend and library build tool with modern dev-server transforms. It supports the portfolio build toolchain and lightweight package development.',
+	Vitest: 'Fast TypeScript unit and integration runner. It validates the portfolio components, data contracts and rendering boundaries with the current test suite.',
+	Vue: 'Progressive component framework used by Print CV. Its composition API, Zod validation and print layout demonstrate a separate frontend delivery model.',
+	Zod: 'Runtime schema validation that turns untrusted data into typed values. It protects form, CV and integration boundaries while TypeScript types serve compile time.',
+};
+
+export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = Object.freeze(
+	TECHNOLOGY_ITEMS.map((technology) => ({
+		...technology,
+		detail: TECHNOLOGY_DESCRIPTIONS[technology.label],
+	})).sort((left, right) =>
+		left.label.localeCompare(right.label, 'en', { sensitivity: 'base' })
+	)
+);
 
 export const LANGUAGES: readonly ILanguageOption[] = [
 	{ id: 'en', label: 'English', detail: 'US + UK', flag: '🇺🇸' },
