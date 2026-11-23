@@ -18,11 +18,11 @@ last-transition-at: 2026-11-22T23:41:09.259Z
 
 Expand the portfolio from four locales to a global, maintainable language catalogue, route canonical regional variants correctly, and detect the visitor's browser language automatically. Every unsupported browser language must fall back to English without losing the explicit locale in the URL.
 
-This proposal is intentionally last. It must not start until `f00001` is complete, published and verified.
+This proposal is intentionally after the product work. It must not start until `f00001` is functionally complete and verified; publication is owned independently and is not a blocker for locale implementation.
 
 ## why
 
-The portfolio is a professional contact and acquisition surface. Visitors may arrive from many regions, and requiring them to find a manually hidden language preference increases friction before they can understand the work or contact the author. Product polish, route completeness and publication from `f00001` remain the priority; once the product is stable, global language reach should be added as a separate feature with explicit detection, fallback, RTL and SSR contracts.
+The portfolio is a professional contact and acquisition surface. Visitors may arrive from many regions, and requiring them to find a manually hidden language preference increases friction before they can understand the work or contact the author. Product polish and route completeness from `f00001` remain the priority; once the product is stable, global language reach should be added as a separate feature with explicit detection, fallback, RTL and SSR contracts.
 
 ## design
 
@@ -62,7 +62,7 @@ Brand names, project names, package names and technical identifiers remain uncha
 
 ## non-goals
 
-- Starting locale expansion before `f00001` product work and deployment are complete.
+- Starting locale expansion before `f00001` product work and product-quality corrections are complete.
 - Creating a separate translated website, route tree or duplicate design per locale.
 - Translating private/client evidence, package names, repository names or technical terms that should remain literal.
 - Machine-translation claims without glossary review and parity tests.
@@ -71,7 +71,7 @@ Brand names, project names, package names and technical identifiers remain uncha
 ## dependency
 
 - **Blocked by**: `f00001`
-- **Unblock condition**: `f00001` is complete, its gates pass, and the GitHub Pages deployment is verified.
+- **Unblock condition**: `f00001` is functionally complete and its product gates pass. Publication remains an independent concern.
 
 ## slices
 

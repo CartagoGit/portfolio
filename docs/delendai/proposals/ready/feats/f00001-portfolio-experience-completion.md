@@ -1,6 +1,6 @@
 ---
 id: f00001
-title: "Portfolio experience completion and Pages publication"
+title: "Portfolio experience completion"
 kind: feat
 status: ready
 type: proposal
@@ -22,15 +22,15 @@ shipped-in:
   - "a35de8d"
 ---
 
-# f00001 — Portfolio experience completion and Pages publication
+# f00001 — Portfolio experience completion
 
 ## goal
 
-Complete the public portfolio as one coherent, responsive product portfolio: polish the home monitor and interactive globe, finish every route with useful evidence and interactions, keep EN/ES/FR/DE parity, and ship a gated GitHub Actions pipeline from preparation and tests through build and deployment to the CartagoGit Pages repository.
+Complete the public portfolio as one coherent, responsive product portfolio: polish the home monitor and interactive globe, finish every route with useful evidence and interactions, keep EN/ES/FR/DE parity, and establish the product-quality gates required before publication is owned by a separate infrastructure proposal.
 
 ## why
 
-The portfolio now has a strong visual foundation, but several product-level gaps remain: chart controls are incomplete, the monitor uses inconsistent context states, the globe needs a richer texture catalogue and unambiguous stacking, project evidence is stale, and several routes still look like disconnected demos rather than a deliberate portfolio. The site is itself evidence of frontend quality, so visual discontinuities, mobile overflow, untranslated controls or an unreliable deployment pipeline directly undermine the product being presented.
+The portfolio now has a strong visual foundation, but several product-level gaps remain: chart controls are incomplete, the monitor uses inconsistent context states, the globe needs a richer texture catalogue and unambiguous stacking, project evidence is stale, and several routes still look like disconnected demos rather than a deliberate portfolio. The site is itself evidence of frontend quality, so visual discontinuities, mobile overflow, untranslated controls or unreliable interactions directly undermine the product being presented.
 
 This proposal turns the requested polish into a dependency-ordered program with observable gates instead of accumulating independent cosmetic patches.
 
@@ -48,8 +48,8 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Keep each language in an owned, lintable structure instead of embedding foreign-language programs inside TypeScript: WebGL shaders live under a dedicated rendering/shaders module, non-TypeScript resources are imported through a typed boundary, reusable calculations/state stay outside the component, and no generated or copied implementation is added when a shared abstraction already owns the behaviour. New source formats must participate in the same validation/build graph and fail visibly on syntax or integration errors.
 - Treat readability as product functionality: secondary and compact UI may be quiet, but never smaller than a comfortably readable size; informative text must reflow, wrap, scroll, or use an accessible tooltip instead of disappearing behind `text-overflow: ellipsis`. Ellipsis is allowed only for non-essential repeated labels where the complete value is available on focus/hover and in the accessible name.
 - A compile/test pass is not a visual pass. Every changed surface must be inspected in a real browser at 1366×768, a tablet viewport and 390×844 in at least two themes: logos/icons must match the destination, plates must not be doubled, text must not overlap icons or break awkwardly inside words, equal cards must remain equal-height, shell layers must remain opaque only where specified, and every animation must be checked at rest, hover, focus and reduced motion.
-- Publish through four independent CI stages: `preparation` → `tests` → `build` → `deploy`.
-- A separate low-priority follow-up (`f00002`) owns global locale expansion only after this product/deployment programme is complete.
+- Publication belongs to a separate infrastructure proposal and is not part of this product-quality scope.
+- A separate low-priority follow-up (`f00002`) owns global locale expansion only after this product programme is complete.
 
 ## non-goals
 
@@ -203,30 +203,30 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Gate**: all tests + browser smoke suite
 - **Acceptance**: regression coverage includes monitor state persistence, globe stacking/return, texture catalogue, destination metadata, footer opacity/back-to-top locale, project ordering, theme adaptation, command-palette focus, all route tabs and mobile overflow. Browser checks produce named failure evidence rather than screenshots alone.
 
-### S15 — CI/CD: preparation, tests, build, deploy
-- **Status**: pending
-- **Files**: `.github/workflows/**`, `README.md`, `docs/deployment.md`, `angular.json`, `package.json`
-- **Gate**: workflow syntax validation + local reproduction of all jobs
-- **Acceptance**: jobs run in order `preparation` → `tests` → `build` → `deploy`; preparation validates lockfile/config/assets, tests run lint/typecheck/unit/browser checks, build emits production SSR/browser artifacts, deploy publishes the browser artifact to `CartagoGit/CartagoGit.github.io` on the intended branch, required token/secret is documented and missing credentials fail with an actionable message; no deploy occurs after a failed gate.
+Publication is explicitly owned by the dedicated infrastructure proposal; no deploy files belong to this proposal.
 
 ### S16 — Visual corrections, truth audit and final polish
-- **Status**: review
+- **Status**: pending
 - **Files**: `docs/visual-audit-s16.md`, `src/app/page.scss`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/domain/types.interface.ts`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/earth-globe/earth-globe.component.scss`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/pages/work/work.page.component.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.scss`, `src/pages/work/work.page.spec.ts`, `src/pages/work/_work-card-system.scss`, `public/images/globe/basketball-canonical-v2.webp`, `public/images/globe/beach-ball-canonical-v2.webp`, `public/images/globe/cartago-banner-v2.webp`, `public/images/globe/cartago-mark-v2.webp`, `public/images/globe/earth-bathymetry-v2.webp`, `public/images/globe/earth-thermal-v2.webp`, `public/images/globe/earth-topography-v2.webp`, `public/images/globe/golf-canonical-v2.webp`, `public/images/globe/kepler-186f-artist-v2.webp`, `public/images/globe/proxima-b-artist-v2.webp`, `public/images/globe/rugby-canonical-v2.webp`, `public/images/globe/soccer-canonical-v2.webp`, `public/images/globe/tennis-canonical-v2.webp`, `public/images/globe/trappist-1e-artist-v2.webp`, `public/images/globe/volleyball-canonical-v2.webp`, `tools/generate-globe-assets.py`
 - **Gate**: visual browser audit at 1366×768 + tablet + 390×844 in light and dark themes, focused tests, lint/typecheck/build
 - **Acceptance**: correct the accepted-slice feedback in this proposal: the desktop monitor expands into available space and never overlaps labels/icons/destinations; footer chrome does not become an opaque slab, only controls receive button backgrounds; Work retains project-specific effects and correct logos/icons while expanding the verified catalogue; football/basketball/tennis/golf/rugby/volleyball textures wrap canonically, brand/banner spheres remain undistorted, Saturn rings share scale/orientation/rotation with the planet, exoplanets read as high-detail labelled artist impressions, and additional Earth day/night/cloud/terrain/bathymetry/thermal variants remain sharp; every changed route is manually inspected for correct marks, readable text and no visual regressions at all required viewports.
 - **Theme correction requirement**: opening the globe, its scrim, texture controls, close button and information copy must use active theme tokens (including light/solar/mono), not a permanent base dark/blue palette.
 - **Evidence**: `docs/visual-audit-s16.md` records twelve route/theme/viewport states, tokenized overlay measurements for light/dark/solar/mono, thirty WebGL presets at error 0, zero footer chrome, zero icon/text collisions, zero broken assets and six distinct Work visual systems.
-- review-state: in_review
+- review-state: changes_requested
 - review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-user
+- review-log: requested_changes by cartago-user — Human product review rejects the current evidence: several globe textures and object renders are not recognisable; monitor controls do not provide the required coherent transitions/effects; the monitor header has an unintended empty space; responsive interaction is not explicitly functional per desktop/tablet/smartphone. Rework must pass the new named visual/device matrix and be accepted on visible output, not only build/tests.
 
 ### S17 — Component boundaries, clean architecture and reuse
-- **Status**: review
+- **Status**: pending
 - **Files**: `docs/architecture-s17.md`, `src/domain/demo-visuals.constant.ts`, `src/pages/demos/demos.page.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.spec.ts`, `src/pages/home/hero-monitor/earth-texture.catalog.ts`, `src/pages/home/hero-monitor/earth-texture-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.catalog.ts`, `src/pages/home/hero-monitor/hero-monitor-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/pages/work/work-visuals.constant.ts`, `src/pages/work/work-project-visual.component.ts`, `src/pages/work/work-project-visual.component.html`, `src/pages/work/work-project-visual.component.scss`, `src/pages/work/work-project-visual.component.spec.ts`, `src/pages/work/work.page.component.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.spec.ts`
 - **Gate**: architecture review + focused unit tests + lint/typecheck/build
 - **Acceptance**: route page components remain thin composition roots; cohesive interaction systems are split into focused standalone components; non-UI algorithms live in typed helpers/services; repeated SCSS and template structures are consolidated into tokens, mixins or reusable components; no component owns unrelated route/page concerns, no duplicated last-wins visual system is accepted, and every extracted public contract has direct tests. The review must identify why each helper/component boundary is cohesive, not merely smaller by line count.
 - **Evidence**: `docs/architecture-s17.md` identifies each owner and rationale; catalog/control/visual helpers have direct specs, HeroMonitor no longer owns static catalogue data or Earth control markup, Work/Demos share visual registries and two redundant console SCSS partials were removed from the runtime cascade.
-- review-state: in_review
+- review-state: changes_requested
 - review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-user
+- review-log: requested_changes by cartago-user — Human architecture/product review rejects the current evidence: icon ownership is still inconsistent (for example Docker differs between footer and other surfaces), demos remain too basic, reusable motion/control primitives are incomplete, and tools are not yet organised consistently into scripts/checks by role. Rework must demonstrate canonical registries, shared primitives and measurable reuse.
 
 ## dependency graph
 
@@ -237,9 +237,8 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - S13 consumes all new UI keys after route work lands.
 - S16 reopens the visual product quality of S1/S3/S5 after human review and must close before S14 certification.
 - S17 must refactor S5–S13 cross-cutting ownership before S14; feature completion cannot be used to accept god components, duplicated styles or untestable inline logic.
-- S14 validates all slices and must be green before S15 deployment.
-- S15 is the final gate of this product programme; publication is blocked until every earlier acceptance gate passes.
-- `f00002` depends on a completed/published `f00001` and is intentionally the final language-expansion programme.
+- S14 validates all product slices.
+- `f00002` depends on a completed `f00001`; publication is independent and must not block locale work.
 
 ## acceptance
 
@@ -254,5 +253,5 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Contact delivery has a documented, tested integration boundary and never falsely reports success.
 - EN/ES/FR/DE remain type-complete and SSR-prerendered; visible and ARIA text is readable at the supported viewport sizes, and informative content is never silently truncated.
 - Lint, typecheck, all unit/integration tests, browser audits, production build and SSR build pass.
-- GitHub Actions executes `preparation → tests → build → deploy` and deploys only after every prior stage succeeds.
-- Locale expansion is deferred to `f00002`; `f00001` finishes product work and deployment first.
+- Product completion is independent from publication; deployment evidence is tracked in its own infrastructure proposal.
+- Locale expansion is deferred to `f00002`; `f00001` finishes product work only.
