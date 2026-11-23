@@ -30,7 +30,7 @@ Publication is an independent delivery concern and must not block product comple
 
 ### S1 — Portable preparation and locked dependency install
 - **Status**: pending
-- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`
+- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `vendor/delendai-core-0.3.0.tgz`, `vendor/delendai-contracts-0.3.0.tgz`, `vendor/delendai-sqlite-0.3.0.tgz`, `vendor/delendai-state-0.3.0.tgz`
 - **Gate**: type
 - acceptance:
   - "Frozen install succeeds in GitHub Actions without machine-specific paths."

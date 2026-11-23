@@ -34,7 +34,7 @@
 		"typecheck:tools": "tsc --noEmit -p tsconfig.tools.json",
 		"check": "(bun run lint) & (bun run typecheck) & wait",
 		"check:naming": "bun tools/check-file-naming.script.ts",
-		"ci:prepare": "bun run check:naming && bun run mcp:check",
+		"ci:prepare": "bun run check:naming && bun run mcp:typecheck && bun run mcp:test",
 		"ci:test": "bun run lint:ci && bun run typecheck && bun run test -- --watch=false && bun run test:e2e",
 		"ci:build": "bun run build",
 		"check:strict": "(bun run lint:ci) & (bun run typecheck) & bun run check:naming & wait",
@@ -57,7 +57,7 @@
 		"@angular/platform-server": "^22.3.0",
 		"@angular/router": "^22.3.0",
 		"@angular/ssr": "^22.3.0",
-		"@delendai/core": "file:/home/cartago/.local/share/delendai/stable/packages/core",
+		"@delendai/core": "file:vendor/delendai-core-0.3.0.tgz",
 		"express": "^5.3.0",
 		"rxjs": "~7.8.0",
 		"simple-icons": "^16.38.0",
@@ -85,8 +85,8 @@
 		"vitest": "^4.1.12"
 	},
 	"overrides": {
-		"@delendai/contracts": "file:/home/cartago/.local/share/delendai/stable/packages/contracts",
-		"@delendai/sqlite": "file:/home/cartago/.local/share/delendai/stable/packages/sqlite",
-		"@delendai/state": "file:/home/cartago/.local/share/delendai/stable/packages/state"
+		"@delendai/contracts": "file:vendor/delendai-contracts-0.3.0.tgz",
+		"@delendai/sqlite": "file:vendor/delendai-sqlite-0.3.0.tgz",
+		"@delendai/state": "file:vendor/delendai-state-0.3.0.tgz"
 	}
 }
