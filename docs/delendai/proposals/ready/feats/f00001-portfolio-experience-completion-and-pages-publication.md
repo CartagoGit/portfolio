@@ -12,6 +12,7 @@ shipped-in:
   - "de01752"
   - "0383333"
   - "51a18bd"
+  - "00444f8"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -106,10 +107,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s5-reviewer-20261123 — verified at 51a18bd, validate exit 0 and tests 47/47 claimed, no recorded run cited — Independent S5 review approved. Six S2-curated cards render in one shared system with real flat logos, status, stack and verified destinations; stale project collage removed. Accent colors derive from theme tokens/project color, focus/hover/reduced motion are shared, metadata is 12px, desktop/mobile layouts have no usable horizontal overflow, and the directory uses four real platforms. Strict lint/typecheck, 21 files/47 tests and production+SSR build pass.
 
 ### S6 — Approach page visual system and content
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/approach/approach.page.ts`, `src/pages/approach/approach.page.html`, `src/pages/approach/approach.page.scss`, `src/pages/approach/_approach-capability-system.scss`, `src/pages/approach/approach.page.spec.ts`
 - **Gate**: approach page unit tests + responsive Playwright audit
 - **Acceptance**: capability panels never visually jump or clip across selection; every capability has a coherent icon/example/proof; text is concise, relevant and attractive; transitions, focus and theme changes preserve layout and contrast.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s6-reviewer-20261124
+- review-log: approved by cartago-independent-s6-reviewer-20261124 — verified at 00444f8, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S6 review approved. All six capabilities now expose icon, practical example and proof; panel is fixed/scroll-safe at 560px desktop/mobile with no selection jump, tabs support roving tabindex plus Arrow/Home/End focus, and theme/reduced-motion styles preserve contrast. Browser audit at 1366x768 and 390x844 passed, along with strict lint/typecheck, 21 files/48 tests and production+SSR build.
 
 ### S7 — Knowledge page examples and related projects
 - **Status**: pending
