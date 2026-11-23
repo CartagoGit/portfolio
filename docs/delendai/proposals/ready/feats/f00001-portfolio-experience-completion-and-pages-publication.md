@@ -42,6 +42,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Prefer data-driven cards and examples. Project ordering, stack evidence, route animations and preview destinations remain centralized in domain data.
 - Keep each language in an owned, lintable structure instead of embedding foreign-language programs inside TypeScript: WebGL shaders live under a dedicated rendering/shaders module, non-TypeScript resources are imported through a typed boundary, reusable calculations/state stay outside the component, and no generated or copied implementation is added when a shared abstraction already owns the behaviour. New source formats must participate in the same validation/build graph and fail visibly on syntax or integration errors.
 - Treat readability as product functionality: secondary and compact UI may be quiet, but never smaller than a comfortably readable size; informative text must reflow, wrap, scroll, or use an accessible tooltip instead of disappearing behind `text-overflow: ellipsis`. Ellipsis is allowed only for non-essential repeated labels where the complete value is available on focus/hover and in the accessible name.
+- A compile/test pass is not a visual pass. Every changed surface must be inspected in a real browser at 1366×768, a tablet viewport and 390×844 in at least two themes: logos/icons must match the destination, plates must not be doubled, text must not overlap icons or break awkwardly inside words, equal cards must remain equal-height, shell layers must remain opaque only where specified, and every animation must be checked at rest, hover, focus and reduced motion.
 - Publish through four independent CI stages: `preparation` → `tests` → `build` → `deploy`.
 - A separate low-priority follow-up (`f00002`) owns global locale expansion only after this product/deployment programme is complete.
 
@@ -63,6 +64,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Files**: `angular.json`, `src/domain/types.ts`, `src/core/rendering/earth-globe-renderer.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/core/rendering/shaders/earth-globe.vert.glsl`, `src/core/rendering/shaders/index.ts`, `src/core/rendering/shaders/raw-assets.d.ts`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/earth-globe/earth-globe.component.html`, `src/pages/home/earth-globe/earth-globe.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `public/images/earth-clouds-4k.webp`, `public/images/globe/basketball-canonical-4k.webp`, `public/images/globe/beach-ball-canonical-4k.webp`, `public/images/globe/cartago-banner-4k.webp`, `public/images/globe/cartago-mark-4k.webp`, `public/images/globe/cartago-portrait-4k.webp`, `public/images/globe/disco-canonical-4k.webp`, `public/images/globe/earth-night-4k.webp`, `public/images/globe/golf-canonical-4k.webp`, `public/images/globe/jupiter-4k.webp`, `public/images/globe/kepler-186f-artist-4k.webp`, `public/images/globe/mars-4k.webp`, `public/images/globe/mercury-4k.webp`, `public/images/globe/moon-4k.webp`, `public/images/globe/neptune-2k.webp`, `public/images/globe/pluto-4k.webp`, `public/images/globe/proxima-b-artist-4k.webp`, `public/images/globe/saturn-4k.webp`, `public/images/globe/soccer-canonical-4k.webp`, `public/images/globe/sun-4k.webp`, `public/images/globe/tennis-canonical-4k.webp`, `public/images/globe/trappist-1e-artist-4k.webp`, `public/images/globe/uranus-2k.webp`, `public/images/globe/venus-4k.webp`, `public/images/ATTRIBUTION.md`, `public/icons/projects/keyer.svg`, `public/icons/projects/print-cv.svg`, `public/icons/projects/steam-keys.svg`
 - **Gate**: lint + typecheck + focused unit tests + desktop/mobile Playwright measurements
 - **Acceptance**: switching Projects/Technologies preserves the active preview; the toggle has an icon; chart controls fill two complete rows with distinct chart icons; the destination aside never overflows; project logos are normalized as flat marks (no doubled border/plate, no icon-on-icon effect); the globe z-index always beats the inactive monitor; the monitor has no active hover affordance while globe content is frontal; the close action says “Close sphere”; all eight solar planets plus Sun/Moon/Pluto, representative exoplanets, sports/random spheres and a joke/brand collection are selectable; Earth exposes multiple real high-resolution variants; brand wraps use 4K equirectangular assets and owned imagery; Saturn visibly includes correctly oriented rings; every texture is a real/attributed visual, owned brand wrap or a clearly labelled artist impression, never an unexplained synthetic look; GLSL is owned under a typed rendering/shaders boundary and compiles during the browser validation gate instead of living as an unchecked string in TypeScript; sphere, controls and backdrop enter/exit as one coordinated transition without a discrete jump or elements escaping above the backdrop; all monitor controls, descriptions and destination text remain readable without zoom at 1366×768 and 390×844, and overflow uses wrapping or controlled scrolling instead of ellipsis for informative content.
+- **Visual correction requirement**: on wide screens the monitor/expanded console consumes available right-side space instead of forcing chart labels, icons and destination text into a tiny laptop; words never break inside ordinary labels to fit, icons never occupy text grid cells, and the destination list scrolls/reflows as a deliberate rail. Texture truth is mandatory: football/basketball/tennis/golf/rugby/volleyball patterns must wrap into canonical balls without seams cutting through panels, logo/banner spheres must remain undistorted/readable, Saturn’s rings keep their correct scale and rotate with the same quaternion/orientation as the planet, exoplanets use visibly plausible high-detail labelled artist impressions, and more Earth modes (day, night, clouds, terrain, bathymetry/topography, infrared/thermal) are available. A 1:1 visual sample audit is required for every preset at rest and after drag.
 - review-state: done
 - review-implementer: microsoft-mai-code-2
 - review-reviewer: cartago-independent-s1-reviewer-20261123
@@ -82,7 +84,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Status**: done
 - **Files**: `src/shared/ui/header/header.component.ts`, `src/shared/ui/header/header.component.html`, `src/shared/ui/header/header.component.scss`, `src/shared/ui/header/header.component.spec.ts`, `src/shared/ui/footer/footer.component.ts`, `src/shared/ui/footer/footer.component.html`, `src/shared/ui/footer/footer.component.scss`, `src/shared/ui/footer/footer.component.spec.ts`, `src/app/page.html`, `src/app/page.ts`, `src/core/platform/shell.facade.ts`, `src/core/platform/routing.ts`
 - **Gate**: shell tests + desktop/mobile Playwright navigation audit
-- **Acceptance**: the theme button is stable-width (`Themes` + selected colour dot), selected theme is marked in the menu, footer links are opaque and never expose route content during transitions, back-to-top only scrolls and never changes locale/configuration, route shell remains stable during View Transitions.
+- **Acceptance**: the theme button is stable-width (`Themes` + selected colour dot), selected theme is marked in the menu, footer links/buttons are opaque and legible without showing route content, while the footer chrome itself stays transparent/secondary as intended; no footer-wide border or opaque slab is added to solve button contrast, back-to-top only scrolls and never changes locale/configuration, and the route shell remains stable during View Transitions.
 - review-state: done
 - review-implementer: microsoft-mai-code-2
 - review-reviewer: cartago-independent-s3-reviewer-20261123
@@ -102,7 +104,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Status**: done
 - **Files**: `src/pages/work/work.page.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.scss`, `src/pages/work/_work-card-system.scss`, `src/pages/work/work.page.spec.ts`
 - **Gate**: work page unit tests + lint/typecheck + desktop/mobile visual audit
-- **Acceptance**: project order reflects public-profile importance/status; every card has a real logo, stack, status, repository and applicable site/docs/package/release destinations; cards share one interaction and motion system; colours derive from active theme plus project accent without breaking contrast.
+- **Acceptance**: project order reflects public-profile importance/status; every card has a real logo, stack, status, repository and applicable site/docs/package/release destinations; cards share one accessibility/responsive contract, but each curated project retains a distinct visual effect inspired by what it does; all technology chips include the corresponding icon, all project marks use the correct logo/asset, and the page expands beyond six headline projects with a verified catalogue of current meaningful work. The shared card system must never flatten the prior custom project visuals into generic rectangles; theme tokens preserve contrast while each effect remains recognisable.
 - review-state: done
 - review-implementer: microsoft-mai-code-2
 - review-reviewer: cartago-independent-s5-reviewer-20261123
@@ -140,7 +142,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S9 — Demos catalogue and mini-games
 - **Status**: pending
-- **Files**: `src/pages/demos/**`
+- **Files**: `src/pages/demos/demos.page.ts`, `src/pages/demos/demos.page.html`, `src/pages/demos/demos.page.scss`, `src/pages/demos/_demos-interaction-system.scss`, `src/pages/demos/demos.page.spec.ts`
 - **Gate**: demo/game unit tests + keyboard/touch Playwright audit
 - **Acceptance**: interactive examples appear in tabs before project links; every external project gets its correct logo; memory text is never reversed; additional compact games/examples exist; all games support keyboard/touch, reduced motion and reset; controls and state transitions are visible and consistent.
 
@@ -160,7 +162,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Status**: pending
 - **Files**: `src/app/page.scss`, `src/styles.scss`, `src/styles/motion/**`, `src/styles/keyframes/**`, `src/styles/tokens/**`
 - **Gate**: lint/typecheck + 1366x768 and 390x844 Playwright audits on every route
-- **Acceptance**: route/tab transitions are intentional and coherent, no page has horizontal overflow or clipped interactive content, scrollbars follow theme tokens, reduced-motion disables non-essential motion, shared effects use existing tokens rather than per-route ad hoc colours/durations, and the minimum visual size, contrast and overflow strategy for labels, navigation, cards and supporting copy are validated on desktop/mobile without relying on ellipsis to hide information.
+- **Acceptance**: route/tab transitions are intentional and coherent, no page has horizontal overflow or clipped interactive content, scrollbars follow theme tokens, reduced-motion disables non-essential motion, shared effects use existing tokens rather than per-route ad hoc colours/durations, and the minimum visual size, contrast and overflow strategy for labels, navigation, cards and supporting copy are validated on desktop/tablet/mobile without relying on ellipsis to hide information. Named browser captures/measurements must cover every route at 1366×768, a tablet viewport and 390×844 in at least a light and a dark theme, and no “build passed” status can close a slice without this visual audit.
 
 ### S13 — Full i18n parity and accessible copy
 - **Status**: pending
@@ -180,6 +182,12 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Gate**: workflow syntax validation + local reproduction of all jobs
 - **Acceptance**: jobs run in order `preparation` → `tests` → `build` → `deploy`; preparation validates lockfile/config/assets, tests run lint/typecheck/unit/browser checks, build emits production SSR/browser artifacts, deploy publishes the browser artifact to `CartagoGit/CartagoGit.github.io` on the intended branch, required token/secret is documented and missing credentials fail with an actionable message; no deploy occurs after a failed gate.
 
+### S16 — Visual corrections, truth audit and final polish
+- **Status**: pending
+- **Files**: `src/pages/home/hero-monitor/**`, `src/pages/home/earth-globe/**`, `src/core/rendering/**`, `src/shared/ui/footer/**`, `src/pages/work/**`, `public/images/globe/**`, `src/app/page.scss`
+- **Gate**: visual browser audit at 1366×768 + tablet + 390×844 in light and dark themes, focused tests, lint/typecheck/build
+- **Acceptance**: correct the accepted-slice feedback in this proposal: the desktop monitor expands into available space and never overlaps labels/icons/destinations; footer chrome does not become an opaque slab, only controls receive button backgrounds; Work retains project-specific effects and correct logos/icons while expanding the verified catalogue; football/basketball/tennis/golf/rugby/volleyball textures wrap canonically, brand/banner spheres remain undistorted, Saturn rings share scale/orientation/rotation with the planet, exoplanets read as high-detail labelled artist impressions, and additional Earth day/night/cloud/terrain/bathymetry/thermal variants remain sharp; every changed route is manually inspected for correct marks, readable text and no visual regressions at all required viewports.
+
 ## dependency graph
 
 - S2 feeds S1, S5, S7, S8 and S9.
@@ -187,6 +195,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - S5–S10 can proceed independently after S2 data is stable.
 - S3 and S4 establish shell interactions before S12 global motion/overflow validation.
 - S13 consumes all new UI keys after route work lands.
+- S16 reopens the visual product quality of S1/S3/S5 after human review and must close before S14 certification.
 - S14 validates all slices and must be green before S15 deployment.
 - S15 is the final gate of this product programme; publication is blocked until every earlier acceptance gate passes.
 - `f00002` depends on a completed/published `f00001` and is intentionally the final language-expansion programme.
@@ -197,6 +206,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Technology previews provide a real definition and practical use statement per technology, not generic filler text.
 - The globe offers real-cloud Earth, several additional real Earth variants, Sun/Moon and all planets (including Pluto), exoplanet artist impressions labelled as such, real/canonical sports-ball patterns, and a branded/joke/portrait collection; Saturn renders real rings, preset origin is explicit, assets are high-resolution/lazy-loaded, orientation survives texture changes, and no preset causes layout shift.
 - Work, Approach, Knowledge, Docker, Demos, Lab and Contact are complete, responsive, theme-correct and coherent as one product.
+- Every route and interactive state is visually attractive at desktop, tablet and mobile: correct icons/logos, no duplicated plates, no overlapping labels, no reversed/mirrored memory text, no pixelated globe mappings, no generic cards where a project had a deliberate effect, and no shell correction that changes an unrelated surface.
 - Public profile evidence is current enough to support the curated order and copy; every destination is verified or intentionally omitted with a truthful reason.
 - Footer, back-to-top, locale, command palette and route/tab transitions work without visual jumps or input regressions.
 - Contact delivery has a documented, tested integration boundary and never falsely reports success.
