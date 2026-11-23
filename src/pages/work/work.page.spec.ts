@@ -20,10 +20,16 @@ describe('WorkPageComponent', () => {
 		for (const card of cards) {
 			expect(card.querySelector('.work-page__status')?.textContent).toBeTruthy();
 			expect(card.querySelector('.work-page__identity img, .work-page__identity svg')).toBeTruthy();
+			expect(card.querySelector('app-work-project-visual .work-project-visual > div')).toBeTruthy();
 			expect(card.querySelectorAll('.work-page__content li').length).toBeGreaterThan(1);
+			expect(card.querySelectorAll('.work-page__content li svg').length).toBe(
+				card.querySelectorAll('.work-page__content li').length
+			);
 			expect(card.querySelectorAll('.work-page__destinations a').length).toBeGreaterThan(1);
 		}
-		expect(element.querySelectorAll('.work-page__directory-grid > a')).toHaveLength(4);
+		expect(new Set([...cards].map((card) => card.getAttribute('data-project'))).size).toBe(6);
+		expect(fixture.componentInstance.experiments).toHaveLength(4);
+		expect(element.querySelectorAll('.work-page__experiment-grid > a')).toHaveLength(4);
 		expect(element.querySelector('#main-content')).toBeNull();
 	});
 	it('localizes project and platform copy from the content catalogue', async () => {

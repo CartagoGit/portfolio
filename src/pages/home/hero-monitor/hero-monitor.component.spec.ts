@@ -61,12 +61,16 @@ describe('HeroMonitorComponent', () => {
 		const element = fixture.nativeElement as HTMLElement;
 
 		expect(component.chartOptions).toHaveLength(14);
-		expect(component.earthTextureOptions).toHaveLength(27);
+		expect(component.earthTextureOptions).toHaveLength(30);
+		expect(component.earthTextureOptions.map(({ id }) => id)).toEqual(
+			expect.arrayContaining(['bathymetry', 'rugby', 'volleyball'])
+		);
 		expect(
 			new Set(component.earthTextureOptions.map(({ category }) => category))
 		).toEqual(new Set(['earth', 'planets', 'exoplanets', 'balls', 'playful']));
 		expect(component.earthTextureLabel('kepler-186f')).toContain('impresión artística');
 		expect(element.querySelectorAll('.hero-monitor__globe-scrim')).toHaveLength(1);
+		expect(element.querySelectorAll('app-earth-globe-controls')).toHaveLength(1);
 		expect(element.querySelectorAll('.hero-monitor__earth-controls')).toHaveLength(1);
 
 		component.selectEarthTexture('saturn', new Event('click'));

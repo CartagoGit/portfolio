@@ -22,7 +22,9 @@ app-hero-monitor .hero-monitor__earth-categories button {
   overflow: visible;
   text-overflow: clip;
   white-space: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 app-hero-monitor .hero-monitor__selector span {
@@ -95,7 +97,7 @@ app-hero-monitor .hero-monitor__retry {
 }
 
 app-hero-monitor .hero-monitor__canvas {
-  grid-template-columns: minmax(0, 1fr) 156px;
+  grid-template-columns: minmax(0, 1fr) 184px;
 }
 
 app-hero-monitor .hero-monitor__destinations {
@@ -119,6 +121,7 @@ app-hero-monitor .hero-monitor__destination-primary > span {
 }
 
 app-hero-monitor .hero-monitor__destination-primary {
+  grid-template-columns: 20px minmax(0, 1fr) auto;
   overflow: visible;
   padding: .5rem .42rem;
 }
@@ -131,8 +134,10 @@ app-hero-monitor .hero-monitor__destination-primary > span {
 
 app-hero-monitor .hero-monitor__destination-primary > b {
   font-size: .75rem;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 app-hero-monitor .hero-monitor__preview-icon:has(img) {
@@ -157,7 +162,7 @@ app-hero-monitor .hero-monitor__globe-scrim {
   opacity: 0;
   visibility: hidden;
   pointer-events: none !important;
-  background: rgb(2 8 18 / .84) !important;
+  background: var(--scrim) !important;
   backdrop-filter: blur(7px) saturate(.68);
   transition:
     opacity .48s ease,
@@ -190,7 +195,7 @@ app-hero-monitor .hero-monitor__earth-controls {
   z-index: 1002 !important;
   top: auto !important;
   right: auto !important;
-  bottom: max(.8rem, env(safe-area-inset-bottom)) !important;
+  bottom: max(1.25rem, env(safe-area-inset-bottom)) !important;
   left: 50% !important;
   width: min(840px, calc(100vw - 1.5rem)) !important;
   max-height: calc(48dvh - 1rem);
@@ -216,21 +221,38 @@ app-hero-monitor .hero-monitor__earth-controls.is-active {
 }
 
 app-hero-monitor .hero-monitor__earth-categories {
+  display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .35rem;
 }
 
 app-hero-monitor .hero-monitor__earth-categories button,
 app-hero-monitor .hero-monitor__earth-textures button {
+  appearance: none;
   min-height: 38px;
-  font-size: .75rem;
-  line-height: 1.2;
+  padding: .45rem .55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 700 .75rem/1.2 tokens.$font-mono, monospace;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible,
+  &.is-active {
+    border-color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 14%, var(--surface));
+    color: var(--ink);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 24%, transparent);
+  }
 }
 
-app-hero-monitor .hero-monitor__earth-textures {
-  min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
+app-hero-monitor .hero-monitor__earth-categories button[aria-selected='true'],
+app-hero-monitor .hero-monitor__earth-textures button[aria-pressed='true'] {
+  border-color: var(--cyan);
+  background: color-mix(in srgb, var(--cyan) 20%, var(--surface));
+  box-shadow: inset 0 -2px 0 var(--cyan);
 }
 
 app-hero-monitor .hero-monitor__earth-origin,
@@ -244,13 +266,13 @@ app-hero-monitor .hero-monitor__earth-drag-hint {
 
 app-hero-monitor .hero-monitor__earth-origin {
   grid-row: 3;
-  color: #bcd6e7 !important;
+  color: var(--ink) !important;
   font-weight: 700;
 }
 
 app-hero-monitor .hero-monitor__earth-drag-hint {
   grid-row: 4;
-  color: #9db3c4 !important;
+  color: var(--muted) !important;
   font-weight: 500;
 }
 
@@ -319,7 +341,7 @@ app-hero-monitor .hero-monitor__chart[data-chart='donut'] {
   background: radial-gradient(circle, var(--surface) 0 19%, #ffffff08 20% 61%, transparent 62%), var(--surface);
 }
 app-hero-monitor .hero-monitor__chart[data-chart='donut'] > span,
-app-hero-monitor .hero-monitor__chart[data-chart='donut'] svg { display: none; }
+app-hero-monitor .hero.monitor__chart[data-chart='donut'] svg { display: none; }
 app-hero-monitor .hero.monitor__chart[data-chart='donut']::before {
   content: '';
   position: absolute;
@@ -530,13 +552,90 @@ app-hero-monitor .hero-monitor__chart[data-chart='stream'] path {
 }
 
 @media (max-width: 900px) {
-  app-hero-monitor .hero-monitor__console-effects button,
-  app-hero-monitor .hero-monitor__chart-symbols button,
-  app-hero-monitor .hero-monitor__temperature,
-  app-hero-monitor .hero-monitor__chart em,
-  app-hero-monitor .hero-monitor__chrome,
-  app-hero-monitor .hero-monitor__heading {
+  app-hero-monitor .hero-monitor__earth-controls {
+    bottom: max(1.25rem, env(safe-area-inset-bottom)) !important;
+    display: grid;
+    width: min(430px, calc(100vw - 1rem)) !important;
+    max-height: 46dvh;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto auto !important;
+    gap: .38rem;
+    padding: .55rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    overscroll-behavior: contain;
+  }
+
+  app-hero-monitor .hero-monitor__earth-categories,
+  app-hero-monitor .hero-monitor__earth-textures {
+    grid-column: 1;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    gap: .35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: .1rem;
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
+  }
+
+  app-hero-monitor .hero-monitor__earth-categories { grid-row: 1; }
+  app-hero-monitor .hero-monitor__earth-textures { grid-row: 2; }
+
+  app-hero-monitor .hero-monitor__earth-categories button,
+  app-hero-monitor .hero-monitor__earth-textures button {
+    min-width: max-content;
+    min-height: 40px;
+    flex: 0 0 auto;
+    font-size: .75rem;
+    white-space: nowrap;
+    scroll-snap-align: start;
+  }
+
+  app-hero-monitor .hero-monitor__earth-origin,
+  app-hero-monitor .hero-monitor__earth-drag-hint {
+    grid-column: 1;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
     font-size: .75rem !important;
+  }
+
+  app-hero-monitor .hero-monitor__earth-origin { grid-row: 3; }
+  app-hero-monitor .hero-monitor__earth-drag-hint { grid-row: 4; }
+
+  app-hero-monitor .hero-monitor__earth-close {
+    grid-column: 1;
+    grid-row: 5;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    height: auto;
+    font-size: .75rem !important;
+  }
+
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-close {
+    grid-column: 1;
+    grid-row: 5;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    height: auto;
+    font-size: .75rem !important;
+  }
+
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-origin {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+  }
+
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-drag-hint {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
   }
 }
 

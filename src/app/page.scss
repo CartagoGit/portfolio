@@ -66,8 +66,8 @@
 .hero {
 	position: relative;
 	display: grid;
-	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-	gap: clamp(2rem, 5vw, 5.5rem);
+	grid-template-columns: minmax(420px, 0.72fr) minmax(0, 1.28fr);
+	gap: clamp(2rem, 4vw, 3.5rem);
 	width: min(1380px, calc(100% - 3rem));
 	height: auto;
 	min-height: 0;

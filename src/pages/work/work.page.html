@@ -17,6 +17,7 @@
 				[attr.data-project]="project.panel.id"
 				[style.--project-accent]="project.panel.color">
 				<div class="work-page__card-glow" aria-hidden="true"></div>
+				<app-work-project-visual [projectId]="project.panel.id" />
 				<header class="work-page__card-header">
 					<span class="work-page__number">{{ project.number }} / {{ projects.length }}</span>
 					<span class="work-page__status">{{ projectStatus(project.panel) }}</span>
@@ -38,7 +39,13 @@
 					<p>{{ projectDetail(project.panel) }}</p>
 					<ul [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
 						@for (technology of project.panel.stack; track technology) {
-							<li>{{ termLabel(technology) }}</li>
+							@let visual = technologyVisual(technology);
+							<li>
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+									<path [attr.d]="visual.iconPath" [attr.fill]="visual.color" />
+								</svg>
+								<span>{{ termLabel(technology) }}</span>
+							</li>
 						}
 					</ul>
 				</div>
@@ -59,6 +66,35 @@
 			</article>
 		}
 	</div>
+
+	<section class="work-page__experiments" aria-labelledby="work-experiments-title">
+		<header>
+			<p class="work-page__eyebrow">{{ 'pages.demos.eyebrow' | translate }}</p>
+			<h2 id="work-experiments-title">
+				{{ 'pages.demos.titleLead' | translate }}
+				<br />
+				<em>{{ 'pages.demos.titleEmphasis' | translate }}</em>
+			</h2>
+			<p>{{ 'pages.demos.subtitle' | translate }}</p>
+		</header>
+		<div class="work-page__experiment-grid" [attr.aria-label]="'pages.demos.externalLinksAria' | translate">
+			@for (experiment of experiments; track experiment.demo.title) {
+				<a [href]="experiment.demo.url" target="_blank" rel="noreferrer">
+					<div class="work-page__experiment-icon" aria-hidden="true">
+						@if (experiment.visual.imageSrc; as image) {
+							<img [src]="image" alt="" />
+						} @else if (experiment.visual.iconPath; as iconPath) {
+							<svg viewBox="0 0 24 24"><path [attr.d]="iconPath" fill="currentColor" /></svg>
+						}
+					</div>
+					<span>{{ experiment.demo.number }}</span>
+					<h3>{{ experiment.demo.title }}</h3>
+					<p>{{ experiment.demo.summaryKey | translate }}</p>
+					<i aria-hidden="true">↗</i>
+				</a>
+			}
+		</div>
+	</section>
 
 	<section class="work-page__directory" aria-labelledby="directory-title">
 		<div>

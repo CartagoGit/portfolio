@@ -35,54 +35,14 @@
 			[preview]="earthPreview()"
 			[textureStyle]="earthTexture()" />
 	</div>
-	<section
-		class="hero-monitor__earth-controls"
-		[class.is-active]="earthControlsVisible()"
-		[attr.inert]="earthControlsVisible() ? null : ''"
-		[attr.aria-hidden]="earthControlsVisible() ? null : 'true'"
-		[attr.aria-label]="'pages.home.earthControlsLabel' | translate">
-		<div
-			class="hero-monitor__earth-categories"
-			role="tablist"
-			[attr.aria-label]="'pages.home.earthTextureLabel' | translate">
-			@for (category of earthTextureCategories; track category) {
-				<button
-					type="button"
-					role="tab"
-					[class.is-active]="earthTextureCategory() === category"
-					[attr.aria-selected]="earthTextureCategory() === category"
-					(click)="selectEarthTextureCategory(category, $event)">
-					{{ earthCategoryLabel(category) }}
-				</button>
-			}
-		</div>
-		<div
-			class="hero-monitor__earth-textures"
-			role="group"
-			[attr.aria-label]="earthCategoryLabel(earthTextureCategory())">
-			@for (texture of visibleEarthTextureOptions(); track texture.id) {
-				<button
-					type="button"
-					[class.is-active]="earthTexture() === texture.id"
-					[attr.aria-pressed]="earthTexture() === texture.id"
-					[attr.title]="earthTextureLabel(texture.id)"
-					(click)="selectEarthTexture(texture.id, $event)">
-					{{ earthTextureLabel(texture.id) }}
-				</button>
-			}
-		</div>
-		<p class="hero-monitor__earth-origin" aria-live="polite">
-			{{ earthTextureOriginLabel(earthTexture()) }}
-		</p>
-		<p class="hero-monitor__earth-drag-hint">{{ 'pages.home.earthDragHint' | translate }}</p>
-		<button
-			class="hero-monitor__earth-close"
-			type="button"
-			(click)="dismissEarth($event)"
-			[attr.aria-label]="closeSphereLabel()">
-			{{ closeSphereLabel() }}
-		</button>
-	</section>
+	<app-earth-globe-controls
+		[active]="earthControlsVisible()"
+		[locale]="locale()"
+		[category]="earthTextureCategory()"
+		[textureStyle]="earthTexture()"
+		(categoryChange)="selectEarthTextureCategory($event)"
+		(textureChange)="selectEarthTexture($event)"
+		(dismiss)="dismissEarth($event)" />
 	<div class="hero-monitor__orb hero-monitor__orb--two"></div>
 	<div
 		class="hero-monitor__interface"

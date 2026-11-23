@@ -47,6 +47,7 @@ export type IEarthTextureStyle =
 	| 'natural'
 	| 'night'
 	| 'terrain'
+	| 'bathymetry'
 	| 'infrared'
 	| 'sun'
 	| 'moon'
@@ -67,6 +68,8 @@ export type IEarthTextureStyle =
 	| 'golf'
 	| 'beach-ball'
 	| 'disco'
+	| 'rugby'
+	| 'volleyball'
 	| 'cartago-mark'
 	| 'cartago-banner'
 	| 'portrait';

@@ -252,6 +252,8 @@ function textureEffectIndex(style: IEarthTextureStyle | undefined): number {
 			return 3;
 		case 'sun':
 			return 4;
+		case 'saturn':
+			return 5;
 		default:
 			return 0;
 	}

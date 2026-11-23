@@ -793,10 +793,14 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface :is(button, a):foc
 	cursor: grabbing;
 }
 .hero-monitor__orb--one.hero-monitor--out-front {
-	z-index: 6;
-	animation: none !important;
-	opacity: 0;
-	transform: translate(-50%, -50%) scale(0.82);
+	position: fixed;
+	z-index: 51;
+	top: 50%;
+	left: 50%;
+	right: auto;
+	bottom: auto;
+	width: min(68vmin, 680px);
+	height: min(68vmin, 680px);
 }
 app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front-ready,
 app-hero-monitor .hero-monitor .hero-monitor__orb--one.hero-monitor--front,
@@ -985,8 +989,6 @@ app-hero-monitor .hero-monitor .hero-monitor__note {
 @keyframes technology-spectrum { 50% { filter: hue-rotate(170deg) saturate(1.8); } }
 
 @include meta.load-css('home-refinement');
-@include meta.load-css('console-final');
-@include meta.load-css('console-layout-final');
 @include meta.load-css('console-header-final');
 @include meta.load-css('monitor-laptop-final');
 @include meta.load-css('monitor-accessibility-final');

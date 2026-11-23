@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
+	DEMOS,
 	HERO_PANELS,
 	PUBLIC_LINKS,
 } from '../../domain/data';
+import { demoVisual, type IDemoVisual } from '../../domain/demo-visuals';
+import { workTechnologyVisual } from './work-visuals';
 import { monitorDestinations } from '../../domain/monitor-destinations';
 import type {
+	IDemo,
 	IHeroPanel,
 	IMonitorDestination,
 	IMonitorDestinationKind,
@@ -13,6 +17,7 @@ import type {
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
 import { contentKey } from '../../lang/content-key';
+import { WorkProjectVisualComponent } from './work-project-visual.component';
 
 interface IWorkProject {
 	panel: IHeroPanel;
@@ -20,9 +25,14 @@ interface IWorkProject {
 	destinations: readonly IMonitorDestination[];
 }
 
+interface IWorkExperiment {
+	demo: IDemo;
+	visual: IDemoVisual;
+}
+
 @Component({
 	selector: 'app-work-page',
-	imports: [TranslatePipe],
+	imports: [TranslatePipe, WorkProjectVisualComponent],
 	templateUrl: './work.page.html',
 	styleUrl: './work.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +62,13 @@ export class WorkPageComponent {
 		({ group }) => group === 'platform'
 	);
 
+	readonly experiments: readonly IWorkExperiment[] = DEMOS
+		.filter(({ title }) => title !== 'Print CV')
+		.map((demo) => ({
+			demo,
+			visual: demoVisual(demo.title),
+		}));
+
 	destinationKindLabel(kind: IMonitorDestinationKind): string {
 		const key: Record<IMonitorDestinationKind, string> = {
 			website: 'pages.home.monitorWebsite',
@@ -80,5 +97,9 @@ export class WorkPageComponent {
 
 	termLabel(value: string): string {
 		return this._translate.instant(`content.terms.${contentKey(value)}`);
+	}
+
+	technologyVisual(label: string) {
+		return workTechnologyVisual(label);
 	}
 }
