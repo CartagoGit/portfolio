@@ -9,6 +9,7 @@ date: 2026-11-22
 shipped-in:
   - "f29e917"
   - "691bd52"
+  - "de01752"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -73,10 +74,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s2-reviewer-20261123 — verified at 691bd52, validate exit 0 and tests 42/42 claimed, no recorded run cited — Independent S2 review approved. Verified curated order on public links and hero panels, 41 alphabetically sorted specific technology definitions, domain-backed technology previews, 164 unique HTTPS destinations with anti-bot exceptions only, explicit removal of the DelendAI 404 site and Tanit non-release, HTTPS/duplicate/no-invented-route tests, strict typecheck/lint, 21 test files/42 tests, and production+SSR build.
 
 ### S3 — Shell, header, footer and back-to-top
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/shared/ui/header/**`, `src/shared/ui/footer/**`, `src/app/page.html`, `src/app/page.ts`, `src/core/platform/shell.facade.ts`, `src/core/platform/routing.ts`
 - **Gate**: shell tests + desktop/mobile Playwright navigation audit
 - **Acceptance**: the theme button is stable-width (`Themes` + selected colour dot), selected theme is marked in the menu, footer links are opaque and never expose route content during transitions, back-to-top only scrolls and never changes locale/configuration, route shell remains stable during View Transitions.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s3-reviewer-20261123
+- review-log: approved by cartago-independent-s3-reviewer-20261123 — verified at de01752, validate exit 0 and tests 43/43 claimed, no recorded run cited — Independent S3 review approved. Theme button is 108px at desktop/mobile, localized Themes label plus active color dot, with one selected menu row. Footer is opaque in all states. Back-to-top is a semantic button wired to reduced-motion-aware scroll only; URL, locale and theme remain unchanged. The route-stage owns main-content across every route and header/footer geometry is unchanged through View Transitions. Strict lint/typecheck, 21 files/43 tests and production+SSR build pass.
 
 ### S4 — Command palette interaction and motion
 - **Status**: pending
