@@ -27,7 +27,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Keep the monitor as one state machine: section choice changes the selector, while the active preview/dashboard remains stable unless the user explicitly changes the view.
 - Use semantic destination metadata (`website`, `repository`, `documentation`, `package`, `release`, `profile`) rather than guessing URLs or icons in templates.
 - Technology descriptions must explain what the technology is, the problem it solves and how it is used in the visible portfolio work; generic “part of the toolkit” copy is not acceptable.
-- Keep globe texture changes GPU-local and lazy. Earth uses a high-quality cloud texture; planets, exoplanets and sports/random spheres use deterministic procedural shaders so the catalogue grows without dozens of large downloads.
+- Keep globe texture changes GPU-local and lazy, but visual truth outranks asset-count convenience: Earth uses a real cloud map; solar bodies use real/publicly sourced colour maps; sports balls use clean canonical textures; exoplanets without direct imagery use a clearly labelled, attributed artist impression rather than a misleading procedural planet. Every visible map must be recognisably what its label says and retain useful detail at the displayed size.
 - Treat contact delivery as an integration boundary: use a configured static-safe endpoint; when unconfigured, expose a truthful fallback rather than simulating success.
 - Prefer data-driven cards and examples. Project ordering, stack evidence, route animations and preview destinations remain centralized in domain data.
 - Publish through four independent CI stages: `preparation` → `tests` → `build` → `deploy`.
@@ -50,7 +50,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Status**: pending
 - **Files**: `src/domain/types.ts`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/earth-globe/earth-globe.component.html`, `src/pages/home/earth-globe/earth-globe.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `src/core/rendering/earth-globe-renderer.ts`, `public/images/earth-clouds-4k.webp`, `public/images/ATTRIBUTION.md`
 - **Gate**: lint + typecheck + focused unit tests + desktop/mobile Playwright measurements
-- **Acceptance**: switching Projects/Technologies preserves the active preview; the toggle has an icon; chart controls fill two complete rows with distinct chart icons; the destination aside never overflows; the globe z-index always beats the inactive monitor; the monitor has no active hover affordance while globe content is frontal; the close action says “Close sphere”; all eight solar planets plus Sun/Moon/Pluto, representative exoplanets and sports/random spheres are selectable.
+- **Acceptance**: switching Projects/Technologies preserves the active preview; the toggle has an icon; chart controls fill two complete rows with distinct chart icons; the destination aside never overflows; project logos are normalized as flat marks (no doubled border/plate, no icon-on-icon effect); the globe z-index always beats the inactive monitor; the monitor has no active hover affordance while globe content is frontal; the close action says “Close sphere”; all eight solar planets plus Sun/Moon/Pluto, representative exoplanets and sports/random spheres are selectable; every texture is a real/attributed visual or a clearly labelled artist impression, never an unexplained synthetic look; sphere, controls and backdrop enter/exit as one coordinated transition without a discrete jump or elements escaping above the backdrop.
 
 ### S2 — Project and technology destination data
 - **Status**: pending
@@ -151,7 +151,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 - All requested monitor behaviours are correct: stable preview across section switching, iconized toggle, two chart rows, readable destination links, richer globe presets, visible close action, truthful lower monitor stacking and no active-hover residue.
 - Technology previews provide a real definition and practical use statement per technology, not generic filler text.
-- The globe offers real-cloud Earth, existing Earth variants, Sun/Moon and all planets (including Pluto), exoplanet presets and sports/random balls; presets switch without replacing the rotation state or causing layout shift.
+- The globe offers real-cloud Earth, existing Earth variants, Sun/Moon and all planets (including Pluto), exoplanet artist impressions labelled as such and real/canonical sports-ball patterns; presets are high-resolution, visually identifiable, preserve rotation state, and never cause layout shift.
 - Work, Approach, Knowledge, Docker, Demos, Lab and Contact are complete, responsive, theme-correct and coherent as one product.
 - Public profile evidence is current enough to support the curated order and copy; every destination is verified or intentionally omitted with a truthful reason.
 - Footer, back-to-top, locale, command palette and route/tab transitions work without visual jumps or input regressions.
