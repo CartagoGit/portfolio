@@ -75,7 +75,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S3 — Shell, header, footer and back-to-top
 - **Status**: done
-- **Files**: `src/shared/ui/header/**`, `src/shared/ui/footer/**`, `src/app/page.html`, `src/app/page.ts`, `src/core/platform/shell.facade.ts`, `src/core/platform/routing.ts`
+- **Files**: `src/shared/ui/header/header.component.ts`, `src/shared/ui/header/header.component.html`, `src/shared/ui/header/header.component.scss`, `src/shared/ui/header/header.component.spec.ts`, `src/shared/ui/footer/footer.component.ts`, `src/shared/ui/footer/footer.component.html`, `src/shared/ui/footer/footer.component.scss`, `src/shared/ui/footer/footer.component.spec.ts`, `src/app/page.html`, `src/app/page.ts`, `src/core/platform/shell.facade.ts`, `src/core/platform/routing.ts`
 - **Gate**: shell tests + desktop/mobile Playwright navigation audit
 - **Acceptance**: the theme button is stable-width (`Themes` + selected colour dot), selected theme is marked in the menu, footer links are opaque and never expose route content during transitions, back-to-top only scrolls and never changes locale/configuration, route shell remains stable during View Transitions.
 - review-state: done
