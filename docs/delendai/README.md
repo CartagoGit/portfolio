@@ -51,14 +51,14 @@ plugins/portfolio-content/
 ├── tsconfig.json
 ├── vitest.config.ts
 ├── src/
-│   ├── index.ts                 ← definePlugin(...) — loadable entry
-│   ├── public/index.ts          ← barrel: re-exports engine + types
+│   ├── plugin.entrypoint.ts                 ← definePlugin(...) — loadable entry
+│   ├── public/index.barrel.ts          ← barrel: re-exports engine + types
 │   └── lib/
 │       ├── contracts/interfaces/{audit,briefs}.interface.ts
 │       ├── services/{audit,briefs}.ts     ← pure engine (DI via interfaces)
 │       └── tools/{audit-tool,briefs-tool}.ts ← IToolRegistration builders
 └── tests/
-    ├── helpers/fake-context.ts
+    ├── helpers/fake-context.helper.ts
     └── portfolio-content.spec.ts
 ```
 
@@ -71,6 +71,6 @@ fake `IMcpPluginContext` and capture the registered handlers so the
 plugin can be exercised without spinning up a transport.
 
 The legacy single-file variant of the plugin was rewritten in place;
-the canonical path is `plugins/portfolio-content/src/index.ts`
+the canonical path is `plugins/portfolio-content/src/plugin.entrypoint.ts`
 and is registered in `delendai.config.json` via `path:`.
 

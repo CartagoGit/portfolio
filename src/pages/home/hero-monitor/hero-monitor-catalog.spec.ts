@@ -1,4 +1,4 @@
-import * as catalog from './hero-monitor-catalog';
+import * as catalog from './hero-monitor.catalog';
 
 const {
 	CHART_OPTIONS,

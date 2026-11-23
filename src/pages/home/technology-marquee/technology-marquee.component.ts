@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
-import { contentKey } from '../../../lang/content-key';
+import { contentKey } from '../../../lang/content-key.helper';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
-import type { IMonitorPreview, ITechnology } from '../../../domain/types';
+import type { IMonitorPreview, ITechnology } from '../../../domain/types.interface';
 
 @Component({
 	selector: 'app-technology-marquee',

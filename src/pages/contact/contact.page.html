@@ -16,31 +16,20 @@
 		<nav
 			class="contact-page__links"
 			[attr.aria-label]="'pages.contact.channelsAria' | translate">
-			<a href="mailto:cv2mario@gmail.com">
-				{{ 'pages.contact.ctaEmail' | translate }}
-				<span aria-hidden="true">↗</span>
-			</a>
-			<a
-				href="https://www.linkedin.com/in/mario-cabrero-volarich"
-				target="_blank"
-				rel="noreferrer">
-				{{ 'pages.contact.ctaLinkedin' | translate }}
-				<span aria-hidden="true">↗</span>
-			</a>
-			<a
-				href="https://github.com/CartagoGit"
-				target="_blank"
-				rel="noreferrer">
-				{{ 'pages.contact.ctaGithub' | translate }}
-				<span aria-hidden="true">↗</span>
-			</a>
-			<a
-				href="https://hub.docker.com/u/cartagodocker"
-				target="_blank"
-				rel="noreferrer">
-				{{ 'pages.contact.ctaDockerHub' | translate }}
-				<span aria-hidden="true">↗</span>
-			</a>
+			@for (channel of channels; track channel.href) {
+				<a
+					[href]="channel.href"
+					[attr.target]="channel.external ? '_blank' : null"
+					[attr.rel]="channel.external ? 'noreferrer' : null">
+					@if (channel.imageSrc; as image) {
+						<img [src]="image" alt="" />
+					} @else if (channel.iconPath; as iconPath) {
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="iconPath" [attr.fill]="channel.color ?? 'currentColor'" /></svg>
+					}
+					{{ channel.labelKey | translate }}
+					<span aria-hidden="true">↗</span>
+				</a>
+			}
 		</nav>
 		<app-contact-form />
 	</div>

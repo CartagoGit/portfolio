@@ -12,8 +12,8 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
-import { renderEarthFrame } from '../../../core/rendering/earth-globe-renderer';
-import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types';
+import { renderEarthFrame } from '../../../core/rendering/earth-globe.renderer';
+import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types.interface';
 
 type IQuaternion = readonly [x: number, y: number, z: number, w: number];
 

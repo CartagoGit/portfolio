@@ -9,11 +9,11 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
-import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data';
-import type { ICapability, ICapabilityId } from '../../domain/types';
+import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data.constant';
+import type { ICapability, ICapabilityId } from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
-import { contentKey } from '../../lang/content-key';
+import { contentKey } from '../../lang/content-key.helper';
 
 interface ICapabilityVisual {
 	iconPath: string;

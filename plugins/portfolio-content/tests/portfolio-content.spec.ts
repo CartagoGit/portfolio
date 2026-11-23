@@ -7,15 +7,15 @@
 
 import { describe, expect, it } from 'vitest';
 
-import plugin, { OptionsSchema } from '../src/index';
-import { buildArchitectureMap } from '../src/lib/services/architecture';
-import { buildFeatureMap } from '../src/lib/services/features';
-import { buildDomainMap, parseDomainSource } from '../src/lib/services/domain';
-import { runPublicAudit } from '../src/lib/services/audit';
-import type { IPublicAuditReader } from '../src/lib/services/audit';
-import { runScssAudit } from '../src/lib/services/scss-audit';
-import { buildInMemoryFs } from './helpers/in-memory-fs';
-import { captureHandlers, makeFakeContext } from './helpers/fake-context';
+import plugin, { OptionsSchema } from '../src/plugin.entrypoint';
+import { buildArchitectureMap } from '../src/lib/services/architecture.service';
+import { buildFeatureMap } from '../src/lib/services/features.service';
+import { buildDomainMap, parseDomainSource } from '../src/lib/services/domain.service';
+import { runPublicAudit } from '../src/lib/services/audit.service';
+import type { IPublicAuditReader } from '../src/lib/services/audit.service';
+import { runScssAudit } from '../src/lib/services/scss-audit.service';
+import { buildInMemoryFs } from './helpers/in-memory-fs.helper';
+import { captureHandlers, makeFakeContext } from './helpers/fake-context.helper';
 
 const inMemoryFs = (
 	dirs: Record<string, readonly string[]> = {},
@@ -169,7 +169,7 @@ export interface ICapability { id: string; }
 export type IHeroPanelId = 'overview' | 'workflows';
 export const PORTFOLIO_COPY = {};
 `;
-			const contracts = parseDomainSource(source, 'src/domain/portfolio.types.ts');
+			const contracts = parseDomainSource(source, 'src/domain/portfolio.types.interface.ts');
 			expect(contracts.map((c) => c.name)).toEqual([
 				'ILocale',
 				'IPortfolioPageId',
@@ -348,7 +348,7 @@ export const PORTFOLIO_COPY = {};
 			const fs = inMemoryFs(
 				{},
 				{
-					'src/domain/portfolio.types.ts':
+					'src/domain/portfolio.types.interface.ts':
 						"export type ILocale = 'en' | 'es';\n",
 				},
 			);

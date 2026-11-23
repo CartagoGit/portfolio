@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
-import type { ILocale, IPublicLink } from '../../../domain/types';
+import type { ILocale, IPublicLink } from '../../../domain/types.interface';
 import { ProfileLinksComponent } from '../../../pages/home/profile-links/profile-links.component';
 
 @Component({

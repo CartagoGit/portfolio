@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '../../../lang/translate.pipe';
-import { contrastRatio } from '../helpers/contrast-ratio';
+import { contrastRatio } from '../helpers/contrast-ratio.helper';
 
 @Component({
 	selector: 'app-accessibility-playground',

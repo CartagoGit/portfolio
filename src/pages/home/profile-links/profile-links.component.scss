@@ -74,6 +74,12 @@
 			flex-wrap: nowrap;
 			gap: 0.3rem;
 		}
+
+		&__badge {
+			border-color: color-mix(in srgb, var(--line) 92%, transparent);
+			background: var(--surface);
+			box-shadow: 0 8px 24px var(--shadow-strong);
+		}
 	}
 }
 

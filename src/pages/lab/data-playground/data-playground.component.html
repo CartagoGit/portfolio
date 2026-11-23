@@ -1,0 +1,28 @@
+<article class="data-playground">
+	<header>
+		<p>{{ 'pages.lab.dataEyebrow' | translate }}</p>
+		<h3>{{ 'pages.lab.dataTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.dataDetail' | translate }}</p>
+	</header>
+	<div class="data-playground__controls">
+		<label>
+			<span>{{ 'pages.lab.dataSearch' | translate }}</span>
+			<input type="search" [value]="query()" (input)="setQuery($event)" [attr.placeholder]="'pages.lab.dataPlaceholder' | translate" />
+		</label>
+		<button type="button" (click)="descending.update(value => !value)">
+			{{ 'pages.lab.dataSort' | translate }} {{ descending() ? '↓' : '↑' }}
+		</button>
+	</div>
+	<div class="data-playground__table-wrap">
+		<table>
+			<thead><tr><th>ID</th><th>{{ 'pages.lab.dataScore' | translate }}</th><th>{{ 'pages.lab.dataLatency' | translate }}</th><th>{{ 'pages.lab.dataStatus' | translate }}</th></tr></thead>
+			<tbody>
+				@for (row of visibleRows(); track row.id) {
+					<tr><th scope="row">{{ row.id }}</th><td>{{ row.score }}</td><td>{{ row.latency }} ms</td><td [class.is-ready]="row.ready">{{ (row.ready ? 'pages.lab.dataReady' : 'pages.lab.dataReview') | translate }}</td></tr>
+				} @empty {
+					<tr><td colspan="4">{{ 'pages.lab.dataEmpty' | translate }}</td></tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</article>

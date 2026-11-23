@@ -5,7 +5,7 @@ import {
 	inject,
 	signal,
 } from '@angular/core';
-import type { IChartType, ITelemetryId } from '../../../domain/types';
+import type { IChartType, ITelemetryId } from '../../../domain/types.interface';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
 import {
@@ -13,7 +13,7 @@ import {
 	chartPoints,
 	linePath,
 	radarPoints,
-} from '../helpers/chart-geometry';
+} from '../helpers/chart-geometry.helper';
 
 interface ILabMetric {
 	id: ITelemetryId;

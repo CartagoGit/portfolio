@@ -31,8 +31,12 @@
 }
 
 .contact-form textarea {
-	resize: vertical;
+	resize: none;
+	height: 116px;
 	min-height: 116px;
+	max-height: 116px;
+	overflow-y: auto;
+	overscroll-behavior: contain;
 }
 
 .contact-form input:focus,
@@ -115,5 +119,17 @@
 @media (prefers-reduced-motion: reduce) {
 	.contact-form * {
 		scroll-behavior: auto;
+	}
+}
+
+@media (min-width: 761px) {
+	.contact-form {
+		gap: .68rem;
+	}
+
+	.contact-form textarea {
+		height: 82px;
+		min-height: 82px;
+		max-height: 82px;
 	}
 }

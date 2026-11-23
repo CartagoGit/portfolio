@@ -6,7 +6,7 @@ import {
 	type ApplicationConfig,
 	provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
@@ -20,6 +20,9 @@ export const appConfig: ApplicationConfig = {
 		provideBrowserGlobalErrorListeners(),
 		provideRouter(
 			routes,
+			withInMemoryScrolling({
+				scrollPositionRestoration: 'top',
+			}),
 			withViewTransitions({
 				skipInitialTransition: true,
 				onViewTransitionCreated: ({ transition }) => {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { HERO_PANELS } from '../../domain/data';
+import { HERO_PANELS } from '../../domain/data.constant';
 import { TranslatePipe } from '../../lang/translate.pipe';
-import type { IHeroPanelId } from '../../domain/types';
+import type { IHeroPanelId } from '../../domain/types.interface';
 
 interface IRelatedProject {
 	label: string;

@@ -12,7 +12,7 @@ import type {
 	IPageComponentId,
 	IPublicLink,
 	ITechnology,
-} from '../../../domain/types';
+} from '../../../domain/types.interface';
 import { ProfileLinksComponent } from '../profile-links/profile-links.component';
 import { TechnologyMarqueeComponent } from '../technology-marquee/technology-marquee.component';
 

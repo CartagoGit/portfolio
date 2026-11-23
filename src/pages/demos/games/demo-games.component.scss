@@ -18,12 +18,17 @@
 	display: flex;
 	gap: 0.4rem;
 	padding: 0.65rem;
+	overflow-x: auto;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
+	scrollbar-width: thin;
 	border-bottom: var(--border-thin) solid var(--line);
 	background: color-mix(in srgb, var(--surface-2) 88%, transparent);
 }
 
 .demo-games__tabs button {
-	flex: 1;
+	flex: 1 0 max-content;
+	min-width: 96px;
 	min-height: 44px;
 	padding: 0.65rem 0.8rem;
 	border: var(--border-thin) solid transparent;
@@ -44,18 +49,29 @@
 .demo-games__stage {
 	min-height: 400px;
 	padding: clamp(1.25rem, 4vw, 3rem);
-	animation: demo-stage-in 0.28s ease both;
+	animation: demo-stage-in-a 0.42s cubic-bezier(.22, 1, .36, 1) both;
 }
 
-@keyframes demo-stage-in {
+.demo-games__stage.is-alternate {
+	animation-name: demo-stage-in-b;
+}
+
+@keyframes demo-stage-in-a {
 	from {
 		opacity: 0;
-		transform: translateY(8px);
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 30px)) scale(.985);
+		filter: blur(4px);
 	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
+	to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+@keyframes demo-stage-in-b {
+	from {
+		opacity: 0;
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 30px)) scale(.985);
+		filter: blur(4px);
 	}
+	to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
 @media (max-width: 760px) {
@@ -70,7 +86,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.demo-games__stage {
+	.demo-games__stage,
+	.demo-games__stage.is-alternate {
 		animation: none;
 	}
 }

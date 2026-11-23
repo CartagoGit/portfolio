@@ -14,10 +14,10 @@ import {
 	viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { routeFor } from '../../../core/platform/routing';
+import { routeFor } from '../../../core/platform/routing.helper';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
-import type { ILocale, IPageComponentId } from '../../../domain/types';
+import type { ILocale, IPageComponentId } from '../../../domain/types.interface';
 
 interface ICommandDefinition {
 	page: IPageComponentId;

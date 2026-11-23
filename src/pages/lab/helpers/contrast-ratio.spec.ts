@@ -1,4 +1,4 @@
-import { contrastRatio } from './contrast-ratio';
+import { contrastRatio } from './contrast-ratio.helper';
 
 describe('contrastRatio', () => {
 	it('measures the WCAG contrast endpoints', () => {

@@ -20,7 +20,7 @@ import {
 	CONSOLE_EFFECTS,
 	DESTINATION_ICON_PATHS,
 	EFFECT_OPTIONS,
-} from './hero-monitor-catalog';
+} from './hero-monitor.catalog';
 import {
 	closeSphereLabel as catalogCloseSphereLabel,
 	earthCategoryLabel as catalogEarthCategoryLabel,
@@ -28,16 +28,16 @@ import {
 	earthTextureOriginLabel as catalogEarthTextureOriginLabel,
 	EARTH_TEXTURE_CATEGORIES,
 	EARTH_TEXTURE_OPTIONS,
-} from './earth-texture-catalog';
+} from './earth-texture.catalog';
 import { HeroMonitorFacade } from './hero-monitor.facade';
-import { PUBLIC_LINKS } from '../../../domain/data';
+import { PUBLIC_LINKS } from '../../../domain/data.constant';
 import {
 	monitorDestinations,
 	primaryTechnologyDestination,
-} from '../../../domain/monitor-destinations';
+} from '../../../domain/monitor-destinations.helper';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
-import { contentKey } from '../../../lang/content-key';
+import { contentKey } from '../../../lang/content-key.helper';
 import type {
 	IChartType,
 	IEarthTextureCategory,
@@ -49,7 +49,7 @@ import type {
 	IMonitorPreview,
 	IPublicLink,
 	ITechnology,
-} from '../../../domain/types';
+} from '../../../domain/types.interface';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -403,6 +403,11 @@ export class HeroMonitorComponent implements OnDestroy {
 		const url = new URL(destination.href);
 		const path = decodeURIComponent(url.pathname).replace(/\/$/, '');
 		return path ? `${url.hostname}${path}` : url.hostname;
+	}
+
+	destinationLocationLabel(destination: IMonitorDestination): string {
+		const host = new URL(destination.href).hostname.replace(/^www\./, '');
+		return `${this.destinationKindLabel(destination.kind)} · ${host}`;
 	}
 
 	destinationIconPath(kind: IMonitorDestinationKind): string {

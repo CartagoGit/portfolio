@@ -16,7 +16,7 @@ The portfolio only supports **two themes** today (`dark` / `light`)
 through a hardcoded pair of palette maps in
 [`src/styles/tokens/_palette.scss`](src/styles/tokens/_palette.scss)
 and a boolean `lightMode` signal in
-[`src/core/platform/shell.facade.ts`](src/core/platform/shell.facade.ts)
+[`src/core/platform/shell.facade.content.ts`](src/core/platform/shell.facade.content.ts)
 that toggles `data-theme` between `'dark'` and `'light'`. The toggle
 UX is a single circular button (☼ / ◐) in the header. Three real
 problems follow:
@@ -64,7 +64,7 @@ mixin keeps working.
 
 ### TypeScript side
 
-- New file `src/core/platform/theme.ts` declares
+- New file `src/core/platform/theme.config.ts` declares
   `IThemeId = 'dark' | 'light' | 'midnight' | 'ocean' | 'forest' | 'sunset' | 'solar' | 'mono'`,
   the `IThemeDefinition { id, label, primary, accent }` interface and
   the `THEMES` registry array.
@@ -200,7 +200,7 @@ Visually:
 
 ## Success criteria
 
-- [ ] Eight themes registered in `src/core/platform/theme.ts`, each
+- [ ] Eight themes registered in `src/core/platform/theme.config.ts`, each
       with a full token set in `_themes.scss`.
 - [ ] Switching theme animates every surface colour, text colour,
       border colour and shadow over ~480 ms.
@@ -214,7 +214,7 @@ Visually:
 
 ## Slice breakdown (suggested order)
 
-1. **`S1` — Registry & facade**: `theme.ts`, `THEMES`, `ShellFacade`
+1. **`S1` — Registry & facade**: `theme.config.ts`, `THEMES`, `ShellFacade`
    replacement of `lightMode` with `theme`. Header still uses the
    old single-button; no visual change yet.
 2. **`S2` — Palette expansion**: extend `_palette.scss` (rename to
@@ -228,5 +228,5 @@ Visually:
    add `themeMenuOpen` / `themeMenuClosing` signals; spec coverage.
 5. **`S5` — Persistence + SSR**: localStorage write, server-side
    cookie / `Accept-Language`-style theme negotiation in
-   `server.ts` (or a parallel `themeMiddleware`), first-paint
+   `server.entrypoint.ts` (or a parallel `themeMiddleware`), first-paint
    hydration test.

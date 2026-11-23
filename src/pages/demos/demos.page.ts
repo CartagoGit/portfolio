@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DEMOS } from '../../domain/data';
-import { demoVisual, type IDemoVisual } from '../../domain/demo-visuals';
-import type { IDemo } from '../../domain/types';
+import { DEMOS } from '../../domain/data.constant';
+import { demoVisual, type IDemoVisual } from '../../domain/demo-visuals.constant';
+import type { IDemo } from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { DemoGamesComponent } from './games/demo-games.component';
 

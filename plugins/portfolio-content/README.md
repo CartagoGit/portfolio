@@ -10,7 +10,7 @@ this one plugin, kept local on purpose).
 |---|---|
 | `portfolio_architecture` | Returns the layered shape of `src/` (app / core / domain / features / shared / styles) with the on-disk subfolders. |
 | `portfolio_features` | Lists every Angular component the features own, grouped by feature. |
-| `portfolio_domain` | Surfaces the public domain contracts (`PortfolioPageId`, `CapabilityId`, …) extracted from `src/domain/portfolio.types.ts`. |
+| `portfolio_domain` | Surfaces the public domain contracts (`PortfolioPageId`, `CapabilityId`, …) extracted from `src/domain/portfolio.types.interface.ts`. |
 | `portfolio_public_audit` | Support tool: scans public templates for forbidden employer/client terms, **per-se forbidden roots** (case-insensitive, separator-collapsed), and `TODO(image)` placeholders. Severity-labelled. |
 
 All tools are **read-only** — no writes, no network.
@@ -51,8 +51,8 @@ plugins/portfolio-content/
 ├── tsconfig.json
 ├── vitest.config.ts
 ├── src/
-│   ├── index.ts              ← definePlugin(...) — loadable entry
-│   ├── public/index.ts       ← barrel: re-exports engines + types
+│   ├── plugin.entrypoint.ts              ← definePlugin(...) — loadable entry
+│   ├── public/index.barrel.ts       ← barrel: re-exports engines + types
 │   └── lib/
 │       ├── contracts/interfaces/{architecture,features,domain}.interface.ts
 │       ├── services/{architecture,features,domain,audit}.ts ← pure engines
@@ -67,7 +67,7 @@ plugins/portfolio-content/
 ```jsonc
 "plugins": {
   "portfolio-content": {
-    "path": "plugins/portfolio-content/src/index.ts",
+    "path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
     "prefix": "portfolio",
     "options": {
       "contentPaths": [

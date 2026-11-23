@@ -1,0 +1,17 @@
+<section class="color-game" aria-labelledby="color-game-title">
+	<div class="color-game__copy">
+		<p>{{ 'pages.demos.colorEyebrow' | translate }}</p>
+		<h3 id="color-game-title">{{ 'pages.demos.colorTitle' | translate }}</h3>
+		<p>{{ 'pages.demos.colorDetail' | translate }}</p>
+		<b>{{ score() }} <small>{{ 'pages.demos.colorScore' | translate }}</small></b>
+	</div>
+	<div class="color-game__board">
+		<div class="color-game__target" [style.--target-color]="colors[target()]"></div>
+		<div class="color-game__options" [attr.aria-label]="'pages.demos.colorChoices' | translate">
+			@for (color of colors; track color) {
+				<button type="button" [style.--choice-color]="color" (click)="choose($index)" [attr.aria-label]="'pages.demos.colorChoice' | translate:{ index: $index + 1 }"></button>
+			}
+		</div>
+		<p aria-live="polite">{{ ('pages.demos.color' + message()[0]!.toUpperCase() + message().slice(1)) | translate }}</p>
+	</div>
+</section>

@@ -84,8 +84,8 @@ These are the non-negotiable principles of the project. If a change breaks one o
 ### Engineering principles
 
 12. **Layered architecture visible.** `app / core / domain / features / shared / styles` is a contract, not a suggestion. The `portfolio_architecture` plugin verifies it.
-13. **Typed domain contracts.** Pages, capabilities, panels, playground steps, etc., live in `src/domain/portfolio.types.ts`. Features do not redefine types; they import them.
-14. **Single source of truth for content.** `src/domain/portfolio.data.ts` centralises copy, links, technologies, telemetry. Pages read from there.
+13. **Typed domain contracts.** Pages, capabilities, panels, playground steps, etc., live in `src/domain/portfolio.types.interface.ts`. Features do not redefine types; they import them.
+14. **Single source of truth for content.** `src/domain/portfolio.data.constant.ts` centralises copy, links, technologies, telemetry. Pages read from there.
 15. **Local MCP plugin.** The repo includes a [`DelendAI`](https://github.com/CartagoGit/DelendAI) plugin that introspects the architecture, features, contracts, and audits the public content. This makes the repo *agent-readable* and shields it from drift.
 16. **The portfolio audits itself.** If the plugin finds a forbidden term, a per-se root, a temporary image without marker, or a declared component that does not exist on disk, the build fails.
 
@@ -183,20 +183,20 @@ The tree is mapped by `src/lib/contracts/interfaces/architecture.interface.ts`. 
 ```
 src/
 ├── app/                       ← shell, routes, page host
-│   ├── app.ts                 ← root component (3 lines)
+│   ├── app.component.ts                 ← root component (3 lines)
 │   ├── app.config.ts          ← provideRouter, provideClientHydration, view transitions
 │   ├── app.config.server.ts   ← server-only overrides
-│   ├── app.routes.ts          ← routes per locale + pageId
+│   ├── app.routes.content.ts          ← routes per locale + pageId
 │   ├── app.routes.server.ts   ← prerender plan
-│   ├── portfolio-page.ts/.html/.scss
+│   ├── portfolio-page.component.ts/.html/.scss
 │   └── app.spec.ts            ← smoke test
 ├── core/                      ← cross-cutting capabilities
 │   ├── motion/                ← animation presets
 │   ├── platform/              ← PortfolioShellFacade (shell-wide state)
 │   └── rendering/             ← paint and view-transition helpers
 ├── domain/                    ← shared contracts and data
-│   ├── portfolio.types.ts     ← public types: Locale, PortfolioPageId, Capability, …
-│   └── portfolio.data.ts      ← copy, links, telemetry, technologies
+│   ├── portfolio.types.interface.ts     ← public types: Locale, PortfolioPageId, Capability, …
+│   └── portfolio.data.constant.ts      ← copy, links, telemetry, technologies
 ├── features/                  ← each page as an isolated feature
 │   ├── home/{home-intro,hero-monitor,earth-globe,profile-links,technology-marquee}
 │   ├── work/                  ← professional projects and featured repos
@@ -281,7 +281,7 @@ The contract lives in `src/lib/contracts/interfaces/architecture.interface.ts`:
 | --- | --- | --- | --- |
 | `app` | `src/app/` | Shell, routes, page host, configuration. | `*.config.ts`, `*.routes*.ts`, `portfolio-page.*` |
 | `core` | `src/core/` | Cross-cutting capabilities reusable by features. | `motion/`, `platform/`, `rendering/` |
-| `domain` | `src/domain/` | Shared contracts and data. Single source of truth. | `portfolio.types.ts`, `portfolio.data.ts` |
+| `domain` | `src/domain/` | Shared contracts and data. Single source of truth. | `portfolio.types.interface.ts`, `portfolio.data.constant.ts` |
 | `features` | `src/features/` | Each page/domain component. Knows no other feature. | one folder per feature, no cross-imports |
 | `shared` | `src/shared/` | Reusable UI without domain logic. | `ui/portfolio-header/`, `ui/portfolio-footer/`, `ui/command-palette/` |
 | `styles` | `src/styles/` | Global tokens and motion consumed by SCSS. | `_tokens.scss`, `_motion.scss` |
@@ -307,16 +307,16 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Domain and data
 
-`src/domain/portfolio.types.ts` defines:
+`src/domain/portfolio.types.interface.ts` defines:
 
 - `Locale`, `PortfolioPageId`, `PlaygroundStep`, `CapabilityId`, `HeroPanelId`, `TelemetryId`, `ChartType`, `HeroEffect`, `HeroPalette`, `HeroPanelTransition`, `EarthDepth`.
 - Interfaces: `Capability`, `HeroPanel`, `Technology`, `PublicLink`, `PortfolioCopy`, `LanguageOption`, `PlaygroundStepDefinition`, `Telemetry`.
 
-`src/domain/portfolio.data.ts` is the only file where per-locale copy lives. Features read from there. Translating the site is a *local* operation, not a global grep.
+`src/domain/portfolio.data.constant.ts` is the only file where per-locale copy lives. Features read from there. Translating the site is a *local* operation, not a global grep.
 
 ### Server
 
-`src/server.ts` boots Express with `@angular/ssr`. `src/main.server.ts` produces the server bundle. `app.config.server.ts` adds the providers that only apply on the node. `app.routes.server.ts` declares the prerender plan so the home and the static pages are served from HTML.
+`src/server.entrypoint.ts` boots Express with `@angular/ssr`. `src/main.server.ts` produces the server bundle. `app.config.server.ts` adds the providers that only apply on the node. `app.routes.server.ts` declares the prerender plan so the home and the static pages are served from HTML.
 
 ---
 
@@ -360,7 +360,7 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 - Supported locales: `en`, `es`, `fr`, `de`.
 - Routes: `/:locale/{page}`. The explicit route locale wins; the default redirect is `en`.
-- Per-locale copy in `src/domain/portfolio.data.ts`.
+- Per-locale copy in `src/domain/portfolio.data.constant.ts`.
 - The locale does not pollute the shell URL (no `?lang=`): navigation is by prefix, as SSR requires.
 
 ### Accessibility
@@ -427,7 +427,7 @@ This repo is one of the few that **includes its own MCP plugin** inside itself. 
 | --- | --- | --- |
 | `portfolio_architecture` | read | The layer tree (`app / core / domain / features / shared / styles`) with its sub-folders and one-line responsibility. |
 | `portfolio_features` | read | Every feature and the components it owns, grouped. |
-| `portfolio_domain` | read | The public contracts extracted from `src/domain/portfolio.types.ts`. |
+| `portfolio_domain` | read | The public contracts extracted from `src/domain/portfolio.types.interface.ts`. |
 | `portfolio_public_audit` | read (with gate) | Content audit: `forbiddenTerms`, `perSeRoots`, `TODO(image)`, orphan features. |
 
 ### Finding IDs
@@ -461,7 +461,7 @@ The plugin also loads procedural knowledge in `docs/delendai/knowledge/`:
 {
   "plugins": {
     "portfolio-content": {
-      "path": "plugins/portfolio-content/src/index.ts",
+      "path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
       "prefix": "portfolio",
       "options": {
         "contentPaths": [

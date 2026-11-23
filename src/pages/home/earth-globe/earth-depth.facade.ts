@@ -1,5 +1,5 @@
 import { computed, signal } from '@angular/core';
-import type { IEarthDepth } from '../../../domain/types';
+import type { IEarthDepth } from '../../../domain/types.interface';
 
 const DEPTH_TRANSITION_MS = 560;
 const PAINT_FALLBACK_MS = 50;

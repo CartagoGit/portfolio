@@ -1,0 +1,18 @@
+@use '../lab-playground-system' as playground;
+@use 'tokens/index' as tokens;
+
+:host { @include playground.component-host; }
+.responsive-playground { @include playground.card; }
+.responsive-playground > header { @include playground.heading; }
+.responsive-playground__controls { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.responsive-playground__controls label { display: flex; min-height: 42px; align-items: center; gap: .55rem; color: var(--muted); font: 700 .75rem tokens.$font-mono, monospace; }
+.responsive-playground__controls input[type='range'] { accent-color: var(--cyan); }
+.responsive-playground__controls output { min-width: 2rem; color: var(--cyan); text-align: center; }
+.responsive-playground__preview { display: grid; grid-template-columns: repeat(var(--preview-columns), minmax(0, 1fr)); gap: .55rem; min-height: 190px; }
+.responsive-playground__preview > div { display: grid; min-width: 0; min-height: 88px; align-content: end; gap: .35rem; padding: .65rem; border: 1px solid color-mix(in srgb, var(--cyan) 28%, var(--line)); border-radius: 10px; background: color-mix(in srgb, var(--cyan) 7%, var(--surface-2)); transition: min-height .25s ease, transform .25s ease; }
+.responsive-playground__preview span { color: var(--cyan); font: 800 .75rem tokens.$font-mono, monospace; }
+.responsive-playground__preview i { display: block; height: 5px; border-radius: 999px; background: color-mix(in srgb, var(--cyan) 36%, transparent); }
+.responsive-playground__preview i:last-child { width: 68%; }
+.responsive-playground__preview.is-compact > div { min-height: 52px; }
+.responsive-playground__preview > div:hover { transform: translateY(-3px); }
+@media (prefers-reduced-motion: reduce) { .responsive-playground__preview > div { transition: none; transform: none !important; } }

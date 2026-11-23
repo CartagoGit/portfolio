@@ -20,7 +20,7 @@ into `src/app/page.{ts,html,scss}` + eight siblings under
 `src/app/_composition/`. The plugin's:
 
 - default `scssAuditSourcePath` now points at `src/app/page.scss`;
-- `scripts/scss-smoke.ts` audits every shell partial and prints a
+- `scripts/scss-smoke.script.ts` audits every shell partial and prints a
   per-file ownership report plus a roll-up;
 - the spec file is updated to the new default;
 - the `delendai.config.json` `contentPaths` already pointed at
@@ -35,7 +35,7 @@ slices (`qs4a` … `qs4f`) line up with the per-partial granularity.
 ## Architecture decisions
 
 - **Audit, don't migrate** — the plugin stays read-only. The next
-  slice author runs `bun run plugins/portfolio-content/scripts/scss-smoke.ts`
+  slice author runs `bun run plugins/portfolio-content/scripts/scss-smoke.script.ts`
   to see the per-partial ownership and decides which selectors move.
 - **Per-partial granularity** — the smoke walks every partial under
   `src/app/_composition/` so the author can claim one partial at a
@@ -52,7 +52,7 @@ slices (`qs4a` … `qs4f`) line up with the per-partial granularity.
   status: done
   doneWhen: `OptionsSchema.scssAuditSourcePath.default` is the new entry point.
 - id: q5s2
-  title: Extend `scss-smoke.ts` to audit every shell partial
+  title: Extend `scss-smoke.script.ts` to audit every shell partial
   status: done
   doneWhen: The smoke walks `page.scss` + 8 partials under `_composition/` and prints a roll-up.
 - id: q5s3
@@ -66,7 +66,7 @@ slices (`qs4a` … `qs4f`) line up with the per-partial granularity.
 
 ## Validation
 
-`bun run mcp:test && bun run plugins/portfolio-content/scripts/scss-smoke.ts`
+`bun run mcp:test && bun run plugins/portfolio-content/scripts/scss-smoke.script.ts`
 
 ## Evidence
 

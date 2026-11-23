@@ -308,7 +308,7 @@ const config = [
 		},
 	},
 	{
-		files: ['config/**/*.ts', 'tools/**/*.ts', '*.config.ts'],
+		files: ['config/**/*.ts', 'tools/**/*.ts', 'e2e/**/*.ts', '*.config.ts'],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
@@ -330,7 +330,7 @@ const config = [
 		// Express middleware signatures are fixed by the framework: every
 		// callback is `(req, res, next)`. Allowing 3 params here is the only
 		// way to keep the rule enabled for the rest of the codebase.
-		files: ['src/server.ts'],
+		files: ['src/server.entrypoint.ts'],
 		rules: {
 			'@typescript-eslint/max-params': 'off',
 		},

@@ -53,11 +53,11 @@ no manual mapping table per descendant.
 - id: q4s1
   title: Add `scss-audit` engine + contract
   status: done
-  doneWhen: `services/scss-audit.ts` + `contracts/interfaces/scss-audit.interface.ts` with `IScssAuditReport`, `IScssSelectorEntry`, `ScssOwnership`.
+  doneWhen: `services/scss-audit.service.ts` + `contracts/interfaces/scss-audit.interface.ts` with `IScssAuditReport`, `IScssSelectorEntry`, `ScssOwnership`.
 - id: q4s2
   title: Add `portfolio_scss_audit` tool
   status: done
-  doneWhen: `tools/scss-audit-tool.ts` registered with `inputSchema` + `outputSchema`; documented in `index.ts`.
+  doneWhen: `tools/scss-audit.tool.ts` registered with `inputSchema` + `outputSchema`; documented in `plugin.entrypoint.ts`.
 - id: q4s3
   title: Add `scssAuditSourcePath` option
   status: done
@@ -69,7 +69,7 @@ no manual mapping table per descendant.
 
 ## Validation
 
-`bun run mcp:typecheck && bun run mcp:test && bun run plugins/portfolio-content/scripts/scss-smoke.ts`
+`bun run mcp:typecheck && bun run mcp:test && bun run plugins/portfolio-content/scripts/scss-smoke.script.ts`
 
 ## Evidence
 
@@ -98,6 +98,6 @@ no manual mapping table per descendant.
   resolve them per-slice. The `home/hero-monitor` slice is the
   biggest migration target (18 selectors — `.orb*`, `.interface-*`,
   `.canvas-*`, `.layer-list`).
-- 2026-07-26: `bun run plugins/portfolio-content/scripts/scss-smoke.ts`
+- 2026-07-26: `bun run plugins/portfolio-content/scripts/scss-smoke.script.ts`
   prints the full report. The author can now sit at the migration
   plan and slice `qs4` by ownership row.

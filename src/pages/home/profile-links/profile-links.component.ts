@@ -7,8 +7,8 @@ import {
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
-import type { IMonitorPreview, IPublicLink } from '../../../domain/types';
-import { contentKey } from '../../../lang/content-key';
+import type { IMonitorPreview, IPublicLink } from '../../../domain/types.interface';
+import { contentKey } from '../../../lang/content-key.helper';
 import { TranslateService } from '../../../lang/translate.service';
 
 @Component({

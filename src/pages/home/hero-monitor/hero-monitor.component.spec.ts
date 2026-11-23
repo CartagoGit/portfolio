@@ -61,6 +61,7 @@ describe('HeroMonitorComponent', () => {
 		const element = fixture.nativeElement as HTMLElement;
 
 		expect(component.chartOptions).toHaveLength(14);
+		expect(element.querySelectorAll('.hero-monitor__chart-switcher button span')).toHaveLength(0);
 		expect(component.earthTextureOptions).toHaveLength(30);
 		expect(component.earthTextureOptions.map(({ id }) => id)).toEqual(
 			expect.arrayContaining(['bathymetry', 'rugby', 'volleyball'])

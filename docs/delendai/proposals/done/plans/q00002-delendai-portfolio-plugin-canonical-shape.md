@@ -76,7 +76,7 @@ actionable `nextAction` so an agent can render them inline.
 - 2026-07-26: 12/12 vitest specs pass; `tsc --noEmit -p tsconfig.json`
   reports no diagnostics; `bun run mcp:check` boots 22 plugins with
   `localPlugin: true` against the new plugin path.
-- 2026-07-26: `tools/delendai/portfolio-content/src/lib/services/audit.ts`
+- 2026-07-26: `tools/delendai/portfolio-content/src/lib/services/audit.service.ts`
   exposes a pure `runPortfolioAudit` engine with an injectable reader
   (`IPortfolioAuditReader`); the handler binds `node:fs/promises` via
   `buildFsAuditReader()` at register-time so the engine stays free of
@@ -90,4 +90,4 @@ actionable `nextAction` so an agent can render them inline.
   `portfolio-content-runbook`) cover publication rules in both
   languages and an explicit runbook of when to call each tool.
 - 2026-07-26: Legacy single-file plugin removed; the canonical
-  path is `tools/delendai/portfolio-content/src/index.ts`.
+  path is `tools/delendai/portfolio-content/src/plugin.entrypoint.ts`.

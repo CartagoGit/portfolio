@@ -1,4 +1,4 @@
-import { contentKey } from './content-key';
+import { contentKey } from './content-key.helper';
 
 describe('contentKey', () => {
 	it.each([

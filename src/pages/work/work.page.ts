@@ -3,20 +3,20 @@ import {
 	DEMOS,
 	HERO_PANELS,
 	PUBLIC_LINKS,
-} from '../../domain/data';
-import { demoVisual, type IDemoVisual } from '../../domain/demo-visuals';
-import { workTechnologyVisual } from './work-visuals';
-import { monitorDestinations } from '../../domain/monitor-destinations';
+} from '../../domain/data.constant';
+import { demoVisual, type IDemoVisual } from '../../domain/demo-visuals.constant';
+import { workTechnologyVisual } from './work-visuals.constant';
+import { monitorDestinations } from '../../domain/monitor-destinations.helper';
 import type {
 	IDemo,
 	IHeroPanel,
 	IMonitorDestination,
 	IMonitorDestinationKind,
 	IPublicLink,
-} from '../../domain/types';
+} from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
-import { contentKey } from '../../lang/content-key';
+import { contentKey } from '../../lang/content-key.helper';
 import { WorkProjectVisualComponent } from './work-project-visual.component';
 
 interface IWorkProject {

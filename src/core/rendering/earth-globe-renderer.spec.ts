@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { renderEarthFrame } from './earth-globe-renderer';
+import { renderEarthFrame } from './earth-globe.renderer';
 
 describe('renderEarthFrame', () => {
 	it('sizes the canvas before requesting the WebGL context', () => {

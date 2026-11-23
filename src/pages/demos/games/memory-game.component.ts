@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
-import { shuffleValues } from '../helpers/shuffle';
+import { shuffleValues } from '../helpers/shuffle.helper';
 
 const MEMORY_VALUES = [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5] as const;
 

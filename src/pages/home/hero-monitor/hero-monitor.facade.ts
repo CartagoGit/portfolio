@@ -1,12 +1,12 @@
 import { computed, signal } from '@angular/core';
-import { HERO_PANELS } from '../../../domain/data';
+import { HERO_PANELS } from '../../../domain/data.constant';
 import type {
 	IChartType,
 	IHeroEffect,
 	IHeroPalette,
 	IHeroPanelId,
 	IHeroPanelTransition,
-} from '../../../domain/types';
+} from '../../../domain/types.interface';
 
 const HERO_PANEL_TRANSITIONS: readonly IHeroPanelTransition[] = [
 	'slide',

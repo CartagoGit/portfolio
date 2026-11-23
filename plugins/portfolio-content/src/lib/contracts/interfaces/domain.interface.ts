@@ -1,6 +1,6 @@
 /**
  * Domain introspection contracts. The engine reads
- * `src/domain/portfolio.types.ts` to extract the public type union
+ * `src/domain/portfolio.types.interface.ts` to extract the public type union
  * (`IPortfolioPageId`, `ICapabilityId`, …) — the contract surface every
  * feature talks to. Pure-static: no symbol resolver, just regex
  * extraction over the source.

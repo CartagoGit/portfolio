@@ -39,6 +39,7 @@ describe('HeaderComponent', () => {
 		expect(
 			fixture.nativeElement.querySelector('.is-active')?.textContent
 		).toContain('Projects');
+		expect(fixture.nativeElement.querySelector('.header__nav a')?.textContent).toContain('Home');
 		const themeButton = fixture.nativeElement.querySelector(
 			'.header__theme > button'
 		);

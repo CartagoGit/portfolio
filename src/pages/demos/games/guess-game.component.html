@@ -1,0 +1,14 @@
+<section class="guess-game" aria-labelledby="guess-game-title">
+	<div class="guess-game__copy">
+		<p>{{ 'pages.demos.guessEyebrow' | translate }}</p>
+		<h3 id="guess-game-title">{{ 'pages.demos.guessTitle' | translate }}</h3>
+		<p>{{ 'pages.demos.guessDetail' | translate }}</p>
+		<small>{{ 'pages.demos.guessAttempts' | translate }}: {{ attempts() }}</small>
+		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+	</div>
+	<form class="guess-game__form" (submit)="$event.preventDefault(); submit()">
+		<label>{{ 'pages.demos.guessLabel' | translate }}<input type="number" min="1" max="50" inputmode="numeric" [value]="guessValue() ?? ''" (input)="setGuess($event)" /></label>
+		<button type="submit">{{ 'pages.demos.guessTry' | translate }}</button>
+		<p aria-live="polite" [attr.data-state]="state()">{{ ('pages.demos.guess' + state()[0]!.toUpperCase() + state().slice(1)) | translate }}</p>
+	</form>
+</section>

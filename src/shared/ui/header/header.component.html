@@ -30,6 +30,12 @@
 		[class.header__nav--open]="menuOpen()"
 		[attr.aria-label]="'chrome.header.navWork' | translate">
 		<a
+			[routerLink]="routeFor('home')"
+			[class.is-active]="page() === 'home'"
+			(click)="selectPage('home')">
+			{{ 'chrome.header.navHome' | translate }}
+		</a>
+		<a
 			[routerLink]="routeFor('work')"
 			[class.is-active]="page() === 'work'"
 			(click)="selectPage('work')">

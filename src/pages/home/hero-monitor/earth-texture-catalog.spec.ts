@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EARTH_TEXTURE_CATEGORIES, EARTH_TEXTURE_OPTIONS, earthCategoryLabel, earthTextureLabel, earthTextureOriginLabel } from './earth-texture-catalog';
+import { EARTH_TEXTURE_CATEGORIES, EARTH_TEXTURE_OPTIONS, earthCategoryLabel, earthTextureLabel, earthTextureOriginLabel } from './earth-texture.catalog';
 
 describe('earth texture catalog', () => {
 	it('owns one unique 30-preset catalogue across five categories', () => {

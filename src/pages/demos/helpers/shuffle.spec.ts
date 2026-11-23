@@ -1,4 +1,4 @@
-import { shuffleValues } from './shuffle';
+import { shuffleValues } from './shuffle.helper';
 
 describe('shuffleValues', () => {
 	it('returns a Fisher-Yates copy without mutating the source', () => {

@@ -7,15 +7,15 @@ import {
 	signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { routeFor } from '../../../core/platform/routing';
+import { routeFor } from '../../../core/platform/routing.helper';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import type {
 	ILanguageOption,
 	ILocale,
 	IPageComponentId,
 	IThemeId,
-} from '../../../domain/types';
-import type { IThemeDefinition } from '../../../core/platform/theme';
+} from '../../../domain/types.interface';
+import type { IThemeDefinition } from '../../../core/platform/theme.config';
 
 /** Theme definition enriched with the localised label/detail. */
 export type IResolvedThemeDefinition = IThemeDefinition & {

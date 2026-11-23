@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { HERO_PANELS, PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from './data';
-import { monitorDestinations, technologyDestinations } from './monitor-destinations';
+import { HERO_PANELS, PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from './data.constant';
+import { monitorDestinations, technologyDestinations } from './monitor-destinations.helper';
 
 describe('monitor destinations', () => {
 	it('covers every technology exposed by the portfolio', () => {

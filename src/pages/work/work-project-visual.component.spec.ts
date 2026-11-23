@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import type { IHeroPanelId } from '../../domain/types';
+import type { IHeroPanelId } from '../../domain/types.interface';
 import { WorkProjectVisualComponent } from './work-project-visual.component';
 
 describe('WorkProjectVisualComponent', () => {

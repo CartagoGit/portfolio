@@ -4,18 +4,36 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { ColorGameComponent } from './color-game.component';
+import { DiceGameComponent } from './dice-game.component';
+import { GuessGameComponent } from './guess-game.component';
 import { MemoryGameComponent } from './memory-game.component';
 import { ReactionGameComponent } from './reaction-game.component';
 import { ReflexGameComponent } from './reflex-game.component';
+import { RpsGameComponent } from './rps-game.component';
+import { TapGameComponent } from './tap-game.component';
 
-type IDemoGameId = 'reflex' | 'reaction' | 'memory';
+type IDemoGameId =
+	| 'reflex'
+	| 'reaction'
+	| 'memory'
+	| 'dice'
+	| 'rps'
+	| 'color'
+	| 'tap'
+	| 'guess';
 
 @Component({
 	selector: 'app-demo-games',
 	imports: [
+		ColorGameComponent,
+		DiceGameComponent,
+		GuessGameComponent,
 		MemoryGameComponent,
 		ReactionGameComponent,
 		ReflexGameComponent,
+		RpsGameComponent,
+		TapGameComponent,
 		TranslatePipe,
 	],
 	templateUrl: './demo-games.component.html',
@@ -24,14 +42,26 @@ type IDemoGameId = 'reflex' | 'reaction' | 'memory';
 })
 export class DemoGamesComponent {
 	readonly activeGame = signal<IDemoGameId>('reflex');
+	readonly transitionAlternate = signal(false);
+	readonly transitionDirection = signal(1);
 	readonly games = [
 		{ id: 'reflex' as const, labelKey: 'pages.demos.tabReflex' },
 		{ id: 'reaction' as const, labelKey: 'pages.demos.tabReaction' },
 		{ id: 'memory' as const, labelKey: 'pages.demos.tabMemory' },
+		{ id: 'dice' as const, labelKey: 'pages.demos.tabDice' },
+		{ id: 'rps' as const, labelKey: 'pages.demos.tabRps' },
+		{ id: 'color' as const, labelKey: 'pages.demos.tabColor' },
+		{ id: 'tap' as const, labelKey: 'pages.demos.tabTap' },
+		{ id: 'guess' as const, labelKey: 'pages.demos.tabGuess' },
 	] as const;
 
 	select(id: IDemoGameId): void {
+		if (id === this.activeGame()) return;
+		const currentIndex = this.games.findIndex((game) => game.id === this.activeGame());
+		const nextIndex = this.games.findIndex((game) => game.id === id);
+		this.transitionDirection.set(nextIndex >= currentIndex ? 1 : -1);
 		this.activeGame.set(id);
+		this.transitionAlternate.update((alternate) => !alternate);
 	}
 
 	onTabKeydown(event: KeyboardEvent, index: number): void {

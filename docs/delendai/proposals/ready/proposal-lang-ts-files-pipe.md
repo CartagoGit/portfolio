@@ -13,7 +13,7 @@ labels: [i18n, translations, architecture, signals]
 ## Why
 
 Today the portfolio ships **two locales only** (`en`, `es`) and the
-`PORTFOLIO_COPY` record in [`src/domain/data.ts`](src/domain/data.ts)
+`PORTFOLIO_COPY` record in [`src/domain/data.constant.ts`](src/domain/data.constant.ts)
 covers a tiny slice of the chrome: four nav labels, one availability
 sentence, two CTAs, role and intro. The result is two real problems:
 
@@ -25,7 +25,7 @@ sentence, two CTAs, role and intro. The result is two real problems:
    handful of nav strings; the rest of the page stays English.
 2. **Adding a third language means editing a fat shared record.** The
    `PORTFOLIO_COPY` / `PAGE_TITLES` / `PAGE_DESCRIPTIONS` shape lives in
-   `data.ts` and `seo.ts` and is keyed by `ILocale`. Contributors have
+   `data.constant.ts` and `seo.helper.ts` and is keyed by `ILocale`. Contributors have
    to thread every new key through three files, and there's no static
    guarantee that `en` and `es` expose the same set of keys.
 
@@ -36,7 +36,7 @@ bodies too.
 
 ## What
 
-Move translations out of `domain/data.ts` into a **`src/lang/`** folder
+Move translations out of `domain/data.constant.ts` into a **`src/lang/`** folder
 where each language is a dedicated, typed `.ts` module. Expose a
 **signal-based translation service** and a **`TranslatePipe`** that
 mirrors the well-known `@ngx-translate/core` API (`'key.path' | args`)
@@ -47,20 +47,20 @@ key fails the type check at build time.
 
 ````text
 src/lang/
-├── types.ts           # TranslationKey union, ITranslationMap contract
-├── en.ts              # English source-of-truth
-├── es.ts              # Spanish (current default second locale)
-├── fr.ts              # French (new — required to prove the pipeline is generic)
-├── de.ts              # German (new — same)
+├── types.interface.ts           # TranslationKey union, ITranslationMap contract
+├── en.content.ts              # English source-of-truth
+├── es.content.ts              # Spanish (current default second locale)
+├── fr.content.ts              # French (new — required to prove the pipeline is generic)
+├── de.content.ts              # German (new — same)
 ├── translate.service.ts  # Signal-driven locale + key resolution
 ├── translate.pipe.ts     # {{ 'home.hero.title' | translate }}
-└── index.ts           # Public surface
+└── index.barrel.ts             # Public surface
 ````
 
 Each language file is just:
 
 ````typescript
-// src/lang/en.ts
+// src/lang/en.content.ts
 import type { ITranslationMap } from './types';
 export const en: ITranslationMap = {
 	home: { hero: { title: 'Frontend product engineer', subtitle: '...' } },
@@ -72,8 +72,8 @@ export const en: ITranslationMap = {
 ### Pipeline
 
 1. **`ILocale` widens** from `'en' | 'es'` to `'en' | 'es' | 'fr' | 'de'`
-   in [`src/domain/types.ts`](src/domain/types.ts). The
-   `LANGUAGES` array in `domain/data.ts` exposes the new entries with
+   in [`src/domain/types.interface.ts`](src/domain/types.interface.ts). The
+   `LANGUAGES` array in `domain/data.constant.ts` exposes the new entries with
    flag assets (`flag-fr.svg`, `flag-de.svg` under `public/icons/`).
 2. **`TranslationService`** (`TranslateService`) is provided in root,
    exposes `locale = signal<ILocale>('en')` and a
@@ -86,8 +86,8 @@ export const en: ITranslationMap = {
    service; the dropdown UI in the header keeps emitting through
    `localeSelect` so the rest of the shell is untouched.
 5. **All hardcoded UI copy** in every page/component/HTML template
-   moves to `lang/en.ts` and `lang/es.ts` (and `fr.ts`, `de.ts`).
-   `seo.ts` pulls from the same source so `<title>` / `<meta
+   moves to `lang/en.content.ts` and `lang/es.content.ts` (and `fr.content.ts`, `de.content.ts`).
+   `seo.helper.ts` pulls from the same source so `<title>` / `<meta
    description>` track the rest of the chrome.
 
 ### Contract guarantees
@@ -115,8 +115,8 @@ export const en: ITranslationMap = {
   `header.component.scss` is reused as-is.
 - The active locale keeps being persisted in cookie + URL (`/:locale/...`)
   through the existing `localeMiddleware` in
-  [`src/server.ts`](src/server.ts) and `detectPreferredLocale` /
-  `persistLocale` helpers in [`src/core/platform/locale.ts`](src/core/platform/locale.ts).
+  [`src/server.entrypoint.ts`](src/server.entrypoint.ts) and `detectPreferredLocale` /
+  `persistLocale` helpers in [`src/core/platform/locale.helper.ts`](src/core/platform/locale.helper.ts).
 - Page bodies become locale-aware without any new wiring at the page
   level: every `{{ '... key ...' | translate }}` runs through the
   service automatically.
@@ -150,10 +150,10 @@ export const en: ITranslationMap = {
 
 ## Success criteria
 
-- [ ] `src/lang/` exists with `en.ts`, `es.ts`, `fr.ts`, `de.ts` and a
-      shared `types.ts`.
+- [ ] `src/lang/` exists with `en.content.ts`, `es.content.ts`, `fr.content.ts`, `de.content.ts` and a
+      shared `types.interface.ts`.
 - [ ] `TranslateService` + `TranslatePipe` are provided in
-      `app.config.ts` and exported through `src/lang/index.ts`.
+      `app.config.ts` and exported through `src/lang/index.barrel.ts`.
 - [ ] `ILocale` widens to four values and `LANGUAGES` exposes them.
 - [ ] All previously hardcoded page copy (work, lab, approach,
       knowledge, docker, demos, contact, hero, capabilities,
@@ -175,10 +175,10 @@ export const en: ITranslationMap = {
    assets, `LANGUAGES` array updated, server `localeMiddleware`
    accepts the new codes, header dropdown gains the four options.
 3. **`S3` — Page-body migration**: every page template + component
-   moves its strings to `en.ts` / `es.ts` (fr/de fall back to English
+   moves its strings to `en.content.ts` / `es.content.ts` (fr/de fall back to English
    in this slice). One commit per page.
-4. **`S4` — French + German translations**: copy in `fr.ts` and
-   `de.ts` for every existing key.
+4. **`S4` — French + German translations**: copy in `fr.content.ts` and
+   `de.content.ts` for every existing key.
 5. **`S5` — Hardening**: SSR check (no missing keys in non-EN locales,
    no `console.warn` in prod), update affected specs, run full
    `validate`.

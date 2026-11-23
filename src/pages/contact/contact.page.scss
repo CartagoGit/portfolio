@@ -69,6 +69,7 @@
 		border-color 0.2s ease,
 		color 0.2s ease,
 		transform 0.2s ease;
+	gap: .55rem;
 }
 
 .contact-page__links a:hover,
@@ -78,11 +79,45 @@
 	transform: translateY(-2px);
 }
 
+.contact-page__links a svg,
+.contact-page__links a img {
+	width: 19px;
+	height: 19px;
+	flex: 0 0 19px;
+	object-fit: contain;
+}
+
+.contact-page__links a span {
+	margin-left: .05rem;
+}
+
 @media (max-width: 760px) {
 	.contact-page {
 		grid-template-columns: minmax(0, 1fr);
 		width: min(100% - 1.7rem, 600px);
 		padding: 2.5rem 0 4rem;
+	}
+}
+
+@media (min-width: 761px) {
+	.contact-page {
+		grid-template-columns: minmax(300px, .8fr) minmax(0, 1.2fr);
+		gap: clamp(2.5rem, 5vw, 5rem);
+		min-height: calc(100dvh - 152px);
+		padding: 1rem 0;
+	}
+
+	.contact-page h2 {
+		font-size: clamp(2.35rem, 3.7vw, 3.8rem);
+		line-height: .92;
+	}
+
+	.contact-page__links {
+		margin: 1rem 0 1.05rem;
+	}
+
+	.contact-page__content > p:not(.contact-page__eyebrow) {
+		line-height: 1.5;
 	}
 }
 

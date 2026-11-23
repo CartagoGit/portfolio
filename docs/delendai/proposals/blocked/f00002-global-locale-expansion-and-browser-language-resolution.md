@@ -79,13 +79,13 @@ Brand names, project names, package names and technical identifiers remain uncha
 
 ### S1 — Locale registry, variant resolver and route/SSR contract
 - **Status**: pending
-- **Files**: `src/domain/types.ts`, `src/core/platform/locale.ts`, `src/core/platform/locale.spec.ts`, `src/lang/translate.service.ts`, `src/lang/translate.service.spec.ts`, `src/app/app.routes.ts`, `src/app/app.routes.server.ts`, `src/server.ts`
+- **Files**: `src/domain/types.interface.ts`, `src/core/platform/locale.helper.ts`, `src/core/platform/locale.spec.ts`, `src/lang/translate.service.ts`, `src/lang/translate.service.spec.ts`, `src/app/app.routes.content.ts`, `src/app/app.routes.server.ts`, `src/server.entrypoint.ts`
 - **Gate**: locale matrix unit tests + typecheck + SSR request audit
 - **Acceptance**: every canonical locale is recognized; all regional/script aliases resolve deterministically; unsupported languages return English; explicit route locale beats storage/cookie; HTML lang, Content-Language and route locale agree.
 
 ### S2 — Translation catalogue and glossary
 - **Status**: pending
-- **Files**: `src/lang/en.ts`, `src/lang/es.ts`, `src/lang/fr.ts`, `src/lang/de.ts`, `src/lang/it.ts`, `src/lang/pt-PT.ts`, `src/lang/pt-BR.ts`, `src/lang/ru.ts`, `src/lang/uk.ts`, `src/lang/pl.ts`, `src/lang/hr.ts`, `src/lang/tr.ts`, `src/lang/ar.ts`, `src/lang/hi.ts`, `src/lang/bn.ts`, `src/lang/zh-CN.ts`, `src/lang/zh-TW.ts`, `src/lang/ja.ts`, `src/lang/ko.ts`, `src/lang/id.ts`, `src/lang/index.ts`, `src/lang/types.ts`, `src/lang/i18n-parity.spec.ts`
+- **Files**: `src/lang/en.content.ts`, `src/lang/es.content.ts`, `src/lang/fr.content.ts`, `src/lang/de.content.ts`, `src/lang/it.ts`, `src/lang/pt-PT.ts`, `src/lang/pt-BR.ts`, `src/lang/ru.ts`, `src/lang/uk.ts`, `src/lang/pl.ts`, `src/lang/hr.ts`, `src/lang/tr.ts`, `src/lang/ar.ts`, `src/lang/hi.ts`, `src/lang/bn.ts`, `src/lang/zh-CN.ts`, `src/lang/zh-TW.ts`, `src/lang/ja.ts`, `src/lang/ko.ts`, `src/lang/id.ts`, `src/lang/index.barrel.ts`, `src/lang/types.interface.ts`, `src/lang/i18n-parity.spec.ts`
 - **Gate**: translation shape/interpolation parity + editorial glossary audit
 - **Acceptance**: every supported locale satisfies `ITranslationMap`; no visible/ARIA key is missing; names and technical identifiers follow the glossary; Chinese script variants stay distinct; Arabic RTL copy is complete.
 
@@ -97,7 +97,7 @@ Brand names, project names, package names and technical identifiers remain uncha
 
 ### S4 — SEO alternates, metadata and RTL layout
 - **Status**: pending
-- **Files**: `src/core/platform/seo.ts`, `src/app/page.html`, `src/app/page.scss`, `src/index.html`, `src/styles.scss`
+- **Files**: `src/core/platform/seo.helper.ts`, `src/app/page.html`, `src/app/page.scss`, `src/index.html`, `src/styles.scss`
 - **Gate**: metadata/SSR audit + RTL desktop/mobile visual audit
 - **Acceptance**: canonical and `hreflang` alternates exist for each route; Arabic uses `dir="rtl"` without clipping; long native labels, CJK typography and Cyrillic text remain readable across shell and route layouts.
 

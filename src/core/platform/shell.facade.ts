@@ -2,17 +2,17 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data';
+import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data.constant';
 import type {
 	ILanguageOption,
 	ILocale,
 	IPageComponentId,
 	IThemeId,
-} from '../../domain/types';
+} from '../../domain/types.interface';
 import { TranslateService } from '../../lang/translate.service';
-import { detectPreferredLocale, isLocale, LOCALES, persistLocale } from './locale';
-import { buildDescription, buildTitle } from './seo';
-import { PAGE_ORDER, routeFor, transitionDirection } from './routing';
+import { detectPreferredLocale, isLocale, LOCALES, persistLocale } from './locale.helper';
+import { buildDescription, buildTitle } from './seo.helper';
+import { PAGE_ORDER, routeFor, transitionDirection } from './routing.helper';
 import {
 	DEFAULT_THEME,
 	detectPreferredTheme,
@@ -20,9 +20,9 @@ import {
 	type IThemeDefinition,
 	persistTheme,
 	THEMES,
-} from './theme';
+} from './theme.config';
 
-export { PAGE_ORDER, transitionDirection } from './routing';
+export { PAGE_ORDER, transitionDirection } from './routing.helper';
 
 const THEME_TRANSITION_MS = 520;
 
@@ -178,6 +178,8 @@ export class ShellFacade {
 		this._document.documentElement.dataset['transitionDirection'] =
 			transitionDirection(this.page(), target);
 		this.closeMenus();
+		if (!isPlatformBrowser(this._platformId)) return;
+		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	}
 
 	private _asPage(page: unknown): IPageComponentId {

@@ -1,4 +1,4 @@
-import { areaPath, chartPoints, linePath, radarPoints } from './chart-geometry';
+import { areaPath, chartPoints, linePath, radarPoints } from './chart-geometry.helper';
 
 describe('lab chart geometry', () => {
 	it('normalizes bounded values without mutating the source', () => {

@@ -24,6 +24,8 @@
 		class="demo-games__stage"
 		id="demo-panel-{{ activeGame() }}"
 		role="tabpanel"
+		[class.is-alternate]="transitionAlternate()"
+		[style.--demo-entry-direction]="transitionDirection()"
 		[attr.aria-labelledby]="'demo-tab-' + activeGame()"
 		[attr.data-game]="activeGame()">
 		@switch (activeGame()) {
@@ -35,6 +37,21 @@
 			}
 			@case ('memory') {
 				<app-memory-game />
+			}
+			@case ('dice') {
+				<app-dice-game />
+			}
+			@case ('rps') {
+				<app-rps-game />
+			}
+			@case ('color') {
+				<app-color-game />
+			}
+			@case ('tap') {
+				<app-tap-game />
+			}
+			@case ('guess') {
+				<app-guess-game />
 			}
 		}
 	</div>

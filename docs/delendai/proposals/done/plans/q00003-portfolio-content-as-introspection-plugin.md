@@ -23,7 +23,7 @@ templates. Four read-only tools:
 |---|---|
 | `portfolio_architecture` | Returns the canonical layered shape of `src/` (app / core / domain / features / shared / styles) with on-disk subfolders. |
 | `portfolio_features` | Lists every Angular component every feature owns, grouped by feature. |
-| `portfolio_domain` | Surfaces the public domain contracts (`PortfolioPageId`, `CapabilityId`, …) extracted from `src/domain/portfolio.types.ts`. |
+| `portfolio_domain` | Surfaces the public domain contracts (`PortfolioPageId`, `CapabilityId`, …) extracted from `src/domain/portfolio.types.interface.ts`. |
 | `portfolio_public_audit` | Support tool: scans public templates for forbidden employer/client terms and `TODO(image)` placeholders. Severity-labelled. |
 
 The audit stays as a support tool — it covers a real pre-publish gate
@@ -43,7 +43,7 @@ gating.
   `fs` directly.
 - **Bilingual knowledge** — six knowledge entries cover architecture,
   features, domain, the public boundary in en + es, and a runbook.
-- **Smoke test** — `plugins/portfolio-content/scripts/smoke.ts`
+- **Smoke test** — `plugins/portfolio-content/scripts/smoke.script.ts`
   boots the plugin and invokes the three introspection tools against
   the *real* `src/`, validating the engine reads the workspace
   correctly.
@@ -56,7 +56,7 @@ gating.
 - id: q3s1
   title: Relocate plugin to `plugins/portfolio-content/`
   status: done
-  doneWhen: Plugin loads from `plugins/portfolio-content/src/index.ts`; old `tools/delendai/portfolio-content/` removed.
+  doneWhen: Plugin loads from `plugins/portfolio-content/src/plugin.entrypoint.ts`; old `tools/delendai/portfolio-content/` removed.
 - id: q3s2
   title: Refocus plugin on codebase introspection
   status: done
@@ -72,11 +72,11 @@ gating.
 - id: q3s5
   title: Smoke test against real workspace
   status: done
-  doneWhen: `scripts/smoke.ts` boots the plugin and surfaces 6 architecture layers + 11 features (home:5, work:1, …) + 8+ domain contracts on the live tree.
+  doneWhen: `scripts/smoke.script.ts` boots the plugin and surfaces 6 architecture layers + 11 features (home:5, work:1, …) + 8+ domain contracts on the live tree.
 
 ## Validation
 
-`bun run mcp:all && bun run plugins/portfolio-content/scripts/smoke.ts`
+`bun run mcp:all && bun run plugins/portfolio-content/scripts/smoke.script.ts`
 
 ## Evidence
 
@@ -84,13 +84,13 @@ gating.
   path `tools/delendai/portfolio-content/` removed; `.gitignore`
   updated to exclude the new location's `node_modules/`. The
   `delendai.config.json` `path:` now points at
-  `plugins/portfolio-content/src/index.ts`.
+  `plugins/portfolio-content/src/plugin.entrypoint.ts`.
 - 2026-07-26: 17/17 vitest specs green (architecture engine, features
   engine, domain engine, audit engine, registration shape, all four
   tools via fake context).
 - 2026-07-26: `bun tools/check-delendai.mjs` boots the host with
   22 plugins loaded; `localPlugin: true` for `portfolio-content`.
-- 2026-07-26: Smoke test (`plugins/portfolio-content/scripts/smoke.ts`)
+- 2026-07-26: Smoke test (`plugins/portfolio-content/scripts/smoke.script.ts`)
   exercises the three introspection tools against the *live* tree:
   6 architecture layers, features `home:5, work:1, approach:1,
   knowledge:1, lab:1, docker:1, demos:1, contact:1`, and domain

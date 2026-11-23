@@ -6,13 +6,13 @@ import {
 	signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import type { ILocale } from '../domain/types';
-import { isLocale } from '../core/platform/locale';
-import { en } from './en';
-import { es } from './es';
-import { fr } from './fr';
-import { de } from './de';
-import type { ITranslationMap } from './types';
+import type { ILocale } from '../domain/types.interface';
+import { isLocale } from '../core/platform/locale.helper';
+import { en } from './en.translation';
+import { es } from './es.translation';
+import { fr } from './fr.translation';
+import { de } from './de.translation';
+import type { ITranslationMap } from './types.interface';
 
 /**
  * Translation registry — keyed by locale id.

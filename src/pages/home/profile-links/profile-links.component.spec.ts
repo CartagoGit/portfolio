@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ProfileLinksComponent } from './profile-links.component';
 import { TranslateService } from '../../../lang/translate.service';
-import type { IMonitorPreview } from '../../../domain/types';
+import type { IMonitorPreview } from '../../../domain/types.interface';
 describe('ProfileLinksComponent', () => {
 	it('renders public links from the supplied domain data', async () => {
 		await TestBed.configureTestingModule({

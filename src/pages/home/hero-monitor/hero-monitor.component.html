@@ -200,7 +200,6 @@
 										<svg viewBox="0 0 24 24" aria-hidden="true">
 											<path [attr.d]="chart.iconPath" />
 										</svg>
-										<span>{{ chartLabel(chart.id) }}</span>
 									</button>
 								}
 							</div>
@@ -303,12 +302,14 @@
 								[attr.data-kind]="destination.kind"
 								[href]="destination.href"
 								target="_blank"
-								rel="noreferrer">
+								rel="noreferrer"
+								[attr.aria-label]="destinationDisplayLabel(destination) + ' · ' + destinationLocationLabel(destination)"
+								[attr.title]="destinationDisplayLabel(destination) + ' · ' + destinationLocationLabel(destination)">
 								<svg viewBox="0 0 24 24" aria-hidden="true">
 									<path [attr.d]="destinationIconPath(destination.kind)" fill="currentColor" />
 								</svg>
-								<span>{{ destinationKindLabel(destination.kind) }}</span>
 								<b>{{ destinationDisplayLabel(destination) }}</b>
+								<span>{{ destinationLocationLabel(destination) }}</span>
 								<i aria-hidden="true">↗</i>
 							</a>
 						}

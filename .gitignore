@@ -34,8 +34,11 @@ yarn-error.log
 .sass-cache/
 /connect.lock
 /coverage
+/test-results/
+/playwright-report/
+__pycache__/
+*.pyc
 /libpeerconnection.log
-testem.log
 /typings
 __screenshots__/
 

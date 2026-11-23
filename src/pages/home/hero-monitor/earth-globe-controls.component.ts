@@ -9,7 +9,7 @@ import type {
 	IEarthTextureCategory,
 	IEarthTextureStyle,
 	ILocale,
-} from '../../../domain/types';
+} from '../../../domain/types.interface';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import {
 	closeSphereLabel,
@@ -18,7 +18,7 @@ import {
 	earthCategoryLabel,
 	earthTextureLabel,
 	earthTextureOriginLabel,
-} from './earth-texture-catalog';
+} from './earth-texture.catalog';
 
 @Component({
 	selector: 'app-earth-globe-controls',

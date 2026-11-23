@@ -33,7 +33,7 @@
 			}
 		},
 		"portfolio-content": {
-			"path": "plugins/portfolio-content/src/index.ts",
+			"path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
 			"prefix": "portfolio",
 			"options": {
 				"contentPaths": [

@@ -1,93 +1,220 @@
 @use 'tokens/index' as tokens;
 
+@property --portrait-angle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
 :host {
 	display: block;
 	min-width: 0;
 }
 
 .contact-portrait {
+	position: relative;
 	margin: 0;
 }
 
 .contact-portrait__frame {
 	position: relative;
+	z-index: 2;
 	overflow: hidden;
 	aspect-ratio: 4 / 5;
 	border: var(--border-thin) solid var(--line);
-	border-radius: 22px 22px 8px 22px;
-	background:
-		radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--cyan) 28%, transparent), transparent 32%),
-		var(--surface-2);
-	box-shadow: 18px 18px 0 color-mix(in srgb, var(--cyan) 8%, transparent);
+	border-radius: 18px;
+	background: var(--surface-2);
+	box-shadow: 14px 14px 0 color-mix(in srgb, var(--cyan) 7%, transparent);
 	isolation: isolate;
+	transition: box-shadow .25s ease;
+}
+
+.contact-portrait__frame::before {
+	position: absolute;
+	z-index: 4;
+	inset: 0;
+	padding: 5px;
+	border-radius: inherit;
+	content: '';
+	pointer-events: none;
+	background: conic-gradient(from var(--portrait-angle), transparent 0 48%, color-mix(in srgb, var(--cyan) 42%, transparent) 58%, var(--cyan) 72%, color-mix(in srgb, var(--cyan) 78%, var(--blue)) 84%, transparent 96%);
+	mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	mask-composite: exclude;
+	animation: portrait-border-orbit 7s linear infinite;
+	filter: drop-shadow(0 0 13px color-mix(in srgb, var(--cyan) 58%, transparent));
 }
 
 .contact-portrait__frame::after {
 	position: absolute;
+	z-index: 3;
 	inset: 0;
 	content: '';
-	background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--canvas) 52%, transparent));
 	pointer-events: none;
+	background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--canvas) 30%, transparent));
 }
 
 .contact-portrait img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	object-position: center 22%;
-	filter: saturate(0.78) contrast(1.06);
-	transition: filter 0.35s ease, transform 0.45s ease;
+	object-position: center 18%;
+	filter: saturate(.9) contrast(1.03);
+	transform: none;
+	transform-origin: center;
+	transition: filter .35s ease, transform .45s cubic-bezier(.22, 1, .36, 1);
 }
 
-.contact-portrait:hover img {
-	filter: saturate(1) contrast(1.02);
-	transform: scale(1.025);
-}
-
-.contact-portrait__index {
+.contact-portrait__aura {
 	position: absolute;
 	z-index: 1;
-	right: 1rem;
-	bottom: 0.75rem;
-	color: color-mix(in srgb, white 84%, transparent);
-	font: 800 clamp(3rem, 7vw, 6rem)/0.8 tokens.$font-mono, monospace;
-	letter-spacing: -0.08em;
+	inset: -1.4rem -2.1rem 2.4rem -2.1rem;
+	pointer-events: none;
+	opacity: 0;
+	color: var(--cyan);
+	transition-duration: .28s;
 }
+
+.contact-portrait__aura span {
+	position: absolute;
+	font: 700 clamp(.8rem, 1.25vw, 1.05rem) tokens.$font-mono, monospace;
+	-webkit-text-stroke: .35px var(--surface);
+	text-shadow: 0 1px 0 var(--surface), 0 0 8px var(--cyan), 0 0 18px color-mix(in srgb, var(--cyan) 58%, transparent);
+	will-change: transform, opacity;
+}
+
+.contact-portrait__aura span:nth-child(1) { top: 2%; left: -1%; --symbol-rotate: -12deg; }
+.contact-portrait__aura span:nth-child(2) { top: 17%; right: -1%; --symbol-rotate: 18deg; }
+.contact-portrait__aura span:nth-child(3) { top: 40%; left: -3%; --symbol-rotate: 8deg; }
+.contact-portrait__aura span:nth-child(4) { top: 55%; right: -2%; --symbol-rotate: -20deg; }
+.contact-portrait__aura span:nth-child(5) { right: 17%; bottom: -1%; --symbol-rotate: 28deg; }
+.contact-portrait__aura span:nth-child(6) { left: 15%; bottom: -2%; --symbol-rotate: -16deg; }
+.contact-portrait__aura span:nth-child(7) { top: 2%; right: 21%; --symbol-rotate: 15deg; }
+.contact-portrait__aura span:nth-child(8) { top: 68%; left: -4%; --symbol-rotate: -28deg; }
+
+.contact-portrait__aura svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke: var(--cyan);
+	stroke-width: 1.1;
+	filter: drop-shadow(0 0 7px color-mix(in srgb, var(--cyan) 45%, transparent));
+}
+
+.contact-portrait__inner-aura {
+	position: absolute;
+	z-index: 2;
+	inset: 0;
+	pointer-events: none;
+	opacity: 0;
+	mask-image: radial-gradient(ellipse at center, transparent 0 24%, rgb(0 0 0 / .3) 38%, #000 62%);
+	transition-duration: .28s;
+}
+
+.contact-portrait__inner-aura svg {
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke: var(--cyan);
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 10 8;
+	filter: drop-shadow(0 0 9px color-mix(in srgb, var(--cyan) 55%, transparent));
+}
+
+.contact-portrait__inner-aura ellipse {
+	stroke: color-mix(in srgb, var(--cyan) 78%, var(--blue));
+	stroke-width: 1.1;
+	stroke-dasharray: 2 10;
+}
+
+.contact-portrait__inner-aura circle {
+	fill: var(--cyan);
+	stroke: color-mix(in srgb, var(--surface) 72%, transparent);
+	stroke-width: 1;
+}
+
+.contact-portrait:hover .contact-portrait__aura,
+.contact-portrait:focus-within .contact-portrait__aura {
+	opacity: 1;
+}
+
+.contact-portrait:hover img,
+.contact-portrait:focus-within img {
+	filter: saturate(.98) contrast(1.02);
+	transform: scale(1.015);
+}
+
+.contact-portrait:hover .contact-portrait__frame,
+.contact-portrait:focus-within .contact-portrait__frame {
+	box-shadow: 14px 14px 0 color-mix(in srgb, var(--cyan) 13%, transparent), 0 18px 48px color-mix(in srgb, var(--cyan) 13%, transparent);
+}
+
+.contact-portrait:hover .contact-portrait__aura span,
+.contact-portrait:focus-within .contact-portrait__aura span {
+	animation: portrait-symbol-orbit 3.8s ease-in-out infinite alternate;
+}
+.contact-portrait__aura span:nth-child(even) { animation-direction: alternate-reverse !important; animation-delay: -.8s !important; }
+.contact-portrait__aura span:nth-child(3n) { animation-duration: 4.6s !important; animation-delay: -1.7s !important; }
+.contact-portrait:hover .contact-portrait__aura svg,
+.contact-portrait:focus-within .contact-portrait__aura svg { animation: portrait-chart-flow 7s linear infinite; }
+
+.contact-portrait:hover .contact-portrait__inner-aura,
+.contact-portrait:focus-within .contact-portrait__inner-aura {
+	opacity: 1;
+}
+
+.contact-portrait:hover .contact-portrait__inner-aura path,
+.contact-portrait:focus-within .contact-portrait__inner-aura path {
+	animation: portrait-chart-draw .9s ease-out both, portrait-chart-flow 5.8s linear .9s infinite;
+}
+.contact-portrait__inner-aura path:nth-child(even) { animation-delay: .18s, 1.08s !important; }
+.contact-portrait__inner-aura path:nth-child(3n) { animation-delay: .34s, 1.24s !important; }
 
 .contact-portrait figcaption {
-	display: flex;
-	justify-content: space-between;
-	gap: 1rem;
-	margin-top: 1.2rem;
-	color: var(--muted);
-	font-size: 0.75rem;
-	line-height: 1.4;
+	position: relative;
+	z-index: 3;
+	margin-top: .8rem;
+	color: var(--ink);
+	font: 700 .75rem/1.4 tokens.$font-mono, monospace;
+	text-align: center;
 }
 
-.contact-portrait figcaption i {
-	color: var(--cyan);
-	font: 700 0.75rem tokens.$font-mono, monospace;
-	font-style: normal;
-	white-space: nowrap;
+@keyframes portrait-border-orbit {
+	to { --portrait-angle: 360deg; }
+}
+
+@keyframes portrait-symbol-orbit {
+	0% { opacity: .45; transform: translate3d(-2px, 6px, 0) rotate(var(--symbol-rotate, 0deg)); }
+	55% { opacity: 1; }
+	100% { opacity: .72; transform: translate3d(7px, -9px, 0) rotate(calc(var(--symbol-rotate, 0deg) + 18deg)); }
+}
+
+@keyframes portrait-chart-draw {
+	from { stroke-dashoffset: 80; opacity: 0; }
+}
+
+@keyframes portrait-chart-flow {
+	to { stroke-dashoffset: -64; }
 }
 
 @media (max-width: 760px) {
-	.contact-portrait__frame {
-		max-height: 360px;
-	}
-
-	.contact-portrait figcaption {
-		align-items: flex-start;
-		flex-direction: column;
-	}
+	.contact-portrait__frame { max-height: 360px; }
+	.contact-portrait__aura { inset: -.55rem -.65rem 2.4rem; }
+	.contact-portrait__inner-aura { opacity: 0; }
+	.contact-portrait__aura span { font-size: .64rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.contact-portrait img {
-		transition: none;
-	}
-
-	.contact-portrait:hover img {
-		transform: none;
+	.contact-portrait__frame::before,
+	.contact-portrait__aura span,
+	.contact-portrait__aura svg,
+	.contact-portrait__inner-aura path,
+	.contact-portrait__inner-aura ellipse {
+		animation: none !important;
 	}
 }

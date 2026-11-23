@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { IHeroPanelId } from '../../domain/types';
+import type { IHeroPanelId } from '../../domain/types.interface';
 
 @Component({
 	selector: 'app-work-project-visual',

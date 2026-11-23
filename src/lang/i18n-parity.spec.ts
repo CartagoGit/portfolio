@@ -1,8 +1,8 @@
-import { de } from './de';
-import { en } from './en';
-import { es } from './es';
-import { fr } from './fr';
-import type { ITranslationMap } from './types';
+import { de } from './de.translation';
+import { en } from './en.translation';
+import { es } from './es.translation';
+import { fr } from './fr.translation';
+import type { ITranslationMap } from './types.interface';
 
 const immutablePath = (path: string): boolean =>
 	/^chrome\.header\.(brand|navDocker|navDemos|navContact)$/.test(path) ||
@@ -20,7 +20,7 @@ const immutablePath = (path: string): boolean =>
 	/^pages\.knowledge\.tile.*Stack$/.test(path) ||
 	/^pages\.knowledge\.tile(Frontend|Mobile)Label$/.test(path) ||
 	/^pages\.docker\.(eyebrow|terminalPull|terminalAngular|terminalNode|dockerAlt|hubLink|sourceLink)$/.test(path) ||
-	/^pages\.contact\.(eyebrow|ctaLinkedin|ctaGithub|ctaDockerHub)$/.test(path) ||
+	/^pages\.contact\.(eyebrow|ctaLinkedin|ctaGithub|ctaDockerHub|ctaNpm)$/.test(path) ||
 	path === 'pages.lab.easingLinear' ||
 	/^pages\.demos\.eyebrow$/.test(path) ||
 	/^content\.capabilities\.(tooling)\.proof$/.test(path) ||
