@@ -13,6 +13,7 @@ shipped-in:
   - "0383333"
   - "51a18bd"
   - "00444f8"
+  - "cdfa1f1"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -117,10 +118,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s6-reviewer-20261124 — verified at 00444f8, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S6 review approved. All six capabilities now expose icon, practical example and proof; panel is fixed/scroll-safe at 560px desktop/mobile with no selection jump, tabs support roving tabindex plus Arrow/Home/End focus, and theme/reduced-motion styles preserve contrast. Browser audit at 1366x768 and 390x844 passed, along with strict lint/typecheck, 21 files/48 tests and production+SSR build.
 
 ### S7 — Knowledge page examples and related projects
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/knowledge/knowledge.page.ts`, `src/pages/knowledge/knowledge.page.html`, `src/pages/knowledge/knowledge.page.scss`, `src/pages/knowledge/_knowledge-card-system.scss`, `src/pages/knowledge/knowledge.page.spec.ts`
 - **Gate**: knowledge tests + link validation + responsive audit
 - **Acceptance**: every knowledge area has a related icon, short practical example and verified links to relevant public projects; cards share dimensions and state treatment and remain readable at 390px.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s7-reviewer-20261124
+- review-log: approved by cartago-independent-s7-reviewer-20261124 — verified at cdfa1f1, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S7 review approved. Six areas have distinct icons, specific portfolio examples and two verified HTTPS project links each; a shared 3/2/1-column card system keeps equal 400px mobile height, 12px+ informative text and accessible nav, with theme tokens and reduced motion. Desktop/mobile audit passed, strict lint/typecheck, 21 files/48 tests and production+SSR build.
 
 ### S8 — Docker page product catalogue
 - **Status**: pending
