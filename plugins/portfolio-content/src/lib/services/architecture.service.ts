@@ -1,6 +1,6 @@
 /**
  * Architecture introspection engine. Returns the canonical layered
- * shape the portfolio follows (`app / core / domain / features /
+ * shape the portfolio follows (`app / core / domain / pages /
  * shared / styles`) plus the subfolders that exist under each layer
  * at the time of the call. Pure-static: no symbol resolution, just
  * `readDir` walks.
@@ -41,15 +41,15 @@ const LAYER_DEFINITIONS: readonly IPortfolioLayer[] = [
 		root: 'src/domain',
 		subLayers: [],
 		responsibility:
-			'Immutable portfolio contracts (`IPortfolioPageId`, `ICapabilityId`, …) and bilingual copy/static content.',
+			'Immutable portfolio contracts (`IPageComponentId`, `ICapabilityId`, …) and bilingual copy/static content.',
 	},
 	{
-		id: 'features',
-		label: 'Features',
-		root: 'src/features',
+		id: 'pages' as PortfolioLayerId,
+		label: 'Pages',
+		root: 'src/pages',
 		subLayers: [],
 		responsibility:
-			'Independently testable public pages. Each feature owns its template, styles, tests, and state.',
+			'Independently testable public pages. Each page owns its template, styles, tests, and nested components.',
 	},
 	{
 		id: 'shared',
@@ -57,7 +57,7 @@ const LAYER_DEFINITIONS: readonly IPortfolioLayer[] = [
 		root: 'src/shared',
 		subLayers: ['ui'],
 		responsibility:
-			'Reusable UI primitives (header, footer, command palette) consumed by the shell and features.',
+			'Reusable UI primitives (header, footer, command palette) consumed by the shell and pages.',
 	},
 	{
 		id: 'styles',
@@ -65,7 +65,7 @@ const LAYER_DEFINITIONS: readonly IPortfolioLayer[] = [
 		root: 'src/styles',
 		subLayers: [],
 		responsibility:
-			'Design tokens, motion, theme primitives. Feature styles own their blocks; the shell has no feature selectors.',
+			'Design tokens, motion, theme primitives. Page styles own their blocks; the shell has no page selectors.',
 	},
 ];
 
@@ -83,8 +83,7 @@ export const buildFsFileSystem = async (): Promise<IFileSystem> => {
 	const readDir = async (workspaceRelative: string): Promise<readonly string[]> => {
 		const entries = await loader.readdir(workspaceRelative, { withFileTypes: true });
 		// Return BOTH directories and files — consumers like the feature
-		// engine need to see `*.component.ts` entries to match them
-		// against `COMPONENT_RE`. The caller filters by name.
+		// engine need to see page/component entries to match them by suffix.
 		return entries.map((entry) => entry.name);
 	};
 	const exists = async (workspaceRelative: string): Promise<boolean> => {
@@ -108,40 +107,52 @@ export const buildFsFileSystem = async (): Promise<IFileSystem> => {
 	return { readDir, exists, isDirectory, readText };
 };
 
+const describeFsError = (error: unknown): string =>
+	error instanceof Error ? ` ${error.message}` : '';
+
 export const buildArchitectureMap = async (
 	options: IBuildArchitectureMapOptions,
 	request: IBuildArchitectureMapRequest = {},
 ): Promise<IPortfolioArchitectureMap> => {
 	const { fs } = options;
-	const filter = new Set<PortfolioLayerId>(request.only ?? []);
-	const layers: IPortfolioLayer[] = [];
+	const filter = new Set<string>(request.only ?? []);
+	const selectedLayers = LAYER_DEFINITIONS.filter(
+		(layer) => filter.size === 0 || filter.has(String(layer.id)),
+	);
+	const missingRoots: string[] = [];
 
-	for (const layer of LAYER_DEFINITIONS) {
-		if (filter.size > 0 && !filter.has(layer.id)) continue;
-
-		if (!(await fs.exists(layer.root))) {
-			// Layer missing on disk — still surfaced so the agent knows
-			// the canonical structure even when the tree is incomplete.
-			layers.push({ ...layer, subLayers: [] });
-			continue;
+	for (const layer of selectedLayers) {
+		if (!(await fs.exists(layer.root)) || !(await fs.isDirectory(layer.root))) {
+			missingRoots.push(layer.root);
 		}
+	}
 
-		let observedSubLayers: readonly string[] = layer.subLayers;
+	if (missingRoots.length > 0) {
+		throw new Error(
+			`Portfolio architecture roots are missing or are not directories: ${missingRoots.join(', ')}. ` +
+				'Restore the canonical directories or update the portfolio-content layer definitions after an intentional move. ' +
+				'The legacy src/features root is not a valid replacement for src/pages.',
+		);
+	}
+
+	const layers: IPortfolioLayer[] = [];
+	for (const layer of selectedLayers) {
+		let observedSubLayers: string[] = [];
 		try {
 			const seen = await fs.readDir(layer.root);
-			const expected = new Set(layer.subLayers);
-			const merged = new Set<string>(expected);
 			for (const entry of seen) {
-				if (expected.has(entry)) continue;
-				// Skip node_modules / hidden dirs.
 				if (entry.startsWith('.')) continue;
-				merged.add(entry);
+				if (await fs.isDirectory(joinPath(layer.root, entry))) {
+					observedSubLayers.push(entry);
+				}
 			}
-			observedSubLayers = [...merged].sort((a, b) => a.localeCompare(b));
-		} catch {
-			observedSubLayers = layer.subLayers;
+		} catch (error) {
+			throw new Error(
+				`Cannot inspect portfolio architecture root "${layer.root}".${describeFsError(error)} ` +
+					'Restore read access to the directory or update the portfolio-content layer definition.',
+			);
 		}
-
+		observedSubLayers.sort((a, b) => a.localeCompare(b));
 		layers.push({ ...layer, subLayers: observedSubLayers });
 	}
 

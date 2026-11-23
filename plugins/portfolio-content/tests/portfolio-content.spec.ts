@@ -30,6 +30,8 @@ describe('@portfolio/delendai-portfolio-content', () => {
 			if (!result.success) return;
 			expect(result.data.locale).toBe('en');
 			expect(result.data.contentPaths.length).toBeGreaterThan(0);
+			expect(result.data.contentPaths.every((path) => !path.includes('src/features'))).toBe(true);
+			expect(result.data.contentPaths).toContain('src/pages/contact/contact.page.html');
 			expect(result.data.forbiddenTerms).toEqual([]);
 			expect(result.data.perSeRoots).toEqual([]);
 			expect(result.data.scssAuditSourcePath).toBe('src/app/page.scss');
@@ -83,80 +85,113 @@ describe('@portfolio/delendai-portfolio-content', () => {
 	});
 
 	describe('architecture engine', () => {
-		it('returns the canonical six layers when the tree is partial', async () => {
+		it('returns the canonical six layers from the current tree', async () => {
 			const fs = inMemoryFs({
 				'src/app': [],
 				'src/core': ['motion', 'platform', 'rendering'],
+				'src/core/motion': [],
+				'src/core/platform': [],
+				'src/core/rendering': [],
 				'src/domain': [],
-				'src/features': ['home', 'work'],
+				'src/pages': ['home', 'work'],
+				'src/pages/home': [],
+				'src/pages/work': [],
 				'src/shared': ['ui'],
+				'src/shared/ui': [],
 				'src/styles': [],
 			});
 			const map = await buildArchitectureMap({ workspaceRoot: '.', fs });
-			expect(map.layers.map((l) => l.id)).toEqual([
+			expect(map.layers.map((layer) => layer.id)).toEqual([
 				'app',
 				'core',
 				'domain',
-				'features',
+				'pages',
 				'shared',
 				'styles',
 			]);
-			const core = map.layers.find((l) => l.id === 'core');
-			expect(core?.subLayers).toEqual(['motion', 'platform', 'rendering']);
+			expect(map.layers.find((layer) => layer.id === 'core')?.subLayers).toEqual([
+				'motion',
+				'platform',
+				'rendering',
+			]);
 		});
 
-		it('marks a missing layer without throwing', async () => {
+		it('fails actionably when a canonical root is missing', async () => {
 			const fs = inMemoryFs({});
-			const map = await buildArchitectureMap({ workspaceRoot: '.', fs });
-			expect(map.layers.length).toBe(6);
-			expect(map.layers.every((l) => l.subLayers.length === 0)).toBe(true);
+			await expect(buildArchitectureMap({ workspaceRoot: '.', fs })).rejects.toThrow(
+				'Portfolio architecture roots are missing or are not directories',
+			);
 		});
 
 		it('filters layers when `only` is provided', async () => {
-			const fs = inMemoryFs({});
+			const fs = inMemoryFs({
+				'src/core': [],
+				'src/domain': [],
+			});
 			const map = await buildArchitectureMap(
 				{ workspaceRoot: '.', fs },
 				{ only: ['core', 'domain'] },
 			);
-			expect(map.layers.map((l) => l.id)).toEqual(['core', 'domain']);
+			expect(map.layers.map((layer) => layer.id)).toEqual(['core', 'domain']);
 		});
 	});
 
 	describe('features engine', () => {
-		it('groups every component under its feature', async () => {
+		it('groups page entries and nested components under their page', async () => {
 			const fs = inMemoryFs({
-				'src/features/home': [
+				'src/pages': ['home', 'work', 'contact'],
+				'src/pages/home': [
 					'home-intro',
 					'hero-monitor',
 					'earth-globe',
 					'profile-links',
 					'technology-marquee',
 				],
-			'src/features/home/hero-monitor': ['hero-monitor.component.ts'],
-			'src/features/home/home-intro': ['home-intro.component.ts'],
-			'src/features/home/earth-globe': ['earth-globe.component.ts'],
-			'src/features/home/profile-links': ['profile-links.component.ts'],
-			'src/features/home/technology-marquee': ['technology-marquee.component.ts'],
-			'src/features/work': ['work-page.component.ts'],
-			'src/features/contact': ['contact-page.component.ts'],
+				'src/pages/home/hero-monitor': ['hero-monitor.component.ts'],
+				'src/pages/home/home-intro': ['home-intro.component.ts'],
+				'src/pages/home/earth-globe': ['earth-globe.component.ts'],
+				'src/pages/home/profile-links': ['profile-links.component.ts'],
+				'src/pages/home/technology-marquee': ['technology-marquee.component.ts'],
+				'src/pages/work': ['work.page.ts'],
+				'src/pages/contact': ['contact.page.ts', 'contact-form'],
+				'src/pages/contact/contact-form': ['contact-form.component.ts'],
 			});
 			const map = await buildFeatureMap(fs);
-			const home = map.features.find((f) => f.id === 'home');
-			expect(home?.components.length).toBe(5);
-			expect(home?.components.every((c) => c.subFeature)).toBe(true);
-			const work = map.features.find((f) => f.id === 'work');
-			expect(work?.components.map((c) => c.name)).toEqual([
-				'work-page.component',
+			const home = map.features.find((feature) => feature.id === 'home');
+			expect(home?.components).toHaveLength(5);
+			expect(home?.components.every((component) => component.subFeature)).toBe(true);
+			const work = map.features.find((feature) => feature.id === 'work');
+			expect(work?.components.map((component) => component.name)).toEqual([
+				'work.page',
+			]);
+			const contact = map.features.find((feature) => feature.id === 'contact');
+			expect(contact?.components.map((component) => component.name)).toEqual([
+				'contact-form.component',
+				'contact.page',
 			]);
 		});
 
-		it('returns a single feature when `featureId` is provided', async () => {
+		it('returns a single page when `featureId` is provided', async () => {
 			const fs = inMemoryFs({
-				'src/features/lab': ['lab-page.component.ts'],
+				'src/pages': ['lab'],
+				'src/pages/lab': ['lab.page.ts'],
 			});
 			const map = await buildFeatureMap(fs, { featureId: 'lab' });
-			expect(map.features.length).toBe(1);
+			expect(map.features).toHaveLength(1);
 			expect(map.features[0]?.id).toBe('lab');
+			expect(map.features[0]?.components.map((component) => component.name)).toEqual([
+				'lab.page',
+			]);
+		});
+
+		it('does not fall back to the stale features root', async () => {
+			const fs = inMemoryFs({
+				'src/features': ['work'],
+				'src/features/work': ['work-page.component.ts'],
+			});
+			await expect(buildFeatureMap(fs)).rejects.toThrow(
+				'Portfolio page root "src/pages" is missing',
+			);
 		});
 	});
 
@@ -164,33 +199,57 @@ describe('@portfolio/delendai-portfolio-content', () => {
 		it('parses unions, interfaces, types and consts', () => {
 			const source = `
 export type ILocale = 'en' | 'es';
-export type IPortfolioPageId = 'home' | 'work' | 'contact';
+export type IPageComponentId = 'home' | 'work' | 'contact';
 export interface ICapability { id: string; }
 export type IHeroPanelId = 'overview' | 'workflows';
 export const PORTFOLIO_COPY = {};
 `;
-			const contracts = parseDomainSource(source, 'src/domain/portfolio.types.interface.ts');
-			expect(contracts.map((c) => c.name)).toEqual([
+			const contracts = parseDomainSource(
+				source,
+				'src/domain/types.interface.ts',
+			);
+			expect(contracts.map((contract) => contract.name)).toEqual([
 				'ILocale',
-				'IPortfolioPageId',
+				'IPageComponentId',
 				'ICapability',
 				'IHeroPanelId',
 				'PORTFOLIO_COPY',
 			]);
-			const unions = contracts.filter((c) => c.kind === 'union');
+			const unions = contracts.filter((contract) => contract.kind === 'union');
 			expect(unions[0]?.members).toEqual(['en', 'es']);
-			expect(contracts.find((c) => c.name === 'ICapability')?.kind).toBe(
+			expect(contracts.find((contract) => contract.name === 'ICapability')?.kind).toBe(
 				'interface',
 			);
-			expect(contracts.find((c) => c.name === 'PORTFOLIO_COPY')?.kind).toBe(
+			expect(contracts.find((contract) => contract.name === 'PORTFOLIO_COPY')?.kind).toBe(
 				'const',
 			);
 		});
 
-		it('returns an empty map when the source file is missing', async () => {
-			const fs = inMemoryFs({});
+		it('reads contracts from src/domain/types.interface.ts', async () => {
+			const fs = inMemoryFs(
+				{},
+				{
+					'src/domain/types.interface.ts': "export type IPageComponentId = 'home';",
+				},
+			);
 			const map = await buildDomainMap(fs);
-			expect(map.contracts).toEqual([]);
+			expect(map.contracts).toHaveLength(1);
+			expect(map.contracts[0]?.sourcePath).toBe(
+				'src/domain/types.interface.ts',
+			);
+		});
+
+		it('fails instead of falling back when the current source is missing', async () => {
+			const fs = inMemoryFs(
+				{},
+				{
+					'src/domain/portfolio.types.interface.ts':
+						"export type IPortfolioPageId = 'home';",
+				},
+			);
+			await expect(buildDomainMap(fs)).rejects.toThrow(
+				'Portfolio domain source "src/domain/types.interface.ts" is missing',
+			);
 		});
 	});
 
@@ -323,38 +382,45 @@ export const PORTFOLIO_COPY = {};
 			const fs = inMemoryFs({
 				'src/app': [],
 				'src/core': ['motion', 'platform', 'rendering'],
+				'src/core/motion': [],
+				'src/core/platform': [],
+				'src/core/rendering': [],
 				'src/domain': [],
-				'src/features': ['home'],
+				'src/pages': ['home'],
+				'src/pages/home': [],
 				'src/shared': ['ui'],
+				'src/shared/ui': [],
 				'src/styles': [],
 			});
 			const map = await buildArchitectureMap({ workspaceRoot: '.', fs });
-			expect(map.layers.length).toBe(6);
-			expect(map.layers.find((l) => l.id === 'core')?.subLayers).toEqual([
+			expect(map.layers).toHaveLength(6);
+			expect(map.layers.map((layer) => layer.id)).toContain('pages');
+			expect(map.layers.find((layer) => layer.id === 'core')?.subLayers).toEqual([
 				'motion',
 				'platform',
 				'rendering',
 			]);
 		});
 
-		it('portfolio_features handles empty workspace', async () => {
+		it('portfolio_features rejects an empty workspace actionably', async () => {
 			const fs = inMemoryFs({});
-			const map = await buildFeatureMap(fs);
-			expect(map.features.length).toBe(0);
-			expect(map.generatedAt).toMatch(/Z$/);
+			await expect(buildFeatureMap(fs)).rejects.toThrow(
+				'Portfolio page root "src/pages" is missing',
+			);
 		});
 
-		it('portfolio_domain reads the source file directly', async () => {
+		it('portfolio_domain reads src/domain/types.interface.ts directly', async () => {
 			const fs = inMemoryFs(
 				{},
 				{
-					'src/domain/portfolio.types.interface.ts':
+					'src/domain/types.interface.ts':
 						"export type ILocale = 'en' | 'es';\n",
 				},
 			);
 			const map = await buildDomainMap(fs);
 			expect(map.contracts).toHaveLength(1);
 			expect(map.contracts[0]?.name).toBe('ILocale');
+			expect(map.contracts[0]?.sourcePath).toBe('src/domain/types.interface.ts');
 		});
 	});
 

@@ -38,16 +38,16 @@
 			"options": {
 				"contentPaths": [
 					"src/app/page.html",
-					"src/features/contact/contact-page.component.html",
-					"src/features/docker/docker-page.component.html",
-					"src/features/demos/demos-page.component.html",
-					"src/features/approach/approach-page.component.html",
-					"src/features/work/work-page.component.html",
-					"src/features/knowledge/knowledge-page.component.html",
-					"src/features/lab/lab-page.component.html",
-					"src/features/home/home-intro/home-intro.component.html",
-					"src/features/home/hero-monitor/hero-monitor.component.html",
-					"src/features/home/earth-globe/earth-globe.component.html"
+					"src/pages/contact/contact.page.html",
+					"src/pages/docker/docker.page.html",
+					"src/pages/demos/demos.page.html",
+					"src/pages/approach/approach.page.html",
+					"src/pages/work/work.page.html",
+					"src/pages/knowledge/knowledge.page.html",
+					"src/pages/lab/lab.page.html",
+					"src/pages/home/home-intro/home-intro.component.html",
+					"src/pages/home/hero-monitor/hero-monitor.component.html",
+					"src/pages/home/earth-globe/earth-globe.component.html"
 				],
 				"forbiddenTerms": [
 					"Beateam",

@@ -1,9 +1,7 @@
 /**
- * Feature introspection engine. Walks `src/features/<id>/` and surfaces
- * every Angular component the feature owns. Components are split into
- * top-level `*.component.ts` (the public page) and sub-feature
- * folders (e.g. `home/hero-monitor/`). Pure-static, no symbol
- * resolution.
+ * Page-feature introspection engine. Walks `src/pages/<id>/` and surfaces
+ * every Angular page and component the feature owns, including nested
+ * component folders. Pure-static, no symbol resolution.
  */
 
 import type {
@@ -26,9 +24,13 @@ const FEATURE_LABELS: Readonly<Record<PortfolioFeatureId, string>> = {
 	contact: 'Contact',
 };
 
-const COMPONENT_RE = /^(.+?)\.component\.ts$/;
+const COMPONENT_RE = /^(.+?)\.(page|component)\.ts$/;
 
 const SKIP_NAMES = new Set(['node_modules', '.angular', 'dist', '.cache']);
+const PAGES_ROOT = 'src/pages';
+
+const describeFsError = (error: unknown): string =>
+	error instanceof Error ? ` ${error.message}` : '';
 
 const buildComponentPath = (
 	entries: readonly string[],
@@ -39,46 +41,78 @@ const buildComponentPath = (
 		.map((name) => COMPONENT_RE.exec(name))
 		.filter((match): match is RegExpExecArray => match !== null)
 		.map((match) => {
-			const componentName = match[1];
+			const componentName = match[1] ?? '';
+			const role = match[2] ?? 'component';
 			const subSegment = subFeature ? `${subFeature}/` : '';
 			return {
-				name: `${componentName}.component`,
-				path: `${featureRoot}/${subSegment}${componentName}.component.ts`,
+				name: `${componentName}.${role}`,
+				path: `${featureRoot}/${subSegment}${componentName}.${role}.ts`,
 				...(subFeature ? { subFeature } : {}),
 			};
 		})
 		.sort((a, b) => a.path.localeCompare(b.path));
 
+const collectComponents = async (
+	fs: IFileSystem,
+	featureRoot: string,
+	currentRoot: string,
+	subFeature?: string,
+): Promise<IPortfolioFeatureComponent[]> => {
+	let entries: readonly string[];
+	try {
+		entries = await fs.readDir(currentRoot);
+	} catch (error) {
+		throw new Error(
+			`Cannot inspect portfolio page directory "${currentRoot}".${describeFsError(error)} ` +
+				`Verify that it remains below "${PAGES_ROOT}" and update the portfolio-content configuration after an intentional move.`,
+		);
+	}
+
+	const visibleEntries = entries.filter(
+		(name) => !SKIP_NAMES.has(name) && !name.startsWith('.'),
+	);
+	const components = [...buildComponentPath(visibleEntries, featureRoot, subFeature)];
+
+	for (const entry of visibleEntries) {
+		const childRoot = `${currentRoot}/${entry}`;
+		if (!(await fs.isDirectory(childRoot))) continue;
+		const childSubFeature = subFeature ? `${subFeature}/${entry}` : entry;
+		components.push(
+			...(await collectComponents(
+				fs,
+				featureRoot,
+				childRoot,
+				childSubFeature,
+			)),
+		);
+	}
+
+	return components.sort((a, b) => a.path.localeCompare(b.path));
+};
+
 const buildFeature = async (
 	fs: IFileSystem,
 	featureId: PortfolioFeatureId,
+	required: boolean,
 ): Promise<IPortfolioFeature | undefined> => {
-	const featureRoot = `src/features/${featureId}`;
-	if (!(await fs.exists(featureRoot))) return undefined;
-
-	const topLevel = (await fs.readDir(featureRoot)).filter(
-		(name) => !SKIP_NAMES.has(name) && !name.startsWith('.'),
-	);
-	const components: IPortfolioFeatureComponent[] = [];
-
-	// Top-level page components (`<id>-page.component.ts`).
-	components.push(...buildComponentPath(topLevel, featureRoot, undefined));
-
-	// Sub-feature folders: every sub-folder that contains a component.
-	for (const entry of topLevel) {
-		const subFeatureRoot = `${featureRoot}/${entry}`;
-		// Test whether `subFeatureRoot` is a real directory; `exists`
-		// returns true for files too, so without `isDirectory` we'd
-		// try to read a `*.component.ts` as a directory and crash.
-		if (!(await fs.isDirectory(subFeatureRoot))) continue;
-		const subEntries = (await fs.readDir(subFeatureRoot)).filter(
-			(name) => !SKIP_NAMES.has(name) && !name.startsWith('.'),
+	const featureRoot = `${PAGES_ROOT}/${featureId}`;
+	if (!(await fs.exists(featureRoot))) {
+		if (required) {
+			throw new Error(
+				`Portfolio page directory "${featureRoot}" is missing. ` +
+					`Create it or update the requested feature id; the old "src/features/${featureId}" layout is stale.`,
+			);
+		}
+		return undefined;
+	}
+	if (!(await fs.isDirectory(featureRoot))) {
+		throw new Error(
+			`Portfolio page path "${featureRoot}" exists but is not a directory. ` +
+				'Restore it as a directory or update the portfolio-content page layout.',
 		);
-		components.push(...buildComponentPath(subEntries, featureRoot, entry));
 	}
 
-	components.sort((a, b) => a.path.localeCompare(b.path));
-
+	const components = await collectComponents(fs, featureRoot, featureRoot);
 	return {
 		id: featureId,
 		label: FEATURE_LABELS[featureId],
@@ -102,12 +136,20 @@ export const buildFeatureMap = async (
 	fs: IFileSystem,
 	request: IBuildFeatureMapRequest = {},
 ): Promise<IPortfolioFeatureMap> => {
+	if (!(await fs.exists(PAGES_ROOT)) || !(await fs.isDirectory(PAGES_ROOT))) {
+		throw new Error(
+			`Portfolio page root "${PAGES_ROOT}" is missing or is not a directory. ` +
+				'Restore the current src/pages layout or update the portfolio-content service after an intentional move; src/features is stale.',
+		);
+	}
+
 	const ids = request.featureId ? [request.featureId] : KNOWN_FEATURES;
 	const features: IPortfolioFeature[] = [];
 	for (const id of ids) {
-		const feature = await buildFeature(fs, id);
+		const feature = await buildFeature(fs, id, request.featureId !== undefined);
 		if (feature) features.push(feature);
 	}
+
 	return {
 		features,
 		generatedAt: new Date().toISOString(),
