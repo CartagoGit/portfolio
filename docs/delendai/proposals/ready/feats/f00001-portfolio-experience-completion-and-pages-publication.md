@@ -19,6 +19,7 @@ shipped-in:
   - "6416483"
   - "201fcaa"
   - "620db3d"
+  - "a35de8d"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -187,10 +188,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by explore-independent-s12-rereview-20261123 — verified at 620db3d, validate exit 0 and tests 71/71 claimed, no recorded run cited
 
 ### S13 — Full i18n parity and accessible copy
-- **Status**: pending
-- **Files**: `src/lang/**`, `src/app/app.routes.server.ts`, `src/server.ts`
+- **Status**: done
+- **Files**: `docs/i18n-audit-s13.md`, `src/app/app.routes.server.spec.ts`, `src/app/app.routes.server.ts`, `src/app/page.html`, `src/app/page.ts`, `src/core/platform/seo.ts`, `src/lang/content-key.spec.ts`, `src/lang/content-key.ts`, `src/lang/content/de.ts`, `src/lang/content/en.ts`, `src/lang/content/es.ts`, `src/lang/content/fr.ts`, `src/lang/content/pages-de.ts`, `src/lang/content/pages-fr.ts`, `src/lang/de.ts`, `src/lang/en.ts`, `src/lang/es.ts`, `src/lang/fr.ts`, `src/lang/i18n-parity.spec.ts`, `src/lang/types.ts`, `src/pages/approach/approach.page.html`, `src/pages/approach/approach.page.spec.ts`, `src/pages/approach/approach.page.ts`, `src/pages/docker/docker.page.html`, `src/pages/docker/docker.page.spec.ts`, `src/pages/docker/docker.page.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/profile-links/profile-links.component.spec.ts`, `src/pages/home/profile-links/profile-links.component.ts`, `src/pages/home/technology-marquee/technology-marquee.component.ts`, `src/pages/knowledge/knowledge.page.html`, `src/pages/knowledge/knowledge.page.spec.ts`, `src/pages/knowledge/knowledge.page.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.spec.ts`, `src/pages/work/work.page.ts`
 - **Gate**: i18n parity tests + typecheck + prerender EN/ES/FR/DE
 - **Acceptance**: EN/ES/FR/DE render the correct locale from the URL even with another saved preference, all visible/ARIA labels—including S5–S11 project details, Work/Approach/Knowledge/Docker/Demos/Lab examples, status/provenance labels and newly added game copy—are localized, server headers/prerender agree with route locale, and no untranslated English visible text appears in non-English routes except immutable brand, project, package and technology names.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: explore-independent-s13-reviewer-20261123
+- review-log: approved by explore-independent-s13-reviewer-20261123 — verified at a35de8d, validate exit 0 and tests 87/87 claimed, no recorded run cited
 
 ### S14 — Regression, accessibility and responsive tests
 - **Status**: pending
