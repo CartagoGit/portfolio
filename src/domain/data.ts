@@ -527,31 +527,31 @@ export const DEMOS: readonly IDemo[] = [
 	{
 		number: '01',
 		title: 'DeathBlitz',
-		summary: 'Stateful product interaction and persistent progression.',
+		summaryKey: 'pages.demos.summaryDeathBlitz',
 		url: 'https://deathblitz.netlify.app/',
 	},
 	{
 		number: '02',
 		title: 'Cartago Tetris',
-		summary: 'Keyboard interaction, game loop and responsive board state.',
+		summaryKey: 'pages.demos.summaryTetris',
 		url: 'https://cartago-tetris.netlify.app/',
 	},
 	{
 		number: '03',
 		title: 'Cartago Snake',
-		summary: 'Real-time movement, collision handling and state updates.',
+		summaryKey: 'pages.demos.summarySnake',
 		url: 'https://cartago-snake.netlify.app/',
 	},
 	{
 		number: '04',
 		title: 'Minesweeper',
-		summary: 'Grid interaction, timers and information hierarchy.',
+		summaryKey: 'pages.demos.summaryMinesweeper',
 		url: 'https://cartago-minesweeper.netlify.app/',
 	},
 	{
 		number: '05',
 		title: 'Print CV',
-		summary: 'Bilingual, data-validated CV with a print layout tuned for real paper.',
+		summaryKey: 'pages.demos.summaryPrintCv',
 		url: 'https://cartagogit.github.io/print-cv/',
 	},
 ] as const;

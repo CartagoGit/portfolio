@@ -324,6 +324,7 @@ export interface ITranslationMap {
 			gameHeading: string;
 			gameDetail: string;
 			gameSignalsLabel: string;
+			resetButton: string;
 			reactionEyebrow: string;
 			reactionHeading: string;
 			reactionDetail: string;
@@ -341,6 +342,21 @@ export interface ITranslationMap {
 			reactionBest: string;
 			memoryReset: string;
 			memoryMoves: string;
+			gamesAria: string;
+			gameTabsAria: string;
+			reflexGridAria: string;
+			reflexTargetAria: string;
+			reflexCellAria: string;
+			memoryGridAria: string;
+			memoryMatchedAria: string;
+			memoryOpenAria: string;
+			memoryHiddenAria: string;
+			externalLinksAria: string;
+			summaryDeathBlitz: string;
+			summaryTetris: string;
+			summarySnake: string;
+			summaryMinesweeper: string;
+			summaryPrintCv: string;
 		};
 		contact: {
 			eyebrow: string;

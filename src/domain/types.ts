@@ -175,7 +175,7 @@ export interface ITelemetry {
 export interface IDemo {
 	number: string;
 	title: string;
-	summary: string;
+	summaryKey: string;
 	url: string;
 }
 

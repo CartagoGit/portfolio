@@ -1,0 +1,73 @@
+@use 'motion' as motion;
+@use '../demos-interaction-system' as interaction;
+
+:host {
+	@include interaction.component-host;
+}
+
+.reflex-game {
+	@include interaction.game-layout;
+}
+
+.reflex-game__copy {
+	@include interaction.game-copy;
+}
+
+.reflex-game__grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.7rem;
+}
+
+.reflex-game__grid button {
+	position: relative;
+	display: grid;
+	aspect-ratio: 1;
+	place-items: center;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 14px;
+	background: var(--surface-2);
+	transition:
+		transform 0.18s ease,
+		border-color 0.18s ease,
+		background 0.18s ease;
+}
+
+.reflex-game__grid button:hover,
+.reflex-game__grid button:focus-visible {
+	border-color: var(--cyan);
+	transform: scale(1.04);
+}
+
+.reflex-game__grid button.is-target {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 12%, var(--surface));
+	box-shadow: 0 0 22px color-mix(in srgb, var(--cyan) 30%, transparent);
+}
+
+.reflex-game__grid .is-target i {
+	display: block;
+	width: 38%;
+	height: 38%;
+	margin: auto;
+	border-radius: 50%;
+	background: var(--cyan);
+	@include motion.cyan-glow(20px);
+}
+
+@media (max-width: 760px) {
+	.reflex-game {
+		@include interaction.game-layout-mobile;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reflex-game__grid button {
+		transition-duration: 0.01ms;
+	}
+
+	.reflex-game__grid button:hover,
+	.reflex-game__grid button:focus-visible {
+		transform: none;
+	}
+}
