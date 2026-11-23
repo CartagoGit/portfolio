@@ -14,6 +14,7 @@ shipped-in:
   - "51a18bd"
   - "00444f8"
   - "cdfa1f1"
+  - "7ed8cab"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -128,10 +129,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s7-reviewer-20261124 — verified at cdfa1f1, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S7 review approved. Six areas have distinct icons, specific portfolio examples and two verified HTTPS project links each; a shared 3/2/1-column card system keeps equal 400px mobile height, 12px+ informative text and accessible nav, with theme tokens and reduced motion. Desktop/mobile audit passed, strict lint/typecheck, 21 files/48 tests and production+SSR build.
 
 ### S8 — Docker page product catalogue
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/docker/docker.page.ts`, `src/pages/docker/docker.page.html`, `src/pages/docker/docker.page.scss`, `src/pages/docker/docker.page.spec.ts`
 - **Gate**: Docker page tests + external destination validation + responsive audit
 - **Acceptance**: the page explains the public Docker toolchain, exposes each important image with use case and command, links to Docker Hub and source, and adapts all cards/terminal examples to the active theme.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s8-reviewer-20261127
+- review-log: approved by cartago-independent-s8-reviewer-20261127 — verified at 7ed8cab, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S8 review approved. Six real Docker Hub images have verified GitHub source links, truthful status, use case, stack and exact pull commands. Tokenized terminal/card UI adapts to themes, uses 12px minimum metadata, two/one-column responsive grids and reduced motion. Desktop/mobile audits and strict lint/typecheck, 21 files/48 tests and production+SSR build pass.
 
 ### S9 — Demos catalogue and mini-games
 - **Status**: pending
