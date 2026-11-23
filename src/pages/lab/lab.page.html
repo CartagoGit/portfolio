@@ -1,0 +1,44 @@
+<section
+	id="main-content"
+	class="lab-page"
+	aria-labelledby="lab-title">
+	<header class="lab-page__heading">
+		<div>
+			<p>{{ 'pages.lab.eyebrow' | translate }}</p>
+			<h2 id="lab-title">
+				{{ 'pages.lab.titleLead' | translate }}
+				<em>{{ 'pages.lab.titleEmphasis' | translate }}</em>
+				{{ 'pages.lab.titleTail' | translate }}
+			</h2>
+		</div>
+		<p>{{ 'pages.lab.subtitle' | translate }}</p>
+		<button type="button" (click)="commandRequested.emit()">
+			<span aria-hidden="true">↗</span>
+			{{ 'pages.lab.commandPalette' | translate }}
+		</button>
+	</header>
+
+	<app-lab-dashboard />
+
+	<section class="lab-page__experiments" aria-labelledby="lab-experiments-title">
+		<header>
+			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>
+			<h3 id="lab-experiments-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
+			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
+		</header>
+		<div class="lab-page__experiment-grid">
+			<app-workflow-playground />
+			<app-motion-playground />
+			<app-accessibility-playground />
+			<app-concurrency-playground />
+			<app-responsive-playground />
+			<app-data-playground />
+			<app-state-machine-playground />
+		</div>
+	</section>
+
+	<p class="lab-page__motion-note">
+		<code>{{ 'pages.lab.motionNoteCode' | translate }}</code>
+		{{ 'pages.lab.motionNote' | translate }}
+	</p>
+</section>

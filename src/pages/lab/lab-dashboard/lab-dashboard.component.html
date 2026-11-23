@@ -1,0 +1,156 @@
+<section class="lab-dashboard" aria-labelledby="lab-dashboard-title">
+	<header class="lab-dashboard__header">
+		<div>
+			<p>{{ 'pages.lab.demosHeading' | translate }}</p>
+			<h3 id="lab-dashboard-title">{{ 'pages.lab.dashboardTitle' | translate }}</h3>
+		</div>
+		<p>{{ 'pages.lab.dashboardDetail' | translate }}</p>
+	</header>
+
+	<div
+		class="lab-dashboard__metrics"
+		role="group"
+		[attr.aria-label]="'pages.lab.metricPickerGroup' | translate">
+		@for (metric of metrics; track metric.id) {
+			<button
+				type="button"
+				[class.is-active]="activeMetric() === metric.id"
+				[attr.aria-pressed]="activeMetric() === metric.id"
+				(click)="selectMetric(metric.id)">
+				{{ metric.labelKey | translate }}
+			</button>
+		}
+	</div>
+
+	<div
+		class="lab-dashboard__chart-picker"
+		role="group"
+		[attr.aria-label]="'pages.lab.chartPickerGroup' | translate">
+		<span>{{ 'pages.lab.visualiseAs' | translate }}</span>
+		<div>
+			@for (type of chartTypes; track type) {
+				<button
+					type="button"
+					[class.is-active]="chartType() === type"
+					[attr.aria-pressed]="chartType() === type"
+					[attr.aria-label]="chartLabel(type)"
+					(click)="selectChart(type)">
+					{{ chartLabel(type) }}
+				</button>
+			}
+		</div>
+	</div>
+
+	<div class="lab-dashboard__surface" [attr.data-chart]="chartType()">
+		<article class="lab-dashboard__summary" aria-live="polite">
+			<span>{{ selectedMetric().labelKey | translate }}</span>
+			<b>{{ selectedMetric().value }}</b>
+			<small>{{ selectedMetric().valueLabelKey | translate }}</small>
+			<p>{{ selectedMetric().noteKey | translate }}</p>
+			<button type="button" (click)="refresh()">
+				{{ 'pages.lab.randomizeData' | translate }}
+			</button>
+		</article>
+
+		<article class="lab-dashboard__chart">
+			<header>
+				<div>
+					<span>{{ 'pages.lab.weekTrend' | translate }}</span>
+					<b>{{ selectedMetric().titleKey | translate }}</b>
+				</div>
+				<i>{{ 'pages.lab.liveBadge' | translate }}</i>
+			</header>
+			<div
+				class="lab-dashboard__visual"
+				[attr.data-chart]="chartType()"
+				[attr.aria-label]="chartLabel(chartType())">
+				@switch (chartType()) {
+					@case ('bars') {
+						<div class="lab-dashboard__bars">
+							@for (value of values(); track $index) {
+								<span [style.--bar]="value + '%'" [attr.data-value]="value"></span>
+							}
+						</div>
+					}
+					@case ('line') {
+						<svg viewBox="0 0 360 170" preserveAspectRatio="none" aria-hidden="true"><path [attr.d]="line()" /></svg>
+					}
+					@case ('area') {
+						<svg viewBox="0 0 360 170" preserveAspectRatio="none" aria-hidden="true"><path class="is-area" [attr.d]="area()" /><path [attr.d]="line()" /></svg>
+					}
+					@case ('dots') {
+						<div class="lab-dashboard__dots">
+							@for (point of points(); track $index) {
+								<i [style.left.%]="point.x / 3.6" [style.top.%]="point.y / 1.7"></i>
+							}
+						</div>
+					}
+					@case ('pulse') {
+						<svg viewBox="0 0 360 170" preserveAspectRatio="none" aria-hidden="true"><path class="is-pulse" [attr.d]="line()" /></svg>
+					}
+					@case ('wave') {
+						<svg viewBox="0 0 360 170" preserveAspectRatio="none" aria-hidden="true"><path class="is-wave" [attr.d]="line()" /><path class="is-wave is-second" [attr.d]="line()" /></svg>
+					}
+					@case ('grid') {
+						<div class="lab-dashboard__grid">
+							@for (value of values(); track $index) {
+								<span [style.opacity]="0.2 + value / 125"></span>
+							}
+						</div>
+					}
+					@case ('stacked') {
+						<div class="lab-dashboard__stacked">
+							@for (value of values(); track $index) {
+								<span><i [style.height.%]="value"></i><b [style.height.%]="100 - value"></b></span>
+							}
+						</div>
+					}
+					@case ('scatter') {
+						<div class="lab-dashboard__scatter">
+							@for (point of points(); track $index) {
+								<i [style.left.%]="point.x / 3.6" [style.top.%]="point.y / 1.7"></i>
+							}
+						</div>
+					}
+					@case ('radar') {
+						<svg class="lab-dashboard__radar" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="68" /><circle cx="90" cy="90" r="36" /><polygon [attr.points]="radar()" /></svg>
+					}
+					@case ('donut') {
+						<div class="lab-dashboard__donut" [style.--donut]="donutValue() + '%'" [attr.data-value]="donutValue()"></div>
+					}
+					@case ('heatmap') {
+						<div class="lab-dashboard__heatmap">
+							@for (value of values(); track $index) {
+								<span [style.opacity]="0.15 + value / 100"></span>
+							}
+						</div>
+					}
+					@case ('treemap') {
+						<div class="lab-dashboard__treemap">
+							@for (value of values(); track $index) {
+								<span [style.flex-grow]="value" [style.opacity]="0.35 + value / 180"></span>
+							}
+						</div>
+					}
+					@case ('stream') {
+						<svg viewBox="0 0 360 170" preserveAspectRatio="none" aria-hidden="true"><path class="is-stream" [attr.d]="line()" /><path class="is-stream is-second" [attr.d]="line()" /><path class="is-stream is-third" [attr.d]="line()" /></svg>
+					}
+				}
+			</div>
+			<footer>
+				<span>{{ 'pages.lab.weekStart' | translate }}</span>
+				<span>{{ 'pages.lab.weekEnd' | translate }}</span>
+			</footer>
+		</article>
+
+		<div class="lab-dashboard__kpis">
+			@for (kpi of selectedMetric().kpis; track kpi[1]) {
+				<article>
+					<b>{{ kpi[0] }}</b>
+					<span>{{ kpi[1] | translate }}</span>
+					<i aria-hidden="true">↗</i>
+				</article>
+			}
+		</div>
+	</div>
+</section>

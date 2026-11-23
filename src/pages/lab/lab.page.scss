@@ -1,0 +1,122 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+}
+
+.lab-page {
+	width: min(1380px, calc(100% - 3rem));
+	margin: 0 auto;
+	padding: clamp(3rem, 5vw, 5.5rem) 0;
+}
+
+.lab-page__heading {
+	display: grid;
+	grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr) auto;
+	gap: 1.5rem;
+	align-items: end;
+	margin-bottom: 3rem;
+}
+
+.lab-page__heading p:first-child,
+.lab-page__experiments > header > p:first-child {
+	margin: 0;
+	color: var(--cyan);
+	@include tokens.mono(0.75rem);
+	letter-spacing: var(--letter-open);
+}
+
+.lab-page__heading h2 {
+	max-width: 18ch;
+	margin: 0.55rem 0 0;
+	font-size: clamp(2.5rem, 5vw, 5.4rem);
+	line-height: 0.9;
+	letter-spacing: -0.065em;
+}
+
+.lab-page__heading h2 em {
+	display: inline;
+	color: var(--cyan);
+	font-style: italic;
+}
+
+.lab-page__heading > p {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.9rem;
+	line-height: 1.65;
+}
+
+.lab-page__heading > button {
+	min-height: 44px;
+	padding: 0.65rem 0.8rem;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 10px;
+	background: var(--surface-2);
+	color: var(--ink);
+	font: 700 0.75rem tokens.$font-mono, monospace;
+}
+
+.lab-page__heading > button:hover,
+.lab-page__heading > button:focus-visible {
+	border-color: var(--cyan);
+	color: var(--cyan);
+}
+
+.lab-page__experiments {
+	display: grid;
+	gap: 1.5rem;
+	margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.lab-page__experiments > header {
+	max-width: 720px;
+}
+
+.lab-page__experiments > header h3 {
+	margin: 0.55rem 0 0.7rem;
+	font-size: clamp(2rem, 4vw, 3.8rem);
+	line-height: 0.96;
+	letter-spacing: -0.055em;
+}
+
+.lab-page__experiments > header p:last-child {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.86rem;
+	line-height: 1.65;
+}
+
+.lab-page__experiment-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+	align-items: start;
+}
+
+.lab-page__motion-note {
+	margin: 1.5rem 0 0;
+	color: var(--muted);
+	font-size: 0.75rem;
+	line-height: 1.5;
+}
+
+.lab-page__motion-note code {
+	color: var(--cyan);
+	font-family: monospace;
+}
+
+@media (max-width: 900px) {
+	.lab-page {
+		width: min(100% - 1.7rem, 760px);
+	}
+
+	.lab-page__heading,
+	.lab-page__experiment-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.lab-page__heading > button {
+		justify-self: start;
+	}
+}

@@ -1,0 +1,17 @@
+@use '../lab-playground-system' as playground;
+@use 'tokens/index' as tokens;
+
+:host { @include playground.component-host; }
+.data-playground { @include playground.card; }
+.data-playground > header { @include playground.heading; }
+.data-playground__controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .65rem; align-items: end; }
+.data-playground__controls label { display: grid; gap: .35rem; color: var(--muted); font: 700 .75rem tokens.$font-mono, monospace; }
+.data-playground__controls input, .data-playground__controls button { @include playground.control; }
+.data-playground__controls button { color: var(--ink); }
+.data-playground__table-wrap { overflow-x: auto; }
+.data-playground table { width: 100%; border-collapse: collapse; font-size: .75rem; }
+.data-playground th, .data-playground td { padding: .55rem .45rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.data-playground thead { color: var(--muted); font-family: tokens.$font-mono, monospace; }
+.data-playground tbody th { color: var(--ink); }
+.data-playground td.is-ready { color: var(--lime); font-weight: 800; }
+@media (max-width: 540px) { .data-playground__controls { grid-template-columns: minmax(0, 1fr); } .data-playground__controls button { justify-self: start; } }

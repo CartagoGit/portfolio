@@ -1,0 +1,28 @@
+<section class="reflex-game" aria-labelledby="reflex-game-title">
+	<div class="reflex-game__copy">
+		<p>{{ 'pages.demos.gameEyebrow' | translate }}</p>
+		<h3 id="reflex-game-title">{{ 'pages.demos.gameHeading' | translate }}</h3>
+		<p>{{ 'pages.demos.gameDetail' | translate }}</p>
+		<b>
+			{{ score() }}
+			<small>{{ 'pages.demos.gameSignalsLabel' | translate }}</small>
+		</b>
+		<button type="button" (click)="reset()">
+			{{ 'pages.demos.resetButton' | translate }}
+		</button>
+	</div>
+	<div
+		class="reflex-game__grid"
+		role="group"
+		[attr.aria-label]="'pages.demos.reflexGridAria' | translate">
+		@for (cell of cells; track cell) {
+			<button
+				type="button"
+				[class.is-target]="target() === cell"
+				[attr.aria-label]="(target() === cell ? 'pages.demos.reflexTargetAria' : 'pages.demos.reflexCellAria') | translate: { index: cell + 1 }"
+				(click)="hit(cell)">
+				<i aria-hidden="true"></i>
+			</button>
+		}
+	</div>
+</section>

@@ -1,0 +1,87 @@
+<section class="approach-page" aria-labelledby="capabilities-title">
+	<div class="approach-page__heading">
+		<p>{{ 'pages.approach.eyebrow' | translate }}</p>
+		<h2 id="capabilities-title">
+			{{ 'pages.approach.titleLead' | translate }}
+			<br />
+			<em>{{ 'pages.approach.titleEmphasis' | translate }}</em>
+			{{ 'pages.approach.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.approach.subtitle' | translate }}</p>
+	</div>
+
+	<div class="approach-page__capabilities">
+		<div
+			class="approach-page__tabs"
+			role="tablist"
+			aria-orientation="vertical"
+			[attr.aria-label]="'pages.approach.subtitle' | translate">
+			@for (capability of capabilities(); track capability.id; let index = $index) {
+				<button
+					id="capability-tab-{{ capability.id }}"
+					type="button"
+					role="tab"
+					[attr.tabindex]="activeCapability() === capability.id ? 0 : -1"
+					[attr.aria-controls]="'capability-panel'"
+					[attr.aria-selected]="activeCapability() === capability.id"
+					[class.is-active]="activeCapability() === capability.id"
+					(click)="selectCapability(capability.id)"
+					(keydown)="onTabKeydown($event, index)">
+					<span>0{{ index + 1 }}</span>
+					{{ capability.eyebrow.split(' / ')[1] }}
+					<i aria-hidden="true">↘</i>
+				</button>
+			}
+		</div>
+
+		<article
+			#detail
+			id="capability-panel"
+			class="approach-page__detail"
+			role="tabpanel"
+			[attr.aria-labelledby]="'capability-tab-' + activeCapability()"
+			[attr.data-capability]="activeCapability()"
+			tabindex="0">
+			<div class="approach-page__detail-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24">
+					<path [attr.d]="selectedVisual().iconPath" fill="currentColor" />
+				</svg>
+			</div>
+			<p class="approach-page__detail-eyebrow">
+				{{ selectedCapability().eyebrow }}
+			</p>
+			<h3>{{ selectedCapability().title }}</h3>
+			<p>{{ selectedCapability().detail }}</p>
+			<p class="approach-page__example">{{ capabilityExample(activeCapability()) }}</p>
+			<div class="approach-page__tools">
+				@for (tool of selectedCapability().tools; track $index) {
+					<span>{{ termLabel(tool) }}</span>
+				}
+			</div>
+			<footer>
+				<i aria-hidden="true"></i>
+				{{ selectedCapability().proof }}
+			</footer>
+		</article>
+	</div>
+</section>
+
+<section class="approach-page__experience" aria-labelledby="experience-title">
+	<div>
+		<p>{{ 'pages.approach.experienceEyebrow' | translate }}</p>
+		<h2 id="experience-title">
+			{{ 'pages.approach.experienceTitleLead' | translate }}
+			<br />
+			<em>{{ 'pages.approach.experienceTitleEmphasis' | translate }}</em>
+			{{ 'pages.approach.experienceTitleTail' | translate }}
+		</h2>
+	</div>
+	<div>
+		<p>{{ 'pages.approach.experienceDetail' | translate }}</p>
+		<ul>
+			@for (bullet of experienceBullets().split('|'); track $index) {
+				<li>{{ bullet }}</li>
+			}
+		</ul>
+	</div>
+</section>

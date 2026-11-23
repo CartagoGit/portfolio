@@ -1,0 +1,58 @@
+<section
+	class="demo-games"
+	[attr.aria-label]="'pages.demos.gamesAria' | translate">
+	<header
+		class="demo-games__tabs"
+		role="tablist"
+		[attr.aria-label]="'pages.demos.gameTabsAria' | translate">
+		@for (game of games; track game.id; let index = $index) {
+			<button
+				id="demo-tab-{{ game.id }}"
+				type="button"
+				role="tab"
+				[attr.tabindex]="activeGame() === game.id ? 0 : -1"
+				[attr.aria-selected]="activeGame() === game.id"
+				[attr.aria-controls]="'demo-panel-' + game.id"
+				[class.is-active]="activeGame() === game.id"
+				(click)="select(game.id)"
+				(keydown)="onTabKeydown($event, index)">
+				{{ game.labelKey | translate }}
+			</button>
+		}
+	</header>
+	<div
+		class="demo-games__stage"
+		id="demo-panel-{{ activeGame() }}"
+		role="tabpanel"
+		[class.is-alternate]="transitionAlternate()"
+		[style.--demo-entry-direction]="transitionDirection()"
+		[attr.aria-labelledby]="'demo-tab-' + activeGame()"
+		[attr.data-game]="activeGame()">
+		@switch (activeGame()) {
+			@case ('reflex') {
+				<app-reflex-game />
+			}
+			@case ('reaction') {
+				<app-reaction-game />
+			}
+			@case ('memory') {
+				<app-memory-game />
+			}
+			@case ('dice') {
+				<app-dice-game />
+			}
+			@case ('rps') {
+				<app-rps-game />
+			}
+			@case ('color') {
+				<app-color-game />
+			}
+			@case ('tap') {
+				<app-tap-game />
+			}
+			@case ('guess') {
+				<app-guess-game />
+			}
+		}
+	</div>
+</section>

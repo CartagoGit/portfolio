@@ -1,0 +1,78 @@
+@use '../lab-playground-system' as playground;
+
+:host {
+	@include playground.component-host;
+}
+
+.accessibility-playground {
+	@include playground.card;
+}
+
+.accessibility-playground__heading {
+	@include playground.heading;
+}
+
+.accessibility-playground__controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.55rem;
+	align-items: center;
+}
+
+.accessibility-playground__controls button {
+	@include playground.control;
+}
+
+.accessibility-playground__controls strong {
+	margin-left: auto;
+	color: var(--lime);
+	font-size: 1.1rem;
+}
+
+.accessibility-playground__preview {
+	display: grid;
+	gap: 0.65rem;
+	padding: 1rem;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 12px;
+	background: #07111e;
+	color: #6f849b;
+}
+
+.accessibility-playground__preview.is-high-contrast {
+	border-color: #fff;
+	color: #fff;
+}
+
+.accessibility-playground__preview label {
+	display: grid;
+	gap: 0.4rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+.accessibility-playground__preview input,
+.accessibility-playground__preview button {
+	min-height: 42px;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid currentcolor;
+	border-radius: 8px;
+	background: transparent;
+	color: inherit;
+}
+
+.accessibility-playground__preview.show-focus :focus-visible {
+	outline: 3px solid #43d5ff;
+	outline-offset: 3px;
+}
+
+.accessibility-playground__preview small {
+	color: #ff9b83;
+	font-size: 0.75rem;
+}
+
+.accessibility-playground__preview p {
+	margin: 0;
+	color: #c8f58c;
+	font-size: 0.75rem;
+}

@@ -1,0 +1,46 @@
+<section
+	class="hero-monitor__earth-controls"
+	[class.is-active]="active()"
+	[attr.inert]="active() ? null : ''"
+	[attr.aria-hidden]="active() ? null : 'true'"
+	[attr.aria-label]="'pages.home.earthControlsLabel' | translate">
+	<div
+		class="hero-monitor__earth-categories"
+		role="tablist"
+		[attr.aria-label]="'pages.home.earthTextureLabel' | translate">
+		@for (item of categories; track item) {
+			<button
+				type="button"
+				role="tab"
+				[class.is-active]="category() === item"
+				[attr.aria-selected]="category() === item"
+				(click)="selectCategory(item, $event)">
+				{{ categoryLabel(item) }}
+			</button>
+		}
+	</div>
+	<div
+		class="hero-monitor__earth-textures"
+		role="group"
+		[attr.aria-label]="categoryLabel(category())">
+		@for (texture of options(); track texture.id) {
+			<button
+				type="button"
+				[class.is-active]="textureStyle() === texture.id"
+				[attr.aria-pressed]="textureStyle() === texture.id"
+				[attr.title]="textureLabel(texture.id)"
+				(click)="selectTexture(texture.id, $event)">
+				{{ textureLabel(texture.id) }}
+			</button>
+		}
+	</div>
+	<p class="hero-monitor__earth-origin" aria-live="polite">{{ originLabel() }}</p>
+	<p class="hero-monitor__earth-drag-hint">{{ 'pages.home.earthDragHint' | translate }}</p>
+	<button
+		class="hero-monitor__earth-close"
+		type="button"
+		(click)="close($event)"
+		[attr.aria-label]="closeLabel()">
+		{{ closeLabel() }}
+	</button>
+</section>

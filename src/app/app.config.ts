@@ -1,0 +1,41 @@
+import {
+	provideHttpClient,
+	withFetch,
+} from '@angular/common/http';
+import {
+	type ApplicationConfig,
+	provideBrowserGlobalErrorListeners,
+} from '@angular/core';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideClientHydration } from '@angular/platform-browser';
+import {
+	CONTACT_DELIVERY_CONFIG,
+	DEFAULT_CONTACT_DELIVERY_CONFIG,
+} from '../pages/contact/contact-delivery.config';
+
+export const appConfig: ApplicationConfig = {
+	providers: [
+		provideBrowserGlobalErrorListeners(),
+		provideRouter(
+			routes,
+			withInMemoryScrolling({
+				scrollPositionRestoration: 'top',
+			}),
+			withViewTransitions({
+				skipInitialTransition: true,
+				onViewTransitionCreated: ({ transition }) => {
+					void transition.ready.catch(() => undefined);
+					void transition.finished.catch(() => undefined);
+				},
+			}),
+		),
+		provideClientHydration(),
+		provideHttpClient(withFetch()),
+		{
+			provide: CONTACT_DELIVERY_CONFIG,
+			useValue: DEFAULT_CONTACT_DELIVERY_CONFIG,
+		},
+	],
+};

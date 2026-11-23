@@ -1,0 +1,15 @@
+// Aggregate the design tokens for a single import surface.
+//
+// Consumers `@use '../styles/tokens/index' as *;` and get the palette maps
+// plus the motion/easing vocabulary and the typography mixins through one
+// declaration.
+@forward './themes';
+@forward './scale';
+@forward './durations';
+// The typography partial exposes both namespaced members ($font-body,
+// $font-mono, $font-accent) and two helper mixins (mono, mono-mixed).
+// Forward with 'show' so the mixins land directly on the 'tokens'
+// namespace at the call site, mirroring how the palette / durations
+// partials expose their top-level members.
+@forward './typography' show $font-body, $font-mono, $font-accent, mono,
+	mono-mixed;

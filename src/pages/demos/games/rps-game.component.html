@@ -1,0 +1,16 @@
+<section class="rps-game" aria-labelledby="rps-game-title">
+	<div class="rps-game__copy">
+		<p>{{ 'pages.demos.rpsEyebrow' | translate }}</p>
+		<h3 id="rps-game-title">{{ 'pages.demos.rpsTitle' | translate }}</h3>
+		<p>{{ 'pages.demos.rpsDetail' | translate }}</p>
+		<b>{{ score() }} <small>{{ 'pages.demos.rpsScore' | translate }}</small></b>
+	</div>
+	<div class="rps-game__board">
+		<div class="rps-game__choices">
+			@for (choice of choices; track choice.id) {
+				<button type="button" [attr.aria-label]="choice.labelKey | translate" (click)="play(choice.id)"><i aria-hidden="true">{{ choice.symbol }}</i><span>{{ choice.labelKey | translate }}</span></button>
+			}
+		</div>
+		<p aria-live="polite">{{ ('pages.demos.rps' + outcome()[0]!.toUpperCase() + outcome().slice(1)) | translate }}</p>
+	</div>
+</section>

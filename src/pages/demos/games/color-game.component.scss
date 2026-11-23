@@ -1,0 +1,11 @@
+@use '../demos-interaction-system' as interaction;
+:host { @include interaction.component-host; }
+.color-game { @include interaction.game-layout; }
+.color-game__copy { @include interaction.game-copy; }
+.color-game__board { display: grid; justify-items: center; gap: 1rem; }
+.color-game__target { width: min(210px, 58%); aspect-ratio: 1; border-radius: 28px; background: var(--target-color); box-shadow: 0 20px 50px color-mix(in srgb, var(--target-color) 36%, transparent); }
+.color-game__options { display: grid; grid-template-columns: repeat(4, 48px); gap: .65rem; }
+.color-game__options button { width: 48px; height: 48px; border: 2px solid color-mix(in srgb, var(--surface) 78%, transparent); border-radius: 50%; background: var(--choice-color); box-shadow: 0 0 0 1px var(--line); }
+.color-game__options button:hover, .color-game__options button:focus-visible { transform: scale(1.1); box-shadow: 0 0 0 3px var(--focus-ring); }
+.color-game__board > p { min-height: 1.4rem; margin: 0; color: var(--muted); font-weight: 800; }
+@media (max-width: 760px) { .color-game { @include interaction.game-layout-mobile; } }
