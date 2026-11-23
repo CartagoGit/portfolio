@@ -142,9 +142,9 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S9 — Demos catalogue and mini-games
 - **Status**: pending
-- **Files**: `src/pages/demos/demos.page.ts`, `src/pages/demos/demos.page.html`, `src/pages/demos/demos.page.scss`, `src/pages/demos/_demos-interaction-system.scss`, `src/pages/demos/demos.page.spec.ts`
+- **Files**: `src/pages/demos/**`
 - **Gate**: demo/game unit tests + keyboard/touch Playwright audit
-- **Acceptance**: interactive examples appear in tabs before project links; every external project gets its correct logo; memory text is never reversed; additional compact games/examples exist; all games support keyboard/touch, reduced motion and reset; controls and state transitions are visible and consistent.
+- **Acceptance**: interactive examples appear in tabs before project links; every external project gets its correct logo; memory text is never reversed; additional compact games/examples exist; all games support keyboard/touch, reduced motion and reset; controls and state transitions are visible and consistent; the page only composes catalog and tab UI, while each game, reusable state helper and shared style contract has a focused component/helper owner with isolated tests.
 
 ### S10 — Contact copy, portrait and delivery
 - **Status**: pending
@@ -189,6 +189,12 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - **Acceptance**: correct the accepted-slice feedback in this proposal: the desktop monitor expands into available space and never overlaps labels/icons/destinations; footer chrome does not become an opaque slab, only controls receive button backgrounds; Work retains project-specific effects and correct logos/icons while expanding the verified catalogue; football/basketball/tennis/golf/rugby/volleyball textures wrap canonically, brand/banner spheres remain undistorted, Saturn rings share scale/orientation/rotation with the planet, exoplanets read as high-detail labelled artist impressions, and additional Earth day/night/cloud/terrain/bathymetry/thermal variants remain sharp; every changed route is manually inspected for correct marks, readable text and no visual regressions at all required viewports.
 - **Theme correction requirement**: opening the globe, its scrim, texture controls, close button and information copy must use active theme tokens (including light/solar/mono), not a permanent base dark/blue palette.
 
+### S17 — Component boundaries, clean architecture and reuse
+- **Status**: pending
+- **Files**: `src/pages/**`, `src/shared/**`, `src/core/**`, `src/styles/**`
+- **Gate**: architecture review + focused unit tests + lint/typecheck/build
+- **Acceptance**: route page components remain thin composition roots; cohesive interaction systems are split into focused standalone components; non-UI algorithms live in typed helpers/services; repeated SCSS and template structures are consolidated into tokens, mixins or reusable components; no component owns unrelated route/page concerns, no duplicated last-wins visual system is accepted, and every extracted public contract has direct tests. The review must identify why each helper/component boundary is cohesive, not merely smaller by line count.
+
 ## dependency graph
 
 - S2 feeds S1, S5, S7, S8 and S9.
@@ -197,6 +203,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - S3 and S4 establish shell interactions before S12 global motion/overflow validation.
 - S13 consumes all new UI keys after route work lands.
 - S16 reopens the visual product quality of S1/S3/S5 after human review and must close before S14 certification.
+- S17 must refactor S5–S13 cross-cutting ownership before S14; feature completion cannot be used to accept god components, duplicated styles or untestable inline logic.
 - S14 validates all slices and must be green before S15 deployment.
 - S15 is the final gate of this product programme; publication is blocked until every earlier acceptance gate passes.
 - `f00002` depends on a completed/published `f00001` and is intentionally the final language-expansion programme.
@@ -207,6 +214,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - Technology previews provide a real definition and practical use statement per technology, not generic filler text.
 - The globe offers real-cloud Earth, several additional real Earth variants, Sun/Moon and all planets (including Pluto), exoplanet artist impressions labelled as such, real/canonical sports-ball patterns, and a branded/joke/portrait collection; Saturn renders real rings, preset origin is explicit, assets are high-resolution/lazy-loaded, orientation survives texture changes, and no preset causes layout shift.
 - Work, Approach, Knowledge, Docker, Demos, Lab and Contact are complete, responsive, theme-correct and coherent as one product.
+- Shared interactions, route composition and visual systems follow clean component/service/helper boundaries with reused tokens, templates and algorithms; new UI is not accepted through a monolithic page component or duplicate SCSS patches.
 - Every route and interactive state is visually attractive at desktop, tablet and mobile: correct icons/logos, no duplicated plates, no overlapping labels, no reversed/mirrored memory text, no pixelated globe mappings, no generic cards where a project had a deliberate effect, and no shell correction that changes an unrelated surface.
 - Public profile evidence is current enough to support the curated order and copy; every destination is verified or intentionally omitted with a truthful reason.
 - Footer, back-to-top, locale, command palette and route/tab transitions work without visual jumps or input regressions.
