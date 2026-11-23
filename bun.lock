@@ -14,6 +14,12 @@
         "@angular/router": "^22.3.0",
         "@angular/ssr": "^22.3.0",
         "@delendai/core": "file:vendor/delendai-core-0.3.0.tgz",
+        "@delendai/docs": "file:vendor/delendai-docs-0.3.0.tgz",
+        "@delendai/error-reporting": "file:vendor/delendai-error-reporting-0.3.0.tgz",
+        "@delendai/logs": "file:vendor/delendai-logs-0.3.0.tgz",
+        "@delendai/memory": "file:vendor/delendai-memory-0.3.0.tgz",
+        "@delendai/proposals": "file:vendor/delendai-proposals-0.3.0.tgz",
+        "@delendai/search": "file:vendor/delendai-search-0.3.0.tgz",
         "express": "^5.3.0",
         "rxjs": "~7.8.0",
         "simple-icons": "^16.38.0",
@@ -43,9 +49,27 @@
     },
   },
   "overrides": {
+    "@delendai/agent-orchestrator": "file:vendor/delendai-agent-orchestrator-0.3.0.tgz",
+    "@delendai/commit-policy": "file:vendor/delendai-commit-policy-0.3.0.tgz",
+    "@delendai/context-compiler": "file:vendor/delendai-context-compiler-0.3.0.tgz",
+    "@delendai/context-for-change": "file:vendor/delendai-context-for-change-0.3.0.tgz",
     "@delendai/contracts": "file:vendor/delendai-contracts-0.3.0.tgz",
+    "@delendai/conventions": "file:vendor/delendai-conventions-0.3.0.tgz",
+    "@delendai/core": "file:vendor/delendai-core-0.3.0.tgz",
+    "@delendai/docs": "file:vendor/delendai-docs-0.3.0.tgz",
+    "@delendai/error-reporting": "file:vendor/delendai-error-reporting-0.3.0.tgz",
+    "@delendai/forge": "file:vendor/delendai-forge-0.3.0.tgz",
+    "@delendai/git": "file:vendor/delendai-git-0.3.0.tgz",
+    "@delendai/logs": "file:vendor/delendai-logs-0.3.0.tgz",
+    "@delendai/memory": "file:vendor/delendai-memory-0.3.0.tgz",
+    "@delendai/proposals": "file:vendor/delendai-proposals-0.3.0.tgz",
+    "@delendai/proposals-sqlite": "file:vendor/delendai-proposals-sqlite-0.3.0.tgz",
+    "@delendai/quality": "file:vendor/delendai-quality-0.3.0.tgz",
+    "@delendai/refactor": "file:vendor/delendai-refactor-0.3.0.tgz",
+    "@delendai/search": "file:vendor/delendai-search-0.3.0.tgz",
     "@delendai/sqlite": "file:vendor/delendai-sqlite-0.3.0.tgz",
     "@delendai/state": "file:vendor/delendai-state-0.3.0.tgz",
+    "@delendai/test-policy": "file:vendor/delendai-test-policy-0.3.0.tgz",
   },
   "packages": {
     "@acemir/cssom": ["@acemir/cssom@0.9.31", "", {}, "sha512-ZnR3GSaH+/vJ0YlHau21FjfLYjMpYVIzTD8M8vIEQvIGxeOXyXdzCI140rrCY862p/C/BbzWsjc1dgnM9mkoTA=="],
@@ -152,9 +176,31 @@
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@4.0.0", "", {}, "sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA=="],
 
+    "@delendai/agent-orchestrator": ["@delendai/agent-orchestrator@vendor/delendai-agent-orchestrator-0.3.0.tgz", { "dependencies": { "@delendai/context-compiler": "workspace:*", "@delendai/contracts": "workspace:*", "@delendai/state": "workspace:*", "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/context-for-change": "^0.3.0", "@delendai/core": "^0.3.0" }, "optionalPeers": ["@delendai/context-for-change"] }, "sha512-kTNUUA9aN/LQDc5n4PTibWBiez2/8ObwYAEDi1QlyVpbxYQslO0+ghLo4FHQOJnbb6vFEMpZ2m52GNgkdieM/w=="],
+
+    "@delendai/commit-policy": ["@delendai/commit-policy@vendor/delendai-commit-policy-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-V5nn/gXTYiVPIRGhwrZAXim6huRsR7XbKzRv/zqZ7KE7h186rgsMvwBq2i/wT1eeb3vJAyxNMMiz8OlfuX6KsQ=="],
+
+    "@delendai/context-compiler": ["@delendai/context-compiler@vendor/delendai-context-compiler-0.3.0.tgz", { "dependencies": { "@delendai/state": "workspace:*" } }, "sha512-P4Nf5/ZxlShyKa/5Nyso2ZcnfTlLUt4864uzbIVhridQUcRYDqVKNo/2c9PH9YtLFbYzutGrbL3NmNX1vE+epw=="],
+
     "@delendai/contracts": ["@delendai/contracts@vendor/delendai-contracts-0.3.0.tgz", {}, "sha512-BuqBL5VwgbeErKLTyYtGthGU4+7v9qT9S6pFG0d6bsHTrlsdcfefHcDXo2NKH+YlRR7MciyJV7jKi/VvOydJXw=="],
 
     "@delendai/core": ["@delendai/core@vendor/delendai-core-0.3.0.tgz", { "dependencies": { "@agentclientprotocol/sdk": "1.5.1", "@delendai/contracts": "workspace:*", "@delendai/sqlite": "workspace:*", "@delendai/state": "workspace:*", "@modelcontextprotocol/sdk": "^1.32.0", "jsonc-parser": "3.3.1", "zod": "^4.6.6" } }, "sha512-ZpjH7RiH/oLJ6xs8C1Ou3DaFB7dghOvFd+8+b4Cv8Rmk3xl+jpwpZEs+neWG3o2g13d++9jEQIwbyzqR08TlrQ=="],
+
+    "@delendai/docs": ["@delendai/docs@vendor/delendai-docs-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-AeJsdDl+9lNfqSgjd6PYGdc4KjuD+v8HldbBeSwR6YMdDz1z8Njs2UxOEMZGSsJDu2NYBCIGqC+ZGLysO06LAw=="],
+
+    "@delendai/error-reporting": ["@delendai/error-reporting@vendor/delendai-error-reporting-0.3.0.tgz", { "dependencies": { "@delendai/commit-policy": "workspace:*", "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-NoOc1QnaoGoym8jF9WKjOijLMm9gLmiZbVyy+qwIT7se2lr/CK9WrjZ7moFT/nxbLIZ/ZCxlQr8a/TlLuSQ2Dw=="],
+
+    "@delendai/logs": ["@delendai/logs@vendor/delendai-logs-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-cNqsqMdSWdt0DaywcO/lpgpD7p0TxhjueUrB9LTVEPN1NY6zIqmu4ZlTMi7Ut3GHvwhIg5yqqqwhqk5OHhZwgQ=="],
+
+    "@delendai/memory": ["@delendai/memory@vendor/delendai-memory-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-A+dTIa8cx8Lo1gLL69XLZu4wooKrNNSpLkOgJHg2N3mnv+bE/2flidbMhg3g0YfUFkbvAdpvqqtrE2Rq4ehlZw=="],
+
+    "@delendai/proposals": ["@delendai/proposals@vendor/delendai-proposals-0.3.0.tgz", { "dependencies": { "@delendai/error-reporting": "workspace:*", "@delendai/logs": "workspace:*", "@delendai/proposals-sqlite": "workspace:*", "@delendai/quality": "workspace:*", "@delendai/state": "workspace:*", "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/agent-orchestrator": "workspace:*", "@delendai/core": "^0.3.0" } }, "sha512-fmuteOThXqOnv9iT6YXbDBhADCBNJG2nQCKb8F+s80ikmw6dlirCa65wt+aHU9VArxN4CC2e0M7xAN8tmTFpow=="],
+
+    "@delendai/proposals-sqlite": ["@delendai/proposals-sqlite@vendor/delendai-proposals-sqlite-0.3.0.tgz", { "dependencies": { "@delendai/core": "workspace:*", "@delendai/sqlite": "workspace:*", "yaml": "2.9.0" } }, "sha512-J03pPxO7xaDYg27d9o+PtWuJP+fJJFQqr6f8GaoK+lyg6KNgXOdc1yTdAnXh756NgnRXmk6/Dvn6xzzr1ZYX/g=="],
+
+    "@delendai/quality": ["@delendai/quality@vendor/delendai-quality-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-P4LxUctA9BXsQNH74lBLxBt+N3Ew4FGwpPea8nuVeljDDZbkHBN8WfvK4EErGQA9l19KNhrI84wkhmqkbIBTig=="],
+
+    "@delendai/search": ["@delendai/search@vendor/delendai-search-0.3.0.tgz", { "dependencies": { "@modelcontextprotocol/sdk": "^1.32.0", "zod": "^4.6.6" }, "peerDependencies": { "@delendai/core": "^0.3.0" } }, "sha512-k+hDPTsvYASf6O/gq4Nhzph0b0JWRuP29vCcViemgWRL/7L+p0gwMFrvZjPjIb8hildEo2XA3nZ9QFxlQ/bhaA=="],
 
     "@delendai/sqlite": ["@delendai/sqlite@vendor/delendai-sqlite-0.3.0.tgz", {}, "sha512-FXCErK8/JEF8EbALCtsYyenTzyxIi5dpdi3PX+h3CFrUiY2Utc5kgmobTR14GG/yZDVgqr387bGdiqmufwMPAQ=="],
 
@@ -1243,6 +1289,8 @@
     "xxhash-wasm": ["xxhash-wasm@1.1.0", "", {}, "sha512-147y/6YNh+tlp6nd/2pWq38i9h6mz/EuQ6njIrmW8D1BS5nCqs0P6DG+m6zTGnNz5I+uhZ0SHxBs9BsPrwcKDA=="],
 
     "y18n": ["y18n@5.0.8", "", {}, "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA=="],
+
+    "yaml": ["yaml@2.9.0", "", { "bin": { "yaml": "bin.mjs" } }, "sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA=="],
 
     "yargs": ["yargs@18.2.0", "", { "dependencies": { "cliui": "^9.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "string-width": "^8.2.1", "y18n": "^5.0.5", "yargs-parser": "^22.0.0" } }, "sha512-9OpKOLeaoNFecEp7P6iYbzze/5CqWoH7N3SMs/6y1XF4nMvFMspEGZzJ6uFi9MmQwXhyzqYoSEKO3tvA3Z/o2w=="],
 

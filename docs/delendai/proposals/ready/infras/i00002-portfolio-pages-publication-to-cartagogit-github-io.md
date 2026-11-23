@@ -29,13 +29,15 @@ Publication is an independent delivery concern and must not block product comple
 - global_gate: e2e
 
 ### S1 — Portable preparation and locked dependency install
-- **Status**: pending
-- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `vendor/delendai-core-0.3.0.tgz`, `vendor/delendai-contracts-0.3.0.tgz`, `vendor/delendai-sqlite-0.3.0.tgz`, `vendor/delendai-state-0.3.0.tgz`
+- **Status**: review
+- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `vendor/delendai-*.tgz`
 - **Gate**: type
 - acceptance:
   - "Frozen install succeeds in GitHub Actions without machine-specific paths."
   - "Preparation validates naming, configuration, assets and lockfile consistency."
   - "Missing or invalid dependencies fail with actionable evidence."
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S2 — Gated workflow, production artifact and publication
 - **Status**: pending
