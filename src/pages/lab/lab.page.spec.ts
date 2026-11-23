@@ -2,13 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabPageComponent } from './lab.page';
 
 describe('LabPageComponent', () => {
-	it('changes the selected telemetry metric', async () => {
+	it('composes the chart lab and four distinct interaction playgrounds', async () => {
 		await TestBed.configureTestingModule({
 			imports: [LabPageComponent],
 		}).compileComponents();
 		const fixture = TestBed.createComponent(LabPageComponent);
 		fixture.detectChanges();
-		fixture.componentInstance.setTelemetry('quality');
-		expect(fixture.componentInstance.activeTelemetry()).toBe('quality');
+		const element = fixture.nativeElement as HTMLElement;
+		expect(element.querySelector('app-lab-dashboard')).not.toBeNull();
+		expect(element.querySelectorAll('.lab-page__experiment-grid > *')).toHaveLength(4);
+		expect(element.querySelectorAll('app-workflow-playground')).toHaveLength(1);
+		expect(element.querySelectorAll('app-motion-playground')).toHaveLength(1);
+		expect(element.querySelectorAll('app-accessibility-playground')).toHaveLength(1);
+		expect(element.querySelectorAll('app-concurrency-playground')).toHaveLength(1);
 	});
 });

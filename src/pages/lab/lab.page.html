@@ -2,158 +2,40 @@
 	id="main-content"
 	class="lab-page"
 	aria-labelledby="lab-title">
-	<div class="lab-page__heading">
-		<p>{{ 'pages.lab.eyebrow' | translate }}</p>
-		<h2 id="lab-title">
-			{{ 'pages.lab.titleLead' | translate }}
-			<br />
-			<em>{{ 'pages.lab.titleEmphasis' | translate }}</em>
-			{{ 'pages.lab.titleTail' | translate }}
-		</h2>
-		<p>{{ 'pages.lab.subtitle' | translate }}</p>
-	</div>
-	<div class="lab-page__toolbar">
-		<div
-			role="group"
-			[attr.aria-label]="'pages.lab.metricPickerGroup' | translate">
-			@for (metric of telemetry; track metric.id) {
-				<button
-					type="button"
-					[class.is-active]="activeTelemetry() === metric.id"
-					(click)="setTelemetry(metric.id)">
-					{{ metric.label }}
-				</button>
-			}
+	<header class="lab-page__heading">
+		<div>
+			<p>{{ 'pages.lab.eyebrow' | translate }}</p>
+			<h2 id="lab-title">
+				{{ 'pages.lab.titleLead' | translate }}
+				<em>{{ 'pages.lab.titleEmphasis' | translate }}</em>
+				{{ 'pages.lab.titleTail' | translate }}
+			</h2>
 		</div>
-		<button
-			class="lab-page__command"
-			type="button"
-			(click)="commandRequested.emit()">
+		<p>{{ 'pages.lab.subtitle' | translate }}</p>
+		<button type="button" (click)="commandRequested.emit()">
 			<span aria-hidden="true">↗</span>
 			{{ 'pages.lab.commandPalette' | translate }}
 		</button>
-	</div>
-	<div
-		class="lab-page__switcher"
-		role="group"
-		[attr.aria-label]="'pages.lab.chartPickerGroup' | translate">
-		<span>{{ 'pages.lab.visualiseAs' | translate }}</span>
-		@for (type of chartTypes; track type) {
-			<button
-				type="button"
-				[class.is-active]="chartType() === type"
-				(click)="setChartType(type)">
-				{{ type }}
-			</button>
-		}
-	</div>
-	<section
-		class="lab-page__dashboard"
-		[attr.data-metric]="activeTelemetry()"
-		[attr.data-chart]="chartType()"
-		aria-live="polite">
-		<article class="lab-page__summary">
-			<span>{{ selectedTelemetry().label }}</span>
-			<b>{{ selectedTelemetry().value }}</b>
-			<small>{{ selectedTelemetry().valueLabel }}</small>
-			<p>{{ selectedTelemetry().note }}</p>
-		</article>
-		<article class="lab-page__chart">
-			<header>
-				<div>
-					<span>{{ 'pages.lab.weekTrend' | translate }}</span>
-					<b>{{ selectedTelemetry().title }}</b>
-				</div>
-				<i>{{ 'pages.lab.liveBadge' | translate }}</i>
-			</header>
-			<div
-				class="lab-page__bar-chart"
-				[attr.aria-label]="'pages.lab.weekTrend' | translate">
-				@for (bar of selectedTelemetry().bars; track $index) {
-					<span
-						[style.--bar]="bar + '%'"
-						[attr.aria-label]="bar + '%'"></span>
-				}
-				<svg
-					viewBox="0 0 400 180"
-					preserveAspectRatio="none"
-					aria-hidden="true">
-					<path
-						d="M0 145 C38 132,54 116,88 122 S136 76,172 93 S220 75,254 63 S302 70,336 35 S375 40,400 16" />
-				</svg>
-			</div>
-			<footer>
-				<span>{{ 'pages.lab.weekStart' | translate }}</span>
-				<span>{{ 'pages.lab.weekEnd' | translate }}</span>
-			</footer>
-		</article>
-		<div class="lab-page__kpis">
-			@for (kpi of selectedTelemetry().kpis; track kpi[1]) {
-				<article>
-					<b>{{ kpi[0] }}</b>
-					<span>{{ kpi[1] }}</span>
-					<i>↗</i>
-				</article>
-			}
+	</header>
+
+	<app-lab-dashboard />
+
+	<section class="lab-page__experiments" aria-labelledby="lab-experiments-title">
+		<header>
+			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>
+			<h3 id="lab-experiments-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
+			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
+		</header>
+		<div class="lab-page__experiment-grid">
+			<app-workflow-playground />
+			<app-motion-playground />
+			<app-accessibility-playground />
+			<app-concurrency-playground />
 		</div>
 	</section>
-	<section
-		class="lab-page__playground"
-		aria-labelledby="playground-title">
-		<div>
-			<h3 id="playground-title">
-				{{ 'pages.lab.playgroundHeading' | translate }}
-			</h3>
-			<p>{{ 'pages.lab.playgroundDescription' | translate }}</p>
-			<p
-				class="lab-page__status"
-				aria-live="polite">
-				<span></span>
-				{{ playgroundMessage() }}
-			</p>
-		</div>
-		<div
-			class="lab-page__board"
-			[class.is-complete]="playgroundComplete()">
-			<div
-				class="lab-page__track"
-				aria-hidden="true">
-				<i [style.--progress]="playgroundComplete() ? 4 : 0"></i>
-			</div>
-			<div class="lab-page__steps">
-				@for (
-					step of playgroundOrder();
-					track step;
-					let index = $index
-				) {
-					<button
-						type="button"
-						draggable="true"
-						[class.is-done]="playgroundComplete()"
-						[class.is-dragging]="draggedStep() === step"
-						(dragstart)="startDrag(step)"
-						(dragend)="draggedStep.set(null)"
-						(dragover)="$event.preventDefault()"
-						(drop)="dropStep(step)">
-						<span>0{{ index + 1 }}</span>
-						<b>{{ playgroundStep(step).label }}</b>
-						<small>{{ playgroundStep(step).hint }}</small>
-						<i aria-hidden="true">⠿</i>
-					</button>
-				}
-			</div>
-			<footer>
-				<span>{{ completedLoopsLabel() }}</span>
-				<button
-					type="button"
-					(click)="resetPlayground()">
-					{{ 'pages.lab.resetButton' | translate }}
-					<i aria-hidden="true">↻</i>
-				</button>
-			</footer>
-		</div>
-	</section>
+
 	<p class="lab-page__motion-note">
-		{{ motionNote() }}
+		<code>{{ 'pages.lab.motionNoteCode' | translate }}</code>
+		{{ 'pages.lab.motionNote' | translate }}
 	</p>
 </section>
