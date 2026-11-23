@@ -34,6 +34,7 @@ describe('TranslateService', () => {
 	});
 
 	afterEach(() => {
+		TestBed.inject(TranslateService).setLocale('en');
 		TestBed.resetTestingModule();
 	});
 

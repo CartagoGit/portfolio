@@ -1,0 +1,93 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+	min-width: 0;
+}
+
+.contact-portrait {
+	margin: 0;
+}
+
+.contact-portrait__frame {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 4 / 5;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 22px 22px 8px 22px;
+	background:
+		radial-gradient(circle at 24% 18%, color-mix(in srgb, var(--cyan) 28%, transparent), transparent 32%),
+		var(--surface-2);
+	box-shadow: 18px 18px 0 color-mix(in srgb, var(--cyan) 8%, transparent);
+	isolation: isolate;
+}
+
+.contact-portrait__frame::after {
+	position: absolute;
+	inset: 0;
+	content: '';
+	background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--canvas) 52%, transparent));
+	pointer-events: none;
+}
+
+.contact-portrait img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 22%;
+	filter: saturate(0.78) contrast(1.06);
+	transition: filter 0.35s ease, transform 0.45s ease;
+}
+
+.contact-portrait:hover img {
+	filter: saturate(1) contrast(1.02);
+	transform: scale(1.025);
+}
+
+.contact-portrait__index {
+	position: absolute;
+	z-index: 1;
+	right: 1rem;
+	bottom: 0.75rem;
+	color: color-mix(in srgb, white 84%, transparent);
+	font: 800 clamp(3rem, 7vw, 6rem)/0.8 tokens.$font-mono, monospace;
+	letter-spacing: -0.08em;
+}
+
+.contact-portrait figcaption {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: 1.2rem;
+	color: var(--muted);
+	font-size: 0.75rem;
+	line-height: 1.4;
+}
+
+.contact-portrait figcaption i {
+	color: var(--cyan);
+	font: 700 0.75rem tokens.$font-mono, monospace;
+	font-style: normal;
+	white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+	.contact-portrait__frame {
+		max-height: 360px;
+	}
+
+	.contact-portrait figcaption {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.contact-portrait img {
+		transition: none;
+	}
+
+	.contact-portrait:hover img {
+		transform: none;
+	}
+}

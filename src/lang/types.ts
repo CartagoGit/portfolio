@@ -368,13 +368,21 @@ export interface ITranslationMap {
 			ctaLinkedin: string;
 			ctaGithub: string;
 			ctaDockerHub: string;
+			channelsAria: string;
+			portraitAlt: string;
+			portraitCaption: string;
 			formAria: string;
 			formEmailLabel: string;
 			formEmailPlaceholder: string;
+			formEmailError: string;
 			formMessageLabel: string;
 			formMessagePlaceholder: string;
+			formMessageError: string;
 			formSubmit: string;
+			formSending: string;
 			formFeedback: string;
+			formFailure: string;
+			formFallbackAction: string;
 		};
 	};
 	seo: {

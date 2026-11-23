@@ -1,0 +1,62 @@
+<form
+	class="contact-form"
+	[formGroup]="form"
+	(ngSubmit)="submit()"
+	[attr.aria-label]="'pages.contact.formAria' | translate"
+	novalidate>
+	<label for="contact-email">
+		<span>{{ 'pages.contact.formEmailLabel' | translate }}</span>
+		<input
+			id="contact-email"
+			name="email"
+			type="email"
+			autocomplete="email"
+			formControlName="email"
+			[attr.placeholder]="'pages.contact.formEmailPlaceholder' | translate"
+			[attr.aria-invalid]="emailInvalid()"
+			[attr.aria-describedby]="emailInvalid() ? 'contact-email-error' : null" />
+	</label>
+	@if (emailInvalid()) {
+		<small id="contact-email-error" class="contact-form__error" role="alert">
+			{{ 'pages.contact.formEmailError' | translate }}
+		</small>
+	}
+
+	<label for="contact-message">
+		<span>{{ 'pages.contact.formMessageLabel' | translate }}</span>
+		<textarea
+			id="contact-message"
+			name="message"
+			rows="4"
+			maxlength="2000"
+			formControlName="message"
+			[attr.placeholder]="'pages.contact.formMessagePlaceholder' | translate"
+			[attr.aria-invalid]="messageInvalid()"
+			[attr.aria-describedby]="messageInvalid() ? 'contact-message-error' : null"></textarea>
+	</label>
+	@if (messageInvalid()) {
+		<small id="contact-message-error" class="contact-form__error" role="alert">
+			{{ 'pages.contact.formMessageError' | translate }}
+		</small>
+	}
+
+	<input class="contact-form__honeypot" name="company" type="hidden" />
+	<button type="submit" [disabled]="status() === 'sending'">
+		{{ (status() === 'sending' ? 'pages.contact.formSending' : 'pages.contact.formSubmit') | translate }}
+		<span aria-hidden="true">↗</span>
+	</button>
+
+	@if (status() === 'success') {
+		<p class="contact-form__feedback is-success" role="status">
+			{{ 'pages.contact.formFeedback' | translate }}
+		</p>
+	}
+	@if (status() === 'error') {
+		<div class="contact-form__feedback is-error" role="alert">
+			<p>{{ 'pages.contact.formFailure' | translate }}</p>
+			<a [href]="fallbackHref()">
+				{{ 'pages.contact.formFallbackAction' | translate }}
+			</a>
+		</div>
+	}
+</form>

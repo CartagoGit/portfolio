@@ -2,11 +2,7 @@
 	id="main-content"
 	class="contact-page"
 	aria-labelledby="contact-title">
-	<div class="contact-page__image">
-		<img
-			src="/images/mario-cabrero-sf.png"
-			alt="Mario Cabrero Volarich" />
-	</div>
+	<app-contact-portrait />
 	<div class="contact-page__content">
 		<p class="contact-page__eyebrow">
 			{{ 'pages.contact.eyebrow' | translate }}
@@ -17,62 +13,35 @@
 			{{ 'pages.contact.titleTail' | translate }}
 		</h2>
 		<p>{{ 'pages.contact.subtitle' | translate }}</p>
-		<div class="contact-page__links">
-			<a
-				href="https://github.com/CartagoGit"
-				target="_blank"
-				rel="noreferrer">
-				{{ 'pages.contact.ctaGithub' | translate }}
-				<span>↗</span>
+		<nav
+			class="contact-page__links"
+			[attr.aria-label]="'pages.contact.channelsAria' | translate">
+			<a href="mailto:cv2mario@gmail.com">
+				{{ 'pages.contact.ctaEmail' | translate }}
+				<span aria-hidden="true">↗</span>
 			</a>
 			<a
 				href="https://www.linkedin.com/in/mario-cabrero-volarich"
 				target="_blank"
 				rel="noreferrer">
 				{{ 'pages.contact.ctaLinkedin' | translate }}
-				<span>↗</span>
+				<span aria-hidden="true">↗</span>
+			</a>
+			<a
+				href="https://github.com/CartagoGit"
+				target="_blank"
+				rel="noreferrer">
+				{{ 'pages.contact.ctaGithub' | translate }}
+				<span aria-hidden="true">↗</span>
 			</a>
 			<a
 				href="https://hub.docker.com/u/cartagodocker"
 				target="_blank"
 				rel="noreferrer">
 				{{ 'pages.contact.ctaDockerHub' | translate }}
-				<span>↗</span>
+				<span aria-hidden="true">↗</span>
 			</a>
-		</div>
-		<form
-			(submit)="submit($event)"
-			[attr.aria-label]="'pages.contact.formAria' | translate">
-			<label>
-				{{ 'pages.contact.formEmailLabel' | translate }}
-				<input
-					type="email"
-					autocomplete="email"
-					[attr.placeholder]="
-						'pages.contact.formEmailPlaceholder' | translate
-					"
-					required />
-			</label>
-			<label>
-				{{ 'pages.contact.formMessageLabel' | translate }}
-				<textarea
-					rows="3"
-					[attr.placeholder]="
-						'pages.contact.formMessagePlaceholder' | translate
-					"
-					required></textarea>
-			</label>
-			<button type="submit">
-				{{ 'pages.contact.formSubmit' | translate }}
-				<span>↗</span>
-			</button>
-			@if (sent()) {
-				<p
-					class="contact-page__feedback"
-					role="status">
-					{{ 'pages.contact.formFeedback' | translate }}
-				</p>
-			}
-		</form>
+		</nav>
+		<app-contact-form />
 	</div>
 </section>

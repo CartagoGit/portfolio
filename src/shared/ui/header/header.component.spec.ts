@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateService } from '../../../lang/translate.service';
 import { HeaderComponent } from './header.component';
 describe('HeaderComponent', () => {
 	it('renders the active navigation state', async () => {
 		await TestBed.configureTestingModule({
 			imports: [HeaderComponent, RouterTestingModule],
 		}).compileComponents();
+		TestBed.inject(TranslateService).setLocale('en');
 		const fixture = TestBed.createComponent(HeaderComponent);
 		fixture.componentRef.setInput('locale', 'en');
 		fixture.componentRef.setInput('page', 'work');

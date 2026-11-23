@@ -4,6 +4,8 @@ import { TranslateService } from '../../../lang/translate.service';
 import { MemoryGameComponent } from './memory-game.component';
 
 describe('MemoryGameComponent', () => {
+	afterEach(() => TestBed.inject(TranslateService).setLocale('en'));
+
 	it('matches pairs and resets without mutating the two-copy deck', async () => {
 		vi.useFakeTimers();
 		try {
