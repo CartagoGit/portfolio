@@ -7,9 +7,11 @@
 			[links]="links()"
 			[compact]="true" />
 	</nav>
-	<a
+	<button
 		class="footer__top"
-		href="#main-content">
+		type="button"
+		(click)="backToTop.emit()"
+		[attr.aria-label]="'chrome.footer.backToTop' | translate">
 		{{ 'chrome.footer.backToTop' | translate }}
-	</a>
+	</button>
 </footer>

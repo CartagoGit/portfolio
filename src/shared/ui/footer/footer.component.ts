@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { ILocale, IPublicLink } from '../../../domain/types';
 import { ProfileLinksComponent } from '../../../pages/home/profile-links/profile-links.component';
@@ -13,4 +13,5 @@ import { ProfileLinksComponent } from '../../../pages/home/profile-links/profile
 export class FooterComponent {
 	readonly locale = input.required<ILocale>();
 	readonly links = input.required<readonly IPublicLink[]>();
+	readonly backToTop = output<void>();
 }

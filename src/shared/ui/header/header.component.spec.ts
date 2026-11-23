@@ -37,5 +37,10 @@ describe('HeaderComponent', () => {
 		expect(
 			fixture.nativeElement.querySelector('.is-active')?.textContent
 		).toContain('Projects');
+		const themeButton = fixture.nativeElement.querySelector(
+			'.header__theme > button'
+		);
+		expect(themeButton?.textContent).toContain('Themes');
+		expect(themeButton?.querySelector('.header__theme-current')).toBeTruthy();
 	});
 });

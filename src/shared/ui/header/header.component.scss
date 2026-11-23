@@ -187,6 +187,21 @@
 	}
 	&__theme {
 		position: relative;
+
+		> button {
+			min-width: 6.75rem;
+			justify-content: space-between;
+			padding-inline: .68rem;
+		}
+	}
+	&__theme-current {
+		display: inline-block;
+		width: .72rem;
+		height: .72rem;
+		flex: 0 0 .72rem;
+		border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px color-mix(in srgb, var(--canvas) 68%, transparent);
 	}
 	&__menu {
 		display: none;

@@ -120,7 +120,11 @@
 				[attr.aria-expanded]="themeMenuOpen()"
 				[attr.aria-label]="'chrome.header.themeOpenLabel' | translate"
 				aria-haspopup="listbox">
-				<span>{{ activeTheme().label }}</span>
+				<span>{{ 'lang.themeMenuLabel' | translate }}</span>
+				<span
+					class="header__theme-current"
+					[style.background]="activeTheme().primary"
+					aria-hidden="true"></span>
 			</button>
 			@if (themeMenuOpen() || themeMenuClosing()) {
 				<div

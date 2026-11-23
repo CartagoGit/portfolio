@@ -162,6 +162,18 @@ export class ShellFacade {
 		this.menuOpen.update((value) => !value);
 	}
 
+	scrollToTop(): void {
+		if (!isPlatformBrowser(this._platformId)) return;
+		const reducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)'
+		).matches;
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: reducedMotion ? 'auto' : 'smooth',
+		});
+	}
+
 	setTransition(target: IPageComponentId): void {
 		this._document.documentElement.dataset['transitionDirection'] =
 			transitionDirection(this.page(), target);
