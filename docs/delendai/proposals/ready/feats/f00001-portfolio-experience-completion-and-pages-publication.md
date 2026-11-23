@@ -129,7 +129,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S8 — Docker page product catalogue
 - **Status**: pending
-- **Files**: `src/pages/docker/**`
+- **Files**: `src/pages/docker/docker.page.ts`, `src/pages/docker/docker.page.html`, `src/pages/docker/docker.page.scss`, `src/pages/docker/docker.page.spec.ts`
 - **Gate**: Docker page tests + external destination validation + responsive audit
 - **Acceptance**: the page explains the public Docker toolchain, exposes each important image with use case and command, links to Docker Hub and source, and adapts all cards/terminal examples to the active theme.
 

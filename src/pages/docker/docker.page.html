@@ -1,35 +1,65 @@
-<section
-	id="main-content"
-	class="docker-page"
-	aria-labelledby="docker-title">
+<section class="docker-page" aria-labelledby="docker-title">
 	<div class="docker-page__heading">
-		<p>{{ 'pages.docker.eyebrow' | translate }}</p>
-		<h2 id="docker-title">
-			{{ 'pages.docker.titleLead' | translate }}
-			<br />
-			<em>{{ 'pages.docker.titleEmphasis' | translate }}</em>
-			{{ 'pages.docker.titleTail' | translate }}
-		</h2>
-		<p>{{ 'pages.docker.subtitle' | translate }}</p>
-	</div>
-	<a
-		class="docker-page__terminal"
-		href="https://hub.docker.com/u/cartagodocker"
-		target="_blank"
-		rel="noreferrer">
-		<span>{{ 'pages.docker.terminalHeading' | translate }}</span>
-		<code>
-			{{ 'pages.docker.terminalPull' | translate }}
-			<br />
-			<b>●</b>
-			{{ 'pages.docker.terminalStatus' | translate }}
-			<br />
-			<i>{{ 'pages.docker.terminalOpen' | translate }}</i>
-		</code>
 		<div>
-			<em>{{ 'pages.docker.terminalAngular' | translate }}</em>
-			<em>{{ 'pages.docker.terminalNode' | translate }}</em>
-			<em>{{ 'pages.docker.terminalDelivery' | translate }}</em>
+			<p>{{ 'pages.docker.eyebrow' | translate }}</p>
+			<h2 id="docker-title">
+				{{ 'pages.docker.titleLead' | translate }}
+				<br />
+				<em>{{ 'pages.docker.titleEmphasis' | translate }}</em>
+				{{ 'pages.docker.titleTail' | translate }}
+			</h2>
+			<p>{{ 'pages.docker.subtitle' | translate }}</p>
 		</div>
-	</a>
+		<aside class="docker-page__terminal" aria-label="Docker Hub profile">
+			<span>{{ 'pages.docker.terminalHeading' | translate }}</span>
+			<code>
+				$ docker pull cartagodocker/nodebun:latest
+				<br />
+				<b>●</b>
+				{{ 'pages.docker.terminalStatus' | translate }}
+			</code>
+			<div>
+				<em>{{ 'pages.docker.terminalAngular' | translate }}</em>
+				<em>{{ 'pages.docker.terminalNode' | translate }}</em>
+				<em>{{ 'pages.docker.terminalDelivery' | translate }}</em>
+			</div>
+			<a
+				href="https://hub.docker.com/u/cartagodocker"
+				target="_blank"
+				rel="noreferrer">
+				{{ 'pages.docker.terminalOpen' | translate }}
+			</a>
+		</aside>
+	</div>
+
+	<div class="docker-page__catalogue" aria-label="Public Docker images">
+		@for (image of images; track image.name; let index = $index) {
+			<article class="docker-page__image">
+				<header>
+					<img src="/icons/projects/docker.svg" alt="Docker" />
+					<span>0{{ index + 1 }} / {{ images.length }}</span>
+					<b>{{ image.status }}</b>
+				</header>
+				<div class="docker-page__image-title">
+					<span>cartagodocker</span>
+					<h3>{{ image.name }}</h3>
+				</div>
+				<p>{{ image.purpose }}</p>
+				<div class="docker-page__stack">
+					@for (technology of image.technologies; track $index) {
+						<span>{{ technology }}</span>
+					}
+				</div>
+				<code>{{ image.command }}</code>
+				<nav aria-label="Docker image destinations">
+					<a [href]="image.hubHref" target="_blank" rel="noreferrer">
+						Docker Hub ↗
+					</a>
+					<a [href]="image.sourceHref" target="_blank" rel="noreferrer">
+						Source ↗
+					</a>
+				</nav>
+			</article>
+		}
+	</div>
 </section>
