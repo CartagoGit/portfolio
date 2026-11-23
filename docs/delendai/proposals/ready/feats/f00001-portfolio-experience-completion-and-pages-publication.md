@@ -118,7 +118,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S7 — Knowledge page examples and related projects
 - **Status**: pending
-- **Files**: `src/pages/knowledge/**`
+- **Files**: `src/pages/knowledge/knowledge.page.ts`, `src/pages/knowledge/knowledge.page.html`, `src/pages/knowledge/knowledge.page.scss`, `src/pages/knowledge/_knowledge-card-system.scss`, `src/pages/knowledge/knowledge.page.spec.ts`
 - **Gate**: knowledge tests + link validation + responsive audit
 - **Acceptance**: every knowledge area has a related icon, short practical example and verified links to relevant public projects; cards share dimensions and state treatment and remain readable at 390px.
 

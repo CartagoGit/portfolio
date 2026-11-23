@@ -1,6 +1,7 @@
 @use 'motion' as motion;
 @use 'keyframes' as *;
 @use 'tokens/index' as tokens;
+@use 'sass:meta';
 
 :host {
 	display: block;
@@ -108,6 +109,7 @@
 		transform: translateZ(28px) rotate(12deg) scale(1.15);
 	}
 }
+
 @media (max-width: 700px) {
 	.knowledge-page {
 		width: min(100% - 1.7rem, 560px);
@@ -117,3 +119,5 @@
 		}
 	}
 }
+
+@include meta.load-css('knowledge-card-system');

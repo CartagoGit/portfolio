@@ -1,7 +1,4 @@
-<section
-	id="main-content"
-	class="knowledge-page"
-	aria-labelledby="knowledge-title">
+<section class="knowledge-page" aria-labelledby="knowledge-title">
 	<div class="knowledge-page__heading">
 		<p>{{ 'pages.knowledge.eyebrow' | translate }}</p>
 		<h2 id="knowledge-title">
@@ -12,70 +9,29 @@
 		</h2>
 		<p>{{ 'pages.knowledge.subtitle' | translate }}</p>
 	</div>
+
 	<div class="knowledge-page__grid">
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<path d="M20 3 35 12v17L20 37 5 29V12z" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileFrontendLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileFrontendStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileFrontendDetail' | translate }}</p>
-		</article>
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<path d="m7 7 26 26M33 7 7 33" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileMobileLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileMobileStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileMobileDetail' | translate }}</p>
-		</article>
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<path d="M5 29 14 20l7 6 14-16" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileQualityLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileQualityStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileQualityDetail' | translate }}</p>
-		</article>
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<path d="M8 10h24v20H8zM14 16h12M14 22h7" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileToolingLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileToolingStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileToolingDetail' | translate }}</p>
-		</article>
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<circle
-					cx="20"
-					cy="20"
-					r="14" />
-				<path d="M20 6v28M6 20h28" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileSystemsLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileSystemsStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileSystemsDetail' | translate }}</p>
-		</article>
-		<article>
-			<svg
-				class="knowledge-page__icon"
-				viewBox="0 0 40 40">
-				<path d="M7 30 20 6l13 24z" />
-			</svg>
-			<span>{{ 'pages.knowledge.tileBackendLabel' | translate }}</span>
-			<b>{{ 'pages.knowledge.tileBackendStack' | translate }}</b>
-			<p>{{ 'pages.knowledge.tileBackendDetail' | translate }}</p>
-		</article>
+		@for (area of areas; track area.id; let index = $index) {
+			<article [attr.data-knowledge]="area.id">
+				<header>
+					<svg class="knowledge-page__icon" viewBox="0 0 40 40" aria-hidden="true">
+						<path [attr.d]="area.iconPath" />
+					</svg>
+					<span>0{{ index + 1 }}</span>
+				</header>
+				<span>{{ area.labelKey | translate }}</span>
+				<b>{{ area.stackKey | translate }}</b>
+				<p>{{ area.detailKey | translate }}</p>
+				<p class="knowledge-page__example">{{ area.example }}</p>
+				<nav [attr.aria-label]="'pages.home.monitorDestinations' | translate">
+					@for (project of area.projects; track project.href) {
+						<a [href]="project.href" target="_blank" rel="noreferrer">
+							{{ project.label }}
+							<span aria-hidden="true">↗</span>
+						</a>
+					}
+				</nav>
+			</article>
+		}
 	</div>
 </section>
