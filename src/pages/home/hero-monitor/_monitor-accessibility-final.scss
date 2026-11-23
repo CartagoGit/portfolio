@@ -528,3 +528,24 @@ app-hero-monitor .hero-monitor__chart[data-chart='stream'] path {
     grid-auto-columns: minmax(145px, 76%);
   }
 }
+
+@media (max-width: 900px) {
+  app-hero-monitor .hero-monitor__console-effects button,
+  app-hero-monitor .hero-monitor__chart-symbols button,
+  app-hero-monitor .hero-monitor__temperature,
+  app-hero-monitor .hero-monitor__chart em,
+  app-hero-monitor .hero-monitor__chrome,
+  app-hero-monitor .hero-monitor__heading {
+    font-size: .75rem !important;
+  }
+}
+
+app-hero-monitor .hero-monitor__chrome,
+app-hero-monitor .hero-monitor__heading,
+app-hero-monitor .hero-monitor__chart em,
+app-hero-monitor .hero-monitor__caption,
+app-hero-monitor .hero-monitor__console-effects button,
+app-hero-monitor .hero-monitor__chart-symbols button,
+app-hero-monitor .hero-monitor__temperature {
+  font-size: .75rem !important;
+}

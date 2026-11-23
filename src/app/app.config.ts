@@ -18,7 +18,16 @@ import {
 export const appConfig: ApplicationConfig = {
 	providers: [
 		provideBrowserGlobalErrorListeners(),
-		provideRouter(routes, withViewTransitions()),
+		provideRouter(
+			routes,
+			withViewTransitions({
+				skipInitialTransition: true,
+				onViewTransitionCreated: ({ transition }) => {
+					void transition.ready.catch(() => undefined);
+					void transition.finished.catch(() => undefined);
+				},
+			}),
+		),
 		provideClientHydration(),
 		provideHttpClient(withFetch()),
 		{

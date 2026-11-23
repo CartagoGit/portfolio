@@ -174,10 +174,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by explore-independent-s11-reviewer-20261123 — verified at 201fcaa, validate exit 0 and tests 71/71 claimed, no recorded run cited
 
 ### S12 — Route transitions, responsive system and shared motion tokens
-- **Status**: pending
-- **Files**: `src/app/page.scss`, `src/styles.scss`, `src/styles/motion/**`, `src/styles/keyframes/**`, `src/styles/tokens/**`
+- **Status**: review
+- **Files**: `src/app/app.config.ts`, `src/app/page.scss`, `src/styles.scss`, `src/styles/motion/_theme-transition.scss`, `src/styles/motion/_view-transitions.scss`, `src/styles/tokens/_durations.scss`, `src/styles/tokens/_index.scss`, `src/styles/tokens/_themes.scss`, `src/shared/ui/header/header.component.scss`, `src/shared/ui/footer/footer.component.scss`, `src/pages/home/home-intro/home-intro.component.scss`, `src/pages/home/profile-links/profile-links.component.scss`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/knowledge/_knowledge-card-system.scss`, `docs/visual-audit-s12.md`
 - **Gate**: lint/typecheck + 1366x768 and 390x844 Playwright audits on every route
 - **Acceptance**: route/tab transitions are intentional and coherent, no page has horizontal overflow or clipped interactive content, scrollbars follow theme tokens, reduced-motion disables non-essential motion, shared effects use existing tokens rather than per-route ad hoc colours/durations, and the minimum visual size, contrast and overflow strategy for labels, navigation, cards and supporting copy are validated on desktop/tablet/mobile without relying on ellipsis to hide information. Named browser captures/measurements must cover every route at 1366×768, a tablet viewport and 390×844 in at least a light and a dark theme, and no “build passed” status can close a slice without this visual audit.
+- **Evidence**: `docs/visual-audit-s12.md` records 48 named dark/light route measurements at 1366×768, 768×1024 and 390×844: no document overflow, no rendered informative text below 12px, transparent footer chrome and zero transition errors under a 14-navigation stress pass.
+- **S16 handoff**: Home destination and Lab chart rails are intentional local scrollers; final wider monitor composition, physical icon/text collision review, globe presentation and project-specific Work effects remain explicitly blocking in S16 before S14 certification.
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S13 — Full i18n parity and accessible copy
 - **Status**: pending

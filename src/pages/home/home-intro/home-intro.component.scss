@@ -11,7 +11,7 @@
 	&__eyebrow {
 		margin: 0 0 0.7rem;
 		color: var(--cyan);
-		@include tokens.mono(0.68rem);
+		@include tokens.mono(0.75rem);
 	}
 	&__eyebrow span {
 		display: inline-block;
@@ -38,7 +38,7 @@
 	}
 	&__signature {
 		color: var(--cyan);
-		@include tokens.mono-mixed(var(--label-md));
+		@include tokens.mono-mixed(0.75rem);
 		letter-spacing: var(--letter-open);
 	}
 	&__role {
@@ -66,7 +66,7 @@
 		border: var(--border-thin) solid var(--line);
 		border-radius: var(--radius-xl);
 		color: var(--ink);
-		font-size: 0.7rem;
+		font-size: 0.75rem;
 		font-weight: 800;
 		text-decoration: none;
 		transition:

@@ -16,7 +16,7 @@
 	&__label {
 		margin: 0;
 		color: var(--muted);
-		@include tokens.mono-mixed(0.55rem);
+		@include tokens.mono-mixed(0.75rem);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 	}
@@ -37,7 +37,7 @@
 		background: color-mix(in srgb, var(--surface) 82%, transparent);
 		backdrop-filter: blur(10px);
 		color: color-mix(in srgb, var(--ink) 82%, var(--muted));
-		@include tokens.mono-mixed(0.74rem);
+		@include tokens.mono-mixed(0.75rem);
 		line-height: 1;
 		text-decoration: none;
 		transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;

@@ -188,13 +188,7 @@
       color .2s ease;
 
     span { color: var(--cyan); }
-
-    &:hover,
-    &:focus-visible {
-      border-color: var(--cyan);
-      background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
-      color: var(--cyan);
-    }
+    span { font-size: .75rem; }
   }
 }
 

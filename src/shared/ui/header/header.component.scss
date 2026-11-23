@@ -87,7 +87,7 @@
 	&__nav a {
 		padding: 0.45rem 0;
 		color: var(--muted);
-		font: 700 0.72rem tokens.$font-mono;
+		font: 700 0.75rem tokens.$font-mono;
 		letter-spacing: 0.02em;
 		text-decoration: none;
 	}
@@ -169,7 +169,7 @@
 	&__theme-menu small {
 		display: block;
 		color: var(--muted);
-		@include tokens.mono-mixed(0.55rem);
+		@include tokens.mono-mixed(0.75rem);
 		margin-top: 0.15rem;
 	}
 	// The colour swatch shown in the theme button + each menu row.
