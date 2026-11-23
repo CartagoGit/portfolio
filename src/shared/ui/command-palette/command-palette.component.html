@@ -1,0 +1,51 @@
+<div
+	class="command-palette"
+	[class.is-open]="open()"
+	[attr.inert]="open() ? null : ''"
+	[attr.aria-hidden]="open() ? null : 'true'"
+	(click)="requestClose()"
+	(keydown)="onKeydown($event)">
+	<section
+		#dialog
+		class="command-palette__dialog"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="command-title"
+		(click)="$event.stopPropagation()">
+		<div class="command-palette__heading">
+			<p id="command-title">
+				{{ 'chrome.commandPalette.title' | translate }}
+			</p>
+			<button
+				type="button"
+				(click)="requestClose()"
+				[attr.aria-label]="'chrome.commandPalette.close' | translate">
+				×
+			</button>
+		</div>
+		<label class="command-palette__search">
+			{{ 'chrome.commandPalette.searchLabel' | translate }}
+			<input
+				#search
+				type="search"
+				[value]="query()"
+				(input)="updateQuery($event)"
+				[attr.placeholder]="
+					'chrome.commandPalette.searchPlaceholder' | translate
+				" />
+		</label>
+		<nav
+			class="command-palette__commands"
+			[attr.aria-label]="'chrome.commandPalette.title' | translate">
+			@for (command of visibleCommands(); track command.page) {
+				<a
+					[routerLink]="routeFor(command.page)"
+					(click)="select(command.page)">
+					<span aria-hidden="true">{{ command.icon }}</span>
+					{{ command.labelKey | translate }}
+					<kbd>Enter</kbd>
+				</a>
+			}
+		</nav>
+	</section>
+</div>

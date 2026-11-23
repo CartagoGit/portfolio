@@ -1,0 +1,36 @@
+<section class="reaction-game" aria-labelledby="reaction-game-title">
+	<div class="reaction-game__copy">
+		<p>{{ 'pages.demos.reactionEyebrow' | translate }}</p>
+		<h3 id="reaction-game-title">{{ 'pages.demos.reactionHeading' | translate }}</h3>
+		<p>{{ 'pages.demos.reactionDetail' | translate }}</p>
+		@if (best(); as bestTime) {
+			<small>{{ 'pages.demos.reactionBest' | translate }}: {{ bestTime }} ms</small>
+		}
+		<button type="button" (click)="reset()">
+			{{ 'pages.demos.resetButton' | translate }}
+		</button>
+	</div>
+	<button
+		class="reaction-game__surface"
+		type="button"
+		[attr.data-phase]="phase()"
+		(click)="press()">
+		@switch (phase()) {
+			@case ('idle') {
+				{{ 'pages.demos.reactionStart' | translate }}
+			}
+			@case ('waiting') {
+				{{ 'pages.demos.reactionWait' | translate }}
+			}
+			@case ('ready') {
+				{{ 'pages.demos.reactionNow' | translate }}
+			}
+			@case ('early') {
+				{{ 'pages.demos.reactionEarly' | translate }}
+			}
+			@case ('result') {
+				{{ time() }} ms · {{ 'pages.demos.reactionAgain' | translate }}
+			}
+		}
+	</button>
+</section>

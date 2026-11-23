@@ -1,0 +1,107 @@
+name: Portfolio Pages
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preparation:
+    name: preparation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Validate project configuration, naming, assets and plugin contract
+        run: bun run ci:prepare
+
+  tests:
+    name: tests
+    needs: preparation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Lint, typecheck, unit and browser regression gates
+        run: bun run ci:test
+
+  build:
+    name: build
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Build browser and SSR artifacts
+        run: bun run ci:build
+      - name: Keep static hosting on the repository root
+        run: touch dist/portfolio/browser/.nojekyll
+      - name: Upload browser and SSR output
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-dist
+          path: dist/portfolio
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: deploy
+    needs: build
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://cartagogit.github.io/
+    steps:
+      - name: Verify deployment credential
+        env:
+          DEPLOY_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$DEPLOY_TOKEN" ]; then
+            echo "::error::Missing PAGES_DEPLOY_TOKEN. Create a fine-grained token with Contents: write on CartagoGit/CartagoGit.github.io and add it as a repository Actions secret named PAGES_DEPLOY_TOKEN."
+            exit 1
+          fi
+      - name: Download validated build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: portfolio-dist
+          path: deploy
+      - name: Publish browser artifact to CartagoGit.github.io
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          external_repository: CartagoGit/CartagoGit.github.io
+          publish_branch: main
+          publish_dir: ./deploy/browser
+          enable_jekyll: false
+          force_orphan: true
+          commit_message: 'deploy(portfolio): ${{ github.sha }}'

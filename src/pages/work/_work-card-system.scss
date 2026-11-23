@@ -1,0 +1,659 @@
+@use 'motion' as motion;
+@use 'tokens/index' as tokens;
+
+.work-page {
+  width: min(1380px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: clamp(3rem, 5vw, 5.5rem) 0;
+
+  &__heading {
+    display: grid;
+    grid-template-columns: minmax(150px, .7fr) minmax(0, 1.5fr) minmax(240px, .8fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+    align-items: start;
+    margin-bottom: 2rem;
+  }
+
+  &__heading h2,
+  &__directory h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(2.3rem, 4vw, 4rem);
+    line-height: .96;
+    letter-spacing: -.06em;
+  }
+
+  &__heading h2 em,
+  &__directory h2 em {
+    color: var(--cyan);
+    font-family: tokens.$font-accent;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  &__heading > p:last-child,
+  &__directory > div > p:not(.work-page__eyebrow) {
+    margin: 0;
+    color: color-mix(in srgb, var(--muted) 88%, var(--ink));
+    font-size: .9rem;
+    line-height: 1.7;
+  }
+
+  &__eyebrow {
+    margin: 0;
+    color: var(--cyan);
+    @include tokens.mono(.75rem);
+    letter-spacing: var(--letter-open);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  &__card {
+    --project-accent: var(--cyan);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 1.1rem;
+    min-width: 0;
+    min-height: 430px;
+    overflow: hidden;
+    padding: clamp(1.1rem, 2.2vw, 1.5rem);
+    border: var(--border-thin) solid var(--line);
+    border-radius: 16px;
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--project-accent) 7%, var(--surface)), var(--surface-2));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+    transition:
+      transform .32s tokens.$ease-standard,
+      border-color .28s ease,
+      box-shadow .32s ease;
+
+    &:hover,
+    &:focus-within {
+      border-color: color-mix(in srgb, var(--project-accent) 72%, var(--line));
+      box-shadow: 0 22px 58px #0005, 0 0 0 1px color-mix(in srgb, var(--project-accent) 24%, transparent);
+      transform: translateY(-5px);
+    }
+  }
+
+  &__card-glow {
+    position: absolute;
+    z-index: -1;
+    top: -8rem;
+    right: -7rem;
+    width: 22rem;
+    height: 22rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--project-accent) 36%, transparent), transparent 66%);
+    filter: blur(8px);
+    opacity: .55;
+    transition: opacity .3s ease, transform .5s tokens.$ease-standard;
+  }
+
+  &__card:hover &__card-glow,
+  &__card:focus-within &__card-glow {
+    opacity: .82;
+    transform: scale(1.08);
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    min-width: 0;
+  }
+
+  &__number {
+    color: var(--muted);
+    font: 700 .75rem tokens.$font-mono, monospace;
+    letter-spacing: .1em;
+  }
+
+  &__status {
+    max-width: 68%;
+    padding: .25rem .45rem;
+    border: 1px solid color-mix(in srgb, var(--lime) 38%, var(--line));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--lime) 8%, var(--surface));
+    color: color-mix(in srgb, var(--ink) 84%, var(--lime));
+    font: 700 .75rem/1.25 tokens.$font-mono, monospace;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  &__identity {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    align-items: center;
+    gap: .9rem;
+    min-width: 0;
+  }
+
+  &__identity > img,
+  &__identity > svg {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--project-accent) 40%, transparent));
+  }
+
+  &__label {
+    color: var(--project-accent);
+    font: 800 .75rem tokens.$font-mono, monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  &__identity h3 {
+    margin: .22rem 0 0;
+    color: var(--ink);
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    line-height: 1;
+    letter-spacing: -.055em;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__content > p {
+    max-width: 64ch;
+    margin: 0;
+    color: color-mix(in srgb, var(--ink) 86%, var(--muted));
+    font-size: .88rem;
+    line-height: 1.65;
+  }
+
+  &__content ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .42rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__content li {
+    display: inline-flex;
+    align-items: center;
+    gap: .36rem;
+    min-height: 30px;
+    padding: .32rem .48rem;
+    border: var(--border-thin) solid color-mix(in srgb, var(--line) 88%, var(--project-accent));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--surface-2) 92%, var(--project-accent));
+    color: var(--ink);
+    font: 700 .75rem tokens.$font-mono, monospace;
+
+    svg {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 15px;
+      overflow: visible;
+    }
+  }
+
+  &__destinations {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .45rem;
+    align-self: end;
+  }
+
+  &__destinations a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: .15rem .35rem;
+    min-width: 0;
+    padding: .55rem .65rem;
+    border: var(--border-thin) solid var(--line);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      border-color .25s ease,
+      color .25s ease,
+      transform .25s ease,
+      background .25s ease;
+
+    span {
+      grid-column: 1;
+      grid-row: 1;
+      color: var(--muted);
+      font: 700 .75rem tokens.$font-mono, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    b {
+      grid-column: 1;
+      grid-row: 2;
+      min-width: 0;
+      font-size: .75rem;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    i {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: center;
+      color: var(--project-accent);
+      font-style: normal;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--project-accent);
+      background: color-mix(in srgb, var(--project-accent) 9%, var(--surface));
+      color: var(--project-accent);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__directory {
+    display: grid;
+    grid-template-columns: minmax(240px, .65fr) minmax(0, 1.35fr);
+    gap: clamp(1.5rem, 6vw, 6rem);
+    margin-top: clamp(3rem, 7vw, 6rem);
+    padding-top: clamp(2rem, 5vw, 4rem);
+    border-top: var(--border-thin) solid var(--line);
+  }
+
+  &__directory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .8rem;
+  }
+
+  &__directory-grid > a {
+    position: relative;
+    display: grid;
+    min-height: 170px;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto 1fr;
+    gap: .35rem .8rem;
+    overflow: hidden;
+    padding: 1rem;
+    border: var(--border-thin) solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      transform .28s tokens.$ease-standard,
+      border-color .25s ease,
+      box-shadow .28s ease;
+
+    > span {
+      grid-column: 2;
+      grid-row: 1;
+      color: var(--cyan);
+      font: 700 .75rem tokens.$font-mono, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    > b {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: 1rem;
+      letter-spacing: -.025em;
+    }
+
+    > small {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      align-self: end;
+      color: var(--muted);
+      font-size: .75rem;
+      line-height: 1.45;
+    }
+
+    > i {
+      grid-column: 3;
+      grid-row: 1 / 3;
+      align-self: center;
+      color: var(--cyan);
+      font-size: 1.2rem;
+      font-style: normal;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--cyan);
+      box-shadow: 0 18px 44px #0005;
+      transform: translateY(-4px);
+    }
+  }
+
+  &__directory-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--cyan) 25%, var(--line));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--cyan) 8%, var(--surface-2));
+
+    img,
+    svg {
+      width: 27px;
+      height: 27px;
+      object-fit: contain;
+    }
+  }
+
+  &__card > :not(app-work-project-visual):not(.work-page__card-glow) {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__card:hover app-work-project-visual,
+  &__card:focus-within app-work-project-visual {
+    opacity: .82;
+  }
+
+  /* Project-specific visual languages share the accessibility card contract. */
+  &__card::before,
+  &__card::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    transition:
+      opacity .4s ease,
+      transform .55s tokens.$ease-standard;
+  }
+
+  &__card::before {
+    inset: 0;
+    opacity: .25;
+  }
+
+  &__card::after {
+    right: 1.2rem;
+    bottom: 1.2rem;
+    width: 82px;
+    height: 82px;
+    opacity: .16;
+  }
+
+  &__card:hover::before,
+  &__card:focus-within::before { opacity: .52; }
+
+  &__card[data-project='overview']::before {
+    background:
+      radial-gradient(circle at 78% 26%, color-mix(in srgb, var(--project-accent) 34%, transparent) 0 2px, transparent 3px),
+      radial-gradient(circle at 62% 61%, color-mix(in srgb, var(--lime) 45%, transparent) 0 3px, transparent 4px),
+      repeating-radial-gradient(circle at 73% 33%, transparent 0 24px, color-mix(in srgb, var(--project-accent) 22%, transparent) 25px 26px);
+  }
+  &__card[data-project='overview']::after {
+    border: 1px solid color-mix(in srgb, var(--project-accent) 70%, transparent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 15px color-mix(in srgb, var(--project-accent) 9%, transparent), 0 0 32px color-mix(in srgb, var(--project-accent) 22%, transparent);
+    animation: work-orbit 8s linear infinite;
+  }
+
+  &__card[data-project='workflows']::before {
+    background:
+      linear-gradient(90deg, transparent 0 16%, color-mix(in srgb, var(--project-accent) 30%, transparent) 16.2% 16.8%, transparent 17%),
+      linear-gradient(0deg, transparent 0 28%, color-mix(in srgb, var(--project-accent) 26%, transparent) 28.2% 28.8%, transparent 29%),
+      repeating-linear-gradient(135deg, transparent 0 34px, color-mix(in srgb, var(--project-accent) 9%, transparent) 35px 36px);
+  }
+  &__card[data-project='workflows']::after {
+    top: 0;
+    right: 22%;
+    bottom: auto;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(transparent, var(--project-accent), transparent);
+    animation: work-scan 4.8s ease-in-out infinite;
+  }
+
+  &__card[data-project='quality']::before {
+    background:
+      linear-gradient(30deg, transparent 48%, color-mix(in srgb, var(--project-accent) 22%, transparent) 49% 51%, transparent 52%),
+      linear-gradient(150deg, transparent 48%, color-mix(in srgb, var(--project-accent) 18%, transparent) 49% 51%, transparent 52%),
+      repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in srgb, var(--project-accent) 8%, transparent) 32px);
+    background-size: 46px 46px, 46px 46px, auto;
+  }
+  &__card[data-project='quality']::after {
+    border: 1px solid color-mix(in srgb, var(--project-accent) 56%, transparent);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    transform: rotate(14deg);
+  }
+
+  &__card[data-project='mobile']::before {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 24px, color-mix(in srgb, var(--project-accent) 12%, transparent) 25px),
+      repeating-linear-gradient(90deg, transparent 0 42px, color-mix(in srgb, var(--project-accent) 10%, transparent) 43px);
+  }
+  &__card[data-project='mobile']::after {
+    width: 68px;
+    height: 52px;
+    border: 2px solid color-mix(in srgb, var(--project-accent) 62%, transparent);
+    border-radius: 12px 12px 22px 22px;
+    box-shadow: inset 0 0 0 8px color-mix(in srgb, var(--surface) 68%, transparent), 0 14px 0 -8px color-mix(in srgb, var(--project-accent) 42%, transparent);
+  }
+
+  &__card[data-project='tooling']::before {
+    background:
+      linear-gradient(90deg, transparent 0 72%, color-mix(in srgb, var(--project-accent) 16%, transparent) 72% 73%, transparent 73%),
+      repeating-linear-gradient(0deg, transparent 0 26px, color-mix(in srgb, var(--project-accent) 11%, transparent) 27px);
+  }
+  &__card[data-project='tooling']::after {
+    width: 68px;
+    height: 88px;
+    border: 1px solid color-mix(in srgb, var(--project-accent) 52%, transparent);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--surface) 72%, var(--project-accent));
+    box-shadow: 8px 8px 0 color-mix(in srgb, var(--project-accent) 20%, transparent);
+    transform: rotate(5deg);
+  }
+
+  &__card[data-project='delivery']::before {
+    background:
+      radial-gradient(circle at 84% 28%, transparent 0 42px, color-mix(in srgb, var(--project-accent) 25%, transparent) 43px 44px, transparent 45px),
+      conic-gradient(from 35deg at 84% 28%, transparent 0 8%, color-mix(in srgb, var(--project-accent) 11%, transparent) 8% 9%, transparent 9% 17%, color-mix(in srgb, var(--project-accent) 11%, transparent) 17% 18%, transparent 18%);
+  }
+  &__card[data-project='delivery']::after {
+    border: 1px solid color-mix(in srgb, var(--project-accent) 58%, transparent);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 18px color-mix(in srgb, var(--project-accent) 8%, transparent);
+  }
+
+  &__card:hover[data-project='quality']::after { transform: rotate(28deg) scale(1.08); }
+  &__card:hover[data-project='tooling']::after { transform: rotate(-2deg) translateY(-5px); }
+  &__card:hover[data-project='delivery']::after { transform: rotate(18deg) scale(1.08); }
+
+  &__experiments {
+    display: grid;
+    grid-template-columns: minmax(240px, .65fr) minmax(0, 1.35fr);
+    gap: clamp(1.5rem, 6vw, 6rem);
+    margin-top: clamp(3rem, 7vw, 6rem);
+    padding-top: clamp(2rem, 5vw, 4rem);
+    border-top: var(--border-thin) solid var(--line);
+  }
+
+  &__experiments h2 {
+    margin: .65rem 0 1rem;
+    color: var(--ink);
+    font-size: clamp(2.3rem, 4vw, 4rem);
+    line-height: .96;
+    letter-spacing: -.06em;
+  }
+
+  &__experiments h2 em {
+    color: var(--cyan);
+    font-family: tokens.$font-accent;
+    font-style: italic;
+  }
+
+  &__experiments > header > p:last-child {
+    margin: 0;
+    color: var(--muted);
+    font-size: .88rem;
+    line-height: 1.6;
+  }
+
+  &__experiment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .8rem;
+  }
+
+  &__experiment-grid > a {
+    position: relative;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto 1fr;
+    gap: .3rem .75rem;
+    min-width: 0;
+    min-height: 180px;
+    padding: 1rem;
+    overflow: hidden;
+    border: var(--border-thin) solid var(--line);
+    border-radius: 14px;
+    background:
+      radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--cyan) 16%, transparent), transparent 34%),
+      var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform .28s tokens.$ease-standard, border-color .25s ease, box-shadow .28s ease;
+
+    > span {
+      grid-column: 2;
+      color: var(--cyan);
+      font: 800 .75rem tokens.$font-mono, monospace;
+    }
+
+    > h3 {
+      grid-column: 2 / -1;
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.15;
+    }
+
+    > p {
+      grid-column: 2 / -1;
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+
+    > i {
+      grid-column: 3;
+      grid-row: 1;
+      color: var(--cyan);
+      font-size: 1.1rem;
+      font-style: normal;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--cyan);
+      box-shadow: 0 18px 44px var(--shadow-strong);
+      transform: translateY(-4px);
+    }
+  }
+
+  &__experiment-icon {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    display: grid;
+    width: 54px;
+    height: 54px;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--cyan) 28%, var(--line));
+    border-radius: 13px;
+    background: color-mix(in srgb, var(--cyan) 9%, var(--surface-2));
+    color: var(--cyan);
+
+    svg,
+    img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+  }
+}
+
+@keyframes work-orbit { to { transform: rotate(1turn); } }
+@keyframes work-scan {
+  0%, 100% { transform: translateX(-80px); opacity: .08; }
+  50% { transform: translateX(80px); opacity: .32; }
+}
+
+@media (max-width: 900px) {
+  .work-page {
+    width: min(100% - 1.7rem, 720px);
+    padding-top: 2.5rem;
+
+    &__heading,
+    &__directory {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .work-page__experiments { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 540px) {
+  .work-page {
+    &__heading h2,
+    &__directory h2 {
+      font-size: clamp(2rem, 11vw, 2.8rem);
+    }
+
+    &__card {
+      min-height: 0;
+      padding: 1rem;
+    }
+
+    &__card-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    &__status {
+      max-width: 100%;
+      text-align: left;
+    }
+
+    &__destinations,
+    &__directory-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .work-page__experiment-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-page__card,
+  .work-page__card-glow,
+  .work-page__destinations a,
+  .work-page__directory-grid > a {
+    transition-duration: .01ms;
+  }
+  .work-page__card[data-project]::after { animation: none; }
+  .work-page__experiment-grid > a:hover,
+  .work-page__experiment-grid > a:focus-visible { transform: none; }
+}

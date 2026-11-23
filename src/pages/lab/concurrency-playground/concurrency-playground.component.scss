@@ -1,0 +1,87 @@
+@use '../lab-playground-system' as playground;
+
+:host {
+	@include playground.component-host;
+}
+
+.concurrency-playground {
+	@include playground.card;
+}
+
+.concurrency-playground__heading {
+	@include playground.heading;
+}
+
+.concurrency-playground__tasks {
+	display: grid;
+	gap: 0.65rem;
+}
+
+.concurrency-playground__tasks > div {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.35rem 0.75rem;
+	padding: 0.75rem;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 9px;
+	background: var(--surface-2);
+}
+
+.concurrency-playground__tasks span {
+	font-weight: 700;
+}
+
+.concurrency-playground__tasks strong {
+	color: var(--muted);
+	font-size: 0.75rem;
+}
+
+.concurrency-playground__tasks i {
+	grid-column: 1 / -1;
+	display: block;
+	height: 5px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: var(--line);
+}
+
+.concurrency-playground__tasks [data-status='running'] i {
+	background: linear-gradient(90deg, var(--cyan), var(--blue));
+	animation: task-progress 1.1s ease-in-out infinite alternate;
+}
+
+.concurrency-playground__tasks [data-status='done'] i {
+	background: var(--lime);
+}
+
+.concurrency-playground footer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.55rem;
+	align-items: center;
+}
+
+.concurrency-playground footer button {
+	@include playground.control;
+}
+
+.concurrency-playground footer button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.concurrency-playground footer p {
+	flex-basis: 100%;
+	@include playground.status;
+}
+
+@keyframes task-progress {
+	from { opacity: 0.35; transform: scaleX(0.2); }
+	to { opacity: 1; transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.concurrency-playground__tasks [data-status='running'] i {
+		animation: none;
+	}
+}

@@ -1,0 +1,13 @@
+@use '../demos-interaction-system' as interaction;
+@use 'tokens/index' as tokens;
+:host { @include interaction.component-host; }
+.guess-game { @include interaction.game-layout; }
+.guess-game__copy { @include interaction.game-copy; }
+.guess-game__form { display: grid; gap: .75rem; padding: clamp(1rem, 3vw, 2rem); border: var(--border-thin) solid var(--line); border-radius: 16px; background: var(--surface-2); }
+.guess-game__form label { display: grid; gap: .45rem; color: var(--muted); font-size: .75rem; font-weight: 800; }
+.guess-game__form input, .guess-game__form button { min-height: 44px; border: var(--border-thin) solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); font: 800 .85rem tokens.$font-mono, monospace; }
+.guess-game__form input { padding: .6rem; font-size: 1.4rem; text-align: center; }
+.guess-game__form p { min-height: 1.4rem; margin: 0; color: var(--muted); text-align: center; }
+.guess-game__form p[data-state='correct'] { color: var(--lime); }
+.guess-game__form p[data-state='high'], .guess-game__form p[data-state='low'], .guess-game__form p[data-state='invalid'] { color: var(--cyan); }
+@media (max-width: 760px) { .guess-game { @include interaction.game-layout-mobile; } }

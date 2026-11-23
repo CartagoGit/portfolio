@@ -1,0 +1,23 @@
+<article class="responsive-playground">
+	<header>
+		<p>{{ 'pages.lab.layoutEyebrow' | translate }}</p>
+		<h3>{{ 'pages.lab.layoutTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.layoutDetail' | translate }}</p>
+	</header>
+	<div class="responsive-playground__controls">
+		<label>
+			{{ 'pages.lab.layoutColumns' | translate }}
+			<input type="range" min="1" max="4" step="1" [value]="columns()" (input)="setColumns($event)" />
+			<output>{{ columns() }}</output>
+		</label>
+		<label>
+			<input type="checkbox" [checked]="compact()" (change)="setCompact($event)" />
+			{{ 'pages.lab.layoutCompact' | translate }}
+		</label>
+	</div>
+	<div class="responsive-playground__preview" [class.is-compact]="compact()" [style.--preview-columns]="columns()">
+		@for (tile of tiles; track tile) {
+			<div><span>{{ tile.toString().padStart(2, '0') }}</span><i></i><i></i></div>
+		}
+	</div>
+</article>

@@ -1,0 +1,104 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+}
+.profile-links {
+	display: grid;
+	gap: 0.65rem;
+	margin-top: 0.65rem;
+
+	&__section {
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	&__label {
+		margin: 0;
+		color: var(--muted);
+		@include tokens.mono-mixed(0.75rem);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+
+	&__badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.3rem 0.68rem;
+		border: var(--border-thin) solid color-mix(in srgb, var(--line) 82%, transparent);
+		border-radius: var(--radius-lg);
+		background: color-mix(in srgb, var(--surface) 82%, transparent);
+		backdrop-filter: blur(10px);
+		color: color-mix(in srgb, var(--ink) 82%, var(--muted));
+		@include tokens.mono-mixed(0.75rem);
+		line-height: 1;
+		text-decoration: none;
+		transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--cyan);
+			border-color: var(--cyan);
+			transform: translateY(-2px);
+		}
+	}
+
+	&__icon {
+		width: 19px;
+		height: 19px;
+		flex: none;
+		object-fit: contain;
+	}
+}
+
+:host(.profile-links-host--compact) {
+	.profile-links {
+		margin: 0;
+
+		&__section {
+			display: block;
+		}
+
+		&__label {
+			display: none;
+		}
+
+		&__list {
+			flex-wrap: nowrap;
+			gap: 0.3rem;
+		}
+
+		&__badge {
+			border-color: color-mix(in srgb, var(--line) 92%, transparent);
+			background: var(--surface);
+			box-shadow: 0 8px 24px var(--shadow-strong);
+		}
+	}
+}
+
+@media (max-width: 640px) {
+	:host(.profile-links-host--compact) .profile-links {
+		&__badge {
+			width: 34px;
+			height: 34px;
+			justify-content: center;
+			padding: 0;
+			border-radius: 10px;
+
+			span {
+				display: none;
+			}
+		}
+		&__icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+}
