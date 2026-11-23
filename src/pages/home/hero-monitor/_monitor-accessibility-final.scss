@@ -1,0 +1,530 @@
+@use 'tokens/index' as tokens;
+
+/* Product readability, overflow handling and the always-mounted globe overlay. */
+.route-stage:has(app-hero-monitor[class~='hero-monitor-host--earth-front']) {
+  position: relative !important;
+  z-index: 2000 !important;
+  isolation: isolate;
+}
+
+app-hero-monitor.hero-monitor-host--earth-front {
+  position: relative;
+  z-index: 1000;
+  isolation: isolate;
+}
+
+app-hero-monitor .hero-monitor__selector span,
+app-hero-monitor .hero-monitor__destinations > header strong,
+app-hero-monitor .hero-monitor__technology-toggle span,
+app-hero-monitor .hero-monitor__chart-switcher button span,
+app-hero-monitor .hero-monitor__destination-primary span,
+app-hero-monitor .hero-monitor__earth-categories button {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+app-hero-monitor .hero-monitor__selector span {
+  font: 700 .75rem/1.25 tokens.$font-mono, monospace;
+}
+
+app-hero-monitor .hero-monitor__technology-toggle {
+  font-size: .75rem !important;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+app-hero-monitor .hero-monitor__technology-toggle span {
+  display: block;
+  min-width: 0;
+}
+
+app-hero-monitor .hero-monitor__chart-switcher {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(2, 56px);
+  grid-auto-flow: row;
+  gap: .28rem;
+}
+
+app-hero-monitor .hero-monitor__chart-switcher button {
+  display: flex;
+  min-width: 0;
+  min-height: 54px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: .15rem;
+  padding: .2rem .04rem;
+  line-height: 1;
+}
+
+app-hero-monitor .hero-monitor__chart-switcher button svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+app-hero-monitor .hero-monitor__chart-switcher button span {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  font: 700 .75rem/1.05 tokens.$font-mono, monospace;
+  letter-spacing: -.04em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+app-hero-monitor .hero-monitor__caption,
+app-hero-monitor .hero-monitor__chart em,
+app-hero-monitor .hero-monitor__preview-meta p,
+app-hero-monitor .hero-monitor__preview-meta span,
+app-hero-monitor .hero-monitor__preview-detail,
+app-hero-monitor .hero-monitor__preview-stack b,
+app-hero-monitor .hero-monitor__preview-stack a,
+app-hero-monitor .hero-monitor__retry {
+  font-size: .75rem;
+}
+
+app-hero-monitor .hero-monitor__canvas {
+  grid-template-columns: minmax(0, 1fr) 156px;
+}
+
+app-hero-monitor .hero-monitor__destinations {
+  width: auto;
+  padding: .55rem;
+  contain: inline-size;
+  scrollbar-gutter: stable;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+app-hero-monitor .hero-monitor__destinations > header strong {
+  font-size: .76rem;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+app-hero-monitor .hero-monitor__destinations > header span,
+app-hero-monitor .hero-monitor__destination-primary > span {
+  font-size: .75rem;
+}
+
+app-hero-monitor .hero-monitor__destination-primary {
+  overflow: visible;
+  padding: .5rem .42rem;
+}
+
+app-hero-monitor .hero-monitor__destination-primary > span {
+  max-width: none;
+  padding: 0;
+  line-height: 1.25;
+}
+
+app-hero-monitor .hero-monitor__destination-primary > b {
+  font-size: .75rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+app-hero-monitor .hero-monitor__preview-icon:has(img) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+app-hero-monitor .hero-monitor__preview-icon img {
+  width: 34px;
+  height: 34px;
+}
+
+/* The three overlay layers are permanently mounted and transition together. */
+app-hero-monitor .hero-monitor__globe-scrim {
+  position: fixed !important;
+  z-index: 1000 !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: 100dvh !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none !important;
+  background: rgb(2 8 18 / .84) !important;
+  backdrop-filter: blur(7px) saturate(.68);
+  transition:
+    opacity .48s ease,
+    visibility 0s linear .48s;
+}
+
+app-hero-monitor .hero-monitor__globe-scrim.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto !important;
+  transition-delay: 0s;
+}
+
+app-hero-monitor .hero-monitor__orb--one:is(
+  .hero-monitor--front-ready,
+  .hero-monitor--front,
+  .hero-monitor--out-front
+) {
+  position: fixed !important;
+  z-index: 1001 !important;
+  top: 43% !important;
+  left: 50% !important;
+  width: min(60vmin, 620px) !important;
+  height: min(60vmin, 620px) !important;
+  overflow: visible !important;
+}
+
+app-hero-monitor .hero-monitor__earth-controls {
+  position: fixed !important;
+  z-index: 1002 !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: max(.8rem, env(safe-area-inset-bottom)) !important;
+  left: 50% !important;
+  width: min(840px, calc(100vw - 1.5rem)) !important;
+  max-height: calc(48dvh - 1rem);
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: auto auto auto auto !important;
+  gap: .4rem .65rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 18px) scale(.98) !important;
+  transition:
+    opacity .38s ease,
+    transform .48s cubic-bezier(.22, 1, .36, 1),
+    visibility 0s linear .48s;
+}
+
+app-hero-monitor .hero-monitor__earth-controls.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1) !important;
+  transition-delay: 0s;
+}
+
+app-hero-monitor .hero-monitor__earth-categories {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+app-hero-monitor .hero-monitor__earth-categories button,
+app-hero-monitor .hero-monitor__earth-textures button {
+  min-height: 38px;
+  font-size: .75rem;
+  line-height: 1.2;
+}
+
+app-hero-monitor .hero-monitor__earth-textures {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+app-hero-monitor .hero-monitor__earth-origin,
+app-hero-monitor .hero-monitor__earth-drag-hint {
+  grid-column: 1;
+  margin: 0;
+  font-family: tokens.$font-mono, monospace;
+  font-size: .75rem !important;
+  line-height: 1.35;
+}
+
+app-hero-monitor .hero-monitor__earth-origin {
+  grid-row: 3;
+  color: #bcd6e7 !important;
+  font-weight: 700;
+}
+
+app-hero-monitor .hero-monitor__earth-drag-hint {
+  grid-row: 4;
+  color: #9db3c4 !important;
+  font-weight: 500;
+}
+
+app-hero-monitor .hero-monitor__earth-close {
+  grid-row: 1 / 5;
+  min-width: 116px;
+  padding: .6rem .7rem;
+  font-size: .75rem;
+}
+
+/* Distinct drawing systems for every S1 chart type. */
+app-hero-monitor .hero-monitor__chart[data-chart='stacked'] {
+  background:
+    linear-gradient(90deg, transparent 49.5%, #ffffff0d 50%, transparent 50.5%),
+    repeating-linear-gradient(0deg, #ffffff0a 0 1px, transparent 1px 20px),
+    var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='stacked'] > span {
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, var(--chart-low) 0 34%, #31e6ba 34% 67%, var(--chart-high) 67%) !important;
+}
+app-hero-monitor .hero-monitor__chart[data-chart='stacked'] svg { display: none; }
+
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] {
+  background:
+    radial-gradient(circle at 18% 26%, #ffffff12 0 1px, transparent 1.5px),
+    repeating-linear-gradient(0deg, transparent 0 24px, #ffffff0b 25px),
+    repeating-linear-gradient(90deg, transparent 0 44px, #ffffff0b 45px),
+    var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span {
+  width: 13px !important;
+  min-width: 13px !important;
+  max-width: 13px !important;
+  height: 13px !important;
+  min-height: 13px !important;
+  border-radius: 50%;
+  background: var(--chart-high) !important;
+}
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span:nth-of-type(1) { transform: translateY(-4px); }
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span:nth-of-type(2) { transform: translateY(-42px); }
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span:nth-of-type(3) { transform: translateY(-20px); }
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span:nth-of-type(4) { transform: translateY(-58px); }
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] > span:nth-of-type(5) { transform: translateY(-31px); }
+app-hero-monitor .hero-monitor__chart[data-chart='scatter'] svg { display: none; }
+
+app-hero-monitor .hero-monitor__chart[data-chart='radar'] {
+  background:
+    radial-gradient(circle, transparent 0 22%, #ffffff14 23% 24%, transparent 25% 48%, #ffffff12 49% 50%, transparent 51%),
+    conic-gradient(from 18deg, transparent 0 19.5%, #ffffff0d 20% 20.5%, transparent 21% 39.5%, #ffffff0d 40% 40.5%, transparent 41% 59.5%, #ffffff0d 60% 60.5%, transparent 61% 79.5%, #ffffff0d 80% 80.5%, transparent 81%),
+    var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='radar'] > span { display: none; }
+app-hero-monitor .hero-monitor__chart[data-chart='radar']::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 17% 26%;
+  border: 2px solid var(--chart-high);
+  background: color-mix(in srgb, var(--chart-high) 18%, transparent);
+  clip-path: polygon(50% 0, 98% 36%, 80% 100%, 20% 100%, 2% 36%);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='radar'] svg { display: block; opacity: .44; transform: scale(.72); }
+
+app-hero-monitor .hero-monitor__chart[data-chart='donut'] {
+  background: radial-gradient(circle, var(--surface) 0 19%, #ffffff08 20% 61%, transparent 62%), var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='donut'] > span,
+app-hero-monitor .hero-monitor__chart[data-chart='donut'] svg { display: none; }
+app-hero-monitor .hero.monitor__chart[data-chart='donut']::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 14% auto auto 50%;
+  width: 42%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(var(--chart-high) 0 34%, #2be4b0 34% 57%, #7857ff 57% 78%, var(--chart-low) 78%);
+  mask: radial-gradient(circle, transparent 0 46%, #000 47% 100%);
+  transform: translateX(-50%);
+}
+
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: stretch;
+  gap: .22rem;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 18px, #ffffff0a 19px),
+    repeating-linear-gradient(90deg, transparent 0 18px, #ffffff0a 19px),
+    var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] > span {
+  align-self: stretch;
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--chart-high) 42%, var(--chart-low)) !important;
+}
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] > span:nth-of-type(1) { opacity: .28; }
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] > span:nth-of-type(2) { opacity: .8; }
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] > span:nth-of-type(3) { opacity: .48; }
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] > span:nth-of-type(4) { opacity: 1; }
+app-hero-monitor .hero.monitor__chart[data-chart='heatmap'] > span:nth-of-type(5) { opacity: .66; }
+app-hero-monitor .hero-monitor__chart[data-chart='heatmap'] svg { display: none; }
+
+app-hero-monitor .hero-monitor__chart[data-chart='treemap'] {
+  display: grid !important;
+  grid-template-columns: 1.5fr .8fr 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: .26rem;
+  background: var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='treemap'] > span {
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--chart-low), var(--chart-high)) !important;
+}
+app-hero-monitor .hero-monitor__chart[data-chart='treemap'] > span:nth-of-type(1) { grid-row: 1 / 3; }
+app-hero-monitor .hero.monitor__chart[data-chart='treemap'] > span:nth-of-type(2) { grid-column: 2; grid-row: 1; }
+app-hero-monitor .hero.monitor__chart[data-chart='treemap'] > span:nth-of-type(3) { grid-column: 2; grid-row: 2; }
+app-hero-monitor .hero.monitor__chart[data-chart='treemap'] > span:nth-of-type(4) { grid-column: 3; grid-row: 1; }
+app-hero-monitor .hero.monitor__chart[data-chart='treemap'] > span:nth-of-type(5) { grid-column: 3; grid-row: 2; opacity: .62; }
+app-hero-monitor .hero-monitor__chart[data-chart='treemap'] svg { display: none; }
+
+app-hero-monitor .hero-monitor__chart[data-chart='stream'] {
+  background:
+    linear-gradient(170deg, transparent 0 34%, #32c8ff18 35% 48%, transparent 49%),
+    linear-gradient(8deg, #32e6b21c 0 28%, transparent 29%),
+    var(--surface);
+}
+app-hero-monitor .hero-monitor__chart[data-chart='stream'] > span {
+  height: 4px !important;
+  opacity: .22;
+  border-radius: 999px;
+}
+app-hero-monitor .hero-monitor__chart[data-chart='stream'] > span:nth-of-type(odd) { transform: translateY(-18px); }
+app-hero-monitor .hero-monitor__chart[data-chart='stream'] svg { display: block; }
+app-hero-monitor .hero-monitor__chart[data-chart='stream'] path {
+  fill: none !important;
+  stroke-width: 10 !important;
+  stroke-linecap: round;
+  opacity: .82;
+}
+
+@media (max-width: 900px) {
+  app-hero-monitor .hero-monitor {
+    padding-top: 3rem;
+  }
+  app-hero-monitor .hero-monitor > .hero-monitor__interface,
+  app-hero-monitor .hero-monitor:hover > .hero-monitor__interface,
+  app-hero-monitor .hero-monitor.hero-monitor--expanded > .hero-monitor__interface {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 560px !important;
+    aspect-ratio: auto !important;
+    transform: none !important;
+  }
+  app-hero-monitor .hero-monitor__body {
+    grid-template-columns: 104px minmax(0, 1fr);
+    flex: 0 0 474px;
+    height: 474px;
+  }
+  app-hero-monitor .hero-monitor__selector[data-section='projects'] {
+    grid-template-rows: repeat(6, minmax(64px, 1fr));
+    overflow-y: auto;
+  }
+  app-hero-monitor .hero-monitor__selector[data-section='technologies'] { overflow-y: auto; }
+  app-hero-monitor .hero-monitor__selector button {
+    min-height: 54px;
+    padding: .42rem .35rem;
+  }
+  app-hero-monitor .hero-monitor__selector span { font-size: .75rem !important; line-height: 1.2; }
+  app-hero-monitor .hero-monitor__selector .core-icon { width: 16px; height: 16px; }
+  app-hero-monitor .hero-monitor__canvas {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 132px;
+    overflow-y: hidden;
+  }
+  app-hero-monitor .hero-monitor__dashboard {
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  app-hero-monitor .hero-monitor__chart-switcher {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: .3rem;
+  }
+  app-hero-monitor .hero-monitor__chart-switcher button {
+    min-height: 48px !important;
+    height: auto;
+    padding: .3rem;
+  }
+  app-hero-monitor .hero-monitor__chart-switcher button span {
+    display: block;
+    font-size: .75rem;
+    line-height: 1.1;
+  }
+  app-hero-monitor .hero-monitor__chart-workspace { min-height: 150px; }
+  app-hero-monitor .hero-monitor__destinations {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+    overflow: hidden;
+    padding: .38rem;
+  }
+  app-hero-monitor .hero-monitor__destinations > header {
+    margin-bottom: .25rem;
+    padding-bottom: .25rem;
+  }
+  app-hero-monitor .hero-monitor__destinations > header span { font-size: .75rem; }
+  app-hero-monitor .hero-monitor__destinations > header strong { font-size: .75rem; }
+
+  app-hero-monitor .hero-monitor__destination-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 44%);
+    gap: .35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: .2rem;
+    scroll-snap-type: x proximity;
+  }
+  app-hero-monitor .hero-monitor__destination-primary { scroll-snap-align: start; }
+  app-hero-monitor .hero-monitor__destination-primary > span { font-size: .75rem; }
+  app-hero-monitor .hero-monitor__destination-primary > b { font-size: .75rem; }
+  app-hero-monitor .hero-monitor__orb--one:is(
+    .hero-monitor--front-ready,
+    .hero-monitor--front,
+    .hero-monitor--out-front
+  ) {
+    top: 41% !important;
+    width: min(84vw, 470px) !important;
+    height: min(84vw, 470px) !important;
+  }
+  app-hero-monitor .hero-monitor__earth-controls {
+    bottom: max(.55rem, env(safe-area-inset-bottom)) !important;
+    width: min(430px, calc(100vw - .8rem)) !important;
+    max-height: 43dvh;
+    padding: .5rem;
+    grid-template-columns: minmax(0, 1fr) 86px !important;
+    overflow-y: auto;
+  }
+  app-hero-monitor .hero-monitor__earth-categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  app-hero-monitor .hero-monitor__earth-categories button,
+  app-hero-monitor .hero-monitor__earth-textures button {
+    min-height: 38px;
+    font-size: .75rem;
+  }
+  app-hero-monitor .hero-monitor__earth-origin,
+  app-hero-monitor .hero-monitor__earth-drag-hint,
+  app-hero-monitor .hero-monitor__earth-close {
+    font-size: .75rem !important;
+  }
+  app-hero-monitor .hero-monitor__earth-close { min-width: 0; }
+}
+
+@media (max-width: 540px) {
+  app-hero-monitor .hero-monitor__body {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+  app-hero-monitor .hero-monitor__chart-switcher {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  app-hero-monitor .hero-monitor__destination-list {
+    grid-auto-columns: minmax(145px, 76%);
+  }
+}

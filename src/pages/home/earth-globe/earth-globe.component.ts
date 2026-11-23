@@ -17,10 +17,35 @@ import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types';
 
 type IQuaternion = readonly [x: number, y: number, z: number, w: number];
 
-const DEFAULT_IDLE_SPEED = 0.00016;
-const MAX_ANGULAR_SPEED = 0.0038;
-const TEXTURE_WIDTH = 4096;
-const TEXTURE_HEIGHT = 2048;
+const TEXTURE_SOURCES: Readonly<Record<IEarthTextureStyle, string>> = {
+	clouds: '/images/earth-clouds-4k.webp',
+	natural: '/images/earth-blue-marble-4k.webp',
+	night: '/images/globe/earth-night-4k.webp',
+	terrain: '/images/earth-blue-marble-4k.webp',
+	infrared: '/images/earth-blue-marble-4k.webp',
+	sun: '/images/globe/sun-4k.webp',
+	moon: '/images/globe/moon-4k.webp',
+	mercury: '/images/globe/mercury-4k.webp',
+	venus: '/images/globe/venus-4k.webp',
+	mars: '/images/globe/mars-4k.webp',
+	jupiter: '/images/globe/jupiter-4k.webp',
+	saturn: '/images/globe/saturn-4k.webp',
+	uranus: '/images/globe/uranus-2k.webp',
+	neptune: '/images/globe/neptune-2k.webp',
+	pluto: '/images/globe/pluto-4k.webp',
+	'kepler-186f': '/images/globe/kepler-186f-artist-4k.webp',
+	'proxima-b': '/images/globe/proxima-b-artist-4k.webp',
+	'trappist-1e': '/images/globe/trappist-1e-artist-4k.webp',
+	soccer: '/images/globe/soccer-canonical-4k.webp',
+	basketball: '/images/globe/basketball-canonical-4k.webp',
+	tennis: '/images/globe/tennis-canonical-4k.webp',
+	golf: '/images/globe/golf-canonical-4k.webp',
+	'beach-ball': '/images/globe/beach-ball-canonical-4k.webp',
+	disco: '/images/globe/disco-canonical-4k.webp',
+	'cartago-mark': '/images/globe/cartago-mark-4k.webp',
+	'cartago-banner': '/images/globe/cartago-banner-4k.webp',
+	portrait: '/images/globe/cartago-portrait-4k.webp',
+};
 
 function quaternionFromAxis(
 	axis: readonly [x: number, y: number, z: number],
@@ -62,18 +87,20 @@ function normalizeQuaternion(value: IQuaternion): IQuaternion {
 export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	readonly depth = input.required<IEarthDepth>();
 	readonly preview = input(false);
-	readonly textureStyle = input<IEarthTextureStyle>('natural');
+	readonly textureStyle = input<IEarthTextureStyle>('clouds');
 	private readonly _document = inject(DOCUMENT);
 	private readonly _platformId = inject(PLATFORM_ID);
 	private _canvas?: HTMLCanvasElement;
 	private _texture?: HTMLCanvasElement;
+	private readonly _textures = new Map<IEarthTextureStyle, HTMLCanvasElement>();
+	private readonly _loadingTextures = new Set<IEarthTextureStyle>();
+	private _destroyed = false;
 	private _frame?: number;
 	private _lastAt?: number;
-	private _loading = false;
 	private _spinning = false;
-	private _idleSpeed = DEFAULT_IDLE_SPEED;
+	private _idleSpeed = 0.00016;
 	private _rotation: IQuaternion = [0, 0, 0, 1];
-	private _angularVelocity = { x: 0, y: DEFAULT_IDLE_SPEED };
+	private _angularVelocity = { x: 0, y: 0.00016 };
 	private _drag?: {
 		pointerId: number;
 		x: number;
@@ -89,6 +116,10 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		if ((this.depth() === 'behind-ready' || this.depth() === 'behind') && !this.preview())
 			this.stop();
 	});
+	private readonly _textureStyleSync = effect(() => {
+		const style = this.textureStyle();
+		if (this._spinning) this._prepare(style);
+	});
 
 	ngAfterViewInit(): void {
 		this._canvas = this.canvasRef()?.nativeElement;
@@ -99,7 +130,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		if (!isPlatformBrowser(this._platformId)) return;
 		this._spinning = true;
 		this.active.set(true);
-		this._prepare();
+		this._prepare(this.textureStyle());
 		if (this._texture && this._frame === undefined)
 			this._animate(performance.now());
 	}
@@ -179,41 +210,59 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		this._destroyed = true;
 		this.stop();
 		this._depthSync.destroy();
+		this._textureStyleSync.destroy();
 	}
 
-	private _prepare(): void {
-		if (!isPlatformBrowser(this._platformId) || this._texture || this._loading)
+	private _prepare(style: IEarthTextureStyle): void {
+		if (!isPlatformBrowser(this._platformId) || this._destroyed) return;
+		const cached = this._textures.get(style);
+		if (cached) {
+			this._texture = cached;
+			this.active.set(true);
+			this._resumeAnimation();
 			return;
-		this._loading = true;
+		}
+		if (this._loadingTextures.has(style)) return;
+		this._texture = undefined;
+		this.active.set(false);
+		this._loadTexture(style);
+	}
+
+	private _loadTexture(style: IEarthTextureStyle): void {
+		this._loadingTextures.add(style);
 		const image = new Image();
 		image.decoding = 'async';
-		image.src = '/images/earth-blue-marble-4k.webp';
 		image.onload = () => {
+			this._loadingTextures.delete(style);
+			if (this._destroyed) return;
 			const source = this._document.createElement('canvas');
-			source.width = TEXTURE_WIDTH;
-			source.height = TEXTURE_HEIGHT;
+			source.width = image.naturalWidth;
+			source.height = image.naturalHeight;
 			const context = source.getContext('2d');
-			if (!context) {
-				this._loading = false;
-				return;
-			}
+			if (!context) return;
 			context.imageSmoothingEnabled = true;
 			context.imageSmoothingQuality = 'high';
-			context.drawImage(image, 0, 0, source.width, source.height);
-			this._texture = source;
-			this._loading = false;
-			if (this._spinning && this._frame === undefined)
-				this._animate(performance.now());
+			context.drawImage(image, 0, 0);
+			this._textures.set(style, source);
+			if (this.textureStyle() === style) {
+				this._texture = source;
+				this.active.set(true);
+				this._resumeAnimation();
+			}
 		};
 		image.onerror = () => {
-			if (image.src.endsWith('earth-blue-marble-4k.webp')) {
-				image.src = '/images/cartagonova-earth-texture-hd.png';
-				return;
-			}
-			this._loading = false;
+			this._loadingTextures.delete(style);
+			console.error(`Unable to load globe texture: ${TEXTURE_SOURCES[style]}`);
 		};
+		image.src = TEXTURE_SOURCES[style];
+	}
+
+	private _resumeAnimation(): void {
+		if (this._spinning && this._texture && this._frame === undefined)
+			this._animate(performance.now());
 	}
 
 	private _animate(now: number): void {
@@ -256,6 +305,6 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private _clampVelocity(range: { value: number }): number {
-		return Math.min(MAX_ANGULAR_SPEED, Math.max(-MAX_ANGULAR_SPEED, range.value));
+		return Math.min(0.0038, Math.max(-0.0038, range.value));
 	}
 }

@@ -47,4 +47,29 @@ describe('HeroMonitorComponent', () => {
 			vi.useRealTimers();
 		}
 	});
+
+	it('owns the complete readable catalogue and permanently mounted overlay', async () => {
+		await TestBed.configureTestingModule({
+			imports: [HeroMonitorComponent],
+		}).compileComponents();
+		const fixture = TestBed.createComponent(HeroMonitorComponent);
+		fixture.componentRef.setInput('locale', 'es');
+		fixture.componentRef.setInput('technologies', []);
+		fixture.detectChanges();
+		const component = fixture.componentInstance;
+		const element = fixture.nativeElement as HTMLElement;
+
+		expect(component.chartOptions).toHaveLength(14);
+		expect(component.earthTextureOptions).toHaveLength(27);
+		expect(
+			new Set(component.earthTextureOptions.map(({ category }) => category))
+		).toEqual(new Set(['earth', 'planets', 'exoplanets', 'balls', 'playful']));
+		expect(component.earthTextureLabel('kepler-186f')).toContain('impresión artística');
+		expect(element.querySelectorAll('.hero-monitor__globe-scrim')).toHaveLength(1);
+		expect(element.querySelectorAll('.hero-monitor__earth-controls')).toHaveLength(1);
+
+		component.selectEarthTexture('saturn', new Event('click'));
+		expect(component.earthTexture()).toBe('saturn');
+		expect(component.earthTextureCategory()).toBe('planets');
+	});
 });

@@ -25,11 +25,58 @@ export type IHeroPanelId =
 	'overview' | 'workflows' | 'quality' | 'mobile' | 'tooling' | 'delivery';
 export type ITelemetryId = 'product' | 'quality' | 'delivery';
 export type IChartType =
-	'bars' | 'line' | 'area' | 'dots' | 'pulse' | 'wave' | 'grid';
+	'bars'
+	| 'line'
+	| 'area'
+	| 'dots'
+	| 'pulse'
+	| 'wave'
+	| 'grid'
+	| 'stacked'
+	| 'scatter'
+	| 'radar'
+	| 'donut'
+	| 'heatmap'
+	| 'treemap'
+	| 'stream';
 export type IHeroEffect = 'idle' | 'shake' | 'glitch' | 'float' | 'spectrum';
 export type IHeroPalette = 'ocean' | 'heat' | 'lime';
 export type IHeroPanelTransition = 'slide' | 'flip' | 'scan';
-export type IEarthTextureStyle = 'natural' | 'terrain' | 'infrared';
+export type IEarthTextureStyle =
+	| 'clouds'
+	| 'natural'
+	| 'night'
+	| 'terrain'
+	| 'infrared'
+	| 'sun'
+	| 'moon'
+	| 'mercury'
+	| 'venus'
+	| 'mars'
+	| 'jupiter'
+	| 'saturn'
+	| 'uranus'
+	| 'neptune'
+	| 'pluto'
+	| 'kepler-186f'
+	| 'proxima-b'
+	| 'trappist-1e'
+	| 'soccer'
+	| 'basketball'
+	| 'tennis'
+	| 'golf'
+	| 'beach-ball'
+	| 'disco'
+	| 'cartago-mark'
+	| 'cartago-banner'
+	| 'portrait';
+export type IEarthTextureCategory =
+	| 'earth'
+	| 'planets'
+	| 'exoplanets'
+	| 'balls'
+	| 'playful';
+export type IEarthTextureOrigin = 'observed' | 'artist' | 'canonical' | 'owned';
 export type IEarthDepth =
 	| 'behind'
 	| 'out-behind'
@@ -136,6 +183,14 @@ export interface IDemo {
 export interface IChartOption {
 	id: IChartType;
 	label: string;
+	iconPath: string;
+}
+
+/** A grouped globe preset exposed by the hero's interactive catalogue. */
+export interface IEarthTextureOption {
+	id: IEarthTextureStyle;
+	category: IEarthTextureCategory;
+	origin: IEarthTextureOrigin;
 }
 
 /** An effect-picker button rendered inside the hero monitor detail panel. */
