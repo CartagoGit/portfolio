@@ -14,7 +14,7 @@ const PAGE_TITLES: Readonly<
 		contact: 'Contact',
 	},
 	es: {
-		home: 'Frontend product engineer',
+		home: 'Ingeniería frontend de producto',
 		work: 'Proyectos destacados',
 		lab: 'Laboratorio frontend',
 		approach: 'Enfoque',
@@ -47,7 +47,7 @@ const PAGE_TITLES: Readonly<
 
 const PAGE_DESCRIPTIONS: Readonly<Record<ILocale, string>> = {
 	en: 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.',
-	es: 'Portfolio de Mario Cabrero Volarich: frontend de producto, Angular, TypeScript, móvil y tooling.',
+	es: 'Portfolio de Mario Cabrero Volarich: ingeniería frontend de producto, Angular, TypeScript, móvil y herramientas.',
 	fr: 'Portfolio de Mario Cabrero Volarich : ingénierie produit frontend, Angular, TypeScript, livraison mobile et outils de développement.',
 	de: 'Portfolio von Mario Cabrero Volarich: Produkt-Frontend, Angular, TypeScript, mobile Bereitstellung und Entwickler-Tools.',
 } as const;

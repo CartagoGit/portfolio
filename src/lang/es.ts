@@ -1,4 +1,5 @@
 import type { ITranslationMap } from './types';
+import { contentEs } from './content/es';
 
 /**
  * Spanish translation map. Every key must satisfy `ITranslationMap`;
@@ -20,7 +21,7 @@ export const es: ITranslationMap = {
 			themeOpenLabel: 'Abrir menú de temas',
 		},
 		footer: {
-			tagline: 'Cartago — Frontend product engineer.',
+			tagline: 'Cartago — Ingeniero frontend de producto.',
 			availability: 'Disponible para proyectos de producto',
 			connectLabel: 'Conectar',
 			rights: 'Todos los derechos reservados.',
@@ -35,26 +36,27 @@ export const es: ITranslationMap = {
 			cmdLab: 'Explorar el laboratorio frontend',
 			cmdContact: 'Iniciar una conversación',
 		},
+		skipToContent: 'Saltar al contenido',
 	},
 	pages: {
 		home: {
-			eyebrow: 'Frontend product engineer',
+			eyebrow: 'Ingeniería frontend de producto',
 			titleLead: 'Frontend operacional para',
 			titleEmphasis: 'equipos de producto',
 			titleTail: 'que entregan todos los días.',
 			subtitle:
-				'Angular, TypeScript y entrega móvil, organizados en torno a workflows y no métricas de vanidad.',
+				'Angular, TypeScript y entrega móvil, organizados en torno a flujos de trabajo y no métricas de vanidad.',
 			role: 'Construyo el frontend de sistemas que se usan todo el día: web, Android y puntos de interacción.',
 			intro: 'ERP, logística, inventario y personal con permisos por rol, reglas de negocio y arquitecturas frontend que pueden mantenerse durante años. Angular + SCSS, Ionic cuando hace falta Android, Material para el sistema de diseño.',
 			ctaWork: 'Ver trabajo',
 			ctaContact: 'Hablemos',
 			capabilitiesTitle: 'Capacidades',
-			playgroundTitle: 'Playground',
+			playgroundTitle: 'Laboratorio',
 			telemetryTitle: 'Telemetría',
 			panelOverviewLabel: 'Angular',
 			panelOverviewMetric: 'UI',
 			panelOverviewDetail:
-				'Servidor MCP agnóstico al proyecto con capacidades explícitas y workflows de plugins para agentes.',
+				'Servidor MCP agnóstico al proyecto con capacidades explícitas y plugins para agentes.',
 			panelWorkflowsLabel: 'TypeScript',
 			panelWorkflowsMetric: 'TS',
 			panelWorkflowsDetail:
@@ -74,7 +76,7 @@ export const es: ITranslationMap = {
 			panelDeliveryLabel: 'Docker',
 			panelDeliveryMetric: 'CTR',
 			panelDeliveryDetail:
-				'Gestor de escritorio local-first con Tauri y SQLite, sin cuenta cloud ni telemetría.',
+				'Gestor de escritorio local con Tauri y SQLite, sin cuenta nube ni telemetría.',
 			monitorChrome: 'consola interactiva de proyectos',
 			monitorProjects: 'Proyectos',
 			monitorTechnologies: 'Tecnologías',
@@ -95,8 +97,8 @@ export const es: ITranslationMap = {
 			monitorPlatformsAria: 'Plataformas de publicación de Cartago',
 			monitorEffectsAria: 'Efectos de consola',
 			monitorSelectorAria: 'Selección de elementos de consola',
-			monitorChartTypesAria: 'Tipo de gráfica del dashboard',
-			monitorChartAria: 'Gráfica del dashboard del portfolio',
+			monitorChartTypesAria: 'Tipo de gráfica del panel',
+			monitorChartAria: 'Gráfica del panel del portafolio',
 			monitorChartSignal: 'señal de producto / 2026',
 			monitorVisualControlsAria: 'Controles visuales de datos',
 			monitorRandomizeAria: 'Generar nuevos valores de demostración',
@@ -134,7 +136,7 @@ export const es: ITranslationMap = {
 			earthDragHint: 'Arrastra y suelta para mantener la esfera en movimiento.',
 			monitorChoose: 'Elige un proyecto para ver su alcance y estado verificados. Usa los controles de visualización para explorar la demo.',
 			monitorOpen: 'Abrir destino ↗',
-			monitorProjectStatus: 'Proyecto open source público',
+			monitorProjectStatus: 'Proyecto público de código abierto',
 			monitorPlatformStatus: 'Plataforma pública de entrega o contacto',
 			monitorTechnologyStatus: 'Tecnología del toolkit de producción',
 			monitorPlatformDetail: '{label} es un destino público para mi trabajo, publicaciones, código o contacto profesional directo.',
@@ -143,52 +145,48 @@ export const es: ITranslationMap = {
 			monitorNoteLead: 'Construido con estado explícito,',
 			monitorNoteTail: 'mejora progresiva y cuidado.',
 			telemetryProductLabel: 'Señal de producto',
-			telemetryProductTitle: 'Un dashboard debe revelar una decisión.',
-			telemetryProductValueLabel: 'claridad de workflow',
+			telemetryProductTitle: 'Un panel debe revelar una decisión.',
+			telemetryProductValueLabel: 'claridad del flujo',
 			telemetryProductNote:
-				'Las señales se agrupan por workflow, no por una métrica de vanidad.',
+				'Las señales se agrupan por flujo, no por una métrica de vanidad.',
 			telemetryQualityLabel: 'Señal de calidad',
-			telemetryQualityTitle:
-				'La calidad es una métrica visible de operación.',
+			telemetryQualityTitle: 'La calidad es una métrica operativa visible.',
 			telemetryQualityValueLabel: 'cobertura de flujo crítico',
 			telemetryQualityNote:
-				'Testing, semántica y rendimiento comparten la misma conversación de entrega.',
+				'Las pruebas, la semántica y el rendimiento comparten la conversación de entrega.',
 			telemetryDeliveryLabel: 'Señal de entrega',
 			telemetryDeliveryTitle: 'Una interfaz, más de una superficie.',
 			telemetryDeliveryValueLabel: 'entrega web + Android',
 			telemetryDeliveryNote:
-				'El producto responsive piensa en el siguiente dispositivo antes de que se convierta en reescritura.',
+				'El producto adaptable piensa en el siguiente dispositivo antes de obligar a reescribirlo.',
 		},
 		work: {
 			eyebrow: '01 / Proyectos',
 			titleLead: 'Trabajo destacado, no',
 			titleEmphasis: 'relleno.',
 			titleTail: '',
-			subtitle:
-				'Proyectos open-source que mejor representan el foco técnico.',
+			subtitle: 'Proyectos de código abierto que mejor representan el foco técnico.',
 			pinnedLabel: 'Proyecto destacado',
 			exploreRepo: 'Explorar repositorio',
 			mcpNumber: '01 — Infraestructura de agentes',
 			mcpTitle: 'DelendAI',
 			mcpDescription:
-				'Un servidor MCP y sistema de plugins que da a cada proyecto capacidades concretas para workflows de agentes reproducibles.',
+				'Un servidor MCP y sistema de plugins que da a cada proyecto capacidades concretas para flujos de agentes reproducibles.',
 			mcpBullets: '62 capacidades|Arquitectura de plugins|CLI + controles CI',
 			quickmodelNumber: '02 — Arquitectura TypeScript',
 			quickmodelTitle: 'QuickModel',
 			quickmodelDescription:
 				'Una librería TypeScript de modelado y serialización centrada en contratos explícitos y fronteras de datos fiables.',
-			quickmodelBullets:
-				'Modelos type-safe|Serialización|Developer experience',
-			keyerNumber: '03 — Tooling para developers',
+			quickmodelBullets: 'Modelos tipados|Serialización|Experiencia de desarrollo',
+			keyerNumber: '03 — Herramientas de desarrollo',
 			keyerTitle: 'Keyer',
-			keyerDescription:
-				'Un CLI y librería TypeScript publicados para gestionar secretos y flujos de configuración con una developer experience más limpia.',
-			keyerBullets: 'CLI design|Node.js tooling|Paquete publicado',
+			keyerDescription: 'CLI y librería TypeScript publicadas para gestionar secretos y configuración con una experiencia de desarrollo más limpia.',
+			keyerBullets: 'Diseño de CLI|Herramientas Node.js|Paquete publicado',
 			alsoPinnedHeading: 'También destacado',
 			printCv: 'Print CV',
 			printCvDetail: 'Vue, validación y E2E · repositorio',
 			zoneless: 'Zoneless Calculator',
-			zonelessDetail: 'Signals de Angular y tests · repositorio',
+			zonelessDetail: 'Señales de Angular y pruebas · repositorio',
 			nestgpt: 'NestGpt',
 			nestgptDetail: 'Integración NestJS y GPT · repositorio',
 			viewOnNpm: 'Ver en npm',
@@ -211,8 +209,7 @@ export const es: ITranslationMap = {
 			directoryDemoDetail: 'Experimento público interactivo de producto.',
 			directoryPlayLabel: '04 / JUEGO',
 			directoryPlayTitle: 'Cartago Tetris',
-			directoryPlayDetail:
-				'Interacción de teclado y estado de game-loop.',
+			directoryPlayDetail: 'Interacción por teclado y estado del bucle de juego.',
 		},
 		lab: {
 			eyebrow: '02 / Laboratorio',
@@ -235,7 +232,7 @@ export const es: ITranslationMap = {
 			metricDeliveryLabel: 'Señal de entrega',
 			metricDeliveryTitle: 'Una interfaz, más de una superficie.',
 			metricDeliveryValueLabel: 'entrega web + Android',
-			metricDeliveryNote: 'El producto responsive contempla el siguiente dispositivo antes de obligar a reescribir.',
+			metricDeliveryNote: 'El producto adaptable contempla el siguiente dispositivo antes de obligar a reescribir.',
 			playgroundHeading: 'Flujo de producto',
 			playgroundDescription:
 				'Reordena cuatro fases de entrega arrastrando o usando teclado y observa cómo reacciona el estado de finalización.',
@@ -339,51 +336,44 @@ export const es: ITranslationMap = {
 		approach: {
 			eyebrow: '03 / Enfoque',
 			titleLead: 'Capacidades conectadas a',
-			titleEmphasis: 'workflows reales.',
+			titleEmphasis: 'flujos reales.',
 			titleTail: '',
 			subtitle:
 				'Seis capacidades operativas, cada una anclada en trabajo de producto entregado y no en ambición abstracta.',
 			capabilityProductEyebrow: '01 / Interfaces de producto',
 			capabilityProductTitle: 'Operacional por diseño.',
-			capabilityProductDetail:
-				'Interfaces para personas que las usan todo el día: información densa, próximas acciones claras y empty states elegantes.',
-			capabilityProductProof:
-				'Interfaces de workflow · formularios complejos · interaction design',
+			capabilityProductDetail: 'Interfaces para personas que las usan todo el día: información densa, próximas acciones claras y estados vacíos cuidados.',
+			capabilityProductProof: 'Interfaces de flujo · formularios complejos · diseño de interacción',
 			capabilityArchitectureEyebrow: '02 / Arquitectura Angular',
 			capabilityArchitectureTitle: 'Explícitamente reactivo.',
-			capabilityArchitectureDetail:
-				'Componentes standalone, signals y fronteras tipadas hacen que los cambios de estado sean comprensibles, testeables y rápidos.',
+			capabilityArchitectureDetail: 'Componentes autónomos, señales y fronteras tipadas hacen comprensibles, testeables y rápidos los cambios de estado.',
 			capabilityArchitectureProof:
 				'Zoneless Calculator · patrones Angular en producción',
 			capabilityMobileEyebrow: '03 / Entrega móvil',
 			capabilityMobileTitle: 'Un producto, más superficies.',
-			capabilityMobileDetail:
-				'Workflows web diseñados para touch, espacio limitado y entrega Android release-ready — no simples pantallas de escritorio encogidas.',
+			capabilityMobileDetail: 'Flujos web diseñados para tacto, espacio limitado y entrega Android lista para publicar — no simples pantallas de escritorio encogidas.',
 			capabilityMobileProof: 'Entrega operacional web + Android',
-			capabilityQualityEyebrow: '04 / Testing y calidad',
+			capabilityQualityEyebrow: '04 / Pruebas y calidad',
 			capabilityQualityTitle: 'La confianza es una feature.',
-			capabilityQualityDetail:
-				'Una pirámide de testing enfocada, HTML semántico y presupuestos de rendimiento mantienen el producto fiable según crece.',
+			capabilityQualityDetail: 'Una pirámide de pruebas, HTML semántico y presupuestos de rendimiento mantienen el producto fiable.',
 			capabilityQualityProof: 'Unit → integración → releases fiables',
-			capabilitySystemsEyebrow: '05 / Design systems',
+			capabilitySystemsEyebrow: '05 / Sistemas de diseño',
 			capabilitySystemsTitle: 'Consistente, no repetitivo.',
 			capabilitySystemsDetail:
 				'Primitivas flexibles convierten un lenguaje visual en interfaces reutilizables y accesibles sin aplanar cada pantalla en una plantilla.',
-			capabilitySystemsProof:
-				'Patrones UI reutilizables · estados · reglas responsive',
-			capabilityToolingEyebrow: '06 / Tooling para developers',
+			capabilitySystemsProof: 'Patrones UI reutilizables · estados · reglas adaptables',
+			capabilityToolingEyebrow: '06 / Herramientas de desarrollo',
 			capabilityToolingTitle: 'El frontend tiene una sala de máquinas.',
-			capabilityToolingDetail:
-				'Contratos tipados, CLIs y tooling MCP convierten el trabajo repetitivo de ingeniería en workflows fiables para equipos y agentes.',
+			capabilityToolingDetail: 'Contratos tipados, CLIs y herramientas MCP convierten el trabajo repetido en flujos fiables para equipos y agentes.',
 			capabilityToolingProof: 'DelendAI · QuickModel · Keyer',
 			experienceEyebrow: '04 / Experiencia profesional',
-			experienceTitleLead: 'Workflows complejos,',
+			experienceTitleLead: 'Flujos complejos,',
 			experienceTitleEmphasis: 'entregados en silencio.',
 			experienceTitleTail: '',
 			experienceDetail:
 				'Construyo interfaces de uso repetido donde roles, reglas longevas y formularios complejos deben seguir siendo entendibles. Puedo hablar de patrones y decisiones sin exponer código de cliente, datos ni detalles de producto.',
 			experienceBullets:
-				'Acciones y permisos por rol|Entrega web + Android|Formularios resilientes con validación progresiva|Prácticas de arquitectura y testing que escalan',
+				'Acciones y permisos por rol|Entrega web + Android|Formularios resilientes con validación progresiva|Prácticas de arquitectura y pruebas que escalan',
 		},
 		knowledge: {
 			eyebrow: '04 / Conocimientos',
@@ -394,20 +384,18 @@ export const es: ITranslationMap = {
 				'Conocimiento expuesto como artefactos buscables en lugar de posts de blog efímeros.',
 			tileFrontendLabel: 'Frontend',
 			tileFrontendStack: 'Angular · TypeScript · SCSS',
-			tileFrontendDetail:
-				'Signals, SSR, interfaces responsive y UI accesible para workflows reales.',
+			tileFrontendDetail: 'Señales, SSR, interfaces adaptables y UI accesible para flujos reales.',
 			tileMobileLabel: 'Móvil',
 			tileMobileStack: 'Ionic · Capacitor · Android',
-			tileMobileDetail:
-				'Un mismo sistema de producto llevado de web a entregas touch-first.',
+			tileMobileDetail: 'Un mismo sistema de producto llevado de web a entregas con prioridad táctil.',
 			tileQualityLabel: 'Calidad',
 			tileQualityStack: 'Vitest · Accesibilidad · Rendimiento',
 			tileQualityDetail:
 				'Tests, semántica y presupuestos de rendimiento que exponen el riesgo temprano.',
-			tileToolingLabel: 'Tooling',
+			tileToolingLabel: 'Herramientas',
 			tileToolingStack: 'Node.js · MCP · Docker',
 			tileToolingDetail:
-				'CLIs, contenedores y workflows de agentes tipados para entrega repetible.',
+				'CLIs, contenedores y flujos de agentes tipados para una entrega repetible.',
 			tileSystemsLabel: 'Sistemas',
 			tileSystemsStack: 'CDK · Storybook · Tokens',
 			tileSystemsDetail:
@@ -423,7 +411,7 @@ export const es: ITranslationMap = {
 			titleEmphasis: 'reproducibles.',
 			titleTail: '',
 			subtitle:
-				'Imágenes de contenedor que mantienen juntos los entornos de producto y tooling entre máquinas.',
+				'Imágenes de contenedor que mantienen alineados los entornos de producto y las herramientas entre máquinas.',
 			terminalHeading: 'Docker Hub / cartagodocker',
 			terminalPull: '$ docker pull cartagodocker/<image>',
 			terminalStatus: 'imágenes públicas disponibles',
@@ -431,6 +419,12 @@ export const es: ITranslationMap = {
 			terminalAngular: 'Angular',
 			terminalNode: 'Node',
 			terminalDelivery: 'Entrega',
+			profileAria: 'Perfil de Docker Hub',
+			catalogueAria: 'Imágenes Docker públicas',
+			dockerAlt: 'Docker',
+			destinationsAria: 'Destinos de la imagen Docker',
+			hubLink: 'Docker Hub',
+			sourceLink: 'Código fuente',
 		},
 		demos: {
 			eyebrow: '06 / Demos',
@@ -443,7 +437,7 @@ export const es: ITranslationMap = {
 				'Algunas demos son builds antiguos de Netlify; siguen enlazados mientras los originales permanezcan accesibles.',
 			openDemo: 'Abrir demo ↗',
 			gameEyebrow: 'Laboratorio de interacción',
-			gameHeading: 'Prueba reflejos y feedback inmediato.',
+			gameHeading: 'Prueba reflejos y respuesta inmediata.',
 			gameDetail:
 				'Pulsa la señal activa y observa cómo cambia el estado sin recargar la interfaz.',
 			gameSignalsLabel: 'señales atrapadas',
@@ -478,7 +472,7 @@ export const es: ITranslationMap = {
 			memoryHiddenAria: 'Carta oculta de memoria {index}',
 			externalLinksAria: 'Demos interactivas externas',
 			summaryDeathBlitz: 'Interacción de producto con estado y progresión persistente.',
-			summaryTetris: 'Interacción por teclado, bucle de juego y estado responsive del tablero.',
+			summaryTetris: 'Interacción por teclado, bucle de juego y estado adaptable del tablero.',
 			summarySnake: 'Movimiento en tiempo real, colisiones y actualizaciones de estado.',
 			summaryMinesweeper: 'Interacción en cuadrícula, temporizadores y jerarquía de información.',
 			summaryPrintCv: 'CV bilingüe y validado con un diseño de impresión afinado para papel real.',
@@ -490,13 +484,13 @@ export const es: ITranslationMap = {
 			titleTail: '',
 			subtitle:
 				'Elige el canal que mejor encaje con la pregunta. Un resumen conciso ayuda; el contexto y las restricciones también son bienvenidos.',
-			ctaEmail: 'Email',
+			ctaEmail: 'Correo',
 			ctaLinkedin: 'LinkedIn',
 			ctaGithub: 'GitHub',
 			ctaDockerHub: 'Docker Hub',
 			channelsAria: 'Canales de contacto',
 			portraitAlt: 'Retrato de Mario Cabrero Volarich en San Francisco',
-			portraitCaption: 'Frontend de producto · Angular · entrega móvil · tooling',
+			portraitCaption: 'Frontend de producto · Angular · entrega móvil · herramientas',
 			formAria: 'Formulario de contacto',
 			formEmailLabel: 'Tu email',
 			formEmailPlaceholder: 'tu@empresa.com',
@@ -511,9 +505,10 @@ export const es: ITranslationMap = {
 			formFallbackAction: 'Abrir aplicación de correo ↗',
 		},
 	},
+	content: contentEs,
 	seo: {
 		description:
-			'Portfolio de Mario Cabrero Volarich: frontend de producto, Angular, TypeScript, móvil y tooling.',
+			'Portfolio de Mario Cabrero Volarich: ingeniería frontend de producto, Angular, TypeScript, móvil y herramientas.',
 	},
 	lang: {
 		languagesLabel: 'Idiomas',

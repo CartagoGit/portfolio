@@ -41,6 +41,7 @@ export interface ITranslationMap {
 			cmdLab: string;
 			cmdContact: string;
 		};
+		skipToContent: string;
 	};
 	pages: {
 		home: {
@@ -387,6 +388,12 @@ export interface ITranslationMap {
 			terminalAngular: string;
 			terminalNode: string;
 			terminalDelivery: string;
+			profileAria: string;
+			catalogueAria: string;
+			dockerAlt: string;
+			destinationsAria: string;
+			hubLink: string;
+			sourceLink: string;
 		};
 		demos: {
 			eyebrow: string;
@@ -460,6 +467,36 @@ export interface ITranslationMap {
 			formFailure: string;
 			formFallbackAction: string;
 		};
+	};
+	content: {
+		projects: Record<
+			string,
+			{
+				detail: string;
+				status: string;
+			}
+		>;
+		capabilities: Record<
+			string,
+			{
+				eyebrow: string;
+				title: string;
+				detail: string;
+				proof: string;
+				example: string;
+			}
+		>;
+		knowledgeExamples: Record<string, string>;
+		dockerImages: Record<
+			string,
+			{
+				status: string;
+				purpose: string;
+			}
+		>;
+		publicLinkDetails: Record<string, string>;
+		terms: Record<string, string>;
+		technologies: Record<string, string>;
 	};
 	seo: {
 		description: string;

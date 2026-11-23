@@ -10,7 +10,7 @@
 			</h2>
 			<p>{{ 'pages.docker.subtitle' | translate }}</p>
 		</div>
-		<aside class="docker-page__terminal" aria-label="Docker Hub profile">
+		<aside class="docker-page__terminal" [attr.aria-label]="'pages.docker.profileAria' | translate">
 			<span>{{ 'pages.docker.terminalHeading' | translate }}</span>
 			<code>
 				$ docker pull cartagodocker/nodebun:latest
@@ -32,31 +32,31 @@
 		</aside>
 	</div>
 
-	<div class="docker-page__catalogue" aria-label="Public Docker images">
+	<div class="docker-page__catalogue" [attr.aria-label]="'pages.docker.catalogueAria' | translate">
 		@for (image of images; track image.name; let index = $index) {
 			<article class="docker-page__image">
 				<header>
-					<img src="/icons/projects/docker.svg" alt="Docker" />
+					<img src="/icons/projects/docker.svg" [attr.alt]="'pages.docker.dockerAlt' | translate" />
 					<span>0{{ index + 1 }} / {{ images.length }}</span>
-					<b>{{ image.status }}</b>
+					<b>{{ imageStatus(image) }}</b>
 				</header>
 				<div class="docker-page__image-title">
 					<span>cartagodocker</span>
 					<h3>{{ image.name }}</h3>
 				</div>
-				<p>{{ image.purpose }}</p>
+				<p>{{ imagePurpose(image) }}</p>
 				<div class="docker-page__stack">
 					@for (technology of image.technologies; track $index) {
 						<span>{{ technology }}</span>
 					}
 				</div>
 				<code>{{ image.command }}</code>
-				<nav aria-label="Docker image destinations">
+				<nav [attr.aria-label]="'pages.docker.destinationsAria' | translate">
 					<a [href]="image.hubHref" target="_blank" rel="noreferrer">
-						Docker Hub ↗
+						{{ 'pages.docker.hubLink' | translate }} ↗
 					</a>
 					<a [href]="image.sourceHref" target="_blank" rel="noreferrer">
-						Source ↗
+						{{ 'pages.docker.sourceLink' | translate }} ↗
 					</a>
 				</nav>
 			</article>

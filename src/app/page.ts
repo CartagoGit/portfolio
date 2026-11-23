@@ -18,6 +18,7 @@ import { FooterComponent } from '../shared/ui/footer/footer.component';
 import { CommandPaletteComponent } from '../shared/ui/command-palette/command-palette.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import type { IMonitorPreview } from '../domain/types';
+import { TranslatePipe } from '../lang/translate.pipe';
 
 @Component({
 	selector: 'app-root',
@@ -34,6 +35,7 @@ import type { IMonitorPreview } from '../domain/types';
 		WorkPageComponent,
 		HeroMonitorComponent,
 		HomeIntroComponent,
+		TranslatePipe,
 	],
 	templateUrl: './page.html',
 	styleUrl: './page.scss',

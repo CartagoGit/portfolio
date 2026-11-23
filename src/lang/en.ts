@@ -1,4 +1,5 @@
 import type { ITranslationMap } from './types';
+import { contentEn } from './content/en';
 
 /**
  * English source of truth for the portfolio's UI copy.
@@ -38,6 +39,7 @@ export const en: ITranslationMap = {
 			cmdLab: 'Explore Frontend Lab',
 			cmdContact: 'Start a conversation',
 		},
+		skipToContent: 'Skip to content',
 	},
 	pages: {
 		home: {
@@ -432,6 +434,12 @@ export const en: ITranslationMap = {
 			terminalAngular: 'Angular',
 			terminalNode: 'Node',
 			terminalDelivery: 'Delivery',
+			profileAria: 'Docker Hub profile',
+			catalogueAria: 'Public Docker images',
+			dockerAlt: 'Docker',
+			destinationsAria: 'Docker image destinations',
+			hubLink: 'Docker Hub',
+			sourceLink: 'Source',
 		},
 		demos: {
 			eyebrow: '06 / Demos',
@@ -512,6 +520,7 @@ export const en: ITranslationMap = {
 			formFallbackAction: 'Open email app ↗',
 		},
 	},
+	content: contentEn,
 	seo: {
 		description:
 			"Mario Cabrero Volarich's portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.",

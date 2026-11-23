@@ -2,11 +2,14 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	computed,
+	inject,
 	input,
 	output,
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import type { IMonitorPreview, IPublicLink } from '../../../domain/types';
+import { contentKey } from '../../../lang/content-key';
+import { TranslateService } from '../../../lang/translate.service';
 
 @Component({
 	selector: 'app-profile-links',
@@ -19,6 +22,8 @@ import type { IMonitorPreview, IPublicLink } from '../../../domain/types';
 	},
 })
 export class ProfileLinksComponent {
+	private readonly _translate = inject(TranslateService);
+
 	readonly links = input.required<readonly IPublicLink[]>();
 	readonly compact = input(false);
 	readonly preview = output<IMonitorPreview | null>();
@@ -33,10 +38,18 @@ export class ProfileLinksComponent {
 		this.preview.emit({
 			kind: link.group,
 			label: link.label,
-			detail: link.detail ?? `Open ${link.label} in a new tab.`,
+			detail: this._translate.instant(
+				`content.publicLinkDetails.${contentKey(link.label)}`,
+			),
 			href: link.href,
-			status: link.group === 'platform' ? 'Public platform' : 'Featured project',
-			stack: link.group === 'platform' ? ['Public profile'] : ['Open source'],
+			status: this._translate.instant(
+				link.group === 'platform'
+					? 'pages.home.monitorPlatformStatus'
+					: 'pages.home.monitorProjectStatus',
+			),
+			stack: link.group === 'platform'
+				? [this._translate.instant('pages.home.monitorPublicProfile')]
+				: [this._translate.instant('pages.home.monitorOpenSource')],
 			imageSrc: link.imageSrc,
 			iconPath: link.iconPath,
 			color: link.color,

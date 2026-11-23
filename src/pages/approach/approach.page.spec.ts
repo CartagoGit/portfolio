@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ApproachPageComponent } from './approach.page';
+import { TranslateService } from '../../lang/translate.service';
 
 describe('ApproachPageComponent', () => {
 	it('renders one complete visual per capability and stable selection', async () => {
@@ -44,5 +45,16 @@ describe('ApproachPageComponent', () => {
 		expect(fixture.componentInstance.activeCapability()).toBe('tooling');
 		expect(tabs[5]?.getAttribute('tabindex')).toBe('0');
 		expect(tabs[0]?.getAttribute('tabindex')).toBe('-1');
+	});
+
+	it('localizes capability copy and practical examples', async () => {
+		await TestBed.configureTestingModule({ imports: [ApproachPageComponent] }).compileComponents();
+		TestBed.inject(TranslateService).setLocale('fr');
+		const fixture = TestBed.createComponent(ApproachPageComponent);
+		fixture.detectChanges();
+		const element = fixture.nativeElement as HTMLElement;
+		expect(element.querySelector('[role="tabpanel"] h3')?.textContent).toContain('Opérationnel');
+		expect(element.querySelector('.approach-page__example')?.textContent).toContain('Parcours');
+		TestBed.inject(TranslateService).setLocale('en');
 	});
 });

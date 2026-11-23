@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import { contentKey } from '../../../lang/content-key';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { TranslateService } from '../../../lang/translate.service';
 import type { IMonitorPreview, ITechnology } from '../../../domain/types';
 
 @Component({
@@ -10,6 +12,8 @@ import type { IMonitorPreview, ITechnology } from '../../../domain/types';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TechnologyMarqueeComponent {
+	private readonly _translate = inject(TranslateService);
+
 	readonly technologies = input.required<readonly ITechnology[]>();
 	readonly reverse = input(false);
 	readonly tooltip = signal<ITechnology | null>(null);
@@ -27,8 +31,10 @@ export class TechnologyMarqueeComponent {
 		this.preview.emit({
 			kind: 'technology',
 			label: technology.label,
-			detail: technology.detail ?? `${technology.label} is part of the frontend and delivery toolkit used across the portfolio.`,
-			status: 'Technology toolkit',
+			detail: this._translate.instant(
+				`content.technologies.${contentKey(technology.label)}`,
+			),
+			status: this._translate.instant('pages.home.monitorTechnologyStatus'),
 			stack: [technology.label],
 			iconPath: technology.iconPath,
 			color: technology.color,

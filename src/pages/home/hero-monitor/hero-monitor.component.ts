@@ -22,6 +22,7 @@ import {
 } from '../../../domain/monitor-destinations';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
+import { contentKey } from '../../../lang/content-key';
 import type {
 	IChartOption,
 	IChartType,
@@ -476,7 +477,7 @@ export class HeroMonitorComponent implements OnDestroy {
 		this.showPreview({
 			kind: 'technology',
 			label: technology.label,
-			detail: technology.detail ?? '',
+			detail: this.technologyDetail(technology.label),
 			status: this._translate.instant('pages.home.monitorTechnologyStatus'),
 			stack: [technology.label],
 			iconPath: technology.iconPath,
@@ -493,7 +494,7 @@ export class HeroMonitorComponent implements OnDestroy {
 			label: panel.label,
 			detail: this._translate.instant(this._projectDetailKey(panel.id)),
 			href: panel.href,
-			status: this._translate.instant('pages.home.monitorProjectStatus'),
+			status: this.projectStatus(panel.id),
 			stack: panel.stack,
 			imageSrc: panel.iconAsset,
 			color: panel.color,
@@ -502,15 +503,25 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	private _projectDetailKey(id: IHeroPanelId): string {
-		const keys: Record<IHeroPanelId, string> = {
-			overview: 'pages.home.panelOverviewDetail',
-			workflows: 'pages.home.panelWorkflowsDetail',
-			quality: 'pages.home.panelQualityDetail',
-			mobile: 'pages.home.panelMobileDetail',
-			tooling: 'pages.home.panelToolingDetail',
-			delivery: 'pages.home.panelDeliveryDetail',
-		};
-		return keys[id];
+		return `content.projects.${id}.detail`;
+	}
+
+	projectDetail(id: IHeroPanelId): string {
+		return this._translate.instant(this._projectDetailKey(id));
+	}
+
+	projectStatus(id: IHeroPanelId): string {
+		return this._translate.instant(`content.projects.${id}.status`);
+	}
+
+	technologyDetail(label: string): string {
+		return this._translate.instant(
+			`content.technologies.${contentKey(label)}`,
+		);
+	}
+
+	termLabel(value: string): string {
+		return this._translate.instant(`content.terms.${contentKey(value)}`);
 	}
 
 	previewKindLabel(kind: IMonitorPreview['kind']): string {

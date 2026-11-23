@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TranslatePipe } from '../../lang/translate.pipe';
+import { TranslateService } from '../../lang/translate.service';
 
 interface IDockerImage {
 	name: string;
@@ -76,5 +77,14 @@ const DOCKER_IMAGES: readonly IDockerImage[] = [
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DockerPageComponent {
+	private readonly _translate = inject(TranslateService);
 	readonly images = DOCKER_IMAGES;
+
+	imageStatus(image: IDockerImage): string {
+		return this._translate.instant(`content.dockerImages.${image.name}.status`);
+	}
+
+	imagePurpose(image: IDockerImage): string {
+		return this._translate.instant(`content.dockerImages.${image.name}.purpose`);
+	}
 }

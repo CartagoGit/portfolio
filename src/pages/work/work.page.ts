@@ -12,6 +12,7 @@ import type {
 } from '../../domain/types';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
+import { contentKey } from '../../lang/content-key';
 
 interface IWorkProject {
 	panel: IHeroPanel;
@@ -61,5 +62,23 @@ export class WorkPageComponent {
 			profile: 'pages.home.monitorPublicProfile',
 		};
 		return this._translate.instant(key[kind]);
+	}
+
+	projectDetail(panel: IHeroPanel): string {
+		return this._translate.instant(`content.projects.${panel.id}.detail`);
+	}
+
+	projectStatus(panel: IHeroPanel): string {
+		return this._translate.instant(`content.projects.${panel.id}.status`);
+	}
+
+	platformDetail(link: IPublicLink): string {
+		return this._translate.instant(
+			`content.publicLinkDetails.${contentKey(link.label)}`,
+		);
+	}
+
+	termLabel(value: string): string {
+		return this._translate.instant(`content.terms.${contentKey(value)}`);
 	}
 }

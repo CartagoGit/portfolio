@@ -16,7 +16,7 @@
 			role="tablist"
 			aria-orientation="vertical"
 			[attr.aria-label]="'pages.approach.subtitle' | translate">
-			@for (capability of capabilities; track capability.id; let index = $index) {
+			@for (capability of capabilities(); track capability.id; let index = $index) {
 				<button
 					id="capability-tab-{{ capability.id }}"
 					type="button"
@@ -52,10 +52,10 @@
 			</p>
 			<h3>{{ selectedCapability().title }}</h3>
 			<p>{{ selectedCapability().detail }}</p>
-			<p class="approach-page__example">{{ selectedVisual().example }}</p>
+			<p class="approach-page__example">{{ capabilityExample(activeCapability()) }}</p>
 			<div class="approach-page__tools">
 				@for (tool of selectedCapability().tools; track $index) {
-					<span>{{ tool }}</span>
+					<span>{{ termLabel(tool) }}</span>
 				}
 			</div>
 			<footer>

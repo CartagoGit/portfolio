@@ -19,7 +19,7 @@
 				<div class="work-page__card-glow" aria-hidden="true"></div>
 				<header class="work-page__card-header">
 					<span class="work-page__number">{{ project.number }} / {{ projects.length }}</span>
-					<span class="work-page__status">{{ project.panel.status }}</span>
+					<span class="work-page__status">{{ projectStatus(project.panel) }}</span>
 				</header>
 				<div class="work-page__identity">
 					@if (project.panel.iconAsset; as icon) {
@@ -35,10 +35,10 @@
 					</div>
 				</div>
 				<div class="work-page__content">
-					<p>{{ project.panel.detail }}</p>
+					<p>{{ projectDetail(project.panel) }}</p>
 					<ul [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
 						@for (technology of project.panel.stack; track technology) {
-							<li>{{ technology }}</li>
+							<li>{{ termLabel(technology) }}</li>
 						}
 					</ul>
 				</div>
@@ -87,7 +87,7 @@
 					</div>
 					<span>{{ link.group === 'platform' ? ('pages.home.monitorPlatforms' | translate) : ('pages.home.monitorProjects' | translate) }}</span>
 					<b>{{ link.label }}</b>
-					<small>{{ link.detail }}</small>
+					<small>{{ platformDetail(link) }}</small>
 					<i aria-hidden="true">↗</i>
 				</a>
 			}

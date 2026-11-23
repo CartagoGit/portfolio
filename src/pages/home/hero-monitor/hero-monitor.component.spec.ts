@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { HeroMonitorComponent } from './hero-monitor.component';
+import { TranslateService } from '../../../lang/translate.service';
 
 describe('HeroMonitorComponent', () => {
 	it('renders the interactive monitor', async () => {
@@ -86,9 +87,12 @@ describe('HeroMonitorComponent', () => {
 		};
 		fixture.componentRef.setInput('locale', 'es');
 		fixture.componentRef.setInput('technologies', [technology]);
+		TestBed.inject(TranslateService).setLocale('es');
 		fixture.detectChanges();
 
 		fixture.componentInstance.previewTechnology(technology);
-		expect(fixture.componentInstance.previewItems()[0]?.detail).toBe(technology.detail);
+		expect(fixture.componentInstance.previewItems()[0]?.detail).not.toBe(technology.detail);
+		expect(fixture.componentInstance.previewItems()[0]?.detail).toContain('Lenguaje tipado');
+		TestBed.inject(TranslateService).setLocale('en');
 	});
 });

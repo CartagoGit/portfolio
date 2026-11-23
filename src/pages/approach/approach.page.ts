@@ -13,6 +13,7 @@ import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data';
 import type { ICapability, ICapabilityId } from '../../domain/types';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
+import { contentKey } from '../../lang/content-key';
 
 interface ICapabilityVisual {
 	iconPath: string;
@@ -59,24 +60,48 @@ export class ApproachPageComponent {
 	private readonly _translate = inject(TranslateService);
 	private readonly _detail = viewChild<ElementRef<HTMLElement>>('detail');
 
-	readonly capabilities = CAPABILITIES;
+	readonly capabilities = computed<readonly ICapability[]>(() =>
+		CAPABILITIES.map((capability) => ({
+			...capability,
+			eyebrow: this._translate.instant(
+				`content.capabilities.${capability.id}.eyebrow`,
+			),
+			title: this._translate.instant(
+				`content.capabilities.${capability.id}.title`,
+			),
+			detail: this._translate.instant(
+				`content.capabilities.${capability.id}.detail`,
+			),
+			proof: this._translate.instant(
+				`content.capabilities.${capability.id}.proof`,
+			),
+		})),
+	);
 	readonly activeCapability = signal<ICapabilityId>('product');
 	readonly selectedCapability = computed<ICapability>(
 		() =>
-			this.capabilities.find(({ id }) => id === this.activeCapability()) ??
+			this.capabilities().find(({ id }) => id === this.activeCapability()) ??
 			FALLBACK_CAPABILITY
 	);
 	readonly selectedVisual = computed(
 		() => CAPABILITY_VISUALS[this.activeCapability()]
 	);
 	readonly selectedIndex = computed(() =>
-		this.capabilities.findIndex(({ id }) => id === this.activeCapability())
+		this.capabilities().findIndex(({ id }) => id === this.activeCapability())
 	);
 	/** Pipe-separated list of experience bullets; rendered through split('|')
 	 * in the template so the translation map stays a flat string. */
 	readonly experienceBullets = computed(() =>
 		this._translate.instant('pages.approach.experienceBullets')
 	);
+
+	capabilityExample(id: ICapabilityId): string {
+		return this._translate.instant(`content.capabilities.${id}.example`);
+	}
+
+	termLabel(value: string): string {
+		return this._translate.instant(`content.terms.${contentKey(value)}`);
+	}
 
 	selectCapability(id: ICapabilityId): void {
 		if (id === this.activeCapability()) return;
@@ -97,9 +122,10 @@ export class ApproachPageComponent {
 			event.key === 'Home'
 				? 0
 				: event.key === 'End'
-					? this.capabilities.length - 1
-					: (index + delta + this.capabilities.length) % this.capabilities.length;
-		const target = this.capabilities[targetIndex];
+					? this.capabilities().length - 1
+					: (index + delta + this.capabilities().length) %
+						this.capabilities().length;
+		const target = this.capabilities()[targetIndex];
 		if (!target) return;
 		this.selectCapability(target.id);
 		queueMicrotask(() => {

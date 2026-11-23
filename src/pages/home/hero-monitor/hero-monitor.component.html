@@ -215,11 +215,7 @@
 									<p class="hero-monitor__preview-detail">{{ item.detail }}</p>
 									<div class="hero-monitor__preview-stack" [attr.aria-label]="'pages.home.monitorRelatedLinks' | translate">
 										@for (technology of item.stack; track technology) {
-											@if (technologyHref(technology); as href) {
-												<a [href]="href" target="_blank" rel="noreferrer">{{ technology }} ↗</a>
-											} @else {
-												<b>{{ technology }}</b>
-											}
+											<span>{{ termLabel(technology) }}</span>
 										}
 									</div>
 								</div>
@@ -316,11 +312,11 @@
 									</svg>
 								}
 								<h3>{{ panel.label }}</h3>
-								<p class="hero-monitor__project-status">{{ panel.status }}</p>
-								<p>{{ panel.detail }}</p>
+								<p class="hero-monitor__project-status">{{ projectStatus(panel.id) }}</p>
+								<p>{{ projectDetail(panel.id) }}</p>
 								<div class="hero-monitor__stack" [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
 									@for (technology of panel.stack; track technology) {
-										<span>{{ technology }}</span>
+										<span>{{ termLabel(technology) }}</span>
 									}
 								</div>
 							</div>
