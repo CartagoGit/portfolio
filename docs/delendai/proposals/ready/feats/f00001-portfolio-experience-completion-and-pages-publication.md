@@ -11,6 +11,7 @@ shipped-in:
   - "691bd52"
   - "de01752"
   - "0383333"
+  - "51a18bd"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -95,10 +96,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s4-reviewer-20261123 — verified at 0383333, validate exit 0 and tests 47/47 claimed, no recorded run cited — Independent S4 review approved. Always-mounted palette uses reversible motion, inert/ARIA state, body scroll lock, focus entry/trap/restore, Escape/backdrop close, localized search, semantic RouterLinks and platform-neutral Enter hints; reduced motion is 0.01ms. Lab trigger has no macOS metaphor. Desktop/mobile browser audits passed, as did strict lint/typecheck, 21 files/47 tests and production+SSR build.
 
 ### S5 — Work page evidence and card system
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/work/work.page.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.scss`, `src/pages/work/_work-card-system.scss`, `src/pages/work/work.page.spec.ts`
 - **Gate**: work page unit tests + lint/typecheck + desktop/mobile visual audit
 - **Acceptance**: project order reflects public-profile importance/status; every card has a real logo, stack, status, repository and applicable site/docs/package/release destinations; cards share one interaction and motion system; colours derive from active theme plus project accent without breaking contrast.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s5-reviewer-20261123
+- review-log: approved by cartago-independent-s5-reviewer-20261123 — verified at 51a18bd, validate exit 0 and tests 47/47 claimed, no recorded run cited — Independent S5 review approved. Six S2-curated cards render in one shared system with real flat logos, status, stack and verified destinations; stale project collage removed. Accent colors derive from theme tokens/project color, focus/hover/reduced motion are shared, metadata is 12px, desktop/mobile layouts have no usable horizontal overflow, and the directory uses four real platforms. Strict lint/typecheck, 21 files/47 tests and production+SSR build pass.
 
 ### S6 — Approach page visual system and content
 - **Status**: pending
