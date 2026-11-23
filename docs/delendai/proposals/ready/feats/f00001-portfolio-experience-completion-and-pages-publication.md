@@ -96,7 +96,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S5 — Work page evidence and card system
 - **Status**: pending
-- **Files**: `src/pages/work/**`
+- **Files**: `src/pages/work/work.page.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.scss`, `src/pages/work/_work-card-system.scss`, `src/pages/work/work.page.spec.ts`
 - **Gate**: work page unit tests + lint/typecheck + desktop/mobile visual audit
 - **Acceptance**: project order reflects public-profile importance/status; every card has a real logo, stack, status, repository and applicable site/docs/package/release destinations; cards share one interaction and motion system; colours derive from active theme plus project accent without breaking contrast.
 

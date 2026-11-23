@@ -1,7 +1,4 @@
-<section
-	id="main-content"
-	class="work-page"
-	aria-labelledby="work-title">
+<section class="work-page" aria-labelledby="work-title">
 	<div class="work-page__heading">
 		<p class="work-page__eyebrow">{{ 'pages.work.eyebrow' | translate }}</p>
 		<h2 id="work-title">
@@ -14,195 +11,56 @@
 	</div>
 
 	<div class="work-page__grid">
-		<a
-			class="work-page__card work-page__card--mcp"
-			href="https://github.com/CartagoGit/delendai"
-			target="_blank"
-			rel="noreferrer"
-			aria-label="Open DelendAI repository">
-			<img
-				class="work-page__project-icon"
-				src="/icons/delendai.svg"
-				alt="DelendAI" />
-			<div
-				class="work-page__mcp-visual"
-				aria-hidden="true">
-				<span>MCP</span>
-				<i></i>
-				<i></i>
-				<i></i>
-				<b>delendai</b>
-			</div>
-			<p class="work-page__number">
-				{{ 'pages.work.mcpNumber' | translate }}
-			</p>
-			<div class="work-page__content">
-				<span class="work-page__label">
-					{{ 'pages.work.pinnedLabel' | translate }}
-				</span>
-				<h3>{{ 'pages.work.mcpTitle' | translate }}</h3>
-				<p>{{ 'pages.work.mcpDescription' | translate }}</p>
-				<ul>
-					@for (bullet of mcpBullets().split('|'); track bullet) {
-						<li>{{ bullet }}</li>
+		@for (project of projects; track project.panel.id) {
+			<article
+				class="work-page__card"
+				[attr.data-project]="project.panel.id"
+				[style.--project-accent]="project.panel.color">
+				<div class="work-page__card-glow" aria-hidden="true"></div>
+				<header class="work-page__card-header">
+					<span class="work-page__number">{{ project.number }} / {{ projects.length }}</span>
+					<span class="work-page__status">{{ project.panel.status }}</span>
+				</header>
+				<div class="work-page__identity">
+					@if (project.panel.iconAsset; as icon) {
+						<img [src]="icon" [alt]="project.panel.label" />
+					} @else {
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path [attr.d]="project.panel.iconPath" [attr.fill]="project.panel.color" />
+						</svg>
 					}
-				</ul>
-				<span class="work-page__link">
-					{{ 'pages.work.exploreRepo' | translate }}
-					<span>↗</span>
-				</span>
-			</div>
-		</a>
-		<a
-			class="work-page__card work-page__card--quickmodel"
-			href="https://github.com/CartagoGit/quickmodel"
-			target="_blank"
-			rel="noreferrer"
-			aria-label="Open QuickModel repository">
-			<img
-				class="work-page__project-icon"
-				src="/icons/quickmodel.png"
-				alt="QuickModel" />
-			<div
-				class="work-page__quickmodel-visual"
-				aria-hidden="true">
-				<div class="work-page__screen">
-					<small>ARCHITECTURE STATE</small>
-					<strong>
-						42
-						<span>.00</span>
-					</strong>
 					<div>
-						<i>signals</i>
-						<i>zoneless</i>
-						<i>tested</i>
+						<span class="work-page__label">{{ project.panel.metric }}</span>
+						<h3>{{ project.panel.label }}</h3>
 					</div>
 				</div>
-				<div class="work-page__signal-path"></div>
-			</div>
-			<p class="work-page__number">
-				{{ 'pages.work.quickmodelNumber' | translate }}
-			</p>
-			<div class="work-page__content">
-				<span class="work-page__label">
-					{{ 'pages.work.pinnedLabel' | translate }}
-				</span>
-				<h3>{{ 'pages.work.quickmodelTitle' | translate }}</h3>
-				<p>{{ 'pages.work.quickmodelDescription' | translate }}</p>
-				<ul>
-					@for (
-						bullet of quickmodelBullets().split('|');
-						track bullet
-					) {
-						<li>{{ bullet }}</li>
-					}
-				</ul>
-				<span class="work-page__link">
-					{{ 'pages.work.exploreRepo' | translate }}
-					<span>↗</span>
-				</span>
-			</div>
-		</a>
-		<article class="work-page__card work-page__card--keyer">
-			<div
-				class="work-page__keyer-visual"
-				aria-hidden="true">
-				<span></span>
-				<span></span>
-				<span></span>
-				<code>
-					$ keyer status
-					<br />
-					<b>●</b>
-					encrypted workspace
-					<br />
-					<i>ready for delivery</i>
-				</code>
-				<em>npm / typescript</em>
-			</div>
-			<p class="work-page__number">
-				{{ 'pages.work.keyerNumber' | translate }}
-			</p>
-			<div class="work-page__content">
-				<span class="work-page__label">
-					{{ 'pages.work.pinnedLabel' | translate }}
-				</span>
-				<h3>{{ 'pages.work.keyerTitle' | translate }}</h3>
-				<p>{{ 'pages.work.keyerDescription' | translate }}</p>
-				<ul>
-					@for (bullet of keyerBullets().split('|'); track bullet) {
-						<li>{{ bullet }}</li>
-					}
-				</ul>
-				<div class="work-page__actions">
-					<a
-						href="https://github.com/CartagoGit/Keyer"
-						target="_blank"
-						rel="noreferrer">
-						{{ 'pages.work.exploreRepo' | translate }} ↗
-					</a>
-					<a
-						href="https://www.npmjs.com/package/@cartago-git/keyer"
-						target="_blank"
-						rel="noreferrer">
-						View on npm ↗
-					</a>
+				<div class="work-page__content">
+					<p>{{ project.panel.detail }}</p>
+					<ul [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
+						@for (technology of project.panel.stack; track technology) {
+							<li>{{ technology }}</li>
+						}
+					</ul>
 				</div>
-			</div>
-		</article>
+				<nav
+					class="work-page__destinations"
+					[attr.aria-label]="'pages.home.monitorDestinations' | translate">
+					@for (destination of project.destinations; track destination.href) {
+						<a
+							[href]="destination.href"
+							target="_blank"
+							rel="noreferrer">
+							<span>{{ destinationKindLabel(destination.kind) }}</span>
+							<b>{{ destination.label }}</b>
+							<i aria-hidden="true">↗</i>
+						</a>
+					}
+				</nav>
+			</article>
+		}
 	</div>
 
-	<div class="work-page__secondary">
-		<p>{{ 'pages.work.alsoPinnedHeading' | translate }}</p>
-		<a
-			href="https://github.com/CartagoGit/print-cv"
-			target="_blank"
-			rel="noreferrer">
-			{{ 'pages.work.printCv' | translate }}
-			<span>{{ 'pages.work.printCvDetail' | translate }}</span>
-			↗
-		</a>
-		<a
-			href="https://github.com/CartagoGit/zoneless-calculator"
-			target="_blank"
-			rel="noreferrer">
-			{{ 'pages.work.zoneless' | translate }}
-			<span>{{ 'pages.work.zonelessDetail' | translate }}</span>
-			↗
-		</a>
-		<a
-			href="https://github.com/CartagoGit/NestGpt"
-			target="_blank"
-			rel="noreferrer">
-			{{ 'pages.work.nestgpt' | translate }}
-			<span>{{ 'pages.work.nestgptDetail' | translate }}</span>
-			↗
-		</a>
-		<a href="https://github.com/CartagoGit/api-source-tanit" target="_blank" rel="noreferrer">
-			API Source Tanit
-			<span>Source analysis · 21 frameworks · exports</span>
-			↗
-		</a>
-		<a href="https://github.com/CartagoGit/DockerNodeBun" target="_blank" rel="noreferrer">
-			DockerNodeBun
-			<span>Node, Bun, Angular, Ionic and NestJS images</span>
-			↗
-		</a>
-		<a href="https://github.com/CartagoGit/steam-keys" target="_blank" rel="noreferrer">
-			Steam Keys
-			<span>Local-first Tauri 2 + SQLite desktop app</span>
-			↗
-		</a>
-		<a href="https://github.com/CartagoGit/aoe2-mods" target="_blank" rel="noreferrer">
-			Age of Empires 2 Mods
-			<span>Binary formats, localisation and content automation</span>
-			↗
-		</a>
-	</div>
-
-	<section
-		class="work-page__directory"
-		aria-labelledby="directory-title">
+	<section class="work-page__directory" aria-labelledby="directory-title">
 		<div>
 			<p class="work-page__eyebrow">
 				{{ 'pages.work.directoryEyebrow' | translate }}
@@ -210,66 +68,29 @@
 			<h2 id="directory-title">
 				{{ 'pages.work.directoryTitleLead' | translate }}
 				<br />
-				<em>
-					{{ 'pages.work.directoryTitleEmphasis' | translate }}
-				</em>
+				<em>{{ 'pages.work.directoryTitleEmphasis' | translate }}</em>
 				{{ 'pages.work.directoryTitleTail' | translate }}
 			</h2>
 			<p>{{ 'pages.work.directorySubtitle' | translate }}</p>
 		</div>
 		<div class="work-page__directory-grid">
-			<a
-				href="https://github.com/CartagoGit"
-				target="_blank"
-				rel="noreferrer">
-				<span>
-					{{ 'pages.work.directoryCodeLabel' | translate }}
-				</span>
-				<b>{{ 'pages.work.directoryCodeTitle' | translate }}</b>
-				<small>
-					{{ 'pages.work.directoryCodeDetail' | translate }}
-				</small>
-				<i>↗</i>
-			</a>
-			<a
-				href="https://hub.docker.com/u/cartagodocker"
-				target="_blank"
-				rel="noreferrer">
-				<span>
-					{{ 'pages.work.directoryShipLabel' | translate }}
-				</span>
-				<b>{{ 'pages.work.directoryShipTitle' | translate }}</b>
-				<small>
-					{{ 'pages.work.directoryShipDetail' | translate }}
-				</small>
-				<i>↗</i>
-			</a>
-			<a
-				href="https://deathblitz.netlify.app/"
-				target="_blank"
-				rel="noreferrer">
-				<span>
-					{{ 'pages.work.directoryDemoLabel' | translate }}
-				</span>
-				<b>{{ 'pages.work.directoryDemoTitle' | translate }}</b>
-				<small>
-					{{ 'pages.work.directoryDemoDetail' | translate }}
-				</small>
-				<i>↗</i>
-			</a>
-			<a
-				href="https://cartago-tetris.netlify.app/"
-				target="_blank"
-				rel="noreferrer">
-				<span>
-					{{ 'pages.work.directoryPlayLabel' | translate }}
-				</span>
-				<b>{{ 'pages.work.directoryPlayTitle' | translate }}</b>
-				<small>
-					{{ 'pages.work.directoryPlayDetail' | translate }}
-				</small>
-				<i>↗</i>
-			</a>
+			@for (link of platformLinks; track link.href) {
+				<a [href]="link.href" target="_blank" rel="noreferrer">
+					<div class="work-page__directory-icon" aria-hidden="true">
+						@if (link.imageSrc; as image) {
+							<img [src]="image" alt="" />
+						} @else if (link.iconPath; as iconPath) {
+							<svg viewBox="0 0 24 24">
+								<path [attr.d]="iconPath" [attr.fill]="link.color ?? 'currentColor'" />
+							</svg>
+						}
+					</div>
+					<span>{{ link.group === 'platform' ? ('pages.home.monitorPlatforms' | translate) : ('pages.home.monitorProjects' | translate) }}</span>
+					<b>{{ link.label }}</b>
+					<small>{{ link.detail }}</small>
+					<i aria-hidden="true">↗</i>
+				</a>
+			}
 		</div>
 	</section>
 </section>
