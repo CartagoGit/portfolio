@@ -15,6 +15,7 @@ shipped-in:
   - "00444f8"
   - "cdfa1f1"
   - "7ed8cab"
+  - "30c26ec"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -141,10 +142,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by cartago-independent-s8-reviewer-20261127 — verified at 7ed8cab, validate exit 0 and tests 48/48 claimed, no recorded run cited — Independent S8 review approved. Six real Docker Hub images have verified GitHub source links, truthful status, use case, stack and exact pull commands. Tokenized terminal/card UI adapts to themes, uses 12px minimum metadata, two/one-column responsive grids and reduced motion. Desktop/mobile audits and strict lint/typecheck, 21 files/48 tests and production+SSR build pass.
 
 ### S9 — Demos catalogue and mini-games
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/demos/**`
 - **Gate**: demo/game unit tests + keyboard/touch Playwright audit
 - **Acceptance**: interactive examples appear in tabs before project links; every external project gets its correct logo; memory text is never reversed; additional compact games/examples exist; all games support keyboard/touch, reduced motion and reset; controls and state transitions are visible and consistent; the page only composes catalog and tab UI, while each game, reusable state helper and shared style contract has a focused component/helper owner with isolated tests.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: explore-independent-s9-reviewer-20261123
+- review-log: approved by explore-independent-s9-reviewer-20261123 — verified at 30c26ec, validate exit 0 and tests 55/55 claimed, no recorded run cited
 
 ### S10 — Contact copy, portrait and delivery
 - **Status**: pending
