@@ -107,7 +107,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S6 — Approach page visual system and content
 - **Status**: pending
-- **Files**: `src/pages/approach/**`
+- **Files**: `src/pages/approach/approach.page.ts`, `src/pages/approach/approach.page.html`, `src/pages/approach/approach.page.scss`, `src/pages/approach/_approach-capability-system.scss`, `src/pages/approach/approach.page.spec.ts`
 - **Gate**: approach page unit tests + responsive Playwright audit
 - **Acceptance**: capability panels never visually jump or clip across selection; every capability has a coherent icon/example/proof; text is concise, relevant and attractive; transitions, focus and theme changes preserve layout and contrast.
 
