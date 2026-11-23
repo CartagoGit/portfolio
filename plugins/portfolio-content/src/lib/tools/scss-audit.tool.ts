@@ -1,130 +1,73 @@
 /**
- * `portfolio_scss_audit` tool. Reads a SCSS file (typically
- * `src/app/portfolio-page.scss`) and reports every top-level
- * selector with a suggested owning feature. Engine is pure
- * (`runScssAudit`) and binds the FS reader once at register time.
+ * `portfolio_scss_audit` tool. Reports which directories' templates use
+ * each class selector of a stylesheet.
  */
 
 import { z } from 'zod';
 
 import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { runScssAudit } from '../services/scss-audit.service';
-import type { IFileSystem } from '../contracts/interfaces/fs.interface';
-import type { ScssOwnership } from '../contracts/interfaces/scss-audit.interface';
+
+export const SCSS_AUDIT_TOOL_ID = 'portfolio_scss_audit';
 
 export interface IBuildScssAuditToolOptions {
-	readonly namespacePrefix: string;
+	readonly fs: IFileSystem;
 	readonly defaultSourcePath: string;
+	readonly templateRoots: readonly string[];
 }
 
-const OWNERSHIP = z.enum([
-	'shell',
-	'home',
-	'home/hero-monitor',
-	'home/earth-globe',
-	'home/home-intro',
-	'work',
-	'approach',
-	'knowledge',
-	'lab',
-	'docker',
-	'demos',
-	'contact',
-	'shared',
-	'shared/ui',
-	'unmapped',
-]) satisfies z.ZodType<ScssOwnership>;
-
-const ENTRY = z.object({
-	name: z.string(),
-	selector: z.string(),
-	line: z.number(),
-	ownership: OWNERSHIP,
-	target: z.string(),
-	rationale: z.string(),
-});
-
-const COUNTS = z.object({
-	shell: z.number(),
-	'home/hero-monitor': z.number(),
-	'home/earth-globe': z.number(),
-	'home/home-intro': z.number(),
-	work: z.number(),
-	approach: z.number(),
-	knowledge: z.number(),
-	lab: z.number(),
-	docker: z.number(),
-	demos: z.number(),
-	contact: z.number(),
-	shared: z.number(),
-	'shared/ui': z.number(),
-	unmapped: z.number(),
-});
-
 const OUTPUT = z.object({
-	ok: z.literal(true),
+	ok: z.boolean(),
 	sourcePath: z.string(),
 	totalSelectors: z.number(),
-	ownershipCounts: COUNTS,
-	entries: z.array(ENTRY),
-	unmapped: z.array(ENTRY),
+	counts: z.object({ unused: z.number(), single: z.number(), shared: z.number() }),
+	entries: z.array(
+		z.object({
+			selector: z.string(),
+			className: z.string(),
+			line: z.number(),
+			owners: z.array(z.string()),
+			status: z.enum(['unused', 'single', 'shared']),
+		}),
+	),
 	nextAction: z.string(),
+	error: z.string().optional(),
 });
 
 export const buildScssAuditTool = (
 	options: IBuildScssAuditToolOptions,
 ): IToolRegistration => ({
-	id: 'portfolio_scss_audit',
-	summary:
-		'Audit a SCSS file and report every top-level selector with a suggested owning feature.',
-	tags: ['portfolio', 'scss', 'migration'],
+	id: SCSS_AUDIT_TOOL_ID,
+	summary: 'Report which directories use each class selector of a stylesheet.',
+	tags: ['portfolio', 'scss'],
 	register: async (server) => {
-		// Lazy import so the engine stays free of `fs` outside the
-		// register-time closure; tests inject their own IFileSystem.
-		const loader = await import('node:fs/promises');
-		const fs: IFileSystem = {
-			readDir: async (workspaceRelative: string) => {
-				const entries = await loader.readdir(workspaceRelative, {
-					withFileTypes: true,
-				});
-				return entries.map((entry) => entry.name);
-			},
-			exists: async (workspaceRelative: string) => {
-				try {
-					await loader.access(workspaceRelative);
-					return true;
-				} catch {
-					return false;
-				}
-			},
-			isDirectory: async (workspaceRelative: string) => {
-				try {
-					const stat = await loader.stat(workspaceRelative);
-					return stat.isDirectory();
-				} catch {
-					return false;
-				}
-			},
-			readText: async (workspaceRelative: string) =>
-				loader.readFile(workspaceRelative, 'utf8'),
-		};
-
 		server.registerTool(
-			`${options.namespacePrefix}_scss_audit`,
+			SCSS_AUDIT_TOOL_ID,
 			{
 				description:
-					'Read a SCSS file and report every top-level selector with a suggested owning feature (e.g. `.case-card` → `work`, `.orb` → `home/hero-monitor`). Useful for migrating legacy shell SCSS into features. Pure read; no network, no writes.',
-				inputSchema: z.object({
-					sourcePath: z.string().optional(),
-				}),
+					'Read a SCSS file and report, for each class selector, the directories whose templates use it (unused, single owner or shared). Ownership comes from the templates on disk at call time. Pure read.',
+				inputSchema: z.object({ sourcePath: z.string().optional() }),
 				outputSchema: OUTPUT,
 			},
 			async (args: { sourcePath?: string }) => {
-				const report = await runScssAudit({
-					sourcePath: args.sourcePath ?? options.defaultSourcePath,
-					fs,
-				});
+				const sourcePath = args.sourcePath ?? options.defaultSourcePath;
+				if (!(await options.fs.exists(sourcePath))) {
+					return toolJson({
+						ok: false,
+						sourcePath,
+						totalSelectors: 0,
+						counts: { unused: 0, single: 0, shared: 0 },
+						entries: [],
+						nextAction: 'Pass an existing `sourcePath`.',
+						error: `File not found: ${sourcePath}`,
+					});
+				}
+				const report = await runScssAudit(
+					{ fs: options.fs },
+					{ sourcePath, templateRoots: options.templateRoots },
+				);
 				return toolJson({ ok: true, ...report });
 			},
 		);

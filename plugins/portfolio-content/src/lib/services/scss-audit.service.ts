@@ -1,354 +1,100 @@
 /**
- * SCSS introspection engine. Reads a SCSS file (typical caller:
- * `src/app/portfolio-page.scss`) and emits a structured report of
- * every top-level selector it defines, plus a suggested owning
- * feature and target file. Pure-static: regex over the source, no
- * Sass compiler.
- *
- * The ownership map is a deliberately terse convention (see
- * `OWNERSHIP_MAP` below). Anything that doesn't match is flagged as
- * `unmapped` so the agent can decide. The mapping is intentionally
- * read-only here — a second pass that *moves* the selectors is the
- * author's job, not the engine's.
+ * SCSS ownership audit. Lists every class selector of a stylesheet and
+ * reports which directories' templates (html files and inline
+ * `template:` strings) use that class. Ownership is read from the
+ * templates found at call time; no selector-to-page table exists.
  */
 
 import type {
-	IBuildScssAuditOptions,
+	IRunScssAuditRequest,
+	IScssAuditEntry,
 	IScssAuditReport,
-	IScssSelectorEntry,
-	ScssOwnership,
-} from '../contracts/interfaces/scss-audit.interface';
+} from '../../contracts/interfaces/scss-audit.interface';
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
+import { walkFiles } from './fs.service';
 
-interface IOwnershipPattern {
-	readonly ownership: ScssOwnership;
-	readonly target: string;
-	readonly rationale: string;
-	/** The selector substring to match against. */
-	readonly match: (selector: string) => boolean;
-}
+const CLASS_SELECTOR_RE = /\.(-?[_a-zA-Z][\w-]*)/g;
+const CLASS_ATTR_RE = /\bclass(?:Name)?\s*=\s*["']([^"']+)["']/g;
+const NG_CLASS_RE = /\[class\.([\w-]+)\]/g;
 
-const startsWith = (prefix: string) => (selector: string): boolean =>
-	selector.startsWith(prefix);
+const dirname = (path: string): string => path.slice(0, path.lastIndexOf('/'));
 
-const equals = (name: string) => (selector: string): boolean => selector === name;
-
-const OWNERSHIP_MAP: readonly IOwnershipPattern[] = [
-	// shell-level (`:root`, `.portfolio`, `.route-stage`, etc.) → `shell`.
-	{
-		ownership: 'shell',
-		target: 'src/app/portfolio-page.scss',
-		rationale: 'Shell-level container owned by the route shell.',
-		match: (selector) =>
-			equals('portfolio')(selector) ||
-			equals('route-stage')(selector) ||
-			equals('skip-link')(selector) ||
-			equals('hero')(selector) ||
-			equals('section')(selector) ||
-			equals('section-heading')(selector),
-	},
-	// home/hero-monitor — `.orb*`, `.interface-shell*`, `.canvas-*`, `.layer-list`,
-	// `.monitor-*`, `.hero-banner`, etc.
-	{
-		ownership: 'home/hero-monitor',
-		target: 'src/features/home/hero-monitor/hero-monitor.component.scss',
-		rationale: 'Hero monitor visual layer (interface shell, canvas, layers).',
-		match: (selector) =>
-			startsWith('orb')(selector) ||
-			startsWith('interface-')(selector) ||
-			startsWith('canvas-')(selector) ||
-			startsWith('layer-list')(selector) ||
-			startsWith('monitor-')(selector) ||
-			equals('hero-banner')(selector) ||
-			equals('hero-composition')(selector),
-	},
-	// home/earth-globe
-	{
-		ownership: 'home/earth-globe',
-		target: 'src/features/home/earth-globe/earth-globe.component.scss',
-		rationale: 'Earth globe visual layer.',
-		match: (selector) =>
-			startsWith('earth')(selector) ||
-			startsWith('globe')(selector),
-	},
-	// home/home-intro — `.home-intro__*`, `.home-directory`, `.explore-banner`,
-	// `.proof-strip`, `.directory-grid`.
-	{
-		ownership: 'home/home-intro',
-		target: 'src/features/home/home-intro/home-intro.component.scss',
-		rationale: 'Home intro / directory / proof strip.',
-		match: (selector) =>
-			startsWith('home-intro')(selector) ||
-			startsWith('home-directory')(selector) ||
-			startsWith('explore-banner')(selector) ||
-			startsWith('directory-grid')(selector) ||
-			startsWith('proof-strip')(selector) ||
-			startsWith('hero-note')(selector),
-	},
-	// work — `.case-*`, `.work-page*`.
-	{
-		ownership: 'work',
-		target: 'src/features/work/work-page.component.scss',
-		rationale: 'Work page case grid.',
-		match: (selector) =>
-			startsWith('case-')(selector) ||
-			startsWith('work-page')(selector),
-	},
-	// approach — `.approach*`.
-	{
-		ownership: 'approach',
-		target: 'src/features/approach/approach-page.component.scss',
-		rationale: 'Approach page.',
-		match: (selector) => startsWith('approach')(selector),
-	},
-	// knowledge — `.knowledge*`, `.capability-*`, `.layer-card`.
-	{
-		ownership: 'knowledge',
-		target: 'src/features/knowledge/knowledge-page.component.scss',
-		rationale: 'Knowledge page grid + capability cards.',
-		match: (selector) =>
-			startsWith('knowledge')(selector) ||
-			startsWith('capability')(selector),
-	},
-	// lab — `.lab-page*`, `.lab-card`, `.playground*`.
-	{
-		ownership: 'lab',
-		target: 'src/features/lab/lab-page.component.scss',
-		rationale: 'Lab playground.',
-		match: (selector) =>
-			startsWith('lab-')(selector) ||
-			startsWith('playground')(selector),
-	},
-	// docker — `.docker*`.
-	{
-		ownership: 'docker',
-		target: 'src/features/docker/docker-page.component.scss',
-		rationale: 'Docker showcase.',
-		match: (selector) => startsWith('docker')(selector),
-	},
-	// demos — `.demos*`.
-	{
-		ownership: 'demos',
-		target: 'src/features/demos/demos-page.component.scss',
-		rationale: 'Demos gallery.',
-		match: (selector) => startsWith('demos')(selector),
-	},
-	// contact — `.contact-page*`.
-	{
-		ownership: 'contact',
-		target: 'src/features/contact/contact-page.component.scss',
-		rationale: 'Contact page.',
-		match: (selector) => startsWith('contact')(selector),
-	},
-	// shared/ui — `.portfolio-header`, `.portfolio-footer`, `.command-palette`,
-	// `.site-footer`, `.footer-links` (the actual current names; the
-	// refactor renamed `portfolio-footer` → `footer`).
-	{
-		ownership: 'shared/ui',
-		target: 'src/shared/ui/<component>/<component>.component.scss',
-		rationale: 'Reusable UI primitives owned by the shared layer.',
-		match: (selector) =>
-			startsWith('header')(selector) ||
-			startsWith('footer')(selector) ||
-			startsWith('command-palette')(selector),
-	},
-	// Shell-level page containers that the live codebase still uses
-	// (`operational`, `demo-links`, …). These stay in the shell
-	// because they describe the public page composition, not any
-	// single feature.
-	{
-		ownership: 'shell',
-		target: 'src/app/page.scss',
-		rationale:
-			'Shell-level page container (composition root, not feature-specific).',
-		match: (selector) =>
-			equals('operational')(selector) ||
-			equals('demo-links')(selector) ||
-			equals('capabilities')(selector) ||
-			equals('telemetry-dashboard')(selector) ||
-			equals('telemetry-summary')(selector) ||
-			equals('telemetry-chart')(selector) ||
-			equals('form-feedback')(selector) ||
-			equals('operational-copy')(selector) ||
-			equals('site-footer')(selector) ||
-			equals('footer-links')(selector),
-	},
-	// Hero monitor overrides / responsive tweaks that live in the
-	// shell composition partial because they need cascade access.
-	{
-		ownership: 'home/hero-monitor',
-		target: 'src/features/home/hero-monitor/hero-monitor.component.scss',
-		rationale: 'Hero monitor override / responsive tweak.',
-		match: (selector) =>
-			equals('hero-chart-switcher')(selector) ||
-			equals('technology-caption')(selector) ||
-			equals('dashboard-caption')(selector),
-	},
-	// Case-grid visuals that the refactor moved into the work feature
-	// (`.mcp-visual`, `.zoneless-visual`, `.cal-screen`, etc.) — BEM
-	// roots that live in the work case cards.
-	{
-		ownership: 'work',
-		target: 'src/features/work/work-page.component.scss',
-		rationale: 'Work case-card visual (project showcase).',
-		match: (selector) =>
-			equals('mcp-visual')(selector) ||
-			equals('zoneless-visual')(selector) ||
-			equals('cal-screen')(selector) ||
-			equals('signal-path')(selector) ||
-			equals('keyer-visual')(selector) ||
-			equals('nestgpt-visual')(selector) ||
-			equals('printcv-visual')(selector) ||
-			equals('primary-work')(selector) ||
-			equals('secondary-work')(selector) ||
-			equals('work-card')(selector),
-	},
-	// Knowledge / capability card primitives.
-	{
-		ownership: 'knowledge',
-		target: 'src/features/knowledge/knowledge-page.component.scss',
-		rationale: 'Knowledge / capability card.',
-		match: (selector) =>
-			equals('tool-pills')(selector) ||
-			equals('pulse')(selector) ||
-			equals('track-card')(selector) ||
-			equals('lab-card')(selector) ||
-			equals('layer-card')(selector) ||
-			equals('capability-grid')(selector) ||
-			equals('capability-row')(selector) ||
-			equals('capability-detail')(selector) ||
-			equals('capability-meter')(selector),
-	},
-];
-
-const classify = (selector: string, known: Map<string, ScssOwnership>): IOwnershipPattern => {
-	for (const pattern of OWNERSHIP_MAP) {
-		if (pattern.match(selector)) return pattern;
-	}
-	// Family inheritance: walk the selector from left to right and
-	// adopt the first parent name that already has an owner. This is
-	// how `.orb-one` → `home/hero-monitor` (parent: `.orb`), or
-	// `.case-card-overlay` → `work` (parent: `.case-card`).
-	for (const segment of selector.split(/[-_]/)) {
-		const owner = known.get(segment);
-		if (owner) {
-			return {
-				ownership: owner,
-				target: targetForOwnership(owner),
-				rationale: `Inherited from family root "${segment}".`,
-				match: () => false,
-			};
+const collectTemplateClasses = (source: string): ReadonlySet<string> => {
+	const classes = new Set<string>();
+	for (const match of source.matchAll(CLASS_ATTR_RE)) {
+		for (const token of (match[1] ?? '').split(/\s+/)) {
+			if (/^[\w-]+$/.test(token)) classes.add(token);
 		}
 	}
-	return {
-		ownership: 'unmapped',
-		target: 'src/app/portfolio-page.scss',
-		rationale:
-			'No ownership pattern matched; resolve manually before migration.',
-		match: () => false,
-	};
+	for (const match of source.matchAll(NG_CLASS_RE)) classes.add(match[1] ?? '');
+	return classes;
 };
 
-const targetForOwnership = (ownership: ScssOwnership): string => {
-	for (const pattern of OWNERSHIP_MAP) {
-		if (pattern.ownership === ownership) return pattern.target;
-	}
-	return 'src/app/portfolio-page.scss';
+const stripComments = (scss: string): string =>
+	scss.replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, ' '));
+
+const nextActionFor = (counts: IScssAuditReport['counts']): string => {
+	if (counts.unused > 0)
+		return 'Review the unused selectors: no template references them, so they are dead or dynamically applied.';
+	if (counts.shared > 0)
+		return 'Shared selectors are used by several directories; keep them in a shared stylesheet.';
+	return 'Every selector has a single owning directory.';
 };
 
-// A "primary" selector is a single class name followed by EITHER a
-// `{` (declaration block) OR a `,` (selector list). We deliberately
-// skip nested combinators (` `, `>`, `+`, `~`, `:`, `.`) so a
-// pseudo-class like `.hero::before` doesn't pollute the migration
-// list — `.hero` is the one to migrate, `.hero::before` follows.
-const SELECTOR_RE = /^(\.[A-Za-z][A-Za-z0-9_-]*)\s*(?:\{|,)/gm;
-
-const lineOf = (source: string, index: number): number => {
-	let line = 1;
-	for (let i = 0; i < index; i += 1) {
-		if (source.charCodeAt(i) === 10) line += 1;
-	}
-	return line;
-};
+export interface IScssAuditDeps {
+	readonly fs: IFileSystem;
+}
 
 export const runScssAudit = async (
-	options: IBuildScssAuditOptions,
+	deps: IScssAuditDeps,
+	request: IRunScssAuditRequest,
 ): Promise<IScssAuditReport> => {
-	const { sourcePath, fs } = options;
-	if (!(await fs.exists(sourcePath))) {
-		return {
-			sourcePath,
-			totalSelectors: 0,
-			ownershipCounts: emptyCounts(),
-			entries: [],
-			unmapped: [],
-			nextAction: `Source file not found: ${sourcePath}`,
-		};
+	const { fs } = deps;
+	const owners = new Map<string, Set<string>>();
+	for (const root of request.templateRoots) {
+		for (const file of await walkFiles(fs, root)) {
+			if (!file.endsWith('.html') && !file.endsWith('.component.ts') && !file.endsWith('.page.ts'))
+				continue;
+			for (const className of collectTemplateClasses(await fs.readText(file))) {
+				const set = owners.get(className) ?? new Set<string>();
+				set.add(dirname(file));
+				owners.set(className, set);
+			}
+		}
 	}
 
-	const source = await fs.readText(sourcePath);
-	const entries: IScssSelectorEntry[] = [];
+	const lines = stripComments(await fs.readText(request.sourcePath)).split('\n');
+	const entries: IScssAuditEntry[] = [];
 	const seen = new Set<string>();
-	// Forward declaration: a `.orb-one` wants to inherit from `.orb`,
-	// so we walk the source top-to-bottom and classify selectors in
-	// the order they appear. `known` accumulates the inferred owners
-	// as we go.
-	const known = new Map<string, ScssOwnership>();
+	lines.forEach((line, index) => {
+		// Only selector lines (before a `{`), not property values like `0.5rem`.
+		const head = line.split('{')[0] ?? '';
+		if (!line.includes('{') || /:\s*[^;{]+;/.test(head)) return;
+		for (const match of head.matchAll(CLASS_SELECTOR_RE)) {
+			const className = match[1] ?? '';
+			if (seen.has(className)) continue;
+			seen.add(className);
+			const found = [...(owners.get(className) ?? [])].sort((a, b) => a.localeCompare(b));
+			entries.push({
+				selector: `.${className}`,
+				className,
+				line: index + 1,
+				owners: found,
+				status: found.length === 0 ? 'unused' : found.length === 1 ? 'single' : 'shared',
+			});
+		}
+	});
 
-	for (const match of source.matchAll(SELECTOR_RE)) {
-		const selector = match[1];
-		if (!selector) continue;
-		const name = selector.slice(1); // drop the leading `.`
-		if (seen.has(name)) continue;
-		seen.add(name);
-		const pattern = classify(name, known);
-		entries.push({
-			name,
-			selector,
-			line: lineOf(source, match.index ?? 0),
-			ownership: pattern.ownership,
-			target: pattern.target,
-			rationale: pattern.rationale,
-		});
-		known.set(name, pattern.ownership);
-	}
-
-	entries.sort((a, b) => a.line - b.line);
-
-	const counts = emptyCounts();
-	for (const entry of entries) {
-		counts[entry.ownership] += 1;
-	}
-
-	const unmapped = entries.filter((entry) => entry.ownership === 'unmapped');
-
-	const nextAction = unmapped.length > 0
-		? `Resolve the ${unmapped.length} unmapped selector(s) before slicing the migration.`
-		: 'Every selector has an owner — ready to slice by ownership.';
-
+	const counts = {
+		unused: entries.filter((entry) => entry.status === 'unused').length,
+		single: entries.filter((entry) => entry.status === 'single').length,
+		shared: entries.filter((entry) => entry.status === 'shared').length,
+	};
 	return {
-		sourcePath,
+		sourcePath: request.sourcePath,
 		totalSelectors: entries.length,
-		ownershipCounts: counts,
+		counts,
 		entries,
-		unmapped,
-		nextAction,
+		nextAction: nextActionFor(counts),
 	};
 };
-
-const emptyCounts = (): Record<ScssOwnership, number> => ({
-	shell: 0,
-	home: 0,
-	'home/hero-monitor': 0,
-	'home/earth-globe': 0,
-	'home/home-intro': 0,
-	work: 0,
-	approach: 0,
-	knowledge: 0,
-	lab: 0,
-	docker: 0,
-	demos: 0,
-	contact: 0,
-	shared: 0,
-	'shared/ui': 0,
-	unmapped: 0,
-});

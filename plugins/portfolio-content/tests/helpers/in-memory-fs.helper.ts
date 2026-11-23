@@ -4,7 +4,7 @@
  * without touching the disk.
  */
 
-import type { IFileSystem } from '../../src/lib/contracts/interfaces/fs.interface';
+import type { IFileSystem } from '../../src/contracts/interfaces/fs.interface';
 
 export interface IInMemoryFileSystemInit {
 	/** Workspace-relative directory → list of names (files or sub-dirs). */

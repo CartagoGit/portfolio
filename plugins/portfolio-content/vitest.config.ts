@@ -1,15 +1,24 @@
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
 
 /**
- * Plugin-local vitest config. The host workspace already loads vitest
- * 4 + jsdom via `package.json#devDependencies`; this config scopes
- * the runner to this plugin's `tests/` folder.
+ * `@delendai/core/public` resolves through the gitignored runtime link
+ * (`bun tools/delendai-runtime.script.ts`), so no machine path is committed.
  */
+const corePublic = fileURLToPath(
+	new URL(
+		'../../.cache/delendai-runtime/packages/core/src/public/index.ts',
+		import.meta.url,
+	),
+);
+
 export default defineConfig({
+	resolve: { alias: { '@delendai/core/public': corePublic } },
 	test: {
 		name: 'portfolio-content',
-		include: ['tests/**/*.spec.ts'],
-		exclude: ['**/node_modules/**', '**/.dist/**', '**/dist/**'],
+		include: ['src/**/*.spec.ts', 'tests/**/*.spec.ts'],
+		exclude: ['**/node_modules/**', '**/dist/**'],
 		environment: 'node',
 		globals: false,
 	},

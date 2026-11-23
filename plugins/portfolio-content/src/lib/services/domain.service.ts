@@ -1,6 +1,6 @@
 /**
- * Domain contract introspection engine. Reads
- * `src/domain/portfolio.types.interface.ts` and pulls out the exported unions
+ * Domain contract introspection engine. Reads every non-spec `.ts` file
+ * under the domain root and pulls out the exported unions
  * (`type X = 'a' | 'b' | ...`), interfaces, type aliases, and
  * const exports. Pure-static: line-by-line regex over the source
  * text — no TypeScript compiler API. Adequate for the size of this
@@ -19,8 +19,9 @@ import type {
 	IPortfolioDomainContract,
 	IPortfolioDomainMap,
 	PortfolioDomainKind,
-} from '../contracts/interfaces/domain.interface';
-import type { IFileSystem } from '../contracts/interfaces/fs.interface';
+} from '../../contracts/interfaces/domain.interface';
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
+import { walkFiles } from './fs.service';
 
 const HEAD_RE = /^export\s+(?:type|interface|const)\s+\w+/;
 
@@ -119,21 +120,25 @@ export const parseDomainSource = (
 	return contracts;
 };
 
+export interface IBuildDomainMapOptions {
+	readonly fs: IFileSystem;
+	readonly domainRoot: string;
+}
+
 export const buildDomainMap = async (
-	fs: IFileSystem,
+	options: IBuildDomainMapOptions,
 	request: IBuildDomainMapRequest = {},
 ): Promise<IPortfolioDomainMap> => {
-	const sourcePath = 'src/domain/portfolio.types.interface.ts';
-	if (!(await fs.exists(sourcePath))) {
-		return { contracts: [], generatedAt: new Date().toISOString() };
+	const { fs, domainRoot } = options;
+	const files = (await walkFiles(fs, domainRoot)).filter(
+		(file) => file.endsWith('.ts') && !file.endsWith('.spec.ts') && !file.endsWith('.d.ts'),
+	);
+	const contracts: IPortfolioDomainContract[] = [];
+	for (const file of files) {
+		const parsed = parseDomainSource(await fs.readText(file), file);
+		contracts.push(
+			...(request.kind ? parsed.filter((c) => c.kind === request.kind) : parsed),
+		);
 	}
-	const source = await fs.readText(sourcePath);
-	const parsed = parseDomainSource(source, sourcePath);
-	const filtered = request.kind
-		? parsed.filter((contract) => contract.kind === request.kind)
-		: parsed;
-	return {
-		contracts: filtered,
-		generatedAt: new Date().toISOString(),
-	};
+	return { domainRoot, contracts, generatedAt: new Date().toISOString() };
 };
