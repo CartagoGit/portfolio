@@ -1,0 +1,34 @@
+<section class="demos-page" aria-labelledby="demos-title">
+	<div class="demos-page__heading">
+		<p>{{ 'pages.demos.eyebrow' | translate }}</p>
+		<h2 id="demos-title">
+			{{ 'pages.demos.titleLead' | translate }}
+			<br />
+			<em>{{ 'pages.demos.titleEmphasis' | translate }}</em>
+			{{ 'pages.demos.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.demos.subtitle' | translate }}</p>
+	</div>
+
+	<app-demo-games />
+
+	<section
+		class="demos-page__links"
+		[attr.aria-label]="'pages.demos.externalLinksAria' | translate">
+		@for (demo of demos; track demo.title) {
+			<a [href]="demo.url" target="_blank" rel="noreferrer">
+				<div class="demos-page__link-logo" aria-hidden="true">
+					@if (demo.imageSrc; as image) {
+						<img [src]="image" alt="" />
+					} @else if (demo.iconPath; as iconPath) {
+						<svg viewBox="0 0 24 24"><path [attr.d]="iconPath" fill="currentColor" /></svg>
+					}
+				</div>
+				<span>{{ demo.number }}</span>
+				<b>{{ demo.title }}</b>
+				<p>{{ demo.summaryKey | translate }}</p>
+				<i>{{ 'pages.demos.openDemo' | translate }}</i>
+			</a>
+		}
+	</section>
+</section>

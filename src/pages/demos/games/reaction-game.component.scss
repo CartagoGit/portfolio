@@ -1,0 +1,57 @@
+@use 'tokens/index' as tokens;
+@use '../demos-interaction-system' as interaction;
+
+:host {
+	@include interaction.component-host;
+}
+
+.reaction-game {
+	@include interaction.game-layout;
+}
+
+.reaction-game__copy {
+	@include interaction.game-copy;
+}
+
+.reaction-game__surface {
+	width: 100%;
+	min-height: 240px;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 18px;
+	background: var(--surface-2);
+	color: var(--ink);
+	font: 800 clamp(1.7rem, 4.5vw, 3.8rem)/1.1 tokens.$font-body;
+	transition:
+		background 0.18s ease,
+		color 0.18s ease,
+		transform 0.18s ease;
+}
+
+.reaction-game__surface[data-phase='ready'] {
+	border-color: var(--lime);
+	background: color-mix(in srgb, var(--lime) 72%, var(--surface));
+	color: var(--canvas);
+	transform: scale(1.015);
+}
+
+.reaction-game__surface[data-phase='early'] {
+	border-color: #ff7a59;
+	background: color-mix(in srgb, #ff7a59 12%, var(--surface));
+	color: #ff7a59;
+}
+
+@media (max-width: 760px) {
+	.reaction-game {
+		@include interaction.game-layout-mobile;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reaction-game__surface {
+		transition-duration: 0.01ms;
+	}
+
+	.reaction-game__surface[data-phase='ready'] {
+		transform: none;
+	}
+}

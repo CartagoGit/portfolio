@@ -1,0 +1,93 @@
+@use 'tokens/index' as tokens;
+@use '../demos-interaction-system' as interaction;
+
+:host {
+	@include interaction.component-host;
+}
+
+.demo-games {
+	margin-top: clamp(2.5rem, 5vw, 4rem);
+	overflow: hidden;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 18px;
+	background: var(--surface);
+	box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+}
+
+.demo-games__tabs {
+	display: flex;
+	gap: 0.4rem;
+	padding: 0.65rem;
+	overflow-x: auto;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
+	scrollbar-width: thin;
+	border-bottom: var(--border-thin) solid var(--line);
+	background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+}
+
+.demo-games__tabs button {
+	flex: 1 0 max-content;
+	min-width: 96px;
+	min-height: 44px;
+	padding: 0.65rem 0.8rem;
+	border: var(--border-thin) solid transparent;
+	border-radius: 9px;
+	background: transparent;
+	color: var(--muted);
+	font: 700 0.75rem/1.2 tokens.$font-mono, monospace;
+}
+
+.demo-games__tabs button:hover,
+.demo-games__tabs button:focus-visible,
+.demo-games__tabs button.is-active {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 10%, transparent);
+	color: var(--ink);
+}
+
+.demo-games__stage {
+	min-height: 400px;
+	padding: clamp(1.25rem, 4vw, 3rem);
+	animation: demo-stage-in-a 0.42s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.demo-games__stage.is-alternate {
+	animation-name: demo-stage-in-b;
+}
+
+@keyframes demo-stage-in-a {
+	from {
+		opacity: 0;
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 30px)) scale(.985);
+		filter: blur(4px);
+	}
+	to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+@keyframes demo-stage-in-b {
+	from {
+		opacity: 0;
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 30px)) scale(.985);
+		filter: blur(4px);
+	}
+	to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+@media (max-width: 760px) {
+	.demo-games__stage {
+		min-height: 0;
+		padding: 1.1rem;
+	}
+
+	.demo-games__tabs button {
+		padding-inline: 0.4rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.demo-games__stage,
+	.demo-games__stage.is-alternate {
+		animation: none;
+	}
+}

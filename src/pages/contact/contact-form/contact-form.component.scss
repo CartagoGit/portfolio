@@ -1,0 +1,135 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+	min-width: 0;
+}
+
+.contact-form {
+	display: grid;
+	gap: 0.8rem;
+	max-width: 560px;
+}
+
+.contact-form label {
+	display: grid;
+	gap: 0.45rem;
+	color: var(--muted);
+	font: 700 0.75rem/1.4 tokens.$font-mono, monospace;
+}
+
+.contact-form input,
+.contact-form textarea {
+	width: 100%;
+	padding: 0.78rem;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 8px;
+	background: var(--surface-2);
+	color: var(--ink);
+	font: 400 0.875rem/1.5 tokens.$font-body;
+	outline: 0;
+}
+
+.contact-form textarea {
+	resize: none;
+	height: 116px;
+	min-height: 116px;
+	max-height: 116px;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+	border-color: var(--cyan);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 18%, transparent);
+}
+
+.contact-form input[aria-invalid='true'],
+.contact-form textarea[aria-invalid='true'] {
+	border-color: var(--coral, #ff7a59);
+}
+
+.contact-form__error {
+	margin-top: -0.45rem;
+	color: var(--coral, #ff7a59);
+	font-size: 0.75rem;
+	line-height: 1.4;
+}
+
+.contact-form button,
+.contact-form__feedback a {
+	min-height: 44px;
+	padding: 0.65rem 0.85rem;
+	border: var(--border-thin) solid var(--cyan);
+	border-radius: 9px;
+	background: var(--cyan);
+	color: var(--canvas);
+	font: 800 0.75rem/1.2 tokens.$font-mono, monospace;
+	text-decoration: none;
+}
+
+.contact-form button {
+	justify-self: start;
+}
+
+.contact-form button:disabled {
+	opacity: 0.58;
+	cursor: wait;
+}
+
+.contact-form__feedback {
+	margin: 0;
+	font-size: 0.78rem;
+	line-height: 1.55;
+}
+
+.contact-form__feedback.is-success {
+	color: var(--lime);
+}
+
+.contact-form__feedback.is-error {
+	display: grid;
+	gap: 0.65rem;
+	padding: 0.85rem;
+	border: 1px solid color-mix(in srgb, var(--coral, #ff7a59) 55%, var(--line));
+	border-radius: 10px;
+	background: color-mix(in srgb, var(--coral, #ff7a59) 8%, var(--surface-2));
+	color: var(--ink);
+}
+
+.contact-form__feedback p {
+	margin: 0;
+}
+
+.contact-form__feedback a {
+	justify-self: start;
+	display: inline-flex;
+	align-items: center;
+}
+
+.contact-form__honeypot {
+	position: absolute;
+	left: -10000px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.contact-form * {
+		scroll-behavior: auto;
+	}
+}
+
+@media (min-width: 761px) {
+	.contact-form {
+		gap: .68rem;
+	}
+
+	.contact-form textarea {
+		height: 82px;
+		min-height: 82px;
+		max-height: 82px;
+	}
+}

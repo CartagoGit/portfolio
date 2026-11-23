@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" role="img" aria-label="English: United Kingdom and United States">
+  <defs><clipPath id="left"><path d="M0 0h36v48H0z"/></clipPath><clipPath id="right"><path d="M36 0h36v48H36z"/></clipPath></defs>
+  <g clip-path="url(#left)"><rect width="72" height="48" fill="#fff"/><path d="M0 0h72v5H0zm0 10h72v5H0zm0 10h72v5H0zm0 10h72v5H0z" fill="#b22234"/><rect width="27" height="26" fill="#163b70"/><g fill="#fff"><circle cx="5" cy="5" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="19" cy="5" r="1"/><circle cx="5" cy="11" r="1"/><circle cx="12" cy="11" r="1"/><circle cx="19" cy="11" r="1"/><circle cx="5" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><circle cx="19" cy="17" r="1"/></g></g>
+  <g clip-path="url(#right)"><rect x="36" width="36" height="48" fill="#123b70"/><path d="M36 0l36 48M72 0L36 48" stroke="#fff" stroke-width="9"/><path d="M36 0l36 48M72 0L36 48" stroke="#c7213b" stroke-width="4"/><path d="M54 0v48M36 24h36" stroke="#fff" stroke-width="12"/><path d="M54 0v48M36 24h36" stroke="#c7213b" stroke-width="6"/></g>
+  <path d="M36 1v46" stroke="#fff" stroke-opacity=".72"/>
+</svg>

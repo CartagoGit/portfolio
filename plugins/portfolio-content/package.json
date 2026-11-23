@@ -1,0 +1,36 @@
+{
+	"name": "@portfolio/delendai-portfolio-content",
+	"version": "0.3.0",
+	"type": "module",
+	"private": true,
+	"description": "Local delendai plugin for the public portfolio. Provides architectural introspection (layers, features, domain contracts) and a public-content audit. Read-only.",
+	"main": "./src/plugin.entrypoint.ts",
+	"module": "./src/plugin.entrypoint.ts",
+	"types": "./src/plugin.entrypoint.ts",
+	"exports": {
+		".": {
+			"types": "./src/plugin.entrypoint.ts",
+			"import": "./src/plugin.entrypoint.ts"
+		},
+		"./public": {
+			"types": "./src/public/index.barrel.ts",
+			"import": "./src/public/index.barrel.ts"
+		}
+	},
+	"files": [
+		"src",
+		"README.md",
+		"tsconfig.json",
+		"vitest.config.ts"
+	],
+	"scripts": {
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"test": "vitest run"
+	},
+	"peerDependencies": {
+		"@delendai/core": "*"
+	},
+	"dependencies": {
+		"zod": "^4.4.3"
+	}
+}

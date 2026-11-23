@@ -1,0 +1,82 @@
+<main class="portfolio">
+	<a
+		class="skip-link"
+		href="#main-content">
+		{{ 'chrome.skipToContent' | translate }}
+	</a>
+
+	<app-shell-header
+		[locale]="shell.locale()"
+		[page]="shell.page()"
+		[languages]="shell.languages()"
+		[menuOpen]="shell.menuOpen()"
+		[localeMenuOpen]="shell.localeMenuOpen()"
+		[localeMenuClosing]="shell.localeMenuClosing()"
+		[theme]="shell.theme()"
+		[themes]="shell.themes()"
+		[themeMenuOpen]="shell.themeMenuOpen()"
+		[themeMenuClosing]="shell.themeMenuClosing()"
+		(navigate)="shell.setTransition($event)"
+		(menuToggle)="shell.toggleMenu()"
+		(localeToggle)="shell.toggleLocaleMenu()"
+		(localeSelect)="shell.selectLocale($event)"
+		(themeToggle)="shell.toggleThemeMenu()"
+		(themeSelect)="shell.setTheme($event)" />
+	<div class="route-stage" id="main-content">
+		@if (shell.page() === 'home') {
+			<section
+				class="hero"
+				aria-labelledby="hero-title">
+				<app-home-intro
+					[locale]="shell.locale()"
+					[technologies]="shell.technologyMarquee"
+					[links]="shell.publicLinks"
+					(preview)="setMonitorPreview($event)"
+					(navigate)="shell.setTransition($event)" />
+				<app-hero-monitor
+					[locale]="shell.locale()"
+					[technologies]="shell.technologyMarquee"
+					[preview]="monitorPreview()" />
+			</section>
+		}
+
+		@if (shell.page() === 'work') {
+			<app-work-page />
+		}
+
+		@if (shell.page() === 'approach') {
+			<app-approach-page />
+		}
+
+		@if (shell.page() === 'knowledge') {
+			<app-knowledge-page />
+		}
+
+		@if (shell.page() === 'docker') {
+			<app-docker-page />
+		}
+
+		@if (shell.page() === 'demos') {
+			<app-demos-page />
+		}
+
+		@if (shell.page() === 'lab') {
+			<app-lab-page (commandRequested)="shell.commandOpen.set(true)" />
+		}
+
+		@if (shell.page() === 'contact') {
+			<app-contact-page />
+		}
+	</div>
+
+	<app-shell-footer
+		[locale]="shell.locale()"
+		[links]="shell.platformLinks"
+		(backToTop)="shell.scrollToTop()" />
+
+	<app-command-palette
+		[open]="shell.commandOpen()"
+		[locale]="shell.locale()"
+		(close)="shell.commandOpen.set(false)"
+		(navigate)="shell.setTransition($event)" />
+</main>

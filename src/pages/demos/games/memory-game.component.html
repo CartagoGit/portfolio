@@ -1,0 +1,30 @@
+<section class="memory-game" aria-labelledby="memory-game-title">
+	<div class="memory-game__copy">
+		<p>{{ 'pages.demos.memoryEyebrow' | translate }}</p>
+		<h3 id="memory-game-title">{{ 'pages.demos.memoryHeading' | translate }}</h3>
+		<p>{{ 'pages.demos.memoryDetail' | translate }}</p>
+		<button type="button" (click)="reset()">
+			{{ 'pages.demos.memoryReset' | translate }} · {{ moves() }} {{ 'pages.demos.memoryMoves' | translate }}
+		</button>
+	</div>
+	<div
+		class="memory-game__grid"
+		role="group"
+		[attr.aria-label]="'pages.demos.memoryGridAria' | translate">
+		@for (value of values(); track $index) {
+			<button
+				type="button"
+				[class.is-open]="open().includes($index)"
+				[class.is-matched]="matched().includes($index)"
+				[disabled]="matched().includes($index)"
+				[attr.aria-label]="label($index, value)"
+				(click)="openCard($index)">
+				<span>
+					@if (open().includes($index) || matched().includes($index)) {
+						{{ value + 1 }}
+					}
+				</span>
+			</button>
+		}
+	</div>
+</section>
