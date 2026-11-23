@@ -85,7 +85,7 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S4 — Command palette interaction and motion
 - **Status**: pending
-- **Files**: `src/shared/ui/command-palette/**`
+- **Files**: `src/shared/ui/command-palette/command-palette.component.ts`, `src/shared/ui/command-palette/command-palette.component.html`, `src/shared/ui/command-palette/command-palette.component.scss`, `src/shared/ui/command-palette/command-palette.component.spec.ts`, `src/pages/lab/lab.page.html`, `src/pages/lab/lab.page.scss`
 - **Gate**: component tests + keyboard Playwright audit
 - **Acceptance**: no macOS-only visual metaphors are required for commands; command meaning is clear and localized; open/close uses reversible enter/exit animation, focus is trapped/restored, Escape and backdrop close work, reduced-motion is respected.
 
