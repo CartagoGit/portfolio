@@ -6,6 +6,8 @@ status: ready
 type: proposal
 track: portfolio-product
 date: 2026-11-22
+shipped-in:
+  - "f29e917"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -50,12 +52,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - global_gate: lint + typecheck + all tests + production/SSR build + responsive browser audit
 
 ### S1 — Monitor state, globe catalogue and chart controls
-- **Status**: review
+- **Status**: done
 - **Files**: `angular.json`, `src/domain/types.ts`, `src/core/rendering/earth-globe-renderer.ts`, `src/core/rendering/shaders/**`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/earth-globe/earth-globe.component.html`, `src/pages/home/earth-globe/earth-globe.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `public/images/earth-clouds-4k.webp`, `public/images/globe/**`, `public/images/ATTRIBUTION.md`, `public/icons/projects/{keyer,print-cv,steam-keys}.svg`
 - **Gate**: lint + typecheck + focused unit tests + desktop/mobile Playwright measurements
 - **Acceptance**: switching Projects/Technologies preserves the active preview; the toggle has an icon; chart controls fill two complete rows with distinct chart icons; the destination aside never overflows; project logos are normalized as flat marks (no doubled border/plate, no icon-on-icon effect); the globe z-index always beats the inactive monitor; the monitor has no active hover affordance while globe content is frontal; the close action says “Close sphere”; all eight solar planets plus Sun/Moon/Pluto, representative exoplanets, sports/random spheres and a joke/brand collection are selectable; Earth exposes multiple real high-resolution variants; brand wraps use 4K equirectangular assets and owned imagery; Saturn visibly includes correctly oriented rings; every texture is a real/attributed visual, owned brand wrap or a clearly labelled artist impression, never an unexplained synthetic look; GLSL is owned under a typed rendering/shaders boundary and compiles during the browser validation gate instead of living as an unchecked string in TypeScript; sphere, controls and backdrop enter/exit as one coordinated transition without a discrete jump or elements escaping above the backdrop; all monitor controls, descriptions and destination text remain readable without zoom at 1366×768 and 390×844, and overflow uses wrapping or controlled scrolling instead of ellipsis for informative content.
-- review-state: in_review
+- review-state: done
 - review-implementer: microsoft-mai-code-2
+- review-reviewer: cartago-independent-s1-reviewer-20261123
+- review-log: approved by cartago-independent-s1-reviewer-20261123 — verified at f29e917, validate exit 0 and tests 38/38 claimed, no recorded run cited — Independent review approved: 14 desktop chart controls, stable previews, 27 texture presets, real/licensed 4K maps and attribution, Saturn rings, brand/portrait wraps, labelled exoplanet art, external typed GLSL, coordinated overlay, 1366x768 and 390x844 readability/no ellipsis/controlled overflow, zero usable horizontal overflow, strict lint/typecheck, 21 test files/38 tests and production+SSR build.
 
 ### S2 — Project and technology destination data
 - **Status**: pending
