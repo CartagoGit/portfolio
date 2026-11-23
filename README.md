@@ -535,10 +535,12 @@ The app boots at `http://localhost:4200`. Public routes: `http://localhost:4200/
 ### Validate
 
 ```bash
-bun run check           # format:check + lint + typecheck
-bun run mcp:all         # plugin: typecheck + test + host boot
-bun run test            # ng test (Karma + jsdom)
+bun run ci:prepare      # naming + DelendAI/content gate
+bun run ci:test         # lint + types + unit + Playwright
+bun run ci:build        # production browser + SSR output
 ```
+
+The same scripts run in GitHub Actions as four ordered jobs: `preparation → tests → build → deploy`.
 
 ### Production build
 
@@ -547,14 +549,13 @@ bun run build
 bun run serve:ssr:portfolio
 ```
 
-The SSR server listens on `http://localhost:4000` by default. The output of `dist/portfolio/` is ready to upload to any Node-with-SSR host (Render, Railway, Fly.io, etc.) or to prerender to static if configured.
+The SSR server listens on `http://localhost:4000` by default. The static browser output is in `dist/portfolio/browser` and the Node/SSR output is in `dist/portfolio/server`.
 
-### Ideal deploy (not yet implemented)
+### GitHub Pages deploy
 
-1. `bun run build` → produces `dist/portfolio/server/server.mjs`.
-2. Deploy the Express server in a Docker container based on `cartagodocker/nodebun`.
-3. CDN in front for static assets.
-4. `mcp:check` as a pre-deploy hook. A `per-se-root` error blocks the deploy.
+Deploy is gated by `.github/workflows/portfolio-pages.yml`. It publishes the validated browser artifact to the `main` branch of `CartagoGit/CartagoGit.github.io`, which serves `https://cartagogit.github.io/` at the root.
+
+Add `PAGES_DEPLOY_TOKEN` as a GitHub Actions secret with write access to that external repository. Pull requests never deploy; missing credentials fail with an actionable message. See [`docs/deployment.md`](docs/deployment.md) for local reproduction, token scope and failure policy.
 
 ---
 

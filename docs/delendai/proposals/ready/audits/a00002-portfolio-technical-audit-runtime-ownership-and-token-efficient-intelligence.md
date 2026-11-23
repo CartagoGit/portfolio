@@ -31,7 +31,7 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - global_gate: e2e
 
 ### S1 — Synchronize portfolio-content with src/pages and current domain contracts
-- **Status**: pending
+- **Status**: review
 - **Files**: `plugins/portfolio-content/src/lib/services/architecture.service.ts`, `plugins/portfolio-content/src/lib/services/features.service.ts`, `plugins/portfolio-content/src/lib/services/domain.service.ts`, `plugins/portfolio-content/src/plugin.entrypoint.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`, `plugins/portfolio-content/tests/helpers/in-memory-fs.helper.ts`, `delendai.config.json`
 - **Gate**: type
 - acceptance:
@@ -40,6 +40,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Domain parsing uses src/domain/types.interface.ts."
   - "Missing or renamed paths fail with actionable diagnostics."
   - "Plugin registration and host configuration match."
+- review-state: in_review
+- review-implementer: Yamato
 
 ### S2 — Hash-index project content with incremental invalidation
 - **Status**: pending
