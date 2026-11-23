@@ -24,12 +24,12 @@
 	padding-top: 88px;
 	padding-bottom: 51px;
 	background:
-		radial-gradient(circle at 80% 0, #0a2d5738, transparent 28%),
+		radial-gradient(circle at 80% 0, color-mix(in srgb, var(--blue) 18%, transparent), transparent 28%),
 		var(--canvas);
 	color: var(--ink);
 	transition:
-		background 0.35s,
-		color 0.35s;
+		background var(--motion-base) var(--ease-standard),
+		color var(--motion-base) var(--ease-standard);
 }
 
 .portfolio.light-mode {
@@ -41,11 +41,11 @@
 	z-index: 30;
 	top: -60px;
 	left: var(--space-4);
-	background: var(--cyan);
-	color: #07101c;
 	padding: 0.7rem var(--space-4);
+	background: var(--cyan);
+	color: var(--on-accent);
 	font-weight: 800;
-	transition: top 0.2s;
+	transition: top var(--motion-fast) var(--ease-standard);
 }
 
 .skip-link:focus {
@@ -55,6 +55,7 @@
 .route-stage {
 	view-transition-name: route-content;
 	min-width: 0;
+	min-inline-size: 0;
 	flex: 1 0 auto;
 }
 
@@ -82,9 +83,9 @@
 	content: '';
 	pointer-events: none;
 	background:
-		radial-gradient(circle at 74% 45%, #0867b52b, transparent 25%),
-		linear-gradient(90deg, transparent 49.8%, #76d7ff0a 50%, transparent 50.2%),
-		linear-gradient(0deg, transparent 49.8%, #76d7ff0a 50%, transparent 50.2%);
+		radial-gradient(circle at 74% 45%, color-mix(in srgb, var(--blue) 16%, transparent), transparent 25%),
+		linear-gradient(90deg, transparent 49.8%, color-mix(in srgb, var(--cyan) 4%, transparent) 50%, transparent 50.2%),
+		linear-gradient(0deg, transparent 49.8%, color-mix(in srgb, var(--cyan) 4%, transparent) 50%, transparent 50.2%);
 	background-size:
 		auto,
 		80px 80px,

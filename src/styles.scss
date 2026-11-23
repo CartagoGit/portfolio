@@ -1,29 +1,17 @@
-// Global stylesheet for the portfolio. Composition root: import design tokens
-// and keyframes from the local partials, then declare the reset and view
-// transition shell that every page relies on.
-
+// Global stylesheet. Design tokens and route motion are owned in partials;
+// this file only defines runtime scales, reset, scrollbars and accessibility.
 @use './styles/tokens/index' as tokens;
 @use './styles/keyframes/index';
+@use './styles/motion/theme-transition';
+@use './styles/motion/view-transitions';
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
-
-// The active palette is selected via `[data-theme="<id>"]` on `<html>`
-// (see `_themes.scss`). The declarations here cover the runtime scale
-// tokens and the page-level reset; component SCSS consumes
-// `var(--ink)` / `var(--cyan)` etc. through the theme partial.
 
 :root {
 	color-scheme: dark;
 	font-family: 'Manrope', Arial, sans-serif;
-	background: #090a12;
-	color: #eff3ff;
-	// Shared design-scale tokens. The Sass-side equivalents live in
-	// `src/styles/tokens/_scale.scss` and are re-exported through
-	// `tokens/index`; these runtime custom properties are the source
-	// of truth for component SCSS that consumes them through
-	// `var(--space-4)` etc. The values mirror the SCSS scale on a
-	// 0.25rem (4px) grid step plus a few sub-grid helpers used by
-	// label / chip layouts.
+	background: var(--canvas);
+	color: var(--ink);
 	--space-1: 0.25rem;
 	--space-2: 0.5rem;
 	--space-3: 0.75rem;
@@ -59,57 +47,55 @@
 	--line-normal: 1.55;
 	--line-relaxed: 1.6;
 	--line-loose: 1.7;
+	--motion-instant: #{tokens.$motion-instant};
+	--motion-fast: #{tokens.$motion-fast};
+	--motion-base: #{tokens.$motion-base};
+	--motion-slow: #{tokens.$motion-slow};
+	--motion-route: #{tokens.$motion-route};
+	--motion-theme: #{tokens.$motion-theme};
+	--ease-standard: #{tokens.$ease-standard};
+	--ease-emphasized: #{tokens.$ease-emphasized};
+	--ease-route: #{tokens.$ease-route};
 }
 
-* {
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
 }
+
 html {
 	scroll-behavior: smooth;
 	overflow-x: clip;
 	overflow-y: scroll;
-	scrollbar-gutter: stable both-edges;
+	scrollbar-gutter: stable;
 }
+
 body {
-	margin: 0;
 	min-width: 320px;
+	margin: 0;
 	overflow-x: clip;
 	background: var(--canvas);
 	color: var(--ink);
 	transition:
-		background-color 0.35s ease,
-		color 0.35s ease;
+		background-color var(--motion-base) ease,
+		color var(--motion-base) ease;
 }
-// Per-theme `color-scheme` declarations — these keep native form
-// controls, scrollbars and the canvas appearance coherent with the
-// active palette. The list mirrors `THEMES` in
-// `src/core/platform/theme.ts`.
-:root[data-theme='dark'] {
-	color-scheme: dark;
-}
-:root[data-theme='light'] {
-	color-scheme: light;
-}
-:root[data-theme='midnight'] {
-	color-scheme: dark;
-}
-:root[data-theme='ocean'] {
-	color-scheme: dark;
-}
-:root[data-theme='forest'] {
-	color-scheme: dark;
-}
+
+:root[data-theme='dark'],
+:root[data-theme='midnight'],
+:root[data-theme='ocean'],
+:root[data-theme='forest'],
 :root[data-theme='sunset'] {
 	color-scheme: dark;
 }
-:root[data-theme='solar'] {
-	color-scheme: light;
-}
+
+:root[data-theme='light'],
+:root[data-theme='solar'],
 :root[data-theme='mono'] {
 	color-scheme: light;
 }
 
-/* Theme-aware scrollbars are shared by every route and nested scroll region. */
 :root {
 	--scrollbar-track: color-mix(in srgb, var(--canvas) 82%, var(--surface-2));
 	--scrollbar-thumb: color-mix(in srgb, var(--cyan) 52%, var(--line));
@@ -127,14 +113,18 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-	border-radius: 999px;
+	border-radius: var(--radius-pill);
 	background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
 	border: 2px solid var(--scrollbar-track);
-	border-radius: 999px;
-	background: linear-gradient(180deg, var(--scrollbar-thumb), color-mix(in srgb, var(--scrollbar-thumb) 68%, var(--surface-2)));
+	border-radius: var(--radius-pill);
+	background: linear-gradient(
+		180deg,
+		var(--scrollbar-thumb),
+		color-mix(in srgb, var(--scrollbar-thumb) 68%, var(--surface-2))
+	);
 	background-clip: padding-box;
 }
 
@@ -149,21 +139,36 @@ body {
 button,
 a,
 input,
-textarea {
+textarea,
+select {
 	font: inherit;
+	touch-action: manipulation;
 }
+
 button {
 	cursor: pointer;
 }
+
 a {
 	color: inherit;
 }
+
 :focus-visible {
-	outline: 3px solid #5ae2ff;
+	outline: 3px solid var(--focus-ring);
 	outline-offset: 4px;
 }
 
-/* Accessibility utility: hide visually but keep available to screen readers. */
+img,
+svg,
+picture,
+video {
+	max-width: 100%;
+}
+
+[hidden] {
+	display: none !important;
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -176,71 +181,17 @@ a {
 	border: 0;
 }
 
-/* The shell (including the fixed header) remains stable; only route content moves. */
-::view-transition-old(root) {
-	animation: none;
-	opacity: 0;
-}
-::view-transition-new(root) {
-	animation: none;
-	opacity: 1;
-}
-::view-transition-old(route-content),
-::view-transition-new(route-content) {
-	animation-duration: 0.68s;
-	animation-timing-function: cubic-bezier(0.22, 0.9, 0.25, 1);
-}
-::view-transition-old(route-content) {
-	z-index: 1;
-}
-::view-transition-new(route-content) {
-	z-index: 2;
-}
-html[data-transition-direction='forward']::view-transition-old(route-content) {
-	animation-name: portfolio-exit-left;
-}
-html[data-transition-direction='forward']::view-transition-new(route-content) {
-	animation-name: portfolio-enter-right;
-}
-html[data-transition-direction='backward']::view-transition-old(route-content) {
-	animation-name: portfolio-exit-right;
-}
-html[data-transition-direction='backward']::view-transition-new(route-content) {
-	animation-name: portfolio-enter-left;
-}
-// The keyframes `portfolio-exit-left`, `portfolio-enter-right`,
-// `portfolio-exit-right` and `portfolio-enter-left` are declared in
-// `_keyframes.scss` so every SCSS partial can `@use` them.
-
 @media (prefers-reduced-motion: reduce) {
-	::view-transition-old(root),
-	::view-transition-new(root),
-	::view-transition-old(route-content),
-	::view-transition-new(route-content) {
-		animation: none;
+	html {
+		scroll-behavior: auto;
 	}
-}
-::view-transition-group(root),
-::view-transition-image-pair(root) {
-	z-index: 0;
-}
-::view-transition-group(route-content),
-::view-transition-image-pair(route-content) {
-	isolation: isolate;
-	z-index: 10;
-}
-::view-transition-old(shell-header),
-::view-transition-new(shell-header),
-::view-transition-old(shell-footer),
-::view-transition-new(shell-footer) {
-	animation: none;
-	mix-blend-mode: normal;
-	opacity: 1;
-}
-::view-transition-group(shell-header),
-::view-transition-image-pair(shell-header),
-::view-transition-group(shell-footer),
-::view-transition-image-pair(shell-footer) {
-	z-index: 1000;
-	animation: none;
+
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
