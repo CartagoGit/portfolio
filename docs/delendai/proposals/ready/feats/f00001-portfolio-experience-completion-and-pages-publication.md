@@ -17,6 +17,7 @@ shipped-in:
   - "7ed8cab"
   - "30c26ec"
   - "6416483"
+  - "201fcaa"
 ---
 
 # f00001 — Portfolio experience completion and Pages publication
@@ -163,10 +164,14 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by explore-independent-s10-reviewer-20261123 — verified at 6416483, validate exit 0 and tests 62/62 claimed, no recorded run cited
 
 ### S11 — Lab examples, playgrounds and graph exploration
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/pages/lab/**`
 - **Gate**: lab tests + interaction/performance audit
 - **Acceptance**: the lab contains multiple useful frontend examples (motion, drag/drop, data visualisation, state, accessibility, forms, concurrency), multiple playgrounds rather than one linear exercise, substantially more chart options than three, useful job-relevant explanations, and responsive controls with visible focus/reduced-motion support.
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: explore-independent-s11-reviewer-20261123
+- review-log: approved by explore-independent-s11-reviewer-20261123 — verified at 201fcaa, validate exit 0 and tests 71/71 claimed, no recorded run cited
 
 ### S12 — Route transitions, responsive system and shared motion tokens
 - **Status**: pending
