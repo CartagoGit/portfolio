@@ -49,10 +49,11 @@ app-hero-monitor .hero-monitor {
 
   &__header {
     --header-control-width: 72px;
+    --monitor-control-transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .28s ease, transform .24s cubic-bezier(.22, 1, .36, 1);
     position: relative;
     flex: 0 0 86px;
     display: grid;
-    grid-template-columns: var(--header-control-width) max-content minmax(0, 1fr);
+    grid-template-columns: var(--header-control-width) minmax(220px, .95fr) minmax(240px, 1.05fr);
     align-items: stretch;
     height: 86px;
     min-height: 86px;
@@ -70,28 +71,53 @@ app-hero-monitor .hero-monitor {
     min-height: 86px;
     aspect-ratio: auto;
     border-right: 1px solid var(--line);
-  }
+    transition: var(--monitor-control-transition), background-position .48s cubic-bezier(.22, 1, .36, 1), filter .28s ease;
 
-  &__banner-link,
-  &__banner {
-    height: 86px;
-    min-height: 86px;
-    max-height: 86px;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 7px;
+      border: 1px solid color-mix(in srgb, var(--cyan) 44%, transparent);
+      border-radius: 50%;
+      opacity: .55;
+      animation: monitor-control-orbit 7s linear infinite;
+      pointer-events: none;
+    }
+
+    &:active {
+      transform: scale(.96);
+    }
   }
 
   &__banner-link {
     grid-column: 2;
-    width: auto;
+    width: 100%;
     min-width: 0;
-    aspect-ratio: 1023 / 300;
+    aspect-ratio: auto;
+    transition: filter .25s ease, background-position .35s ease;
   }
 
   &__banner {
     display: block;
     width: 100%;
-    object-fit: contain !important;
-    object-position: left center !important;
+    object-fit: cover !important;
+    object-position: center !important;
     background: #07111d;
+    transition: transform .45s cubic-bezier(.22, 1, .36, 1), filter .28s ease;
+  }
+
+  &__banner-link:hover {
+    .hero-monitor__banner {
+      filter: brightness(1.08) saturate(1.08);
+      transform: scale(1.018);
+    }
+  }
+
+  &__banner-link:focus-visible {
+    .hero-monitor__banner {
+      filter: brightness(1.08) saturate(1.08);
+      transform: scale(1.018);
+    }
   }
 
   &__platform-rail {
@@ -127,17 +153,26 @@ app-hero-monitor .hero-monitor {
       border-radius: 8px;
       background: var(--surface);
       color: var(--ink);
+      transition: var(--monitor-control-transition);
+
+      &:active { transform: scale(.93); }
 
       &:hover,
       &:focus-visible,
       &.is-active {
         border-color: var(--cyan);
         background: color-mix(in srgb, var(--cyan) 14%, var(--surface));
-        box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 24%, transparent);
+        color: var(--cyan);
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 24%, transparent), 0 5px 16px color-mix(in srgb, var(--cyan) 12%, transparent);
       }
 
       img,
-      svg { width: 19px; height: 19px; object-fit: contain; }
+      svg { width: 19px; height: 19px; object-fit: contain; transition: transform .24s cubic-bezier(.22, 1, .36, 1), filter .24s ease; }
+
+      &:hover img,
+      &:hover svg,
+      &:focus-visible img,
+      &:focus-visible svg { transform: translateY(-1px) scale(1.08); }
     }
   }
 
@@ -194,6 +229,14 @@ app-hero-monitor .hero-monitor {
     svg { display: none; width: 16px; height: 16px; }
   }
 
+  &__dashboard-control,
+  &__technology-toggle,
+  &__console-effects button {
+    transition: var(--monitor-control-transition);
+
+    &:active { transform: scale(.93); }
+  }
+
   &__console-effects {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -209,6 +252,15 @@ app-hero-monitor .hero-monitor {
       background: var(--surface-2);
       color: var(--cyan);
       font-size: .7rem;
+
+      &:hover,
+      &:focus-visible,
+      &.is-active {
+        border-color: var(--cyan);
+        background: color-mix(in srgb, var(--cyan) 16%, var(--surface));
+        color: var(--ink);
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 24%, transparent), 0 5px 18px color-mix(in srgb, var(--cyan) 14%, transparent);
+      }
     }
   }
 
@@ -776,9 +828,9 @@ app-hero-monitor .hero-monitor {
   app-hero-monitor .hero-monitor__header {
     --header-control-width: 72px;
     grid-template-columns: var(--header-control-width) minmax(0, 1fr);
-    grid-template-rows: 64px auto;
+    grid-template-rows: 72px auto;
     height: auto;
-    min-height: 126px;
+    min-height: 148px;
     overflow: hidden;
   }
 
@@ -813,25 +865,61 @@ app-hero-monitor .hero-monitor {
     grid-column: 1 / -1;
     grid-row: 2;
     width: 100% !important;
-    height: 62px;
-    grid-template-rows: 30px 24px;
+    height: 76px;
+    grid-template-rows: 40px 32px;
+    padding: .3rem .45rem;
     border-top: 1px solid var(--line);
     border-left: 0;
   }
 
   app-hero-monitor .hero-monitor__platform-row {
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    height: 30px;
+    height: 40px;
   }
 
   app-hero-monitor .hero-monitor__platform-row a,
-  app-hero-monitor .hero-monitor__dashboard-control {
+  app-hero-monitor .hero-monitor__dashboard-control,
+  app-hero-monitor .hero-monitor__technology-toggle {
     width: 100%;
-    height: 30px;
+    min-width: 0;
+    height: 40px;
+    min-height: 40px !important;
   }
 
-  app-hero-monitor .hero-monitor__technology-toggle {
-    min-height: 30px !important;
-    height: 30px;
+  app-hero-monitor .hero-monitor__console-effects button {
+    height: 32px;
+  }
+}
+
+@keyframes monitor-control-orbit {
+  to { transform: rotate(1turn); }
+}
+
+@media (hover: none) {
+  app-hero-monitor .hero-monitor__motion-control::before {
+    animation-duration: 11s;
+    opacity: .35;
+  }
+
+  app-hero-monitor .hero-monitor__platform-row a:hover,
+  app-hero-monitor .hero-monitor__dashboard-control:hover,
+  app-hero-monitor .hero-monitor__technology-toggle:hover,
+  app-hero-monitor .hero-monitor__console-effects button:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  app-hero-monitor .hero-monitor__motion-control::before {
+    animation: none;
+  }
+
+  app-hero-monitor .hero.monitor__banner,
+  app-hero-monitor .hero-monitor__motion-control,
+  app-hero-monitor .hero-monitor__platform-row a,
+  app-hero-monitor .hero-monitor__dashboard-control,
+  app-hero-monitor .hero-monitor__technology-toggle,
+  app-hero-monitor .hero-monitor__console-effects button {
+    transition-duration: .01ms;
   }
 }

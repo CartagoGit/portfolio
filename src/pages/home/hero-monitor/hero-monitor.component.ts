@@ -134,6 +134,8 @@ export class HeroMonitorComponent implements OnDestroy {
 	private _monitorOpening = false;
 	private _monitorOpenTimer?: number;
 	private _monitorCloseTimer?: number;
+	private _consoleEffectFrame?: number;
+	private _consoleEffectTimer?: number;
 	private readonly _earthReturnSync = effect(() => {
 		if (this.earthBlocksMonitor()) {
 			this._monitorHovered = false;
@@ -167,6 +169,10 @@ export class HeroMonitorComponent implements OnDestroy {
 			window.clearTimeout(this._monitorOpenTimer);
 		if (this._monitorCloseTimer !== undefined)
 			window.clearTimeout(this._monitorCloseTimer);
+		if (this._consoleEffectFrame !== undefined)
+			cancelAnimationFrame(this._consoleEffectFrame);
+		if (this._consoleEffectTimer !== undefined)
+			window.clearTimeout(this._consoleEffectTimer);
 		this._previewSync.destroy();
 		this._earthReturnSync.destroy();
 	}
@@ -444,9 +450,19 @@ export class HeroMonitorComponent implements OnDestroy {
 			);
 			return;
 		}
+		if (this._consoleEffectFrame !== undefined)
+			cancelAnimationFrame(this._consoleEffectFrame);
+		if (this._consoleEffectTimer !== undefined)
+			window.clearTimeout(this._consoleEffectTimer);
 		this.consoleEffect.set('none');
-		window.setTimeout(() => this.consoleEffect.set(id), 20);
-		this.consoleEffect.set(id);
+		this._consoleEffectFrame = requestAnimationFrame(() => {
+			this._consoleEffectFrame = undefined;
+			this.consoleEffect.set(id);
+			this._consoleEffectTimer = window.setTimeout(() => {
+				this.consoleEffect.set('none');
+				this._consoleEffectTimer = undefined;
+			}, 1_150);
+		});
 	}
 
 	private _queueMonitorClose(): void {

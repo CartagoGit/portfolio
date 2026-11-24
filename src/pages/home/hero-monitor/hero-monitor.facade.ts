@@ -107,6 +107,7 @@ export class HeroMonitorFacade {
 	);
 	readonly chartPath = computed(() => buildChartPath(this.chartBars()));
 	private _panelTimer?: number;
+	private _effectTimer?: number;
 	selectPanel(panel: IHeroPanelId): void {
 		if (this.activePanel() === panel) return;
 		if (this._panelTimer !== undefined)
@@ -147,8 +148,13 @@ export class HeroMonitorFacade {
 		);
 	}
 	setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
+		if (this._effectTimer !== undefined)
+			window.clearTimeout(this._effectTimer);
 		this.effect.set('idle');
-		window.setTimeout(() => this.effect.set(effect), 24);
+		this._effectTimer = window.setTimeout(() => {
+			this._effectTimer = undefined;
+			this.effect.set(effect);
+		}, 24);
 	}
 	setTemperature(): void {
 		this.setPalette('heat');
@@ -165,5 +171,7 @@ export class HeroMonitorFacade {
 	destroy(): void {
 		if (this._panelTimer !== undefined)
 			window.clearTimeout(this._panelTimer);
+		if (this._effectTimer !== undefined)
+			window.clearTimeout(this._effectTimer);
 	}
 }

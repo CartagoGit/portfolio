@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { HeroMonitorFacade } from './hero-monitor.facade';
 
 describe('HeroMonitorFacade', () => {
@@ -27,5 +27,23 @@ describe('HeroMonitorFacade', () => {
 		facade.selectPanel('quality');
 		const secondTransition = facade.panelTransition();
 		expect(secondTransition).not.toBe(firstTransition);
+	});
+
+	it('keeps only the latest queued effect and clears it on destroy', () => {
+		vi.useFakeTimers();
+		try {
+			const facade = new HeroMonitorFacade();
+			facade.setEffect('shake');
+			facade.setEffect('glitch');
+			vi.advanceTimersByTime(24);
+			expect(facade.effect()).toBe('glitch');
+
+			facade.setEffect('float');
+			facade.destroy();
+			vi.advanceTimersByTime(24);
+			expect(facade.effect()).toBe('idle');
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 });
