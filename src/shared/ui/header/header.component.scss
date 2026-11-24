@@ -127,6 +127,15 @@
 		width: 1.5rem;
 		border-radius: 3px;
 	}
+	&__flag {
+		display: inline-grid;
+		width: 1.65rem;
+		height: 1.35rem;
+		place-items: center;
+		border-radius: 5px;
+		font-size: 1.2rem;
+		line-height: 1;
+	}
 	&__locale-menu,
 	&__theme-menu {
 		position: absolute;
@@ -142,7 +151,37 @@
 		animation: menu-in 0.2s tokens.$ease-standard both;
 	}
 	&__locale-menu {
-		width: 180px;
+		width: 270px;
+		max-height: min(64dvh, 520px);
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+	}
+	&__locale-search {
+		position: sticky;
+		z-index: 1;
+		top: 0;
+		display: block;
+		padding: 0.15rem 0.15rem 0.4rem;
+		background: color-mix(in srgb, var(--surface) 96%, transparent);
+
+		input {
+			width: 100%;
+			height: 38px;
+			padding: 0 0.7rem;
+			border: var(--border-thin) solid var(--line);
+			border-radius: 9px;
+			outline: 0;
+			background: var(--surface-2);
+			color: var(--ink);
+			font: 600 0.75rem tokens.$font-mono, monospace;
+
+			&:focus {
+				border-color: var(--cyan);
+				box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 15%, transparent);
+			}
+		}
 	}
 	&__theme-menu {
 		width: 220px;
@@ -247,6 +286,13 @@
 		}
 		&__actions {
 			order: 3;
+		}
+		&__locale-menu {
+			position: fixed;
+			top: calc(72px + var(--space-2));
+			right: .85rem;
+			width: min(320px, calc(100vw - 1.7rem));
+			max-height: min(68dvh, 520px);
 		}
 	}
 }

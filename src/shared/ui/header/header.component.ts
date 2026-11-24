@@ -71,11 +71,28 @@ export class HeaderComponent {
 	readonly currentLanguage = computed<ILanguageOption | undefined>(() =>
 		this.languages().find((entry) => entry.id === this.locale())
 	);
+	readonly languageQuery = signal('');
+	readonly filteredLanguages = computed(() => {
+		const query = this.languageQuery().trim().toLocaleLowerCase();
+		if (!query) return this.languages();
+		return this.languages().filter(({ id, label, detail }) =>
+			`${id} ${label} ${detail}`.toLocaleLowerCase().includes(query)
+		);
+	});
 
 	readonly routeFor = (page: IPageComponentId): string[] =>
 		routeFor(page, this.locale());
 	selectPage(page: IPageComponentId): void {
 		this.navigate.emit(page);
+	}
+
+	updateLanguageQuery(event: Event): void {
+		this.languageQuery.set((event.currentTarget as HTMLInputElement).value);
+	}
+
+	selectLanguage(locale: ILocale): void {
+		this.languageQuery.set('');
+		this.localeSelect.emit(locale);
 	}
 
 	protected readonly _onScroll = (): void => {

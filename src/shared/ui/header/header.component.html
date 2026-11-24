@@ -87,7 +87,7 @@
 				[attr.aria-label]="'lang.languagesLabel' | translate"
 				aria-haspopup="listbox">
 				@if (currentLanguage(); as language) {
-					<img [src]="language.flag" width="24" height="16" alt="" />
+					<span class="header__flag" aria-hidden="true">{{ language.flag }}</span>
 				}
 			</button>
 			@if (localeMenuOpen() || localeMenuClosing()) {
@@ -96,17 +96,21 @@
 					[class.is-closing]="localeMenuClosing()"
 					[attr.aria-label]="'lang.languagesLabel' | translate"
 					role="listbox">
-					@for (language of languages(); track language.id) {
+					<label class="header__locale-search">
+						<input
+							type="search"
+							[value]="languageQuery()"
+							(input)="updateLanguageQuery($event)"
+							[attr.aria-label]="'lang.languagesLabel' | translate"
+							[attr.placeholder]="'lang.languagesLabel' | translate" />
+					</label>
+					@for (language of filteredLanguages(); track language.id) {
 						<button
 							type="button"
 							role="option"
 							[attr.aria-selected]="locale() === language.id"
-							(click)="localeSelect.emit(language.id)">
-							<img
-								[src]="language.flag"
-								width="24"
-								height="16"
-								alt="" />
+							(click)="selectLanguage(language.id)">
+							<span class="header__flag" aria-hidden="true">{{ language.flag }}</span>
 							<span>
 								{{ language.label }}
 								<small>{{ language.detail }}</small>

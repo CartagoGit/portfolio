@@ -1,7 +1,7 @@
 import type { ILocale, IPageComponentId } from '../../domain/types.interface';
 
 const PAGE_TITLES: Readonly<
-	Record<ILocale, Readonly<Record<IPageComponentId, string>>>
+	Partial<Record<ILocale, Readonly<Record<IPageComponentId, string>>>>
 > = {
 	en: {
 		home: 'Frontend product engineer',
@@ -45,7 +45,7 @@ const PAGE_TITLES: Readonly<
 	},
 } as const;
 
-const PAGE_DESCRIPTIONS: Readonly<Record<ILocale, string>> = {
+const PAGE_DESCRIPTIONS: Readonly<Partial<Record<ILocale, string>>> = {
 	en: 'Mario Cabrero Volarich’s portfolio: product frontend, Angular, TypeScript, mobile delivery and developer tooling.',
 	es: 'Portfolio de Mario Cabrero Volarich: ingeniería frontend de producto, Angular, TypeScript, móvil y herramientas.',
 	fr: 'Portfolio de Mario Cabrero Volarich : ingénierie produit frontend, Angular, TypeScript, livraison mobile et outils de développement.',
@@ -54,10 +54,11 @@ const PAGE_DESCRIPTIONS: Readonly<Record<ILocale, string>> = {
 
 /// Builds the `<title>` string from the active page + locale.
 export function buildTitle(locale: ILocale, page: IPageComponentId): string {
-	return `Cartago · ${PAGE_TITLES[locale][page]}`;
+	const titles = PAGE_TITLES[locale] ?? PAGE_TITLES.en;
+	return `Cartago · ${titles![page]}`;
 }
 
 /// Builds the meta description shown in the result page of every locale.
 export function buildDescription(locale: ILocale): string {
-	return PAGE_DESCRIPTIONS[locale];
+	return PAGE_DESCRIPTIONS[locale] ?? PAGE_DESCRIPTIONS.en!;
 }

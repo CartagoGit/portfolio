@@ -12,13 +12,68 @@ export const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 export const LOCALE_COOKIE_ATTRS =
 	`Path=/; Max-Age=${LOCALE_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax` as const;
 
-const SUPPORTED_LOCALES: readonly ILocale[] = ['en', 'es', 'fr', 'de'];
+const LOCALE_DEFINITIONS = [
+	{ id: 'en', flag: '🇺🇸', label: 'English', detail: 'Global English' },
+	{ id: 'es', flag: '🇪🇸', label: 'Español', detail: 'España' },
+	{ id: 'fr', flag: '🇫🇷', label: 'Français', detail: 'France' },
+	{ id: 'de', flag: '🇩🇪', label: 'Deutsch', detail: 'Deutschland' },
+	{ id: 'it', flag: '🇮🇹', label: 'Italiano', detail: 'Italia' },
+	{ id: 'pt-PT', flag: '🇵🇹', label: 'Português', detail: 'Portugal' },
+	{ id: 'pt-BR', flag: '🇧🇷', label: 'Português', detail: 'Brasil' },
+	{ id: 'ru', flag: '🇷🇺', label: 'Русский', detail: 'Россия' },
+	{ id: 'uk', flag: '🇺🇦', label: 'Українська', detail: 'Україна' },
+	{ id: 'pl', flag: '🇵🇱', label: 'Polski', detail: 'Polska' },
+	{ id: 'hr', flag: '🇭🇷', label: 'Hrvatski', detail: 'Hrvatska' },
+	{ id: 'tr', flag: '🇹🇷', label: 'Türkçe', detail: 'Türkiye' },
+	{ id: 'ar', flag: '🇸🇦', label: 'العربية', detail: 'العربية · RTL' },
+	{ id: 'hi', flag: '🇮🇳', label: 'हिन्दी', detail: 'भारत' },
+	{ id: 'bn', flag: '🇧🇩', label: 'বাংলা', detail: 'বাংলাদেশ' },
+	{ id: 'zh-CN', flag: '🇨🇳', label: '中文', detail: '简体 · 中国' },
+	{ id: 'zh-TW', flag: '🇹🇼', label: '中文', detail: '繁體 · 台灣' },
+	{ id: 'ja', flag: '🇯🇵', label: '日本語', detail: '日本' },
+	{ id: 'ko', flag: '🇰🇷', label: '한국어', detail: '대한민국' },
+	{ id: 'id', flag: '🇮🇩', label: 'Bahasa Indonesia', detail: 'Indonesia' },
+] as const satisfies ReadonlyArray<{
+	id: ILocale;
+	flag: string;
+	label: string;
+	detail: string;
+}>;
+
+const SUPPORTED_LOCALES = LOCALE_DEFINITIONS.map(({ id }) => id);
 
 export function isLocale(value: unknown): value is ILocale {
 	return (
 		typeof value === 'string' &&
 		(SUPPORTED_LOCALES as readonly string[]).includes(value)
 	);
+}
+
+/** Resolves browser and regional language tags to one canonical route locale. */
+export function resolveLocale(value: unknown): ILocale | null {
+	if (typeof value !== 'string') return null;
+	const normalized = value.trim().replaceAll('_', '-');
+	if (!normalized) return null;
+	if (isLocale(normalized)) return normalized;
+
+	let locale: Intl.Locale;
+	try {
+		locale = new Intl.Locale(normalized);
+	} catch {
+		return null;
+	}
+
+	const language = locale.language.toLowerCase();
+	const region = locale.region?.toUpperCase();
+	const script = locale.script;
+	if (language === 'pt')
+		return !region || region === 'BR' ? 'pt-BR' : 'pt-PT';
+	if (language === 'zh') {
+		if (script === 'Hant' || region === 'TW' || region === 'HK' || region === 'MO')
+			return 'zh-TW';
+		return 'zh-CN';
+	}
+	return isLocale(language) ? language : null;
 }
 
 /**
@@ -35,19 +90,13 @@ export function detectPreferredLocale(doc: Document): ILocale | null {
 		/* Storage may be blocked (private mode, sandboxed iframe). */
 	}
 	const cookieLocale = readLocaleCookie(doc);
-	const candidate =
-		stored ??
-		cookieLocale ??
-		navigator.languages
-			.find(
-				(language) =>
-					['es', 'en', 'fr', 'de'].includes(
-						language.toLowerCase().slice(0, 2)
-					)
-			)
-			?.slice(0, 2) ??
-		null;
-	return isLocale(candidate) ? candidate : null;
+	const storedLocale = resolveLocale(stored);
+	if (storedLocale) return storedLocale;
+	const cookieResolved = resolveLocale(cookieLocale);
+	if (cookieResolved) return cookieResolved;
+	return navigator.languages
+		.map(resolveLocale)
+		.find((language): language is ILocale => language !== null) ?? null;
 }
 
 /**
@@ -76,14 +125,7 @@ export function readLocaleCookie(doc: Document): string | null {
 
 /**
  * Locale registry mirroring the canonical set the runtime supports.
- * The translation map owns the display copy (label/detail); this
- * module is the single source of truth for the runtime list so
- * the shell facade, the SSR cookie layer and the UI dropdown can
- * agree without duplicating the array.
+ * Native labels and region details remain stable across the UI; this
+ * module is the single source of truth for runtime routing and the selector.
  */
-export const LOCALES = [
-	{ id: 'en' as const, flag: '/icons/flag-en.svg' },
-	{ id: 'es' as const, flag: '/icons/flag-es.svg' },
-	{ id: 'fr' as const, flag: '/icons/flag-fr.svg' },
-	{ id: 'de' as const, flag: '/icons/flag-de.svg' },
-] as const satisfies ReadonlyArray<{ id: ILocale; flag: string }>;
+export const LOCALES = LOCALE_DEFINITIONS;

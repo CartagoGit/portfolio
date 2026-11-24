@@ -10,7 +10,7 @@ import type {
 	IThemeId,
 } from '../../domain/types.interface';
 import { TranslateService } from '../../lang/translate.service';
-import { detectPreferredLocale, isLocale, LOCALES, persistLocale } from './locale.helper';
+import { detectPreferredLocale, LOCALES, persistLocale, resolveLocale } from './locale.helper';
 import { buildDescription, buildTitle } from './seo.helper';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing.helper';
 import {
@@ -43,15 +43,9 @@ export class ShellFacade {
 	private readonly _platformId = inject(PLATFORM_ID);
 	private readonly _translate = inject(TranslateService);
 
-	readonly languages = computed<readonly ILanguageOption[]>(() => {
-		const t = this._translate.translations();
-		return LOCALES.map((locale) => ({
-			id: locale.id,
-			label: t.lang.languages[locale.id].label,
-			detail: t.lang.languages[locale.id].detail,
-			flag: locale.flag,
-		}));
-	});
+	readonly languages = computed<readonly ILanguageOption[]>(() =>
+		LOCALES.map(({ id, label, detail, flag }) => ({ id, label, detail, flag }))
+	);
 	/** Theme definitions surfaced to the dropdown; label/detail come from the
 	 * active locale's translation map so the swatch + copy stay in sync. */
 	readonly themes = computed<
@@ -92,9 +86,13 @@ export class ShellFacade {
 		this._applyTheme(this.theme(), { animate: false });
 		this._route.paramMap.subscribe((params) => {
 			const raw = params.get('locale');
-			const locale: ILocale = isLocale(raw) ? raw : 'en';
+			const locale: ILocale = resolveLocale(raw) ?? 'en';
+			if (raw && raw !== locale) {
+				queueMicrotask(() => void this._router.navigate(routeFor(this.page(), locale), { replaceUrl: true }));
+			}
 			this._translate.setLocale(locale);
 			this._document.documentElement.lang = locale;
+			this._document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
 			this._refreshSeo();
 		});
 		this._route.data.subscribe((data) => {
@@ -200,7 +198,7 @@ export class ShellFacade {
 	private _applyPreferredLocale(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
 		const routeLocale = this._route.snapshot.paramMap.get('locale');
-		if (isLocale(routeLocale)) return;
+		if (resolveLocale(routeLocale)) return;
 		const locale = detectPreferredLocale(this._document);
 		if (!locale || locale === this.locale()) return;
 		queueMicrotask(

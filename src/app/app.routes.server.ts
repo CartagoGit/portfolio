@@ -1,6 +1,7 @@
 import { RenderMode, type ServerRoute } from '@angular/ssr';
+import { LOCALES } from '../core/platform/locale.helper';
 
-const PRERENDER_LOCALES = ['en', 'es', 'fr', 'de'] as const;
+const PRERENDER_LOCALES = LOCALES.map(({ id }) => id);
 const PRERENDER_PAGES = [
 	'',
 	'work',

@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import type { ILocale } from '../domain/types.interface';
-import { isLocale } from '../core/platform/locale.helper';
+import { resolveLocale } from '../core/platform/locale.helper';
 import { en } from './en.translation';
 import { es } from './es.translation';
 import { fr } from './fr.translation';
@@ -22,7 +22,7 @@ import type { ITranslationMap } from './types.interface';
  * canonical fallback used when a key is absent from the active
  * locale.
  */
-const TRANSLATIONS: Readonly<Record<ILocale, ITranslationMap>> = {
+const TRANSLATIONS: Readonly<Partial<Record<ILocale, ITranslationMap>>> = {
 	en,
 	es,
 	fr,
@@ -76,7 +76,7 @@ function interpolate(template: string, args?: Record<string, unknown>): string {
 @Injectable({ providedIn: 'root' })
 export class TranslateService {
 	private readonly _platformId = inject(PLATFORM_ID);
-	private readonly _fallback: ITranslationMap = TRANSLATIONS.en;
+	private readonly _fallback: ITranslationMap = en;
 	private readonly _localeSignal = signal<ILocale>(
 		this._detectInitialLocale()
 	);
@@ -129,16 +129,17 @@ export class TranslateService {
 		if (!isPlatformBrowser(this._platformId)) return 'en';
 		try {
 			const stored = window.localStorage.getItem('cartago-locale');
-			if (isLocale(stored)) return stored;
+			const storedLocale = resolveLocale(stored);
+			if (storedLocale) return storedLocale;
 		} catch {
 			/* Storage may be blocked; fall through to the cookie. */
 		}
 		const match = document.cookie.match(/(?:^|;\s*)cartago_locale=([^;]+)/);
-		const cookie = match?.[1];
-		if (isLocale(cookie)) return cookie;
+		const cookieLocale = resolveLocale(match?.[1]);
+		if (cookieLocale) return cookieLocale;
 		const candidate = navigator.languages
-			.map((language) => language.toLowerCase().slice(0, 2))
-			.find(isLocale);
+			.map(resolveLocale)
+			.find((language): language is ILocale => language !== null);
 		return candidate ?? 'en';
 	}
 }

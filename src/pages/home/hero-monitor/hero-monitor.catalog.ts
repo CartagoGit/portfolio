@@ -26,14 +26,14 @@ const CHART_ICON_PATHS: Readonly<Record<IChartType, string>> = {
 	stream: 'M2 8c4-5 7 4 11 0s7 3 9-1M2 13c4-5 7 4 11 0s7 3 9-1M2 18c4-5 7 4 11 0s7 3 9-1',
 };
 
-const CHART_LABELS: Readonly<Record<ILocale, Readonly<Record<IChartType, string>>>> = {
+const CHART_LABELS: Readonly<Partial<Record<ILocale, Readonly<Record<IChartType, string>>>>> = {
 	en: { bars: 'Bars', line: 'Line', area: 'Area', dots: 'Dots', pulse: 'Pulse', wave: 'Wave', grid: 'Grid', stacked: 'Stacked', scatter: 'Scatter', radar: 'Radar', donut: 'Donut', heatmap: 'Heatmap', treemap: 'Treemap', stream: 'Stream' },
 	es: { bars: 'Barras', line: 'Línea', area: 'Área', dots: 'Puntos', pulse: 'Pulso', wave: 'Onda', grid: 'Cuadrícula', stacked: 'Apilado', scatter: 'Dispersión', radar: 'Radar', donut: 'Rosquilla', heatmap: 'Mapa térmico', treemap: 'Mapa árbol', stream: 'Flujo' },
 	fr: { bars: 'Barres', line: 'Ligne', area: 'Aire', dots: 'Points', pulse: 'Impulsion', wave: 'Onde', grid: 'Grille', stacked: 'Empilé', scatter: 'Dispersion', radar: 'Radar', donut: 'Anneau', heatmap: 'Carte thermique', treemap: 'Arborescence', stream: 'Flux' },
 	de: { bars: 'Balken', line: 'Linie', area: 'Fläche', dots: 'Punkte', pulse: 'Impuls', wave: 'Welle', grid: 'Raster', stacked: 'Gestapelt', scatter: 'Streuung', radar: 'Radar', donut: 'Ring', heatmap: 'Wärmekarte', treemap: 'Baumkarte', stream: 'Strom' },
 };
 
-export const CHART_OPTIONS: readonly IChartOption[] = CHART_TYPES.map((id) => ({ id, label: CHART_LABELS.en[id], iconPath: CHART_ICON_PATHS[id] }));
+export const CHART_OPTIONS: readonly IChartOption[] = CHART_TYPES.map((id) => ({ id, label: CHART_LABELS.en![id], iconPath: CHART_ICON_PATHS[id] }));
 
 export const DESTINATION_ICON_PATHS: Readonly<Record<IMonitorDestinationKind, string>> = {
 	website: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.93 6h-3.17a15.6 15.6 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8ZM12 4c.83 1.17 1.51 2.51 1.98 4h-3.96C10.49 6.51 11.17 5.17 12 4ZM9.62 4.44A15.6 15.6 0 0 0 8.24 8H5.07a8.03 8.03 0 0 1 4.55-3.56ZM4.26 10h3.39a17.1 17.1 0 0 0 0 4H4.26a8.08 8.08 0 0 1 0-4Zm.81 6h3.17a15.6 15.6 0 0 0 1.38 3.56A8.03 8.03 0 0 1 5.07 16ZM12 20c-.83-1.17-1.51-2.51-1.98-4h3.96C13.51 17.49 12.83 18.83 12 20Zm2.38-.44A15.6 15.6 0 0 0 15.76 16h3.17a8.03 8.03 0 0 1-4.55 3.56ZM16.35 14a17.1 17.1 0 0 0 0-4h3.39a8.08 8.08 0 0 1 0 4h-3.39Z',
@@ -62,5 +62,5 @@ export const CONSOLE_EFFECTS = [
 ] as const;
 
 export function chartLabel(locale: ILocale, type: IChartType): string {
-	return CHART_LABELS[locale][type];
+	return (CHART_LABELS[locale] ?? CHART_LABELS.en)![type];
 }

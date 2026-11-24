@@ -45,7 +45,6 @@ import type {
 	ICapability,
 	IDemo,
 	IHeroPanel,
-	ILanguageOption,
 	IPlaygroundStep,
 	IPlaygroundStepDefinition,
 	IPublicLink,
@@ -344,11 +343,6 @@ export const TECHNOLOGY_MARQUEE: readonly ITechnology[] = Object.freeze(
 		left.label.localeCompare(right.label, 'en', { sensitivity: 'base' })
 	)
 );
-
-export const LANGUAGES: readonly ILanguageOption[] = [
-	{ id: 'en', label: 'English', detail: 'US + UK', flag: '🇺🇸' },
-	{ id: 'es', label: 'Español', detail: 'España', flag: '🇪🇸' },
-];
 
 /**
  * Default capability row used when the active signal doesn't match any

@@ -1,5 +1,25 @@
 /** Shared domain contracts for the portfolio screens. */
-export type ILocale = 'en' | 'es' | 'fr' | 'de';
+export type ILocale =
+	| 'en'
+	| 'es'
+	| 'fr'
+	| 'de'
+	| 'it'
+	| 'pt-PT'
+	| 'pt-BR'
+	| 'ru'
+	| 'uk'
+	| 'pl'
+	| 'hr'
+	| 'tr'
+	| 'ar'
+	| 'hi'
+	| 'bn'
+	| 'zh-CN'
+	| 'zh-TW'
+	| 'ja'
+	| 'ko'
+	| 'id';
 export type IThemeId =
 	| 'dark'
 	| 'light'

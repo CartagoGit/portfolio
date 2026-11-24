@@ -88,4 +88,11 @@ describe('TranslateService', () => {
 		expect(window.localStorage.getItem('cartago-locale')).toBe('es');
 		expect(document.cookie).toContain('cartago_locale=es');
 	});
+
+	it('accepts a new canonical locale and keeps a truthful English fallback', () => {
+		window.localStorage.setItem('cartago-locale', 'it-IT');
+		const service = TestBed.inject(TranslateService);
+		expect(service.locale()).toBe('it');
+		expect(service.instant('chrome.header.navWork')).toBe('Projects');
+	});
 });

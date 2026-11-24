@@ -13,7 +13,7 @@ interface IEarthLocalLabels {
 	closeSphere: string;
 }
 
-const EARTH_TEXTURE_LABELS: Readonly<Record<ILocale, IEarthLocalLabels>> = {
+const EARTH_TEXTURE_LABELS: Readonly<Partial<Record<ILocale, IEarthLocalLabels>>> = {
 	en: {
 		categories: { earth: 'Earth', planets: 'Planets', exoplanets: 'Exoplanets', balls: 'Balls', playful: 'Brand & faces' },
 		presets: {
@@ -84,18 +84,18 @@ export const EARTH_TEXTURE_OPTIONS = [
 ] as const satisfies readonly IEarthTextureOption[];
 
 export function earthCategoryLabel(locale: ILocale, category: IEarthTextureCategory): string {
-	return EARTH_TEXTURE_LABELS[locale].categories[category];
+	return (EARTH_TEXTURE_LABELS[locale] ?? EARTH_TEXTURE_LABELS.en)!.categories[category];
 }
 
 export function earthTextureLabel(locale: ILocale, style: IEarthTextureStyle): string {
-	return EARTH_TEXTURE_LABELS[locale].presets[style];
+	return (EARTH_TEXTURE_LABELS[locale] ?? EARTH_TEXTURE_LABELS.en)!.presets[style];
 }
 
 export function earthTextureOriginLabel(locale: ILocale, style: IEarthTextureStyle): string {
 	const option = EARTH_TEXTURE_OPTIONS.find(({ id }) => id === style);
-	return option ? EARTH_TEXTURE_LABELS[locale].origins[option.origin] : '';
+	return option ? (EARTH_TEXTURE_LABELS[locale] ?? EARTH_TEXTURE_LABELS.en)!.origins[option.origin] : '';
 }
 
 export function closeSphereLabel(locale: ILocale): string {
-	return EARTH_TEXTURE_LABELS[locale].closeSphere;
+	return (EARTH_TEXTURE_LABELS[locale] ?? EARTH_TEXTURE_LABELS.en)!.closeSphere;
 }

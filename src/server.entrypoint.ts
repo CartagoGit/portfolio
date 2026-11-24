@@ -6,6 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { resolveLocale } from './core/platform/locale.helper';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -42,9 +43,8 @@ function localeMiddleware(ctx: {
 	next: express.NextFunction;
 }): void {
 	const { req, res, next } = ctx;
-	const match = req.path.match(/^\/(en|es|fr|de)(\/.*)?$/);
-	if (!match) return next();
-	const locale = match[1];
+	const routeLocale = req.path.split('/')[1];
+	const locale = resolveLocale(routeLocale);
 	if (!locale) return next();
 	res.setHeader('Content-Language', locale);
 	return next();
