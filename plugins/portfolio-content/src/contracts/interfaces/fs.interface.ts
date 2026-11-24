@@ -1,7 +1,8 @@
 /**
- * Shared file-system interface used by every introspection engine.
- * Kept narrow on purpose — the engines only need readDir, exists,
- * readText, and a directory test.
+ * Narrow read-only file-system port shared by every introspection
+ * service. All paths are workspace-relative with `/` separators; the
+ * production adapter anchors them to the workspace root, tests inject
+ * an in-memory tree.
  */
 export interface IFileSystem {
 	readonly readDir: (workspaceRelative: string) => Promise<readonly string[]>;

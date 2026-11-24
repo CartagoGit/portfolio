@@ -1,16 +1,9 @@
 /**
- * Domain introspection contracts. The engine reads
- * `src/domain/portfolio.types.interface.ts` to extract the public type union
- * (`IPortfolioPageId`, `ICapabilityId`, …) — the contract surface every
- * feature talks to. Pure-static: no symbol resolver, just regex
- * extraction over the source.
+ * Domain introspection contracts. Every exported type, interface and
+ * const found in the domain root is reported, in source order.
  */
 
-export type PortfolioDomainKind =
-	| 'union'
-	| 'interface'
-	| 'type'
-	| 'const';
+export type PortfolioDomainKind = 'union' | 'interface' | 'type' | 'const';
 
 export interface IPortfolioDomainContract {
 	readonly name: string;
@@ -21,6 +14,7 @@ export interface IPortfolioDomainContract {
 }
 
 export interface IPortfolioDomainMap {
+	readonly domainRoot: string;
 	readonly contracts: readonly IPortfolioDomainContract[];
 	readonly generatedAt: string;
 }

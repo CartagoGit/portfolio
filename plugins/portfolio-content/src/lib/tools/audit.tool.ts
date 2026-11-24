@@ -1,76 +1,71 @@
 /**
- * `portfolio_public_audit` tool (support). Read-only scan of public
- * templates for forbidden terms and `TODO(image)` placeholders.
- * Severity-labelled; bilingual remediation.
+ * `portfolio_public_audit` tool. Scans every public template found at
+ * call time for forbidden terms and `TODO(image)` placeholders.
  */
 
 import { z } from 'zod';
 
 import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
-import {
-	buildFsPublicAuditReader,
-	runPublicAudit,
-} from '../services/audit.service';
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
+import type { IPortfolioContentOptions } from '../../contracts/interfaces/plugin-options.interface';
+import { runPublicAudit } from '../services/audit.service';
+import { discoverContentPaths } from '../services/content.service';
+
+export const AUDIT_TOOL_ID = 'portfolio_public_audit';
 
 export interface IBuildAuditToolOptions {
-	readonly namespacePrefix: string;
-	readonly contentPaths: readonly string[];
-	readonly forbiddenTerms: readonly string[];
-	readonly perSeRoots: readonly string[];
-	readonly locale: 'en' | 'es';
+	readonly fs: IFileSystem;
+	readonly options: IPortfolioContentOptions;
 }
 
 const FINDING = z.object({
 	id: z.string(),
 	severity: z.enum(['error', 'warning', 'info']),
 	message: z.string(),
-	location: z.object({
-		contentPath: z.string(),
-		line: z.number().optional(),
-	}),
+	location: z.object({ contentPath: z.string(), line: z.number().optional() }),
 	remediation: z.string(),
 });
 
 const OUTPUT = z.object({
 	ok: z.boolean(),
 	contentPaths: z.array(z.string()),
-	severity: z.object({
-		errors: z.number(),
-		warnings: z.number(),
-		info: z.number(),
-	}),
+	severity: z.object({ errors: z.number(), warnings: z.number(), info: z.number() }),
 	findings: z.array(FINDING),
 	nextAction: z.string(),
 });
 
 export const buildAuditTool = (
-	options: IBuildAuditToolOptions,
+	deps: IBuildAuditToolOptions,
 ): IToolRegistration => ({
-	id: 'portfolio_public_audit',
-	summary:
-		'Audit public portfolio templates for forbidden employer/client terms and TODO(image) placeholders.',
+	id: AUDIT_TOOL_ID,
+	summary: 'Audit the public portfolio templates for forbidden terms and TODO(image) placeholders.',
 	tags: ['portfolio', 'audit'],
 	register: async (server) => {
-		const reader = await buildFsPublicAuditReader();
 		server.registerTool(
-			`${options.namespacePrefix}_public_audit`,
+			AUDIT_TOOL_ID,
 			{
 				description:
-					'Scan the configured public templates. Reports forbidden employer/client terms as `error`-severity findings, per-se forbidden roots (case-insensitive, separator-collapsed) as `error`-severity findings, and `TODO(image): …` placeholders as `warning`-severity findings. Pure read; no writes, no network.',
-				inputSchema: z.object({
-					contentPaths: z.array(z.string()).optional(),
-				}),
+					'Discover every `*.html` template under the configured content roots (plus include/exclude globs) and report forbidden employer/client terms and per-se roots as errors and `TODO(image)` placeholders as warnings. Pure read.',
+				inputSchema: z.object({ contentPaths: z.array(z.string()).optional() }),
 				outputSchema: OUTPUT,
 			},
 			async (args: { contentPaths?: readonly string[] }) => {
-				const contentPaths = args.contentPaths ?? options.contentPaths;
+				const o = deps.options;
+				const contentPaths =
+					args.contentPaths ??
+					(await discoverContentPaths({
+						fs: deps.fs,
+						roots: o.contentRoots,
+						includeGlobs: o.contentIncludeGlobs,
+						excludeGlobs: o.contentExcludeGlobs,
+					}));
 				const report = await runPublicAudit({
 					contentPaths,
-					forbiddenTerms: options.forbiddenTerms,
-					perSeRoots: options.perSeRoots,
-					locale: options.locale,
-					reader,
+					forbiddenTerms: o.forbiddenTerms,
+					perSeRoots: o.perSeRoots,
+					locale: o.locale,
+					reader: deps.fs,
 				});
 				return toolJson(report);
 			},

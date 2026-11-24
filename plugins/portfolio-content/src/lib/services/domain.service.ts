@@ -1,10 +1,11 @@
 /**
- * Domain contract introspection engine. Reads
- * `src/domain/types.interface.ts` and pulls out the exported unions
+ * Domain contract introspection engine. Reads every non-spec `.ts` file
+ * under the domain root and pulls out the exported unions
  * (`type X = 'a' | 'b' | ...`), interfaces, type aliases, and
  * const exports. Pure-static: line-by-line regex over the source
  * text — no TypeScript compiler API. Adequate for the size of this
- * workspace and avoids the cost of a tsc round-trip.
+ * workspace (the file is ~150 lines) and avoids the cost of a tsc
+ * round-trip.
  *
  * Per-line scanning keeps the result deterministic: the order of the
  * output matches the order of declarations in the source. Multi-line
@@ -18,11 +19,9 @@ import type {
 	IPortfolioDomainContract,
 	IPortfolioDomainMap,
 	PortfolioDomainKind,
-} from '../contracts/interfaces/domain.interface';
-import type { IFileSystem } from '../contracts/interfaces/fs.interface';
-
-const DOMAIN_SOURCE_PATH = 'src/domain/types.interface.ts';
-const LEGACY_DOMAIN_SOURCE_PATH = 'src/domain/portfolio.types.interface.ts';
+} from '../../contracts/interfaces/domain.interface';
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
+import { walkFiles } from './fs.service';
 
 const HEAD_RE = /^export\s+(?:type|interface|const)\s+\w+/;
 
@@ -121,40 +120,25 @@ export const parseDomainSource = (
 	return contracts;
 };
 
+export interface IBuildDomainMapOptions {
+	readonly fs: IFileSystem;
+	readonly domainRoot: string;
+}
+
 export const buildDomainMap = async (
-	fs: IFileSystem,
+	options: IBuildDomainMapOptions,
 	request: IBuildDomainMapRequest = {},
 ): Promise<IPortfolioDomainMap> => {
-	if (!(await fs.exists(DOMAIN_SOURCE_PATH))) {
-		throw new Error(
-			`Portfolio domain source "${DOMAIN_SOURCE_PATH}" is missing. ` +
-				`Restore that file or update the portfolio-content domain service after an intentional move; "${LEGACY_DOMAIN_SOURCE_PATH}" is stale.`,
+	const { fs, domainRoot } = options;
+	const files = (await walkFiles(fs, domainRoot)).filter(
+		(file) => file.endsWith('.ts') && !file.endsWith('.spec.ts') && !file.endsWith('.d.ts'),
+	);
+	const contracts: IPortfolioDomainContract[] = [];
+	for (const file of files) {
+		const parsed = parseDomainSource(await fs.readText(file), file);
+		contracts.push(
+			...(request.kind ? parsed.filter((c) => c.kind === request.kind) : parsed),
 		);
 	}
-	if (await fs.isDirectory(DOMAIN_SOURCE_PATH)) {
-		throw new Error(
-			`Portfolio domain source "${DOMAIN_SOURCE_PATH}" is a directory, not a file. ` +
-				'Restore the domain contract file at that path.',
-		);
-	}
-
-	let source: string;
-	try {
-		source = await fs.readText(DOMAIN_SOURCE_PATH);
-	} catch (error) {
-		const detail = error instanceof Error ? ` ${error.message}` : '';
-		throw new Error(
-			`Cannot read portfolio domain source "${DOMAIN_SOURCE_PATH}".${detail} ` +
-				'Check file permissions and restore readable domain contracts.',
-		);
-	}
-
-	const parsed = parseDomainSource(source, DOMAIN_SOURCE_PATH);
-	const filtered = request.kind
-		? parsed.filter((contract) => contract.kind === request.kind)
-		: parsed;
-	return {
-		contracts: filtered,
-		generatedAt: new Date().toISOString(),
-	};
+	return { domainRoot, contracts, generatedAt: new Date().toISOString() };
 };

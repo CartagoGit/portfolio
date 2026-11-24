@@ -1,65 +1,64 @@
 /**
- * `portfolio_features` tool. Returns the components in `src/features/`
- * grouped by feature, so an agent can answer "what's in the home
- * feature?" without reading the disk by hand.
+ * `portfolio_features` tool. Lists every page directory with the
+ * components found below it, read from disk at call time.
  */
 
 import { z } from 'zod';
 
 import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
-import { buildFeatureMap, KNOWN_FEATURES } from '../services/features.service';
-import { buildFsFileSystem } from '../services/architecture.service';
-import type { IFileSystem } from '../contracts/interfaces/fs.interface';
+import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
+import { buildPageMap } from '../services/pages.service';
+
+export const FEATURES_TOOL_ID = 'portfolio_features';
 
 export interface IBuildFeaturesToolOptions {
-	readonly namespacePrefix: string;
+	readonly fs: IFileSystem;
+	readonly pagesRoot: string;
 }
-
-const COMPONENT = z.object({
-	name: z.string(),
-	path: z.string(),
-	subFeature: z.string().optional(),
-});
-
-const FEATURE = z.object({
-	id: z.string(),
-	label: z.string(),
-	path: z.string(),
-	components: z.array(COMPONENT),
-});
 
 const OUTPUT = z.object({
 	ok: z.literal(true),
-	features: z.array(FEATURE),
+	pagesRoot: z.string(),
+	pages: z.array(
+		z.object({
+			id: z.string(),
+			label: z.string(),
+			path: z.string(),
+			pageFile: z.string().optional(),
+			components: z.array(
+				z.object({
+					name: z.string(),
+					path: z.string(),
+					subFeature: z.string().optional(),
+				}),
+			),
+		}),
+	),
 	generatedAt: z.string(),
 });
 
 export const buildFeaturesTool = (
 	options: IBuildFeaturesToolOptions,
 ): IToolRegistration => ({
-	id: 'portfolio_features',
-	summary: 'List every Angular component the portfolio features own.',
+	id: FEATURES_TOOL_ID,
+	summary: 'List every page directory and the components it owns.',
 	tags: ['portfolio', 'features'],
 	register: async (server) => {
-		const fs: IFileSystem = await buildFsFileSystem();
 		server.registerTool(
-			`${options.namespacePrefix}_features`,
+			FEATURES_TOOL_ID,
 			{
 				description:
-					'Walk `src/features/<id>/` and return every `*.component.ts` the feature owns (top-level page component + sub-feature folders). Pure read.',
-				inputSchema: z.object({
-					featureId: z.enum(KNOWN_FEATURES as readonly [string, ...string[]]).optional(),
-				}),
+					'Walk the pages root and return, per page directory, its `*.page.ts` file and every nested `*.component.ts`. Read from disk at call time; pure read.',
+				inputSchema: z.object({ pageId: z.string().optional() }),
 				outputSchema: OUTPUT,
 			},
-			async (args: { featureId?: string }) => {
-				const map = await buildFeatureMap(fs, {
-					...((args.featureId as (typeof KNOWN_FEATURES)[number] | undefined)
-						? { featureId: args.featureId as (typeof KNOWN_FEATURES)[number] }
-						: {}),
-				});
-				return toolJson({ ok: true, ...map });
+			async (args: { pageId?: string }) => {
+				const map = await buildPageMap(
+					{ fs: options.fs, pagesRoot: options.pagesRoot },
+					args.pageId ? { pageId: args.pageId } : {},
+				);
+				return toolJson({ ok: true as const, ...map });
 			},
 		);
 	},

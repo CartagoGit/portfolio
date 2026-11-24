@@ -179,21 +179,6 @@ export interface IPublicAuditOptions {
 	readonly reader: IPublicAuditReader;
 }
 
-export const buildFsPublicAuditReader = async (): Promise<IPublicAuditReader> => {
-	const loader = await import('node:fs/promises');
-	const readText = async (path: string): Promise<string> =>
-		loader.readFile(path, 'utf8');
-	const exists = async (path: string): Promise<boolean> => {
-		try {
-			await loader.access(path);
-			return true;
-		} catch {
-			return false;
-		}
-	};
-	return { readText, exists };
-};
-
 export const runPublicAudit = async (
 	options: IPublicAuditOptions,
 ): Promise<IPublicAuditReport> => {
@@ -214,8 +199,8 @@ export const runPublicAudit = async (
 				severity: 'info',
 				message:
 					locale === 'es'
-						? `Ruta duplicada en la configuración: ${contentPath}`
-						: `Duplicate path in config: ${contentPath}`,
+						? `Ruta duplicada en la auditoría: ${contentPath}`
+						: `Duplicate audited path: ${contentPath}`,
 				location: { contentPath },
 				remediation:
 					locale === 'es'
@@ -232,13 +217,13 @@ export const runPublicAudit = async (
 				severity: 'info',
 				message:
 					locale === 'es'
-						? `Ruta declarada pero sin archivo: ${contentPath}`
-						: `Declared path has no file yet: ${contentPath}`,
+						? `Ruta solicitada sin archivo: ${contentPath}`
+						: `Requested path has no file: ${contentPath}`,
 				location: { contentPath },
 				remediation:
 					locale === 'es'
-						? 'Crea el archivo o quítalo del campo `contentPaths` del plugin.'
-						: 'Create the file or remove it from the plugin `contentPaths` config.',
+						? 'Crea el archivo o ajusta las rutas de la auditoría.'
+						: 'Create the file or adjust the audited paths.',
 			});
 			continue;
 		}
