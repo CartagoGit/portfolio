@@ -16,18 +16,15 @@
 }
 
 .demo-games__fullscreen {
-	position: absolute;
+	position: relative;
 	z-index: 4;
-	top: .65rem;
-	right: .65rem;
+	top: auto;
+	right: auto;
+	display: flex;
+	justify-content: center;
+	width: max-content;
 	min-height: 38px;
-	padding: .45rem .6rem;
-	border: 1px solid var(--line);
-	border-radius: 8px;
-	background: color-mix(in srgb, var(--surface) 92%, transparent);
-	color: var(--ink);
-	font: 700 .72rem tokens.$font-mono, monospace;
-	backdrop-filter: blur(10px);
+	margin: .65rem .65rem 0 auto;
 }
 
 .demo-games__tabs {
@@ -125,9 +122,10 @@
 	}
 
 	.demo-games__fullscreen {
-		left: .65rem;
-		right: .65rem;
-		text-align: center;
+		left: auto;
+		right: auto;
+		width: calc(100% - 1.3rem);
+		margin: .65rem;
 	}
 }
 

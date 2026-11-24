@@ -114,7 +114,7 @@
 				<a [href]="link.href" target="_blank" rel="noreferrer">
 					<div class="work-page__directory-icon" aria-hidden="true">
 						@if (link.imageSrc; as image) {
-							<img [src]="image" alt="" />
+							<img [src]="image" alt="" width="64" height="64" />
 						} @else if (link.iconPath; as iconPath) {
 							<svg viewBox="0 0 24 24">
 								<path [attr.d]="iconPath" [attr.fill]="link.color ?? 'currentColor'" />

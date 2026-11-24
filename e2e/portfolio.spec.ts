@@ -18,7 +18,7 @@ test('S14-01 monitor preserves preview, destinations and section state', async (
 	await openSpanishRoute(page);
 	await page.mouse.move(10, 10);
 	await expect(page.locator('.header__nav a')).toHaveCount(8);
-	await expect(page.locator('.hero-monitor__chart-switcher button span')).toHaveCount(0);
+	await expect(page.locator('.hero-monitor__chart-switcher button span')).toHaveCount(14);
 	expect(await page.locator('.hero-monitor__chart-switcher button').first().evaluate((button) => (button as HTMLElement).offsetHeight)).toBeLessThanOrEqual(34);
 	const restingTransform = await page.locator('.hero-monitor__interface').evaluate((element) => getComputedStyle(element).transform);
 	expect(restingTransform).not.toBe('none');
@@ -47,8 +47,8 @@ test('S14-02 globe catalogue, token theme, stacking and return are stable', asyn
 	await expect(page.locator('app-hero-monitor')).toHaveClass(/hero-monitor-host--earth-front/);
 	await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 
-	await expect(page.getByRole('tab')).toHaveCount(5);
-	const expectedCounts = [6, 10, 3, 8, 3];
+	await expect(page.getByRole('tab')).toHaveCount(6);
+	const expectedCounts = [6, 10, 3, 5, 3, 3];
 	let total = 0;
 	for (let category = 0; category < expectedCounts.length; category += 1) {
 		await page.locator('.hero-monitor__earth-categories button').nth(category).click();
@@ -136,7 +136,7 @@ test('S14-06 route tabs are keyboard usable and every mobile route stays contain
 	await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
 
 	await openSpanishRoute(page, 'demos');
-	await expect(page.locator('app-demos-showcase [role="tab"]')).toHaveCount(3);
+	await expect(page.locator('app-demos-showcase [role="tab"]')).toHaveCount(6);
 	await page.locator('app-demos-showcase [role="tab"]').nth(1).click();
 	await expect(page.locator('.showcase__stage')).toHaveAttribute('data-scene', 'flow');
 	await expect(page.locator('.demo-games__tabs [role="tab"]')).toHaveCount(8);

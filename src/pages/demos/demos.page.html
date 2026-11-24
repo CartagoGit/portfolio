@@ -21,7 +21,7 @@
 			<a [href]="demo.url" target="_blank" rel="noreferrer" [attr.data-demo]="demo.title">
 				<div class="demos-page__link-logo" aria-hidden="true">
 					@if (demo.imageSrc; as image) {
-						<img [src]="image" alt="" />
+						<img [src]="image" alt="" width="64" height="64" />
 					} @else if (demo.iconPath; as iconPath) {
 						<svg viewBox="0 0 24 24"><path [attr.d]="iconPath" fill="currentColor" /></svg>
 					}
