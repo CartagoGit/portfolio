@@ -26,8 +26,8 @@ jobs:
         with:
           bun-version: 1.4.3
       # DelendAI is not on npm yet: install the forge's stable release (tag
-      # `stable`, else the newest `v*` tag) where `prepare` links it, exactly
-      # as every machine follows ~/.local/share/delendai/stable.
+      # `stable`, else the newest `v*` tag) and put the same global `delendai`
+      # command every machine has on PATH; `prepare` links its core.
       - name: Install the stable DelendAI release
         env:
           DELENDAI_REPO: https://github.com/CartagoGit/DelendAI.git
@@ -40,6 +40,10 @@ jobs:
           git clone --quiet --depth 1 --branch "$ref" "$DELENDAI_REPO" "$RUNNER_TEMP/delendai"
           (cd "$RUNNER_TEMP/delendai" && bun install --frozen-lockfile --ignore-scripts && bun run build)
           echo "DELENDAI_PATH=$RUNNER_TEMP/delendai" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/bin"
+          printf '#!/usr/bin/env sh\nexec bun "%s/packages/cli/dist/index.js" "$@"\n' "$RUNNER_TEMP/delendai" > "$RUNNER_TEMP/bin/delendai"
+          chmod +x "$RUNNER_TEMP/bin/delendai"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
       - name: Install locked dependencies
         run: bun install --frozen-lockfile
       - name: Validate project configuration, naming, assets and plugin contract

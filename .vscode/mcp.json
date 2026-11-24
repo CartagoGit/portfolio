@@ -2,9 +2,8 @@
 	"servers": {
 		"delendai": {
 			"type": "stdio",
-			"command": "bun",
+			"command": "delendai",
 			"args": [
-				"${workspaceFolder}/.cache/delendai-runtime/packages/cli/dist/index.js",
 				"__serve",
 				"--workspace=${workspaceFolder}",
 				"--config=${workspaceFolder}/delendai.config.json",

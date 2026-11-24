@@ -1,20 +1,11 @@
-import { fileURLToPath } from 'node:url';
-
 import { defineConfig } from 'vitest/config';
 
 /**
- * `@delendai/core/public` resolves through the gitignored runtime link
- * (`bun tools/delendai-runtime.script.ts`), so no machine path is committed.
+ * `@delendai/core/public` resolves through `node_modules/@delendai/core`,
+ * which `bun install` links to the machine's stable DelendAI
+ * (`tools/link-delendai-core.script.ts`).
  */
-const corePublic = fileURLToPath(
-	new URL(
-		'../../.cache/delendai-runtime/packages/core/dist/public/index.js',
-		import.meta.url,
-	),
-);
-
 export default defineConfig({
-	resolve: { alias: { '@delendai/core/public': corePublic } },
 	test: {
 		name: 'portfolio-content',
 		include: ['src/**/*.spec.ts', 'tests/**/*.spec.ts'],

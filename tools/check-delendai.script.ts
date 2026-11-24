@@ -3,13 +3,13 @@
  * importing `@delendai/core`:
  *
  *   1. no committed file carries a machine path (`/home/`, `/Users/`);
- *   2. the linked stable CLI serves the workspace over stdio, the local
- *      plugin activates, every `delendai_portfolio_*` tool is listed and each
- *      read-only tool answers `ok`.
+ *   2. the global `delendai` command (the one `.mcp.json` starts) serves the
+ *      workspace over stdio, the local plugin activates, every
+ *      `delendai_portfolio_*` tool is listed and each read-only tool answers
+ *      `ok`.
  *
- * The runtime is the machine's stable DelendAI, reached through the gitignored
- * `.cache/delendai-runtime` link (`bun run mcp:link`); CI installs the same
- * stable release before `bun install`.
+ * The command runs the machine's stable DelendAI; CI installs the same stable
+ * release and puts a `delendai` command on PATH.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -17,7 +17,6 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CLI = join(root, '.cache/delendai-runtime/packages/cli/dist/index.js');
 const PLUGIN = 'portfolio-content';
 /** Tool ids; the host serves each as `<core prefix>_<plugin prefix>_<id>`. */
 const TOOL_PREFIX = 'delendai_portfolio';
@@ -73,8 +72,7 @@ const findMachinePaths = (): string[] => {
 const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 	const proc = Bun.spawn(
 		[
-			'bun',
-			CLI,
+			'delendai',
 			'__serve',
 			`--workspace=${root}`,
 			`--config=${join(root, 'delendai.config.json')}`,
@@ -188,8 +186,15 @@ const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 errors.push(...findMachinePaths());
 
 let report: { tools: string[]; calls: string[] } | undefined;
-if (!existsSync(CLI)) {
-	errors.push('DelendAI runtime link missing: run `bun run mcp:link`.');
+const onPath = (command: string): boolean =>
+	(process.env['PATH'] ?? '')
+		.split(':')
+		.some((dir) => dir.length > 0 && existsSync(join(dir, command)));
+
+if (!onPath('delendai')) {
+	errors.push(
+		'no `delendai` command on PATH: install the stable DelendAI channel.'
+	);
 } else {
 	try {
 		report = await probe();

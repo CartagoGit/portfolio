@@ -1,5 +1,5 @@
 {
-	"$schema": "./.cache/delendai-runtime/packages/core/schema/delendai.config.schema.json",
+	"$schema": "./node_modules/@delendai/core/schema/delendai.config.schema.json",
 	"cacheDir": ".cache/delendai",
 	"docsDir": "docs/delendai",
 	"plugins": {

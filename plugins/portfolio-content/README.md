@@ -86,5 +86,6 @@ plugins/portfolio-content/
 ## Develop
 
 `bun run mcp:test`, `bun run mcp:typecheck` and `bun run mcp:check` from
-the repo root. `@delendai/core/public` resolves through the gitignored
-`.cache/delendai-runtime` link (`bun run mcp:link`, or `DELENDAI_PATH`).
+the repo root. `@delendai/core/public` resolves through
+`node_modules/@delendai/core`, which `bun install` links to the machine's
+stable DelendAI (`bun run mcp:link`; `DELENDAI_PATH` picks another install).

@@ -2,9 +2,8 @@
 	"mcpServers": {
 		"delendai": {
 			"type": "stdio",
-			"command": "bun",
+			"command": "delendai",
 			"args": [
-				"./.cache/delendai-runtime/packages/cli/dist/index.js",
 				"__serve",
 				"--workspace=.",
 				"--config=delendai.config.json",

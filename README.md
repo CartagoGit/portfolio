@@ -343,7 +343,7 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Plugins and orchestration
 
-`delendai` (local install, linked on demand into the gitignored `.cache/delendai-runtime` by `bun tools/delendai-runtime.script.ts`, which runs on `bun install`; set `DELENDAI_PATH` to use another install). The `portfolio-content` plugin needs `@delendai/core` only for types and tests (the host supplies it at load time) and `zod` for the schemas of its tools.
+`delendai` (the machine's global `delendai` command, which runs the stable channel at `~/.local/share/delendai/stable`; set `DELENDAI_PATH` to use another install). The `portfolio-content` plugin needs `@delendai/core` only for types and tests (the host supplies it at load time) and `zod` for the schemas of its tools.
 
 ### Stack decisions
 
@@ -499,7 +499,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. The project carries no `@delendai/*` dependency: the plugin's `@delendai/core/public` imports resolve through the same link (tsconfig `paths`, vitest alias), and the server hands the plugin its own core at load time. GitHub Actions installs the forge's stable release (tag `stable`, else the newest `v*` tag) before `bun install`, so CI runs the same checks.
+`DelendAI` is not published to npm. `.mcp.json` and `.vscode/mcp.json` start the global `delendai` command, the same on every machine, so no machine path is committed; once DelendAI is on npm, a global install provides the same command. `bun install` (the `prepare` script, or `bun run mcp:link`) links `node_modules/@delendai/core` to that stable install, so the plugin's `@delendai/core/public` imports and the config's `$schema` resolve as they will from a published package; the server hands the plugin its own core at load time. `mcp:check` starts the `delendai` command over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. GitHub Actions installs the forge's stable release (tag `stable`, else the newest `v*` tag) before `bun install`, so CI runs the same checks.
 
 ---
 

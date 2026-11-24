@@ -3,12 +3,7 @@
 	"compilerOptions": {
 		"types": ["node", "vitest/globals"],
 		"noEmit": true,
-		"rootDir": ".",
-		"paths": {
-			"@delendai/core/public": [
-				"../../.cache/delendai-runtime/packages/core/dist/public/index.d.ts"
-			]
-		}
+		"rootDir": "."
 	},
 	"include": ["src/**/*.ts", "tests/**/*.ts"],
 	"exclude": ["node_modules"]
