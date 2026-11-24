@@ -17,6 +17,8 @@ describe('DemosPageComponent', () => {
 	it('composes interactive games before five correctly marked demos', async () => {
 		const fixture = await createPage();
 		const element = fixture.nativeElement as HTMLElement;
+		expect(element.querySelector('app-demos-showcase')).not.toBeNull();
+		expect(element.querySelectorAll('app-demos-showcase [role="tab"]')).toHaveLength(3);
 		expect(element.querySelector('app-demo-games')).not.toBeNull();
 		expect(element.querySelectorAll('.demo-games__tabs [role="tab"]')).toHaveLength(8);
 		expect(element.querySelectorAll('.demos-page__links > a')).toHaveLength(5);

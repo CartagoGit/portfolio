@@ -136,6 +136,9 @@ test('S14-06 route tabs are keyboard usable and every mobile route stays contain
 	await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1);
 
 	await openSpanishRoute(page, 'demos');
+	await expect(page.locator('app-demos-showcase [role="tab"]')).toHaveCount(3);
+	await page.locator('app-demos-showcase [role="tab"]').nth(1).click();
+	await expect(page.locator('.showcase__stage')).toHaveAttribute('data-scene', 'flow');
 	await expect(page.locator('.demo-games__tabs [role="tab"]')).toHaveCount(8);
 	await page.getByRole('tab', { name: 'Memoria', exact: true }).click();
 	await expect(page.locator('.memory-game__grid button')).toHaveCount(12);

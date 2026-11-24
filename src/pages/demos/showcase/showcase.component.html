@@ -1,0 +1,106 @@
+<section class="showcase" aria-labelledby="showcase-title">
+	<header class="showcase__heading">
+		<div>
+			<p>{{ 'pages.demos.showcaseEyebrow' | translate }}</p>
+			<h3 id="showcase-title">
+				{{ 'pages.demos.showcaseTitleLead' | translate }}
+				<em>{{ 'pages.demos.showcaseTitleEmphasis' | translate }}</em>
+				{{ 'pages.demos.showcaseTitleTail' | translate }}
+			</h3>
+		</div>
+		<p>{{ 'pages.demos.showcaseSubtitle' | translate }}</p>
+	</header>
+
+	<div
+		class="showcase__tabs"
+		role="tablist"
+		[attr.aria-label]="'pages.demos.showcaseTabsAria' | translate"
+		(keydown)="onTabsKeydown($event)">
+		@for (tab of tabs; track tab.id) {
+			<button
+				type="button"
+				role="tab"
+				[attr.id]="'showcase-tab-' + tab.id"
+				[attr.aria-controls]="'showcase-panel-' + tab.id"
+				[attr.aria-selected]="activeScene() === tab.id"
+				[attr.tabindex]="activeScene() === tab.id ? 0 : -1"
+				[class.is-active]="activeScene() === tab.id"
+				(click)="selectScene(tab.id)">
+				<span>{{ tab.index }}</span>
+				{{ tab.labelKey | translate }}
+			</button>
+		}
+	</div>
+
+	<div
+		class="showcase__stage"
+		[attr.data-scene]="activeScene()"
+		[attr.data-revision]="signalRevision()"
+		[style.--showcase-rx]="rotateX()"
+		[style.--showcase-ry]="rotateY()"
+		role="tabpanel"
+		[attr.id]="'showcase-panel-' + activeScene()"
+		[attr.aria-labelledby]="'showcase-tab-' + activeScene()"
+		(pointermove)="moveScene($event)"
+		(pointerdown)="moveScene($event)"
+		(pointerleave)="resetPointer()">
+		@if (activeScene() === 'depth') {
+			<div class="showcase__depth" aria-hidden="true">
+				<div class="showcase__orbit showcase__orbit--one"></div>
+				<div class="showcase__orbit showcase__orbit--two"></div>
+				<div class="showcase__cube">
+					<span class="showcase__cube-face showcase__cube-face--front">C</span>
+					<span class="showcase__cube-face showcase__cube-face--back">A</span>
+					<span class="showcase__cube-face showcase__cube-face--left">R</span>
+					<span class="showcase__cube-face showcase__cube-face--right">T</span>
+					<span class="showcase__cube-face showcase__cube-face--top">3D</span>
+					<span class="showcase__cube-face showcase__cube-face--bottom">GO</span>
+				</div>
+			</div>
+			<div class="showcase__copy">
+				<p>{{ 'pages.demos.showcaseDepthKicker' | translate }}</p>
+				<h4>{{ 'pages.demos.showcaseDepthTitle' | translate }}</h4>
+				<span>{{ 'pages.demos.showcaseDepthDetail' | translate }}</span>
+			</div>
+		} @else if (activeScene() === 'flow') {
+			<div class="showcase__flow" aria-hidden="true">
+				<svg viewBox="0 0 720 320" preserveAspectRatio="none">
+					<path d="M72 185 C145 40 228 255 310 122 S505 245 640 88" />
+					<path d="M72 185 C180 280 245 88 365 188 S545 84 640 88" />
+				</svg>
+				@for (node of [0, 1, 2, 3, 4, 5, 6, 7]; track node) {
+					<span [style.--node-index]="node"></span>
+				}
+			</div>
+			<div class="showcase__copy">
+				<p>{{ 'pages.demos.showcaseFlowKicker' | translate }}</p>
+				<h4>{{ 'pages.demos.showcaseFlowTitle' | translate }}</h4>
+				<span>{{ 'pages.demos.showcaseFlowDetail' | translate }}</span>
+			</div>
+		} @else {
+			<div class="showcase__signal" aria-hidden="true">
+				<div class="showcase__radar">
+					<i></i><i></i><i></i><i></i>
+				</div>
+				<div class="showcase__signal-bars">
+					@for (bar of [42, 68, 36, 84, 57, 76, 48, 92]; track $index) {
+						<span [style.--signal-value]="bar + '%'" [style.--bar-index]="$index"></span>
+					}
+				</div>
+			</div>
+			<div class="showcase__copy">
+				<p>{{ 'pages.demos.showcaseSignalKicker' | translate }}</p>
+				<h4>{{ 'pages.demos.showcaseSignalTitle' | translate }}</h4>
+				<span>{{ 'pages.demos.showcaseSignalDetail' | translate }}</span>
+			</div>
+		}
+		<p class="showcase__hint">{{ 'pages.demos.showcaseHint' | translate }}</p>
+	</div>
+
+	<footer class="showcase__footer">
+		<button type="button" (click)="resetScene()">
+			<span aria-hidden="true">↻</span>
+			{{ 'pages.demos.showcaseReset' | translate }}
+		</button>
+	</footer>
+</section>
