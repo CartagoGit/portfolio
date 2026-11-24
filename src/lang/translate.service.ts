@@ -12,6 +12,7 @@ import { en } from './en.translation';
 import { es } from './es.translation';
 import { fr } from './fr.translation';
 import { de } from './de.translation';
+import { GLOBAL_TRANSLATIONS } from './global.translations';
 import type { ITranslationMap } from './types.interface';
 
 /**
@@ -27,6 +28,7 @@ const TRANSLATIONS: Readonly<Partial<Record<ILocale, ITranslationMap>>> = {
 	es,
 	fr,
 	de,
+	...GLOBAL_TRANSLATIONS,
 };
 
 /**

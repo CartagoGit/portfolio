@@ -89,11 +89,11 @@ describe('TranslateService', () => {
 		expect(document.cookie).toContain('cartago_locale=es');
 	});
 
-	it('accepts a new canonical locale and keeps a truthful English fallback', () => {
+	it('accepts a new canonical locale and loads its registered translation', () => {
 		window.localStorage.setItem('cartago-locale', 'it-IT');
 		const service = TestBed.inject(TranslateService);
 		expect(service.locale()).toBe('it');
-		expect(service.instant('chrome.header.navWork')).toBe('Projects');
+		expect(service.instant('chrome.header.navWork')).toBe('Progetti');
 	});
 
 	it('returns the literal fallback when an optional content term is missing', () => {
@@ -101,5 +101,17 @@ describe('TranslateService', () => {
 		expect(service.instantOr('content.terms.public-profile', 'Perfil público')).toBe(
 			'Perfil público'
 		);
+	});
+
+	it.each([
+		'it', 'pt-PT', 'pt-BR', 'ru', 'uk', 'pl', 'hr', 'tr',
+		'ar', 'hi', 'bn', 'zh-CN', 'zh-TW', 'ja', 'ko', 'id',
+	] as const)('loads native product copy for %s', (locale) => {
+		const service = TestBed.inject(TranslateService);
+		service.setLocale(locale);
+		expect(service.instant('pages.home.subtitle')).not.toBe(
+			'Nothing proves how someone works better than real examples. This portfolio is the evidence.',
+		);
+		expect(service.instant('pages.contact.formSubmit')).not.toBe('Send');
 	});
 });
