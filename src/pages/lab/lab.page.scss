@@ -151,14 +151,36 @@
 	position: fixed;
 	z-index: 9999;
 	inset: 0;
-	width: 100vw;
-	height: 100dvh;
-	min-height: 100dvh;
+	width: min(96vw, 153.6dvh) !important;
+	height: auto !important;
+	min-height: 0 !important;
+	max-height: 96dvh !important;
+	aspect-ratio: 8 / 5 !important;
+	margin: auto;
 	overflow-y: auto;
 	border-radius: 0;
 	padding: clamp(1.5rem, 5vw, 4rem);
 	background: var(--canvas);
+	display: grid;
+	place-items: center;
+	width: 100vw !important;
+	height: 100dvh !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	aspect-ratio: auto !important;
 }
+.lab-page__signal-card:fullscreen > .lab-page__fullscreen-frame,
+.lab-page__signal-card.is-fullscreen > .lab-page__fullscreen-frame {
+	position: relative;
+	display: grid;
+	width: min(96vw, 153.6dvh);
+	height: auto;
+	max-height: 96dvh;
+	aspect-ratio: 8 / 5;
+	align-content: center;
+	overflow: auto;
+}
+.lab-page__fullscreen-frame { display: contents; }
 @keyframes lab-queue-in { from { opacity: 0; transform: translateY(8px) scale(.94); } }
 @media (max-width: 900px) { .lab-page__signal-grid { grid-template-columns: 1fr; } .lab-page__signal-card { min-height: 260px; } }
 @media (max-width: 560px) { .lab-page__signal-gallery > header { align-items: stretch; flex-direction: column; } }

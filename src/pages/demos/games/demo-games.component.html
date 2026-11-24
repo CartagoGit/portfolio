@@ -27,7 +27,8 @@
 		[class.is-alternate]="transitionAlternate()"
 		[style.--demo-entry-direction]="transitionDirection()"
 		[attr.aria-labelledby]="'demo-tab-' + activeGame()"
-		[attr.data-game]="activeGame()">
+		[attr.data-game]="activeGame()"
+		[class.is-fallback-fullscreen]="fullscreen()">
 		<button
 			class="demo-games__fullscreen interactive-fullscreen-control"
 			type="button"
@@ -35,31 +36,33 @@
 			(click)="toggleFullscreen($event)">
 			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
 		</button>
-		@switch (activeGame()) {
-			@case ('reflex') {
-				<app-reflex-game />
+		<div class="demo-games__fullscreen-frame">
+			@switch (activeGame()) {
+				@case ('reflex') {
+					<app-reflex-game />
+				}
+				@case ('reaction') {
+					<app-reaction-game />
+				}
+				@case ('memory') {
+					<app-memory-game />
+				}
+				@case ('dice') {
+					<app-dice-game />
+				}
+				@case ('rps') {
+					<app-rps-game />
+				}
+				@case ('color') {
+					<app-color-game />
+				}
+				@case ('tap') {
+					<app-tap-game />
+				}
+				@case ('guess') {
+					<app-guess-game />
+				}
 			}
-			@case ('reaction') {
-				<app-reaction-game />
-			}
-			@case ('memory') {
-				<app-memory-game />
-			}
-			@case ('dice') {
-				<app-dice-game />
-			}
-			@case ('rps') {
-				<app-rps-game />
-			}
-			@case ('color') {
-				<app-color-game />
-			}
-			@case ('tap') {
-				<app-tap-game />
-			}
-			@case ('guess') {
-				<app-guess-game />
-			}
-		}
+		</div>
 	</div>
 </section>

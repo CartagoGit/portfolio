@@ -195,9 +195,12 @@ video {
 	position: fixed !important;
 	z-index: 9999 !important;
 	inset: 0 !important;
-	width: 100vw !important;
-	height: 100dvh !important;
-	min-height: 100dvh !important;
+	width: min(96vw, 153.6dvh) !important;
+	height: auto !important;
+	min-height: 0 !important;
+	max-height: 96dvh !important;
+	aspect-ratio: 8 / 5;
+	margin: auto !important;
 	overflow-y: auto !important;
 	padding: clamp(1rem, 3vw, 2.5rem) !important;
 	border-radius: 0 !important;

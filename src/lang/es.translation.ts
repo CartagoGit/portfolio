@@ -47,8 +47,8 @@ export const es: ITranslationMap = {
 			titleTail: 'que entregan todos los días.',
 			subtitle:
 				'Angular, TypeScript y entrega móvil, organizados en torno a flujos de trabajo y no métricas de vanidad.',
-			role: 'Construyo sistemas frontend de producto que deben seguir claros cuando se usan de verdad.',
-			intro: 'Explora código en funcionamiento, experimentos visuales y decisiones de entrega. Los ejemplos muestran la arquitectura, la interacción y el cuidado detrás del trabajo.',
+			role: 'Construyo productos frontend claros y sólidos para el uso real.',
+			intro: 'Código, interacción y entrega real. Ejemplos que muestran cómo trabajo.',
 			ctaWork: 'Ver trabajo',
 			ctaContact: 'Hablemos',
 			capabilitiesTitle: 'Capacidades',

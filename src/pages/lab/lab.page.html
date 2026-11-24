@@ -32,22 +32,28 @@
 		<div class="lab-page__signal-grid">
 			<article class="lab-page__signal-card lab-page__signal-card--tune" data-experiment="tune" [class.is-fullscreen]="fullscreenCard() === 'tune'">
 				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'tune' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
 				<p>{{ 'pages.lab.motionEyebrow' | translate }}</p><h3>{{ 'pages.lab.motionTitle' | translate }}</h3>
 				<div class="lab-page__signal-meter" [style.--signal-strength]="signalStrength() + '%'" aria-hidden="true"><i></i></div>
 				<output>{{ signalStrength() }}%</output>
 				<button type="button" (click)="tuneSignal()">{{ 'pages.lab.randomizeData' | translate }}</button>
+				</div>
 			</article>
 			<article class="lab-page__signal-card lab-page__signal-card--route" data-experiment="route" [class.is-fullscreen]="fullscreenCard() === 'route'" [attr.data-path]="packetPath()">
 				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'route' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
 				<p>{{ 'pages.lab.stateEyebrow' | translate }}</p><h3>{{ 'pages.lab.stateTitle' | translate }}</h3>
 				<div class="lab-page__packet-route" aria-hidden="true"><i>A</i><span></span><i>B</i><span></span><i>C</i><b></b></div>
 				<button type="button" (click)="routePacket()">{{ 'pages.lab.stateRun' | translate }}</button>
+				</div>
 			</article>
 			<article class="lab-page__signal-card lab-page__signal-card--queue" data-experiment="queue" [class.is-fullscreen]="fullscreenCard() === 'queue'">
 				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'queue' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
 				<p>{{ 'pages.lab.concurrencyEyebrow' | translate }}</p><h3>{{ 'pages.lab.concurrencyTitle' | translate }}</h3>
 				<ul>@for (item of queue(); track item) { <li>{{ item }}</li> }</ul>
 				<div><button type="button" (click)="enqueue()">{{ 'pages.lab.runConcurrent' | translate }}</button><button type="button" (click)="dequeue()">{{ 'pages.lab.cancelConcurrent' | translate }}</button></div>
+				</div>
 			</article>
 		</div>
 	</section>

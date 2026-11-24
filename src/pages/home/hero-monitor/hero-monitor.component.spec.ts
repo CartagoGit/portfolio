@@ -100,4 +100,17 @@ describe('HeroMonitorComponent', () => {
 		expect(fixture.componentInstance.previewItems()[0]?.detail).toContain('Lenguaje tipado');
 		TestBed.inject(TranslateService).setLocale('en');
 	});
+
+	it('opens a stable CSS fullscreen state without the browser Fullscreen API', async () => {
+		await TestBed.configureTestingModule({ imports: [HeroMonitorComponent] }).compileComponents();
+		const fixture = TestBed.createComponent(HeroMonitorComponent);
+		fixture.componentRef.setInput('locale', 'es');
+		fixture.componentRef.setInput('technologies', []);
+		fixture.detectChanges();
+		await fixture.componentInstance.toggleMonitorFullscreen(new MouseEvent('click'));
+		fixture.detectChanges();
+		expect(fixture.componentInstance.monitorFullscreen()).toBe(true);
+		expect((fixture.nativeElement as HTMLElement).classList.contains('hero-monitor-host--fullscreen')).toBe(true);
+		expect(fixture.componentInstance.monitorExpanded()).toBe(true);
+	});
 });

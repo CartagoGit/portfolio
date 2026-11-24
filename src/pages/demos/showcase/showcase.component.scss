@@ -261,15 +261,27 @@
 .showcase__stage > .showcase__fullscreen {
 	@include motion.fullscreen-control;
 }
-.showcase__stage:fullscreen {
-	position: fixed;
-	z-index: 9999;
-	inset: 0;
-	width: 100vw;
-	height: 100dvh;
-	min-height: 100dvh;
-	border-radius: 0;
-	background: var(--canvas);
+.showcase__stage:fullscreen,
+.showcase__stage.is-fallback-fullscreen {
+	display: grid;
+	place-items: center;
+	width: 100vw !important;
+	height: 100dvh !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	aspect-ratio: auto !important;
+	margin: 0;
+}
+.showcase__stage:fullscreen > .showcase__fullscreen-frame,
+.showcase__stage.is-fallback-fullscreen > .showcase__fullscreen-frame {
+	position: relative;
+	display: grid;
+	width: min(96vw, 170.67dvh);
+	height: auto;
+	max-height: 96dvh;
+	aspect-ratio: 16 / 9;
+	grid-template-columns: minmax(0, 1.45fr) minmax(240px, .55fr);
+	overflow: auto;
 }
 
 @keyframes showcase-cube-float { 50% { translate: 0 -12px; } }

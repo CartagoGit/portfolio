@@ -185,12 +185,12 @@ The accepted proposal history and automated evidence did not fully satisfy the h
 - Desktop pointer affordances degrade into explicit touch controls instead of becoming dead interactions.
 - A premium showcase tab system appears above the compact demo and game layers.
 - Six visually substantial showcases ship; depth 3D is drag/touch manipulable, data flow can be rerouted/paused, live signal can be tuned, and three additional interactions explore related engineering ideas.
-- The showcase layer includes a compact explanation of the engineering problem, reset, keyboard/touch alternatives and an animated transition between tabs.
-- A separate arcade section ships six varied mini-games using the portfolio's product visual language and project-real identities.
-- Every mini-game supports a clear start/restart loop, score and/or lives, tabs, keyboard controls where useful, direct touch controls and a visual result state that invites another round.
-- Premium showcases and games expose fullscreen/normal-size controls without blocking vertical page scrolling outside the active fullscreen experience.
-- Project-like game cards use animated backgrounds with the same quality bar as Work while preserving a distinct game identity.
-- All visible and ARIA copy stays in EN/ES/FR/DE parity; missing copy fails parity checks.
+  - "The showcase layer includes a compact explanation of the engineering problem, reset, keyboard/touch alternatives and an animated transition between tabs."
+  - "A separate arcade section ships six varied mini-games using the portfolio's product visual language and project-real identities."
+  - "Every mini-game supports a clear start/restart loop, score and/or lives, tabs, keyboard controls where useful, direct touch controls and a visual result state that invites another round."
+  - "Premium showcases and games expose fullscreen/normal-size controls without blocking vertical page scrolling outside the active fullscreen experience."
+  - "Project-like game cards use animated backgrounds with the same quality bar as Work while preserving a distinct game identity."
+  - "All visible and ARIA copy stays in EN/ES/FR/DE parity; missing copy fails parity checks."
 - Docker, GitHub, platform, project and game identities resolve through one canonical registry rather than ad hoc icon variants.
 - DeathBlitz, Tetris, Snake and Minesweeper use artwork taken from the corresponding canonical repository/project identity, with source attribution and repository links, not generic glyph substitutes.
 - The same project/platform uses the same mark, colour, stroke and accessible label everywhere.

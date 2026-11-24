@@ -73,9 +73,12 @@
 	position: fixed;
 	z-index: 9999;
 	inset: 0;
-	width: 100vw;
-	height: 100dvh;
-	min-height: 100dvh;
+	width: min(96vw, 153.6dvh) !important;
+	height: auto !important;
+	min-height: 0 !important;
+	max-height: 96dvh !important;
+	aspect-ratio: 8 / 5 !important;
+	margin: auto;
 	overflow-y: auto;
 	padding: clamp(1rem, 3vw, 2rem);
 	background: var(--canvas);
@@ -125,6 +128,29 @@
 .demo-games:fullscreen .demo-games__stage,
 .demo-games.is-fullscreen .demo-games__stage {
 	min-height: calc(100dvh - 80px);
+}
+
+.demo-games__fullscreen-frame { display: contents; }
+.demo-games__stage:fullscreen,
+.demo-games__stage.is-fallback-fullscreen {
+	display: grid;
+	place-items: center;
+	width: 100vw !important;
+	height: 100dvh !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	aspect-ratio: auto !important;
+	padding: 1rem;
+}
+.demo-games__stage:fullscreen > .demo-games__fullscreen-frame,
+.demo-games__stage.is-fallback-fullscreen > .demo-games__fullscreen-frame {
+	position: relative;
+	display: grid;
+	width: min(96vw, 153.6dvh);
+	height: auto;
+	max-height: 96dvh;
+	aspect-ratio: 8 / 5;
+	overflow: auto;
 }
 
 @media (max-width: 760px) {

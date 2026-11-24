@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 
 const ROUTES = ['', 'work', 'lab', 'approach', 'knowledge', 'docker', 'demos', 'contact'] as const;
 const VIEWPORTS = [
@@ -25,6 +25,13 @@ async function expectContained(page: Page, label: string): Promise<void> {
 		() => document.documentElement.scrollWidth - document.documentElement.clientWidth,
 	);
 	expect(delta, `${label} must fit its viewport`).toBeLessThanOrEqual(0);
+}
+
+async function expectAspectRatio(locator: Locator, expected: number): Promise<void> {
+	await expect.poll(async () => {
+		const box = await locator.boundingBox();
+		return box ? box.width / box.height : 0;
+	}).toBeCloseTo(expected, 1);
 }
 
 for (const viewport of VIEWPORTS) {
@@ -64,16 +71,45 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	await page.setViewportSize({ width: 1280, height: 900 });
 	await openRoute(page);
 	await expect(page.locator('.hero-monitor__fullscreen')).toHaveCount(1);
+	await page.locator('.hero-monitor__fullscreen').click();
+	await expect(page.locator('app-hero-monitor')).toHaveClass(/hero-monitor-host--fullscreen/);
+	await expect(page.locator('.hero-monitor__fullscreen')).toHaveAttribute('aria-pressed', 'true');
+	await expectAspectRatio(page.locator('.hero-monitor__interface'), 8 / 5);
+	const monitorLogicalSize = await page.locator('.hero-monitor__interface').evaluate((element) => ({
+		width: (element as HTMLElement).offsetWidth,
+		height: (element as HTMLElement).offsetHeight,
+	}));
+	expect(monitorLogicalSize).toEqual({ width: 780, height: 488 });
+	await expect.poll(async () => page.locator('.hero-monitor__interface').evaluate((element) => {
+		const style = getComputedStyle(element);
+		const matrix = new DOMMatrix(style.transform);
+		const expected = Number(style.getPropertyValue('--monitor-fullscreen-scale'));
+		return Math.max(Math.abs(matrix.a - expected), Math.abs(matrix.d - expected));
+	})).toBeLessThan(0.001);
+	const fullscreenTransform = await page.locator('.hero-monitor__interface').evaluate((element) => getComputedStyle(element).transform);
+	await page.mouse.move(2, 2);
+	await page.waitForTimeout(800);
+	await expect(page.locator('.hero-monitor')).toHaveClass(/hero-monitor--expanded/);
+	await expect(page.locator('.hero-monitor__interface')).toHaveCSS('transform', fullscreenTransform);
+	await page.locator('.hero-monitor__fullscreen').click();
 	await openRoute(page, { route: 'demos' });
 	await expect(page.locator('.showcase__footer button')).toHaveCount(1);
 	await expect(page.locator('.showcase__stage .showcase__fullscreen svg')).toHaveCount(1);
+	await page.locator('.showcase__fullscreen').click();
+	await expectAspectRatio(page.locator('.showcase__fullscreen-frame'), 16 / 9);
+	await page.locator('.showcase__fullscreen').click();
 	await expect(page.locator('.demo-games__fullscreen svg')).toHaveCount(1);
 	await expect(page.locator('.demo-games__stage > .demo-games__fullscreen')).toHaveCount(1);
+	await page.locator('.demo-games__fullscreen').click();
+	await expectAspectRatio(page.locator('.demo-games__fullscreen-frame'), 8 / 5);
+	await page.locator('.demo-games__fullscreen').click();
 	await openRoute(page, { route: 'lab' });
 	await expect(page.locator('.lab-page__signal-card > .lab-page__fullscreen')).toHaveCount(3);
-	await expect(page.locator('.lab-page__signal-gallery > header button')).toHaveCount(0);
-	for (const control of await page.locator('.interactive-fullscreen-control').all())
-		await expect(control).toHaveText('');
+	await expect(page.locator('.lab-page__experiment-grid > * > .interactive-fullscreen-control')).toHaveCount(7);
+	await expect(page.locator('app-lab-dashboard > .interactive-fullscreen-control')).toHaveCount(1);
+	await page.locator('.lab-page__signal-card .lab-page__fullscreen').first().click();
+	await expectAspectRatio(page.locator('.lab-page__signal-card .lab-page__fullscreen-frame').first(), 8 / 5);
+	await page.locator('.lab-page__signal-card .lab-page__fullscreen').first().click();
 });
 
 test('visual truth: twenty locales render native primary copy and Arabic remains RTL', async ({ page }) => {

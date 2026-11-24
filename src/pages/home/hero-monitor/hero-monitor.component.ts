@@ -63,9 +63,10 @@ import type {
 	encapsulation: ViewEncapsulation.None,
 	host: {
 		'(document:pointerdown)': '_onDocumentDown($event)',
-		'(document:fullscreenchange)': '_onFullscreenChange()',
+		'(window:resize)': '_syncMonitorFullscreenScale()',
 		'[class.hero-monitor-host--earth-front]': 'earthBlocksMonitor()',
 		'[class.hero-monitor-host--fullscreen]': 'monitorFullscreen()',
+		'[style.--monitor-fullscreen-scale]': 'monitorFullscreenScale()',
 	},
 })
 export class HeroMonitorComponent implements OnDestroy {
@@ -123,6 +124,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	});
 	readonly monitorExpanded = signal(false);
 	readonly monitorFullscreen = signal(false);
+	readonly monitorFullscreenScale = signal(1);
 	readonly chartChanging = signal(false);
 	readonly earthPreview = signal(false);
 	readonly earthTexture = signal<IEarthTextureStyle>('clouds');
@@ -204,6 +206,7 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	leaveMonitor(): void {
 		if (!isPlatformBrowser(this._platformId)) return;
+		if (this.monitorFullscreen()) return;
 		this._monitorHovered = false;
 		if (this._monitorOpening || this.earthDepth() !== 'behind') return;
 		this._queueMonitorClose();
@@ -368,19 +371,22 @@ export class HeroMonitorComponent implements OnDestroy {
 	async toggleMonitorFullscreen(event: MouseEvent): Promise<void> {
 		event.stopPropagation();
 		if (!isPlatformBrowser(this._platformId)) return;
-		const monitor = (event.currentTarget as Element | null)?.closest<HTMLElement>('.hero-monitor');
-		try {
-			if (document.fullscreenElement) await document.exitFullscreen();
-			else if (monitor?.requestFullscreen) await monitor.requestFullscreen();
-			else this.monitorFullscreen.update((expanded) => !expanded);
-		} catch {
-			this.monitorFullscreen.update((expanded) => !expanded);
+		const expand = !this.monitorFullscreen();
+		this.monitorFullscreen.set(expand);
+		this.monitorExpanded.set(expand || this.monitorExpanded());
+		if (expand) {
+			this._monitorHovered = true;
+			this._monitorOpening = false;
+			if (this._monitorCloseTimer !== undefined) {
+				window.clearTimeout(this._monitorCloseTimer);
+				this._monitorCloseTimer = undefined;
+			}
 		}
+		this._syncMonitorFullscreenScale();
 	}
 
 	protected readonly _onFullscreenChange = (): void => {
-		if (isPlatformBrowser(this._platformId))
-			this.monitorFullscreen.set(Boolean(document.fullscreenElement));
+		this._syncMonitorFullscreenScale();
 	};
 
 	/**
@@ -530,6 +536,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	private _queueMonitorClose(): void {
+		if (this.monitorFullscreen()) return;
 		if (this._monitorCloseTimer !== undefined)
 			window.clearTimeout(this._monitorCloseTimer);
 		this._monitorCloseTimer = window.setTimeout(() => {
@@ -556,5 +563,15 @@ export class HeroMonitorComponent implements OnDestroy {
 	private _resetEarthPreset(): void {
 		this.earthTexture.set('clouds');
 		this.earthTextureCategory.set('earth');
+	}
+
+	private _syncMonitorFullscreenScale(): void {
+		if (!isPlatformBrowser(this._platformId) || !this.monitorFullscreen()) {
+			this.monitorFullscreenScale.set(1);
+			return;
+		}
+		const widthScale = (window.innerWidth * 0.96) / 780;
+		const heightScale = (window.innerHeight * 0.92) / 487.5;
+		this.monitorFullscreenScale.set(Math.max(0.2, Math.min(widthScale, heightScale)));
 	}
 }

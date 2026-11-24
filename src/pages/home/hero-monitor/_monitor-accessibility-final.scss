@@ -168,19 +168,14 @@ app-hero-monitor .hero-monitor__destination-primary > span {
   letter-spacing: 0;
 }
 
-app-hero-monitor .hero-monitor__destination-primary > i {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-app-hero-monitor .hero-monitor__preview-icon:has(img) {
+app-hero-monitor .hero.monitor__preview-icon:has(img) {
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
 
-app-hero-monitor .hero-monitor__preview-icon img {
+app-hero-monitor .hero.monitor__preview-icon img {
   width: 34px;
   height: 34px;
 }
@@ -507,7 +502,7 @@ app-hero-monitor .hero-monitor__chart[data-chart='stream'] path {
     height: auto;
     padding: .3rem;
   }
-  app-hero-monitor .hero-monitor__chart-switcher button span {
+  app-hero-monitor .hero.monitor__chart-switcher button span {
     display: block;
     font-size: .75rem;
     line-height: 1.1;
@@ -740,7 +735,7 @@ app-hero-monitor .hero-monitor__technology-toggle {
   white-space: nowrap;
 }
 
-app-hero-monitor .hero-monitor__dashboard-control span,
+app-hero-monitor .hero.monitor__dashboard-control span,
 app-hero-monitor .hero.monitor__technology-toggle span {
   overflow: hidden;
   font-size: .75rem;
@@ -797,7 +792,7 @@ app-hero-monitor .hero-monitor:hover .hero-monitor__interface :is(button, a):foc
 }
 
 app-hero-monitor .hero-monitor:fullscreen,
-app-hero-monitor .hero-monitor-host--fullscreen .hero-monitor {
+app-hero-monitor.hero-monitor-host--fullscreen > .hero-monitor {
   position: fixed;
   z-index: 9999;
   inset: 0;
@@ -810,11 +805,18 @@ app-hero-monitor .hero-monitor-host--fullscreen .hero-monitor {
 }
 
 app-hero-monitor .hero-monitor:fullscreen > .hero-monitor__interface,
-app-hero-monitor.hero-monitor-host--fullscreen .hero-monitor > .hero-monitor__interface {
-  width: min(1440px, 96vw) !important;
-  max-height: 92dvh;
-  aspect-ratio: 16 / 10;
-  transform: none !important;
+app-hero-monitor.hero-monitor-host--fullscreen > .hero-monitor.hero-monitor--expanded > .hero-monitor__interface {
+  width: 780px !important;
+  min-width: 780px !important;
+  max-width: 780px !important;
+  height: 487.5px !important;
+  min-height: 487.5px !important;
+  max-height: 487.5px !important;
+  flex: 0 0 780px !important;
+  aspect-ratio: 8 / 5 !important;
+  margin: auto !important;
+  transform: scale(var(--monitor-fullscreen-scale, 1)) !important;
+  transform-origin: 50% 50%;
 }
 
 app-hero-monitor .hero-monitor__chrome {
