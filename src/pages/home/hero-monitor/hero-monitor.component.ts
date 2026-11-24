@@ -63,7 +63,9 @@ import type {
 	encapsulation: ViewEncapsulation.None,
 	host: {
 		'(document:pointerdown)': '_onDocumentDown($event)',
+		'(document:fullscreenchange)': '_onFullscreenChange()',
 		'[class.hero-monitor-host--earth-front]': 'earthBlocksMonitor()',
+		'[class.hero-monitor-host--fullscreen]': 'monitorFullscreen()',
 	},
 })
 export class HeroMonitorComponent implements OnDestroy {
@@ -120,6 +122,8 @@ export class HeroMonitorComponent implements OnDestroy {
 		return depth === 'front-ready' || depth === 'front' || depth === 'out-front';
 	});
 	readonly monitorExpanded = signal(false);
+	readonly monitorFullscreen = signal(false);
+	readonly chartChanging = signal(false);
 	readonly earthPreview = signal(false);
 	readonly earthTexture = signal<IEarthTextureStyle>('clouds');
 	readonly earthTextureCategories = EARTH_TEXTURE_CATEGORIES;
@@ -136,6 +140,7 @@ export class HeroMonitorComponent implements OnDestroy {
 	private _monitorCloseTimer?: number;
 	private _consoleEffectFrame?: number;
 	private _consoleEffectTimer?: number;
+	private _chartTransitionTimer?: number;
 	private readonly _earthReturnSync = effect(() => {
 		if (this.earthBlocksMonitor()) {
 			this._monitorHovered = false;
@@ -173,6 +178,8 @@ export class HeroMonitorComponent implements OnDestroy {
 			cancelAnimationFrame(this._consoleEffectFrame);
 		if (this._consoleEffectTimer !== undefined)
 			window.clearTimeout(this._consoleEffectTimer);
+		if (this._chartTransitionTimer !== undefined)
+			window.clearTimeout(this._chartTransitionTimer);
 		this._previewSync.destroy();
 		this._earthReturnSync.destroy();
 	}
@@ -206,6 +213,7 @@ export class HeroMonitorComponent implements OnDestroy {
 		const target = event.target as Element | null;
 		if (!target) return;
 		if (target.closest('app-hero-monitor')) return;
+		if (this.earthBlocksMonitor()) this._resetEarthPreset();
 		this._earth.returnBehind(target);
 	};
 
@@ -252,6 +260,7 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	dismissEarth(event: MouseEvent): void {
 		event.stopPropagation();
+		this._resetEarthPreset();
 		this._earth.returnBehind(event.currentTarget);
 	}
 
@@ -331,6 +340,60 @@ export class HeroMonitorComponent implements OnDestroy {
 		this.showPreview({
 			kind: 'project',
 			label: panel.label,
+			detail: this.projectDetail(panel.id),
+			href: panel.href,
+			status: this.projectStatus(panel.id),
+			stack: panel.stack,
+			imageSrc: panel.iconAsset,
+			color: panel.color,
+			destinations: panel.destinations,
+		});
+	}
+
+	selectChart(type: IChartType): void {
+		if (type === this.chartType()) {
+			this.hero.randomizeChart();
+			return;
+		}
+		if (this._chartTransitionTimer !== undefined)
+			window.clearTimeout(this._chartTransitionTimer);
+		this.chartChanging.set(true);
+		this._chartTransitionTimer = window.setTimeout(() => {
+			this.hero.setChart(type);
+			this.chartChanging.set(false);
+			this._chartTransitionTimer = undefined;
+		}, 120);
+	}
+
+	async toggleMonitorFullscreen(event: MouseEvent): Promise<void> {
+		event.stopPropagation();
+		if (!isPlatformBrowser(this._platformId)) return;
+		const monitor = (event.currentTarget as Element | null)?.closest<HTMLElement>('.hero-monitor');
+		try {
+			if (document.fullscreenElement) await document.exitFullscreen();
+			else if (monitor?.requestFullscreen) await monitor.requestFullscreen();
+			else this.monitorFullscreen.update((expanded) => !expanded);
+		} catch {
+			this.monitorFullscreen.update((expanded) => !expanded);
+		}
+	}
+
+	protected readonly _onFullscreenChange = (): void => {
+		if (isPlatformBrowser(this._platformId))
+			this.monitorFullscreen.set(Boolean(document.fullscreenElement));
+	};
+
+	/**
+	 * Update the active panel and sync the preview state.
+	 * @param panelId The ID of the panel to activate.
+	 */
+	activatePanel(panelId: IHeroPanelId): void {
+		this.hero.selectPanel(panelId);
+		const panel = this.panels.find(({ id }) => id === panelId);
+		if (!panel) return;
+		this.showPreview({
+			kind: 'project',
+			label: panel.label,
 			detail: this._translate.instant(this._projectDetailKey(panel.id)),
 			href: panel.href,
 			status: this.projectStatus(panel.id),
@@ -354,13 +417,14 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	technologyDetail(label: string): string {
-		return this._translate.instant(
+		return this._translate.instantOr(
 			`content.technologies.${contentKey(label)}`,
+			this._translate.instant('pages.home.monitorTechnologyDetail', { label }),
 		);
 	}
 
 	termLabel(value: string): string {
-		return this._translate.instant(`content.terms.${contentKey(value)}`);
+		return this._translate.instantOr(`content.terms.${contentKey(value)}`, value);
 	}
 
 	previewKindLabel(kind: IMonitorPreview['kind']): string {
@@ -487,5 +551,10 @@ export class HeroMonitorComponent implements OnDestroy {
 			this._monitorCloseTimer = undefined;
 		}
 		this.monitorExpanded.set(false);
+	}
+
+	private _resetEarthPreset(): void {
+		this.earthTexture.set('clouds');
+		this.earthTextureCategory.set('earth');
 	}
 }

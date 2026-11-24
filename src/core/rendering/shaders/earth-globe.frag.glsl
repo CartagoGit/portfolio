@@ -44,7 +44,11 @@ void main() {
   float sphereRadius = isSaturn ? 0.67 : 1.0;
   if (isSaturn) scenePoint *= 1.45;
 
-  vec2 point = scenePoint / sphereRadius;
+  vec2 shapeScale = vec2(1.0);
+  if (textureEffect == 6) shapeScale = vec2(0.72, 1.0); // prolate rugby ball
+  if (textureEffect == 7) shapeScale = vec2(0.97, 1.02); // Pluto's irregular footprint
+
+  vec2 point = scenePoint / sphereRadius / shapeScale;
   float radiusSquared = dot(point, point);
   bool sphereHit = radiusSquared <= 1.002;
   vec4 result = vec4(0.0);
@@ -66,10 +70,25 @@ void main() {
     vec3 sampled = texture2D(earthTexture, textureUv).rgb;
     vec3 color = sampled;
 
-    if (textureEffect == 2) {
-      color = terrainEffect(sampled);
-    } else if (textureEffect == 3) {
-      color = infraredEffect(sampled);
+    if (textureEffect == 8) {
+      vec2 frontUv = vec2(0.5 + point.x * 0.5, 0.5 - point.y * 0.5);
+      color = texture2D(earthTexture, clamp(frontUv, 0.001, 0.999)).rgb;
+    } else if (textureEffect == 7) {
+      vec2 heartPoint = (spherical - vec2(0.51, 0.46)) * vec2(2.8, 4.4);
+      float heartMask = 1.0 - smoothstep(0.08, 0.42, length(heartPoint));
+      color = mix(color, vec3(0.78, 0.76, 0.66), heartMask * 0.58);
+    } else if (textureEffect == 10) {
+      float equator = 1.0 - smoothstep(0.012, 0.042, abs(rotated.y));
+      float meridian = 1.0 - smoothstep(0.012, 0.045, abs(rotated.x));
+      float curve = 1.0 - smoothstep(0.012, 0.045, abs(rotated.x + 0.5 * rotated.z));
+      color = mix(color, vec3(0.055, 0.024, 0.018), max(max(equator, meridian), curve));
+    } else if (textureEffect == 11) {
+      float seam = abs(rotated.y - 0.42 * sin(rotated.x * 3.0));
+      color = mix(color, vec3(0.96, 0.94, 0.82), 1.0 - smoothstep(0.018, 0.05, seam));
+    } else if (textureEffect == 12) {
+      float dimple = smoothstep(0.09, 0.02, abs(fract(spherical.x * 34.0) - 0.5));
+      dimple *= smoothstep(0.09, 0.02, abs(fract(spherical.y * 22.0) - 0.5));
+      color *= 0.88 + dimple * 0.18;
     }
 
     float directional = max(0.0, -0.35 * point.x - 0.2 * point.y + 0.92 * surfaceZ);

@@ -90,6 +90,9 @@ export interface ITranslationMap {
 			monitorDashboard: string;
 			monitorPublicDestinations: string;
 			monitorRelatedLinks: string;
+			monitorFullscreen: string;
+			monitorExitFullscreen: string;
+			monitorCharts: string;
 			monitorAriaLabel: string;
 			monitorBannerAria: string;
 			monitorBannerAlt: string;
@@ -441,6 +444,12 @@ export interface ITranslationMap {
 			showcaseTabDepth: string;
 			showcaseTabFlow: string;
 			showcaseTabSignal: string;
+			showcaseTabLatency: string;
+			showcaseTabParticles: string;
+			showcaseTabOrbits: string;
+			showcaseInteract: string;
+			showcaseFullscreen: string;
+			showcaseExitFullscreen: string;
 			showcaseDepthKicker: string;
 			showcaseDepthTitle: string;
 			showcaseDepthDetail: string;

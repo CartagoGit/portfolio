@@ -71,6 +71,15 @@
 
 .contact-form button {
 	justify-self: start;
+	display: inline-flex;
+	align-items: center;
+	gap: .55rem;
+}
+
+.contact-form button svg {
+	width: 18px;
+	height: 18px;
+	flex: 0 0 18px;
 }
 
 .contact-form button:disabled {

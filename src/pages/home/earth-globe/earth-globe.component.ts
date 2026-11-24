@@ -18,12 +18,12 @@ import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types.inte
 type IQuaternion = readonly [x: number, y: number, z: number, w: number];
 
 const TEXTURE_SOURCES: Readonly<Record<IEarthTextureStyle, string>> = {
-	clouds: '/images/earth-clouds-4k.webp',
-	natural: '/images/earth-blue-marble-4k.webp',
+	clouds: '/images/globe/earth-clouds-4k.webp',
+	natural: '/images/globe/earth-blue-marble-4k.webp',
 	night: '/images/globe/earth-night-4k.webp',
-	terrain: '/images/globe/earth-topography-v2.webp',
-	bathymetry: '/images/globe/earth-bathymetry-v2.webp',
-	infrared: '/images/globe/earth-thermal-v2.webp',
+	terrain: '/images/globe/earth-topography-4k.webp',
+	bathymetry: '/images/globe/earth-bathymetry-4k.webp',
+	infrared: '/images/globe/earth-thermal-4k.webp',
 	sun: '/images/globe/sun-4k.webp',
 	moon: '/images/globe/moon-4k.webp',
 	mercury: '/images/globe/mercury-4k.webp',
@@ -31,23 +31,23 @@ const TEXTURE_SOURCES: Readonly<Record<IEarthTextureStyle, string>> = {
 	mars: '/images/globe/mars-4k.webp',
 	jupiter: '/images/globe/jupiter-4k.webp',
 	saturn: '/images/globe/saturn-4k.webp',
-	uranus: '/images/globe/uranus-2k.webp',
-	neptune: '/images/globe/neptune-2k.webp',
+	uranus: '/images/globe/uranus-4k.webp',
+	neptune: '/images/globe/neptune-4k.webp',
 	pluto: '/images/globe/pluto-4k.webp',
-	'kepler-186f': '/images/globe/kepler-186f-artist-v2.webp',
-	'proxima-b': '/images/globe/proxima-b-artist-v2.webp',
-	'trappist-1e': '/images/globe/trappist-1e-artist-v2.webp',
-	soccer: '/images/globe/soccer-canonical-v2.webp',
-	basketball: '/images/globe/basketball-canonical-v2.webp',
-	tennis: '/images/globe/tennis-canonical-v2.webp',
-	golf: '/images/globe/golf-canonical-v2.webp',
-	'beach-ball': '/images/globe/beach-ball-canonical-v2.webp',
+	'kepler-186f': '/images/globe/kepler-186f-artist-4k.webp',
+	'proxima-b': '/images/globe/proxima-b-artist-4k.webp',
+	'trappist-1e': '/images/globe/trappist-1e-artist-4k.webp',
+	soccer: '/images/globe/soccer-canonical-4k.webp',
+	basketball: '/images/globe/basketball-canonical-4k.webp',
+	tennis: '/images/globe/tennis-canonical-4k.webp',
+	golf: '/images/globe/golf-canonical-4k.webp',
+	'beach-ball': '/images/globe/beach-ball-canonical-4k.webp',
 	disco: '/images/globe/disco-canonical-4k.webp',
-	rugby: '/images/globe/rugby-canonical-v2.webp',
-	volleyball: '/images/globe/volleyball-canonical-v2.webp',
-	'cartago-mark': '/images/globe/cartago-mark-v2.webp',
-	'cartago-banner': '/images/globe/cartago-banner-v2.webp',
-	portrait: '/images/globe/cartago-portrait-4k.webp',
+	rugby: '/images/globe/rugby-canonical-4k.webp',
+	volleyball: '/images/globe/volleyball-canonical-4k.webp',
+	'cartago-mark': '/icons/cartago.svg',
+	'cartago-banner': '/images/brand/cartago-banner.png',
+	portrait: '/images/profile/mario-cabrero-sf.png',
 };
 
 function quaternionFromAxis(
@@ -242,13 +242,15 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 			this._loadingTextures.delete(style);
 			if (this._destroyed) return;
 			const source = this._document.createElement('canvas');
-			source.width = image.naturalWidth;
-			source.height = image.naturalHeight;
+			const isOwned = style === 'cartago-mark' || style === 'cartago-banner' || style === 'portrait';
+			source.width = isOwned ? 2048 : image.naturalWidth;
+			source.height = isOwned ? 2048 : image.naturalHeight;
 			const context = source.getContext('2d');
 			if (!context) return;
 			context.imageSmoothingEnabled = true;
 			context.imageSmoothingQuality = 'high';
-			context.drawImage(image, 0, 0);
+			if (isOwned) this._drawOwnedTexture(context, { style, image, size: 2048 });
+			else context.drawImage(image, 0, 0);
 			this._textures.set(style, source);
 			if (this.textureStyle() === style) {
 				this._texture = source;
@@ -309,5 +311,23 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 
 	private _clampVelocity(range: { value: number }): number {
 		return Math.min(0.0038, Math.max(-0.0038, range.value));
+	}
+
+	private _drawOwnedTexture(
+		context: CanvasRenderingContext2D,
+		options: { style: IEarthTextureStyle; image: HTMLImageElement; size: number },
+	): void {
+		const { style, image, size } = options;
+		context.fillStyle = style === 'portrait' ? '#dce5ed' : '#07111d';
+		context.fillRect(0, 0, size, size);
+		if (style === 'cartago-banner') {
+			const band = size * 0.56;
+			context.drawImage(image, 0, (size - band) / 2, size, band);
+			return;
+		}
+		const scale = Math.max(size / image.naturalWidth, size / image.naturalHeight);
+		const width = image.naturalWidth * scale;
+		const height = image.naturalHeight * scale;
+		context.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
 	}
 }

@@ -254,6 +254,22 @@ function textureEffectIndex(style: IEarthTextureStyle | undefined): number {
 			return 4;
 		case 'saturn':
 			return 5;
+		case 'rugby':
+			return 6;
+		case 'pluto':
+			return 7;
+		case 'cartago-mark':
+		case 'cartago-banner':
+		case 'portrait':
+			return 8;
+		case 'soccer':
+			return 9;
+		case 'basketball':
+			return 10;
+		case 'tennis':
+			return 11;
+		case 'golf':
+			return 12;
 		default:
 			return 0;
 	}

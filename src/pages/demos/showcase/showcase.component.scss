@@ -114,6 +114,9 @@
 		linear-gradient(140deg, color-mix(in srgb, var(--canvas) 90%, var(--surface-2)), var(--canvas));
 	perspective: 1200px;
 	touch-action: pan-y;
+	cursor: default;
+	transition: background .38s ease, border-color .3s ease;
+	&[data-scene='depth'] { cursor: grab; &:active { cursor: grabbing; } }
 }
 .showcase__stage[data-scene='flow'] { background: linear-gradient(145deg, color-mix(in srgb, var(--lime) 7%, var(--canvas)), var(--canvas)); }
 .showcase__stage[data-scene='signal'] { background: linear-gradient(145deg, color-mix(in srgb, var(--cyan) 8%, var(--canvas)), var(--canvas)); }
@@ -226,9 +229,34 @@
 .showcase__signal-bars { display: flex; height: 72%; align-items: end; gap: .5rem; padding: 1rem; border-bottom: 1px solid var(--line); }
 .showcase__signal-bars span { width: 100%; height: var(--signal-value); min-width: 10px; border-radius: 7px 7px 2px 2px; background: linear-gradient(to top, var(--blue), var(--cyan)); box-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 14%, transparent); transform-origin: bottom; animation: showcase-bar 1.8s ease-in-out infinite; animation-delay: calc(var(--bar-index) * -130ms); }
 
-.showcase__footer { position: relative; display: flex; justify-content: flex-end; margin-top: .75rem; }
-.showcase__footer button { display: inline-flex; min-height: 42px; align-items: center; gap: .45rem; padding: .55rem .8rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: 700 .72rem tokens.$font-mono, monospace; cursor: pointer; transition: border-color .2s ease, color .2s ease, transform .2s ease; }
-.showcase__footer button:hover, .showcase__footer button:focus-visible { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+.showcase__activate {
+	position: absolute;
+	z-index: 6;
+	right: 1rem;
+	bottom: 1rem;
+	min-height: 42px;
+	padding: .55rem .8rem;
+	border: 1px solid color-mix(in srgb, var(--cyan) 42%, var(--line));
+	border-radius: 10px;
+	background: color-mix(in srgb, var(--surface) 92%, transparent);
+	color: var(--ink);
+	font: 800 .72rem tokens.$font-mono, monospace;
+	backdrop-filter: blur(10px);
+	&:hover, &:focus-visible { border-color: var(--cyan); color: var(--cyan); }
+}
+
+.showcase__footer { gap: .5rem; flex-wrap: wrap; }
+.showcase:fullscreen {
+	width: 100vw;
+	height: 100dvh;
+	max-height: 100dvh;
+	margin: 0;
+	padding: clamp(1rem, 3vw, 2rem);
+	overflow: auto;
+	border-radius: 0;
+	background: var(--canvas);
+}
+.showcase:fullscreen .showcase__stage { min-height: calc(100dvh - 250px); }
 
 @keyframes showcase-cube-float { 50% { translate: 0 -12px; } }
 @keyframes showcase-orbit { to { rotate: 1turn; } }
@@ -236,6 +264,8 @@
 @keyframes showcase-node { 50% { translate: 0 -10px; scale: 1.16; } }
 @keyframes showcase-radar { to { transform: rotate(1turn); } }
 @keyframes showcase-bar { 50% { transform: scaleY(.72); filter: brightness(1.18); } }
+@keyframes showcase-latency { 50% { scale: .18 1; filter: brightness(1.5); } }
+@keyframes showcase-particle { 50% { transform: translate(calc((var(--particle-index) - 9) * 3px), -22px) scale(1.45); opacity: .45; } }
 
 @media (max-width: 900px) {
 	.showcase__heading { grid-template-columns: 1fr; gap: 1rem; }
@@ -244,8 +274,9 @@
 	.showcase__depth, .showcase__flow, .showcase__signal { grid-column: 1; grid-row: 1; min-height: 360px; }
 	.showcase__hint { bottom: auto; top: 332px; }
 	.showcase__signal { grid-template-columns: minmax(130px, .9fr) minmax(160px, 1.1fr); }
+	.showcase__latency, .showcase__particles, .showcase__orbits { min-height: 360px; }
+	.showcase__activate { right: 1rem; bottom: 1rem; }
 }
-
 @media (max-width: 560px) {
 	.showcase { margin-inline: -0.35rem; padding: .8rem; border-radius: 18px; }
 	.showcase__tabs { gap: .35rem; }
@@ -255,6 +286,9 @@
 	.showcase__radar { width: min(190px, 52vw); justify-self: center; }
 	.showcase__signal-bars { height: 150px; }
 	.showcase__hint { right: 1rem; top: 332px; font-size: .62rem; }
+	.showcase__tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.showcase__activate { left: 1rem; right: 1rem; width: auto; }
+	.showcase__footer button { flex: 1 1 150px; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -107,6 +107,12 @@ export class TranslateService {
 		return interpolate(template, args);
 	}
 
+	/** Resolves a content-owned term while keeping literal labels truthful. */
+	instantOr(key: string, fallback: string): string {
+		const resolved = this.instant(key);
+		return resolved === key ? fallback : resolved;
+	}
+
 	/**
 	 * Updates the active locale and persists the choice. The header
 	 * dropdown is the only call site; routing is handled by the

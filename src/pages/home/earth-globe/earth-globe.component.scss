@@ -46,6 +46,14 @@
 :host([data-texture-style='saturn']) .earth-globe__layer::after {
 	content: none;
 }
+:host([data-texture-style='saturn']) .earth-globe__canvas,
+:host([data-texture-style='rugby']) .earth-globe__canvas,
+:host([data-texture-style='saturn']) .earth-globe__layer,
+:host([data-texture-style='rugby']) .earth-globe__layer {
+	border-radius: 0;
+	overflow: visible;
+	contain: none;
+}
 @media (prefers-reduced-motion: reduce) {
 	.earth-globe__canvas {
 		transition-duration: 0.01ms;

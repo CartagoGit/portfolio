@@ -224,7 +224,7 @@ def exoplanet(width: int, height: int, palette: str) -> np.ndarray:
 
 
 def earth_variants(width: int, height: int) -> dict[str, np.ndarray]:
-    source = Image.open(ROOT / "public" / "images" / "earth-blue-marble-4k.webp").convert("RGB")
+    source = Image.open(ROOT / "public" / "images" / "globe" / "earth-blue-marble-4k.webp").convert("RGB")
     if source.size != (width, height):
         source = source.resize((width, height), Image.Resampling.LANCZOS)
     rgb = np.asarray(source, dtype=np.float32) / 255
@@ -252,9 +252,9 @@ def earth_variants(width: int, height: int) -> dict[str, np.ndarray]:
     thermal[:, :, 1] = np.clip(1 - abs(heat - 0.5) * 2.0, 0, 1)
     thermal[:, :, 2] = np.clip((0.5 - heat) * 2.0, 0, 1)
     return {
-        "earth-topography-v2.webp": topo,
-        "earth-bathymetry-v2.webp": bathy,
-        "earth-thermal-v2.webp": thermal,
+        "earth-topography-4k.webp": topo,
+        "earth-bathymetry-4k.webp": bathy,
+        "earth-thermal-4k.webp": thermal,
     }
 
 
@@ -308,16 +308,16 @@ def generate(selected: set[str]) -> None:
         "trappist": lambda: exoplanet(width, height, "trappist"),
     }
     names = {
-        "soccer": "soccer-canonical-v2.webp",
-        "basketball": "basketball-canonical-v2.webp",
-        "tennis": "tennis-canonical-v2.webp",
-        "golf": "golf-canonical-v2.webp",
-        "beach-ball": "beach-ball-canonical-v2.webp",
-        "volleyball": "volleyball-canonical-v2.webp",
-        "rugby": "rugby-canonical-v2.webp",
-        "kepler": "kepler-186f-artist-v2.webp",
-        "proxima": "proxima-b-artist-v2.webp",
-        "trappist": "trappist-1e-artist-v2.webp",
+        "soccer": "soccer-canonical-4k.webp",
+        "basketball": "basketball-canonical-4k.webp",
+        "tennis": "tennis-canonical-4k.webp",
+        "golf": "golf-canonical-4k.webp",
+        "beach-ball": "beach-ball-canonical-4k.webp",
+        "volleyball": "volleyball-canonical-4k.webp",
+        "rugby": "rugby-canonical-4k.webp",
+        "kepler": "kepler-186f-artist-4k.webp",
+        "proxima": "proxima-b-artist-4k.webp",
+        "trappist": "trappist-1e-artist-4k.webp",
     }
     for key, task in tasks.items():
         if selected and key not in selected:

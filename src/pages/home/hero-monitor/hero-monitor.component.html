@@ -49,12 +49,19 @@
 		[attr.data-chart]="chartType()"
 		(click)="handleShellInteraction($event)">
 		<div
-			class="hero-monitor__chrome"
-			aria-hidden="true">
+			class="hero-monitor__chrome">
 			<b>cartago.system</b>
 			<span>{{ 'pages.home.monitorChrome' | translate }}</span>
 			<i></i>
 			<small>{{ 'pages.home.monitorLive' | translate }}</small>
+			<button
+				class="hero-monitor__fullscreen"
+				type="button"
+				[attr.aria-pressed]="monitorFullscreen()"
+				[attr.aria-label]="(monitorFullscreen() ? 'pages.home.monitorExitFullscreen' : 'pages.home.monitorFullscreen') | translate"
+				(click)="toggleMonitorFullscreen($event)">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+			</button>
 		</div>
 		<div class="hero-monitor__header">
 			<button
@@ -75,7 +82,7 @@
 				[attr.aria-label]="'pages.home.monitorBannerAria' | translate">
 				<img
 					class="hero-monitor__banner"
-					src="/images/cartagonova-banner-monitor.webp"
+					src="/images/brand/cartagonova-banner-monitor.webp"
 					width="1023"
 					height="300"
 					[attr.alt]="'pages.home.monitorBannerAlt' | translate" />
@@ -104,10 +111,11 @@
 						type="button"
 						[class.is-active]="!activePreview()"
 						(click)="showDashboard()"
-						[attr.aria-label]="'pages.home.monitorDashboard' | translate">
+						[attr.aria-label]="'pages.home.monitorCharts' | translate">
 						<svg viewBox="0 0 24 24" aria-hidden="true">
 							<path d="M4 19V11h3v8H4Zm6 0V5h3v14h-3Zm6 0V8h3v11h-3Z" fill="currentColor" />
 						</svg>
+						<span>{{ 'pages.home.monitorCharts' | translate }}</span>
 					</button>
 					<button
 						class="hero-monitor__technology-toggle"
@@ -121,8 +129,15 @@
 					</button>
 				</div>
 				<div class="hero-monitor__console-effects" [attr.aria-label]="'pages.home.monitorEffectsAria' | translate">
-					@for (consoleEffect of consoleEffects; track consoleEffect.id) {
-						<button type="button" (click)="triggerConsoleEffect(consoleEffect.id)" [attr.aria-label]="consoleEffect.labelKey | translate">{{ consoleEffect.symbol }}</button>
+					@for (consoleEffectOption of consoleEffects; track consoleEffectOption.id) {
+						<button
+							type="button"
+							[class.is-active]="consoleEffect() === consoleEffectOption.id"
+							[attr.aria-pressed]="consoleEffect() === consoleEffectOption.id"
+							(click)="triggerConsoleEffect(consoleEffectOption.id)"
+							[attr.aria-label]="consoleEffectOption.labelKey | translate">
+							{{ consoleEffectOption.symbol }}
+						</button>
 					}
 				</div>
 			</nav>
@@ -196,39 +211,31 @@
 										[attr.aria-label]="chartLabel(chart.id)"
 										[attr.title]="chartLabel(chart.id)"
 										[attr.aria-pressed]="chartType() === chart.id"
-										(click)="hero.setChart(chart.id)">
+										(click)="selectChart(chart.id)">
 										<svg viewBox="0 0 24 24" aria-hidden="true">
 											<path [attr.d]="chart.iconPath" />
 										</svg>
+										<span>{{ chartLabel(chart.id) }}</span>
 									</button>
 								}
 							</div>
 							<p class="hero-monitor__caption">
 								{{ 'pages.home.monitorChoose' | translate }}
 							</p>
-							<div class="hero-monitor__chart-workspace">
+							<div class="hero-monitor__chart-workspace" [class.is-chart-changing]="chartChanging()">
 								<div
 									class="hero-monitor__chart"
 									[attr.data-chart]="chartType()"
 									[attr.data-palette]="palette()">
 									@for (bar of chartBars(); track $index) {
-										<span
-											[style.height.%]="bar"
-											[style.background]="
-												hero.gradient(bar)
-											"></span>
+										<span [style.height.%]="bar" [style.background]="hero.gradient(bar)"></span>
 									}
-									<svg
-										viewBox="0 0 360 120"
-										preserveAspectRatio="none"
-										[attr.aria-label]="'pages.home.monitorChartAria' | translate">
+									<svg viewBox="0 0 360 120" preserveAspectRatio="none" [attr.aria-label]="'pages.home.monitorChartAria' | translate">
 										<path [attr.d]="chartPath()" />
 									</svg>
 									<em>{{ 'pages.home.monitorChartSignal' | translate }}</em>
 								</div>
-								<div
-									class="hero-monitor__chart-symbols"
-									[attr.aria-label]="'pages.home.monitorVisualControlsAria' | translate">
+								<div class="hero-monitor__chart-symbols" [attr.aria-label]="'pages.home.monitorVisualControlsAria' | translate">
 									@for (symbol of ['⌁', '◌', '✦']; track symbol) {
 										<button
 											type="button"
@@ -242,55 +249,31 @@
 										type="button"
 										[class.is-active]="palette() === 'heat'"
 										(click)="hero.setTemperature()"
-										[attr.aria-label]="'pages.home.monitorHeatAria' | translate">
-										◉
-									</button>
+										[attr.aria-label]="'pages.home.monitorHeatAria' | translate">◉</button>
 								</div>
 							</div>
 						</section>
 					}
 					@if (selectedPanel(); as panel) {
-						<article
-							class="hero-monitor__detail"
-							[attr.data-effect]="effect()"
-							[attr.data-transition]="panelTransition()">
+						<article class="hero-monitor__detail" [attr.data-effect]="effect()" [attr.data-transition]="panelTransition()">
 							<div>
 								@if (panel.iconAsset) {
-									<img
-										class="core-icon"
-										[src]="panel.iconAsset"
-										alt="" />
+									<img class="core-icon" [src]="panel.iconAsset" alt="" />
 								} @else {
-									<svg
-										class="core-icon"
-										viewBox="0 0 24 24"
-										aria-hidden="true">
-										<path
-											[attr.d]="panel.iconPath"
-											[attr.fill]="panel.color" />
-									</svg>
+									<svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="panel.iconPath" [attr.fill]="panel.color" /></svg>
 								}
 								<h3>{{ panel.label }}</h3>
 								<p class="hero-monitor__project-status">{{ projectStatus(panel.id) }}</p>
 								<p>{{ projectDetail(panel.id) }}</p>
 								<div class="hero-monitor__stack" [attr.aria-label]="'pages.home.monitorProjectTechnologiesAria' | translate">
-									@for (technology of panel.stack; track technology) {
-										<span>{{ termLabel(technology) }}</span>
-									}
+									@for (technology of panel.stack; track technology) { <span>{{ termLabel(technology) }}</span> }
 								</div>
 							</div>
-							<button
-								class="hero-monitor__retry"
-								type="button"
-								(click)="hero.clearPanel()">
-								{{ 'pages.home.monitorRetry' | translate }}
-							</button>
+							<button class="hero-monitor__retry" type="button" (click)="hero.clearPanel()">{{ 'pages.home.monitorRetry' | translate }}</button>
 						</article>
 					}
 				</div>
-				<aside
-					class="hero-monitor__destinations"
-					[attr.aria-label]="'pages.home.monitorDestinations' | translate">
+				<aside class="hero-monitor__destinations" [attr.aria-label]="'pages.home.monitorDestinations' | translate">
 					<header>
 						<span>{{ 'pages.home.monitorDestinations' | translate }}</span>
 						<strong>{{ activePreview()?.label ?? ('pages.home.monitorPublicDestinations' | translate) }}</strong>
@@ -305,9 +288,7 @@
 								rel="noreferrer"
 								[attr.aria-label]="destinationDisplayLabel(destination) + ' · ' + destinationLocationLabel(destination)"
 								[attr.title]="destinationDisplayLabel(destination) + ' · ' + destinationLocationLabel(destination)">
-								<svg viewBox="0 0 24 24" aria-hidden="true">
-									<path [attr.d]="destinationIconPath(destination.kind)" fill="currentColor" />
-								</svg>
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="destinationIconPath(destination.kind)" fill="currentColor" /></svg>
 								<b>{{ destinationDisplayLabel(destination) }}</b>
 								<span>{{ destinationLocationLabel(destination) }}</span>
 								<i aria-hidden="true">↗</i>

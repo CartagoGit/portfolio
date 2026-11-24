@@ -1,8 +1,10 @@
 # Image attribution
 
+Assets are owned by domain under `brand/`, `games/`, `globe/` and `profile/`. UI marks remain under `public/icons/` and are never duplicated as raster artwork.
+
 ## Earth texture without prominent clouds
 
-- `earth-blue-marble-4k.webp` derives from **“Whole world - land and oceans.jpg”** (8192×4096).
+- `globe/earth-blue-marble-4k.webp` derives from **“Whole world - land and oceans.jpg”** (8192×4096).
 - Creator/source: NASA Earth Observatory / NASA Goddard Space Flight Center; combined and scaled by Wikimedia Commons contributor Dbenbenn.
 - Source: https://commons.wikimedia.org/wiki/File:Whole_world_-_land_and_oceans.jpg
 - License: Public domain (NASA imagery).
@@ -10,7 +12,7 @@
 
 ## Earth texture with realistic clouds
 
-- `earth-clouds-4k.webp` derives from **“Land ocean ice cloud hires.jpg”** (8192×4096).
+- `globe/earth-clouds-4k.webp` derives from **“Land ocean ice cloud hires.jpg”** (8192×4096).
 - Creator/source: NASA Blue Marble 2002, NASA Earth Observatory / NASA Goddard Space Flight Center.
 - Source: https://commons.wikimedia.org/wiki/File:Land_ocean_ice_cloud_hires.jpg
 - License: Public domain (NASA imagery).
@@ -18,11 +20,11 @@
 
 ## Earth night map and solar-system colour maps
 
-- Files: `globe/earth-night-4k.webp`, `sun-4k.webp`, `moon-4k.webp`, `mercury-4k.webp`, `venus-4k.webp`, `mars-4k.webp`, `jupiter-4k.webp`, `saturn-4k.webp`, `uranus-2k.webp`, `neptune-2k.webp`.
+- Files: `globe/earth-night-4k.webp`, `sun-4k.webp`, `moon-4k.webp`, `mercury-4k.webp`, `venus-4k.webp`, `mars-4k.webp`, `jupiter-4k.webp`, `saturn-4k.webp`, `uranus-4k.webp`, `neptune-4k.webp`.
 - Creator/source: Solar System Scope texture pack, based on NASA elevation and spacecraft imagery.
 - Source: https://www.solarsystemscope.com/textures/
 - License: [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
-- Local changes: resized only when needed and converted from the downloaded source JPEG to WebP. The existing equirectangular projection and colour relationship are retained.
+- Local changes: resized/converted to WebP; the Uranus and Neptune display copies were upsampled locally from the licensed 2048px source so every interactive raster texture is 4096×2048. The existing equirectangular projection and colour relationship are retained.
 
 ## Pluto
 
@@ -46,13 +48,20 @@
 - License: owned by the project author.
 - The patterns are canonical visual interpretations, not photographs or third-party logos.
 
-## Cartago brand and portrait wraps
+## Cartago brand and portrait
 
-- Files: `globe/cartago-mark-4k.webp`, `cartago-banner-4k.webp`, `cartago-portrait-4k.webp`.
+- Files: `brand/cartago-banner.png`, `brand/cartagonova-banner-monitor.webp`, `brand/cartagonova-banner-neon.png`, `profile/mario-cabrero-sf.png` and `icons/cartago.svg`.
 - Creator/source: original Cartago project artwork and the portfolio owner's portrait source image.
 - License: owned by the project author; third-party redistribution is not granted by this file.
+- The globe renderer rasterises the canonical source into a front-projected sphere rather than using repeated texture sheets.
+
+## Canonical game marks
+
+- Files: `games/deathblitz.png`, `games/tetris.png`, `games/snake.png`, `games/minesweeper.png`.
+- Sources: the favicons/icon assets published by the corresponding Cartago demos at `https://deathblitz.netlify.app/favicon.png`, `https://cartago-tetris.netlify.app/favicon.ico`, `https://cartago-snake.netlify.app/icon.png` and `https://cartago-minesweeper.netlify.app/icon.png`.
+- Ownership: these marks represent the portfolio author's canonical game projects and are reused by the shared Demos/Work visual registry.
 
 ## Rendering notes
 
 - Terrain and infrared remain colour treatments of the real cloudless Earth map, preserving the geographic silhouette.
-- Saturn's rings are original CSS geometry rendered separately from the sampled planet texture.
+- Saturn's rings are original WebGL geometry rendered with the same quaternion as the sampled planet texture.

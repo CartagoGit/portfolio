@@ -42,8 +42,10 @@
 
 	<input class="contact-form__honeypot" name="company" type="hidden" />
 	<button type="submit" [disabled]="status() === 'sending'">
+		<svg viewBox="0 0 24 24" aria-hidden="true">
+			<path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v9a2.5 2.5 0 0 1-2.5 2.5H9l-5 4v-4.5a2.5 2.5 0 0 1-1-2V5.5Zm2.5-.5a.5.5 0 0 0-.5.5v1.1l7 4.4 7-4.4V5.5a.5.5 0 0 0-.5-.5h-13Zm13.5 3.55-6.47 4.07a1 1 0 0 1-1.06 0L5 8.55v5.95a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V8.55Z" fill="currentColor" />
+		</svg>
 		{{ (status() === 'sending' ? 'pages.contact.formSending' : 'pages.contact.formSubmit') | translate }}
-		<span aria-hidden="true">↗</span>
 	</button>
 
 	@if (status() === 'success') {

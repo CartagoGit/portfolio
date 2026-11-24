@@ -98,6 +98,7 @@ export type IEarthTextureCategory =
 	| 'planets'
 	| 'exoplanets'
 	| 'balls'
+	| 'figures'
 	| 'playful';
 export type IEarthTextureOrigin = 'observed' | 'artist' | 'canonical' | 'owned';
 export type IEarthDepth =

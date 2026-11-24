@@ -95,4 +95,11 @@ describe('TranslateService', () => {
 		expect(service.locale()).toBe('it');
 		expect(service.instant('chrome.header.navWork')).toBe('Projects');
 	});
+
+	it('returns the literal fallback when an optional content term is missing', () => {
+		const service = TestBed.inject(TranslateService);
+		expect(service.instantOr('content.terms.public-profile', 'Perfil público')).toBe(
+			'Perfil público'
+		);
+	});
 });
