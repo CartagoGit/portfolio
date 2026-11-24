@@ -42,7 +42,7 @@
 		"validate:strict": "(bun run check:strict) & (bun run test) & wait",
 		"prepare": "bun tools/delendai-runtime.script.ts --optional",
 		"mcp:link": "bun tools/delendai-runtime.script.ts",
-		"mcp:check": "bun tools/delendai-runtime.script.ts && bun tools/check-delendai.script.ts",
+		"mcp:check": "bun tools/delendai-runtime.script.ts --optional && bun tools/check-delendai.script.ts",
 		"mcp:test": "bun run --cwd plugins/portfolio-content test",
 		"mcp:typecheck": "bun run --cwd plugins/portfolio-content typecheck",
 		"mcp:all": "bun run mcp:typecheck && bun run mcp:test && bun run mcp:check",

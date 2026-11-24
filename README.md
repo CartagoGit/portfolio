@@ -499,7 +499,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. Without an install it only runs the path check when `CI` is set.
+`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. Without an install (GitHub Actions) and with `CI` set, it runs the path check and validates `delendai.config.json` with the vendored `@delendai/core` instead.
 
 ---
 
