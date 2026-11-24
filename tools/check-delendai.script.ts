@@ -7,8 +7,8 @@
  *      plugin activates, every `delendai_portfolio_*` tool is listed and each
  *      read-only tool answers `ok`.
  *
- * In CI there is no DelendAI install: the probe is skipped with a notice
- * and only the machine-path check runs.
+ * In CI there is no DelendAI install: the probe validates the complete
+ * vendored plugin graph with `@delendai/core` and keeps the machine-path gate.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -148,17 +148,16 @@ errors.push(...findMachinePaths());
 let report: { tools: string[]; calls: string[] } | undefined;
 if (!existsSync(CLI)) {
 	if (process.env['CI']) {
-		// No stable install in CI: validate the config with the vendored core instead.
 		const { assembleCliConfig, parseCliArgs } = await import('@delendai/core/public');
 		const args = parseCliArgs(
 			['--workspace=.', '--config=delendai.config.json', '--preset=swarm'],
-			root
+			root,
 		);
 		const { loadResult } = await assembleCliConfig(args);
 		for (const error of [...loadResult.errors, ...loadResult.registerErrors]) {
 			errors.push('message' in error && typeof error.message === 'string' ? error.message : String(error));
 		}
-		console.warn('mcp:check: no DelendAI runtime in CI; config checked with the vendored core, MCP probe skipped.');
+		console.warn('mcp:check: no local runtime in CI; validated the vendored DelendAI graph.');
 	} else {
 		errors.push('DelendAI runtime link missing: run `bun tools/delendai-runtime.script.ts`.');
 	}

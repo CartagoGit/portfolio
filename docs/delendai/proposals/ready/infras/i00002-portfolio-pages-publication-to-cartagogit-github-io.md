@@ -45,7 +45,7 @@ Publication is an independent delivery concern and must not block product comple
 
 ### S2 — Gated workflow, production artifact and publication
 - **Status**: pending
-- **Files**: `.github/workflows/portfolio-pages.yml`, `README.md`, `docs/deployment.md`, `angular.json`, `tools/check-delendai.script.ts`
+- **Files**: `.github/workflows/portfolio-pages.yml`, `README.md`, `docs/deployment.md`, `angular.json`, `tools/check-delendai.script.ts`, `package.json`, `bun.lock`
 - **Gate**: e2e
 - acceptance:
   - "Jobs execute in order preparation, tests, build, deploy."
