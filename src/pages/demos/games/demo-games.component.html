@@ -1,10 +1,6 @@
 <section
 	class="demo-games"
-	[class.is-fullscreen]="fullscreen()"
 	[attr.aria-label]="'pages.demos.gamesAria' | translate">
-	<button class="demo-games__fullscreen" type="button" (click)="toggleFullscreen($event)">
-		{{ (fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate }}
-	</button>
 	<header
 		class="demo-games__tabs"
 		role="tablist"
@@ -32,6 +28,13 @@
 		[style.--demo-entry-direction]="transitionDirection()"
 		[attr.aria-labelledby]="'demo-tab-' + activeGame()"
 		[attr.data-game]="activeGame()">
+		<button
+			class="demo-games__fullscreen interactive-fullscreen-control"
+			type="button"
+			[attr.aria-label]="(fullscreen() ? 'pages.demos.gamesExitFullscreen' : 'pages.demos.gamesFullscreen') | translate"
+			(click)="toggleFullscreen($event)">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+		</button>
 		@switch (activeGame()) {
 			@case ('reflex') {
 				<app-reflex-game />

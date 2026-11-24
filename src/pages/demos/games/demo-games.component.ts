@@ -39,6 +39,7 @@ type IDemoGameId =
 	templateUrl: './demo-games.component.html',
 	styleUrl: './demo-games.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: { '(document:fullscreenchange)': 'syncFullscreen()' },
 })
 export class DemoGamesComponent {
 	readonly activeGame = signal<IDemoGameId>('reflex');
@@ -85,7 +86,7 @@ export class DemoGamesComponent {
 
 	async toggleFullscreen(event: MouseEvent): Promise<void> {
 		event.stopPropagation();
-		const stage = (event.currentTarget as Element | null)?.closest<HTMLElement>('.demo-games');
+		const stage = (event.currentTarget as Element | null)?.closest<HTMLElement>('.demo-games__stage');
 		try {
 			if (document.fullscreenElement) {
 				await document.exitFullscreen();
@@ -97,5 +98,9 @@ export class DemoGamesComponent {
 		} catch {
 			this.fullscreen.update((active) => !active);
 		}
+	}
+
+	syncFullscreen(): void {
+		this.fullscreen.set(document.fullscreenElement?.matches('.demo-games__stage') ?? false);
 	}
 }

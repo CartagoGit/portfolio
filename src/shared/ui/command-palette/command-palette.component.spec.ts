@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { vi } from 'vitest';
+import { TranslateService } from '../../../lang/translate.service';
 import { CommandPaletteComponent } from './command-palette.component';
 
 async function createPalette(open = false) {
@@ -8,6 +9,7 @@ async function createPalette(open = false) {
 		imports: [CommandPaletteComponent, RouterTestingModule],
 	}).compileComponents();
 	const fixture = TestBed.createComponent(CommandPaletteComponent);
+	TestBed.inject(TranslateService).setLocale('en');
 	fixture.componentRef.setInput('locale', 'en');
 	fixture.componentRef.setInput('open', open);
 	fixture.detectChanges();

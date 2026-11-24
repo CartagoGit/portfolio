@@ -49,3 +49,42 @@ $entrance-ease: tokens.$ease-emphasized;
 		top 0.55s $entrance-ease,
 		right 0.55s $entrance-ease;
 }
+
+@mixin fullscreen-control {
+	position: absolute;
+	z-index: 30;
+	top: .7rem;
+	right: .7rem;
+	display: grid;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	min-height: 40px;
+	padding: 0;
+	place-items: center;
+	border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--line));
+	border-radius: 10px;
+	background: color-mix(in srgb, var(--surface) 92%, transparent);
+	color: var(--ink);
+	box-shadow: 0 8px 22px color-mix(in srgb, var(--shadow-strong) 34%, transparent);
+	backdrop-filter: blur(10px);
+	transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+
+	svg {
+		width: 19px;
+		height: 19px;
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.8;
+	}
+
+	&:hover,
+	&:focus-visible {
+		border-color: var(--cyan);
+		background: color-mix(in srgb, var(--cyan) 16%, var(--surface));
+		color: var(--cyan);
+		transform: translateY(-2px);
+	}
+}

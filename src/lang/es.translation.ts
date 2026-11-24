@@ -367,6 +367,8 @@ export const es: ITranslationMap = {
 		},
 		approach: {
 			eyebrow: '03 / Enfoque',
+			panelFullscreen: 'Abrir detalle a pantalla completa',
+			panelExitFullscreen: 'Restaurar tamaño del detalle',
 			titleLead: 'Capacidades conectadas a',
 			titleEmphasis: 'flujos reales.',
 			titleTail: '',
@@ -480,6 +482,8 @@ export const es: ITranslationMap = {
 			showcaseInteract: 'Cambiar el experimento',
 			showcaseFullscreen: 'Abrir showcase a pantalla completa',
 			showcaseExitFullscreen: 'Restaurar tamaño del showcase',
+			gamesFullscreen: 'Abrir arcade a pantalla completa',
+			gamesExitFullscreen: 'Restaurar tamaño del arcade',
 			showcaseDepthKicker: 'Sistema espacial CSS',
 			showcaseDepthTitle: 'Mover con profundidad, no decorar.',
 			showcaseDepthDetail: 'Arrastra el objeto por ejes precisos; táctil, teclado y movimiento reducido conservan una escena estable y explícita.',

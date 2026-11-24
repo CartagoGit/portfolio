@@ -24,6 +24,7 @@ const SHOWCASE_TABS: readonly IShowcaseTab[] = [
 	templateUrl: './showcase.component.html',
 	styleUrl: './showcase.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: { '(document:fullscreenchange)': 'syncFullscreen()' },
 })
 export class ShowcaseComponent {
 	readonly tabs = SHOWCASE_TABS;
@@ -109,7 +110,7 @@ export class ShowcaseComponent {
 	}
 
 	async toggleFullscreen(event: MouseEvent): Promise<void> {
-		const showcase = (event.currentTarget as Element | null)?.closest<HTMLElement>('.showcase');
+		const showcase = (event.currentTarget as Element | null)?.closest<HTMLElement>('.showcase__stage');
 		try {
 			if (document.fullscreenElement) {
 				await document.exitFullscreen();
@@ -121,6 +122,10 @@ export class ShowcaseComponent {
 		} catch {
 			this.fullscreen.update((active) => !active);
 		}
+	}
+
+	syncFullscreen(): void {
+		this.fullscreen.set(document.fullscreenElement?.matches('.showcase__stage') ?? false);
 	}
 
 	resetPointer(): void {

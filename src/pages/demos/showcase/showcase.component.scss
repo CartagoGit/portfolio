@@ -1,3 +1,4 @@
+@use 'motion' as motion;
 @use 'tokens/index' as tokens;
 
 :host { display: block; }
@@ -257,6 +258,19 @@
 	background: var(--canvas);
 }
 .showcase:fullscreen .showcase__stage { min-height: calc(100dvh - 250px); }
+.showcase__stage > .showcase__fullscreen {
+	@include motion.fullscreen-control;
+}
+.showcase__stage:fullscreen {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+	width: 100vw;
+	height: 100dvh;
+	min-height: 100dvh;
+	border-radius: 0;
+	background: var(--canvas);
+}
 
 @keyframes showcase-cube-float { 50% { translate: 0 -12px; } }
 @keyframes showcase-orbit { to { rotate: 1turn; } }

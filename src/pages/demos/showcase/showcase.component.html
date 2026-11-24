@@ -50,6 +50,14 @@
 		(pointerup)="endScene($event)"
 		(pointercancel)="endScene($event)"
 		(keydown)="onStageKeydown($event)">
+		<button
+			class="showcase__fullscreen interactive-fullscreen-control"
+			type="button"
+			[attr.aria-label]="(fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate"
+			(click)="toggleFullscreen($event)"
+			(pointerdown)="$event.stopPropagation()">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+		</button>
 		@if (activeScene() === 'depth') {
 			<div class="showcase__depth" aria-hidden="true">
 				<div class="showcase__orbit showcase__orbit--one"></div>
@@ -140,9 +148,6 @@
 		<button type="button" (click)="resetScene()">
 			<span aria-hidden="true">↻</span>
 			{{ 'pages.demos.showcaseReset' | translate }}
-		</button>
-		<button type="button" (click)="toggleFullscreen($event)">
-			{{ (fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate }}
 		</button>
 	</footer>
 </section>

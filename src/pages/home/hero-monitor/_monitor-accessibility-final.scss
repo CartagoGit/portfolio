@@ -1,3 +1,4 @@
+@use 'motion' as motion;
 @use 'tokens/index' as tokens;
 
 /* Product readability, overflow handling and the always-mounted globe overlay. */
@@ -740,7 +741,7 @@ app-hero-monitor .hero-monitor__technology-toggle {
 }
 
 app-hero-monitor .hero-monitor__dashboard-control span,
-app-hero-monitor .hero-monitor__technology-toggle span {
+app-hero-monitor .hero.monitor__technology-toggle span {
   overflow: hidden;
   font-size: .75rem;
   text-overflow: ellipsis;
@@ -816,39 +817,20 @@ app-hero-monitor.hero-monitor-host--fullscreen .hero-monitor > .hero-monitor__in
   transform: none !important;
 }
 
-@media (max-width: 900px) {
-  app-hero-monitor .hero-monitor__header {
-    grid-template-columns: 82px minmax(0, 1fr) !important;
-  }
-  app-hero-monitor .hero-monitor__platform-rail {
-    grid-column: 1 / -1;
-  }
-  app-hero-monitor .hero-monitor__platform-row {
-    grid-template-columns: repeat(4, 38px) repeat(2, minmax(84px, 1fr)) !important;
-  }
-  app-hero-monitor .hero-monitor__banner-link,
-  app-hero-monitor .hero-monitor__banner {
-    height: 86px !important;
-  }
-  app-hero-monitor .hero-monitor:fullscreen > .hero-monitor__interface,
-  app-hero-monitor.hero-monitor-host--fullscreen .hero-monitor > .hero-monitor__interface {
-    min-height: min(720px, 94dvh) !important;
-    width: 100% !important;
-    max-height: 96dvh;
-  }
+app-hero-monitor .hero-monitor__chrome {
+  position: relative;
+  padding-right: 46px;
 }
+app-hero-monitor .hero-monitor__fullscreen.interactive-fullscreen-control {
+  @include motion.fullscreen-control;
+  top: 3px;
+  right: 6px;
+  width: 30px;
+  min-width: 30px;
+  height: 26px;
+  min-height: 26px;
+  border-radius: 6px;
+  box-shadow: none;
 
-@media (max-width: 540px) {
-  app-hero-monitor .hero-monitor__platform-row {
-    grid-template-columns: repeat(4, 34px) minmax(0, 1fr);
-    grid-template-rows: 36px 36px;
-    height: auto;
-  }
-  app-hero-monitor .hero-monitor__dashboard-control,
-  app-hero-monitor .hero-monitor__technology-toggle {
-    grid-column: span 2 !important;
-  }
-  app-hero-monitor .hero-monitor__dashboard-control { grid-column: 5 !important; grid-row: 1; }
-  app-hero-monitor .hero-monitor__technology-toggle { grid-column: 1 / -1 !important; grid-row: 2; }
-  app-hero-monitor .hero-monitor__fullscreen { width: 26px; flex-basis: 26px; }
+  svg { width: 16px; height: 16px; }
 }

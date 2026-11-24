@@ -351,6 +351,8 @@ export interface ITranslationMap {
 		};
 		approach: {
 			eyebrow: string;
+			panelFullscreen: string;
+			panelExitFullscreen: string;
 			titleLead: string;
 			titleEmphasis: string;
 			titleTail: string;
@@ -452,6 +454,8 @@ export interface ITranslationMap {
 			showcaseInteract: string;
 			showcaseFullscreen: string;
 			showcaseExitFullscreen: string;
+			gamesFullscreen: string;
+			gamesExitFullscreen: string;
 			showcaseDepthKicker: string;
 			showcaseDepthTitle: string;
 			showcaseDepthDetail: string;

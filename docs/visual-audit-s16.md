@@ -1,25 +1,10 @@
 # S16 visual truth audit
 
-Validated against the current `develop` source on 2026-11-23 with the Angular dev server and production build/SSR output.
+Validated against the current `develop` source on 2026-11-24 with Angular, Playwright, production and SSR output.
 
 ## Named viewport matrix
 
-| Route | Theme | Viewport | Horizontal overflow | Informative minimum | Icon/text collisions | Broken images | Footer chrome |
-|---|---|---:|---:|---:|---:|---:|---|
-| Home | light | 1366×768 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | light | 1366×768 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Home | light | 768×1024 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | light | 768×1024 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Home | light | 390×844 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | light | 390×844 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Home | dark | 1366×768 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | dark | 1366×768 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Home | dark | 768×1024 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | dark | 768×1024 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Home | dark | 390×844 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-| Work | dark | 390×844 | 0 px | 12 px | 0 | 0 | transparent, border 0, shadow none |
-
-`aria-hidden` decorative project art is excluded from the readable-text minimum. Decorative `GET /capabilities` lettering is intentionally smaller and exposes no content to assistive technology.
+The executable matrix lives in `e2e/visual-truth.spec.ts` and covers all eight routes at four device classes: 1440×900 desktop, 1024×768 laptop, 768×1024 tablet and 390×844 smartphone. It names failures by viewport/route, rejects unresolved `pages.*`/`content.*` copy, checks broken images and requires zero horizontal overflow.
 
 ## Monitor and globe
 
@@ -30,7 +15,7 @@ Validated against the current `develop` source on 2026-11-23 with the Angular de
 - At 390×844 the control panel is 240 px high, arranged as category rail, texture rail, origin, hint and full-width close action. Both rails scroll independently and do not overlap copy.
 - All 30 presets load, retain the selected style and report WebGL error `0`; failed network requests: 0.
 - Saturn renders the planet and rings inside the same shader/quaternion path. The CSS ring pseudo-elements are disabled.
-- Every newly generated map is 4096×2048 and reproducible through `tools/generate-globe-assets.py`.
+- Every newly generated map is 4096×2048 and reproducible through `tools/generators/generate-globe-assets.py`.
 
 ## Active-theme evidence
 
@@ -54,7 +39,9 @@ The scrim value exactly matches the active theme token in all four cases; contro
 ## Technical gate
 
 - `git diff --check`: pass.
-- `typecheck`: pass.
-- strict lint: pass.
-- unit/integration: 43 files / 98 tests pass.
-- production + 32-route SSR prerender: pass.
+- typecheck (`app`, specs, E2E): pass.
+- strict lint (`src`, tests, E2E, tools): pass.
+- unit/integration: 54 files / 141 tests pass.
+- browser regression: 7/7 pass.
+- new named visual matrix: `e2e/visual-truth.spec.ts`.
+- production + 160-route SSR prerender: pass.

@@ -148,7 +148,11 @@ export const de: ITranslationMap = {
 			telemetryDeliveryNote: 'Anpassungsfähige Arbeit denkt an das nächste Gerät.',
 		},
 		work: workDe,
-		approach: approachDe,
+		approach: {
+			...approachDe,
+			panelFullscreen: 'Detail im Vollbild öffnen',
+			panelExitFullscreen: 'Detailgröße wiederherstellen',
+		},
 		knowledge: knowledgeDe,
 		docker: dockerDe,
 		lab: {
@@ -248,6 +252,8 @@ export const de: ITranslationMap = {
 			showcaseInteract: 'Experiment ändern',
 			showcaseFullscreen: 'Vollbild öffnen',
 			showcaseExitFullscreen: 'Größe wiederherstellen',
+			gamesFullscreen: 'Spielhalle im Vollbild öffnen',
+			gamesExitFullscreen: 'Spielhallengröße wiederherstellen',
 			showcaseDepthKicker: 'Räumliches CSS-System',
 			showcaseDepthTitle: 'Bewegung mit Tiefe statt Dekoration.',
 			showcaseDepthDetail: 'Der Zeiger neigt das Objekt präzise, während Touch und Tastatur eine stabile und eindeutige Szene behalten.',

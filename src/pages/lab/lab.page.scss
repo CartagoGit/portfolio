@@ -1,3 +1,4 @@
+@use 'motion' as motion;
 @use 'tokens/index' as tokens;
 
 :host {
@@ -142,10 +143,22 @@
 .lab-page__signal-card--queue ul { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
 .lab-page__signal-card--queue li { min-width: 54px; padding: .65rem; border: 1px solid color-mix(in srgb, var(--cyan) 32%, var(--line)); border-radius: 9px; background: color-mix(in srgb, var(--cyan) 8%, var(--surface)); color: var(--ink); font: 800 .75rem tokens.$font-mono, monospace; animation: lab-queue-in .35s ease; }
 .lab-page__signal-card--queue > div { display: flex; flex-wrap: wrap; gap: .4rem; }
-.lab-page__signal-gallery:fullscreen,
-.lab-page__signal-gallery.is-fullscreen { position: fixed; z-index: 9999; inset: 0; overflow-y: auto; border-radius: 0; padding: clamp(1rem, 4vw, 3rem); background: var(--canvas); }
-.lab-page__signal-gallery:fullscreen .lab-page__signal-grid,
-.lab-page__signal-gallery.is-fullscreen .lab-page__signal-grid { min-height: calc(100dvh - 180px); }
+.lab-page__signal-card > .lab-page__fullscreen {
+	@include motion.fullscreen-control;
+}
+.lab-page__signal-card:fullscreen,
+.lab-page__signal-card.is-fullscreen {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+	width: 100vw;
+	height: 100dvh;
+	min-height: 100dvh;
+	overflow-y: auto;
+	border-radius: 0;
+	padding: clamp(1.5rem, 5vw, 4rem);
+	background: var(--canvas);
+}
 @keyframes lab-queue-in { from { opacity: 0; transform: translateY(8px) scale(.94); } }
 @media (max-width: 900px) { .lab-page__signal-grid { grid-template-columns: 1fr; } .lab-page__signal-card { min-height: 260px; } }
 @media (max-width: 560px) { .lab-page__signal-gallery > header { align-items: stretch; flex-direction: column; } }

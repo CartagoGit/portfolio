@@ -96,6 +96,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	private _canvas?: HTMLCanvasElement;
 	private _texture?: HTMLCanvasElement;
 	private readonly _textures = new Map<IEarthTextureStyle, HTMLCanvasElement>();
+	private _textureOrder: IEarthTextureStyle[] = [];
 	private readonly _loadingTextures = new Set<IEarthTextureStyle>();
 	private _destroyed = false;
 	private _frame?: number;
@@ -224,6 +225,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		const cached = this._textures.get(style);
 		if (cached) {
 			this._texture = cached;
+			this._textureOrder = [...this._textureOrder.filter((item) => item !== style), style];
 			this.active.set(true);
 			this._resumeAnimation();
 			return;
@@ -252,6 +254,11 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 			if (isOwned) this._drawOwnedTexture(context, { style, image, size: 2048 });
 			else context.drawImage(image, 0, 0);
 			this._textures.set(style, source);
+			this._textureOrder = [...this._textureOrder.filter((item) => item !== style), style];
+			while (this._textureOrder.length > 4) {
+				const expired = this._textureOrder.shift();
+				if (expired) this._textures.delete(expired);
+			}
 			if (this.textureStyle() === style) {
 				this._texture = source;
 				this.active.set(true);

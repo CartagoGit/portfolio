@@ -148,7 +148,11 @@ export const fr: ITranslationMap = {
 			telemetryDeliveryNote: 'Le parcours adaptable anticipe le prochain appareil.',
 		},
 		work: workFr,
-		approach: approachFr,
+		approach: {
+			...approachFr,
+			panelFullscreen: 'Afficher le détail en plein écran',
+			panelExitFullscreen: 'Rétablir la taille du détail',
+		},
 		knowledge: knowledgeFr,
 		docker: dockerFr,
 		lab: {
@@ -248,6 +252,8 @@ export const fr: ITranslationMap = {
 			showcaseInteract: 'Modifier l’expérience',
 			showcaseFullscreen: 'Afficher en plein écran',
 			showcaseExitFullscreen: 'Rétablir la taille',
+			gamesFullscreen: 'Afficher l’arcade en plein écran',
+			gamesExitFullscreen: 'Rétablir la taille de l’arcade',
 			showcaseDepthKicker: 'Système spatial CSS',
 			showcaseDepthTitle: 'Bouger avec profondeur, pas pour décorer.',
 			showcaseDepthDetail: 'Le pointeur incline l’objet sur des axes précis tandis que le tactile et le clavier conservent une scène stable et explicite.',

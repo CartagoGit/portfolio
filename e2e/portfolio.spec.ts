@@ -19,7 +19,14 @@ test('S14-01 monitor preserves preview, destinations and section state', async (
 	await page.mouse.move(10, 10);
 	await expect(page.locator('.header__nav a')).toHaveCount(8);
 	await expect(page.locator('.hero-monitor__chart-switcher button span')).toHaveCount(14);
-	expect(await page.locator('.hero-monitor__chart-switcher button').first().evaluate((button) => (button as HTMLElement).offsetHeight)).toBeLessThanOrEqual(34);
+	const monitorFullscreen = page.locator('.hero-monitor__fullscreen');
+	await expect(monitorFullscreen).toHaveText('');
+	const fullscreenBounds = await monitorFullscreen.boundingBox();
+	const chromeBounds = await page.locator('.hero-monitor__chrome').boundingBox();
+	expect(fullscreenBounds).not.toBeNull();
+	expect(chromeBounds).not.toBeNull();
+	expect(fullscreenBounds!.x + fullscreenBounds!.width).toBeLessThanOrEqual(chromeBounds!.x + chromeBounds!.width);
+	expect(fullscreenBounds!.y + fullscreenBounds!.height).toBeLessThanOrEqual(chromeBounds!.y + chromeBounds!.height);
 	const restingTransform = await page.locator('.hero-monitor__interface').evaluate((element) => getComputedStyle(element).transform);
 	expect(restingTransform).not.toBe('none');
 	await page.locator('.hero-monitor__selector button').filter({ hasText: 'DelendAI' }).click();

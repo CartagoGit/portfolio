@@ -1,3 +1,4 @@
+@use 'motion' as motion;
 @use 'tokens/index' as tokens;
 @use '../demos-interaction-system' as interaction;
 
@@ -58,6 +59,26 @@
 	border-color: var(--cyan);
 	background: color-mix(in srgb, var(--cyan) 10%, transparent);
 	color: var(--ink);
+}
+
+.demo-games__stage {
+	position: relative;
+}
+
+.demo-games__stage > .demo-games__fullscreen {
+	@include motion.fullscreen-control;
+}
+
+.demo-games__stage:fullscreen {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+	width: 100vw;
+	height: 100dvh;
+	min-height: 100dvh;
+	overflow-y: auto;
+	padding: clamp(1rem, 3vw, 2rem);
+	background: var(--canvas);
 }
 
 .demo-games__stage {

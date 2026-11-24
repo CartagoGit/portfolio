@@ -172,8 +172,8 @@ portfolio/
 ├── plugins/portfolio-content/ ← local DelendAI plugin
 ├── docs/delendai/           ← knowledge entries and proposals
 └── tools/
-    ├── check-delendai.mjs   ← DelendAI host gate
-    └── delendai/            ← auxiliary scripts
+    ├── check-*.{mjs,ts} ← gates de integración existentes
+    └── generators/     ← generadores reproducibles de assets
 ```
 
 ### `src/` — the app in layers

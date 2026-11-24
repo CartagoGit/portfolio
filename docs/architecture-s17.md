@@ -15,6 +15,9 @@
 | Demo marks | `demo-visuals.constant.ts` | Shared mark ownership for Work and Demos catalogues. |
 | Contact delivery | `ContactDeliveryService` | HTTP boundary, timeout and fallback state separate from the form component. |
 | Lab interactions | dashboard/workflow/motion/accessibility/concurrency components | One state machine or calculation domain per child; route remains composition-only. |
+| Fullscreen control | `src/styles/motion/_index.scss` mixin `fullscreen-control` | One icon-only geometry/aria contract; each feature chooses the smallest interactive target. |
+| Globe texture cache | `EarthGlobeComponent` | Quaternion/input owns loading and a four-entry LRU budget; the renderer only uploads/draws the current canvas. |
+| Public visual assets | `public/images/{brand,games,globe,profile}` | Domain-owned folders; no root-level brand/portrait/globe files. |
 
 ## SCSS ownership
 
@@ -36,6 +39,8 @@ The former runtime imports for `console-final` and `console-layout-final` were r
 - Project visual modes are directly tested for all six `IHeroPanelId` values.
 - The extracted catalogues have direct integrity/parity tests.
 - Route/page tests still cover composition and localized output at 43 files / 98 tests.
+- Fullscreen targets only the interactive surface: monitor, showcase stage, active game board or individual Lab experiment card.
+- `e2e/visual-truth.spec.ts` names viewport/route/theme/locale failures separately from functional smoke tests.
 
 ## Review rationale
 

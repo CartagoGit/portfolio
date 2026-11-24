@@ -373,6 +373,8 @@ export const en: ITranslationMap = {
 		},
 		approach: {
 			eyebrow: '03 / Approach',
+			panelFullscreen: 'Open approach detail fullscreen',
+			panelExitFullscreen: 'Restore approach detail size',
 			titleLead: 'Capabilities wired to',
 			titleEmphasis: 'real workflows.',
 			titleTail: '',
@@ -495,6 +497,8 @@ export const en: ITranslationMap = {
 			showcaseInteract: 'Change the experiment',
 			showcaseFullscreen: 'Open showcase fullscreen',
 			showcaseExitFullscreen: 'Restore showcase size',
+			gamesFullscreen: 'Open game arcade fullscreen',
+			gamesExitFullscreen: 'Restore game arcade size',
 			showcaseDepthKicker: 'CSS spatial system',
 			showcaseDepthTitle: 'Move with depth, not decoration.',
 			showcaseDepthDetail: 'Drag the object on precise axes; touch, keyboard and reduced-motion users keep an explicit, stable scene.',
