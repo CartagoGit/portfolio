@@ -12,6 +12,7 @@ export const workFr: ITranslationMap['pages']['work'] = {
 
 export const approachFr: ITranslationMap['pages']['approach'] = {
 	eyebrow: '03 / Approche', titleLead: 'Des capacités reliées à', titleEmphasis: 'de vrais parcours.', titleTail: '', subtitle: 'Six capacités opérationnelles, chacune ancrée dans du travail produit livré plutôt que dans une ambition abstraite.',
+	panelFullscreen: 'Afficher le détail en plein écran', panelExitFullscreen: 'Rétablir la taille du détail',
 	capabilityProductEyebrow: '01 / Interfaces produit', capabilityProductTitle: 'Opérationnel par conception.', capabilityProductDetail: 'Interfaces pour les personnes qui les utilisent toute la journée : information dense, actions claires et états vides soignés.', capabilityProductProof: 'Interfaces de parcours · formulaires complexes · design d’interaction',
 	capabilityArchitectureEyebrow: '02 / Architecture Angular', capabilityArchitectureTitle: 'Explicitement réactif.', capabilityArchitectureDetail: 'Composants autonomes, signaux et contrats typés rendent les changements d’état testables et rapides.', capabilityArchitectureProof: 'Zoneless Calculator · motifs Angular en production',
 	capabilityMobileEyebrow: '03 / Livraison mobile', capabilityMobileTitle: 'Un produit, plusieurs surfaces.', capabilityMobileDetail: 'Parcours web conçus pour le toucher, l’espace contraint et une livraison Android prête à publier.', capabilityMobileProof: 'Livraison opérationnelle web + Android',

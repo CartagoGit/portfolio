@@ -12,6 +12,7 @@ export const workDe: ITranslationMap['pages']['work'] = {
 
 export const approachDe: ITranslationMap['pages']['approach'] = {
 	eyebrow: '03 / Ansatz', titleLead: 'Fähigkeiten verbunden mit', titleEmphasis: 'echte Abläufe.', titleTail: '', subtitle: 'Sechs operative Fähigkeiten, jeweils durch gelieferte Produktarbeit statt abstrakte Ambition belegt.',
+	panelFullscreen: 'Detail im Vollbild öffnen', panelExitFullscreen: 'Detailgröße wiederherstellen',
 	capabilityProductEyebrow: '01 / Produktoberflächen', capabilityProductTitle: 'Operational nach Entwurf.', capabilityProductDetail: 'Oberflächen für tägliche Nutzung: dichte Informationen, klare nächste Schritte und saubere Leerzustände.', capabilityProductProof: 'Ablauflächen · komplexe Formulare · Interaktion',
 	capabilityArchitectureEyebrow: '02 / Angular-Architektur', capabilityArchitectureTitle: 'Explizit reaktiv.', capabilityArchitectureDetail: 'Standalone-Komponenten, Signale und typisierte Grenzen machen Zustandsänderungen verständlich und testbar.', capabilityArchitectureProof: 'Zoneless Calculator · Angular in Produktion',
 	capabilityMobileEyebrow: '03 / Mobile Lieferung', capabilityMobileTitle: 'Ein Produkt, mehrere Oberflächen.', capabilityMobileDetail: 'Web-Abläufe für Touch, begrenzten Platz und veröffentlichungsbereites Android.', capabilityMobileProof: 'Operative Web- + Android-Lieferung',

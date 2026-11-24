@@ -1,10 +1,9 @@
 import {
+	type AfterViewInit,
 	Directive,
 	ElementRef,
-	HostBinding,
 	inject,
 	input,
-	type AfterViewInit,
 	type OnDestroy,
 	Renderer2,
 } from '@angular/core';
@@ -13,6 +12,7 @@ import { DOCUMENT } from '@angular/common';
 @Directive({
 	selector: '[appFullscreenPanel]',
 	standalone: true,
+	host: { '[class.is-fallback-fullscreen]': '_fallback' },
 })
 export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	readonly fullscreenLabel = input('Open interactive panel fullscreen');
@@ -23,7 +23,7 @@ export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	private _button?: HTMLButtonElement;
 	private _removeClick?: () => void;
 	private _removeFullscreenChange?: () => void;
-	@HostBinding('class.is-fallback-fullscreen') private _fallback = false;
+	private _fallback = false;
 
 	ngAfterViewInit(): void {
 		const host = this._element.nativeElement;
