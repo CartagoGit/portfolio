@@ -32,6 +32,10 @@ describe('DockerPageComponent', () => {
 			expect(image.hubHref.startsWith('https://hub.docker.com/')).toBe(true);
 			expect(image.sourceHref.startsWith('https://github.com/')).toBe(true);
 		}
+		const marks = element.querySelectorAll<HTMLImageElement>('.docker-page__image header img');
+		expect(new Set(Array.from(marks, ({ src }) => new URL(src).pathname))).toEqual(
+			new Set(['/icons/projects/docker.svg'])
+		);
 	});
 	it('localizes image status and purpose', async () => {
 		await TestBed.configureTestingModule({ imports: [DockerPageComponent] }).compileComponents();
