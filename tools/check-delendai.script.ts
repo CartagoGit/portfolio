@@ -7,8 +7,9 @@
  *      plugin activates, every `delendai_portfolio_*` tool is listed and each
  *      read-only tool answers `ok`.
  *
- * In CI there is no DelendAI install: the probe validates the complete
- * vendored plugin graph with `@delendai/core` and keeps the machine-path gate.
+ * The runtime is the machine's stable DelendAI, reached through the gitignored
+ * `.cache/delendai-runtime` link (`bun run mcp:link`); CI installs the same
+ * stable release before `bun install`.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -28,7 +29,10 @@ const EXPECTED_TOOLS = [
 	'public_audit',
 ].map((id) => `${TOOL_PREFIX}_${id}`);
 const MACHINE_PATH = /(?:^|[^A-Za-z0-9_.])\/(?:home|Users)\/[A-Za-z0-9_.-]+/;
-const PATH_CHECK_EXEMPT = new Set(['bun.lock', 'tools/check-delendai.script.ts']);
+const PATH_CHECK_EXEMPT = new Set([
+	'bun.lock',
+	'tools/check-delendai.script.ts',
+]);
 const TIMEOUT_MS = 60_000;
 
 interface IRpcMessage {
@@ -40,11 +44,16 @@ interface IRpcMessage {
 const errors: string[] = [];
 
 const findMachinePaths = (): string[] => {
-	const listed = spawnSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' });
-	if (listed.status !== 0) return ['git ls-files failed; cannot check machine paths'];
+	const listed = spawnSync('git', ['ls-files', '-z'], {
+		cwd: root,
+		encoding: 'utf8',
+	});
+	if (listed.status !== 0)
+		return ['git ls-files failed; cannot check machine paths'];
 	const hits: string[] = [];
 	for (const file of listed.stdout.split('\0').filter(Boolean)) {
-		if (PATH_CHECK_EXEMPT.has(file) || !existsSync(join(root, file))) continue;
+		if (PATH_CHECK_EXEMPT.has(file) || !existsSync(join(root, file)))
+			continue;
 		let text: string;
 		try {
 			text = readFileSync(join(root, file), 'utf8');
@@ -54,7 +63,8 @@ const findMachinePaths = (): string[] => {
 		if (text.includes('\0')) continue;
 		const lines = text.split('\n');
 		lines.forEach((line, index) => {
-			if (MACHINE_PATH.test(line)) hits.push(`${file}:${index + 1}: machine path committed`);
+			if (MACHINE_PATH.test(line))
+				hits.push(`${file}:${index + 1}: machine path committed`);
 		});
 	}
 	return hits;
@@ -70,7 +80,7 @@ const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 			`--config=${join(root, 'delendai.config.json')}`,
 			'--preset=swarm',
 		],
-		{ cwd: root, stdin: 'pipe', stdout: 'pipe', stderr: 'pipe' },
+		{ cwd: root, stdin: 'pipe', stdout: 'pipe', stderr: 'pipe' }
 	);
 	const pending = new Map<number, (message: IRpcMessage) => void>();
 	let buffer = '';
@@ -86,7 +96,8 @@ const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 				if (!raw.startsWith('{')) continue;
 				try {
 					const message = JSON.parse(raw) as IRpcMessage;
-					if (message.id !== undefined) pending.get(message.id)?.(message);
+					if (message.id !== undefined)
+						pending.get(message.id)?.(message);
 				} catch {
 					// not a JSON-RPC line
 				}
@@ -98,22 +109,38 @@ const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 		proc.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', ...payload })}\n`);
 		proc.stdin.flush();
 	};
-	const request = (method: string, params: object): Promise<Record<string, unknown>> => {
+	const request = (
+		method: string,
+		params: object
+	): Promise<Record<string, unknown>> => {
 		const id = nextId++;
 		return new Promise((resolveRequest, reject) => {
-			const timer = setTimeout(() => reject(new Error(`${method} timed out`)), TIMEOUT_MS);
+			const timer = setTimeout(
+				() => reject(new Error(`${method} timed out`)),
+				TIMEOUT_MS
+			);
 			pending.set(id, (message) => {
 				clearTimeout(timer);
-				if (message.error) reject(new Error(`${method}: ${message.error.message}`));
+				if (message.error)
+					reject(new Error(`${method}: ${message.error.message}`));
 				else resolveRequest(message.result ?? {});
 			});
 			send({ id, method, params });
 		});
 	};
-	const callTool = async (name: string, args: object): Promise<Record<string, unknown>> => {
+	const callTool = async (
+		name: string,
+		args: object
+	): Promise<Record<string, unknown>> => {
 		const result = await request('tools/call', { name, arguments: args });
-		if (result['isError']) throw new Error(`${name} returned an error: ${JSON.stringify(result['content'])}`);
-		return (result['structuredContent'] as Record<string, unknown> | undefined) ?? {};
+		if (result['isError'])
+			throw new Error(
+				`${name} returned an error: ${JSON.stringify(result['content'])}`
+			);
+		return (
+			(result['structuredContent'] as
+				Record<string, unknown> | undefined) ?? {}
+		);
 	};
 
 	try {
@@ -123,21 +150,36 @@ const probe = async (): Promise<{ tools: string[]; calls: string[] }> => {
 			clientInfo: { name: 'portfolio-mcp-check', version: '1.0.0' },
 		});
 		send({ method: 'notifications/initialized' });
-		const activation = await callTool('delendai_plugin_activate', { plugin: PLUGIN });
-		if (activation['ok'] === false) throw new Error(`activation refused: ${JSON.stringify(activation)}`);
+		const activation = await callTool('delendai_plugin_activate', {
+			plugin: PLUGIN,
+		});
+		if (activation['ok'] === false)
+			throw new Error(
+				`activation refused: ${JSON.stringify(activation)}`
+			);
 		const listed = await request('tools/list', {});
-		const tools = ((listed['tools'] as Array<{ name: string }> | undefined) ?? []).map((tool) => tool.name);
+		const tools = (
+			(listed['tools'] as Array<{ name: string }> | undefined) ?? []
+		).map((tool) => tool.name);
 		const calls: string[] = [];
 		for (const name of EXPECTED_TOOLS) {
 			if (!tools.includes(name)) {
-				errors.push(`tool ${name} is not listed after activating ${PLUGIN}`);
+				errors.push(
+					`tool ${name} is not listed after activating ${PLUGIN}`
+				);
 				continue;
 			}
 			const out = await callTool(name, {});
-			if (out['ok'] === false) errors.push(`tool ${name} answered ok:false: ${JSON.stringify(out).slice(0, 300)}`);
+			if (out['ok'] === false)
+				errors.push(
+					`tool ${name} answered ok:false: ${JSON.stringify(out).slice(0, 300)}`
+				);
 			else calls.push(name);
 		}
-		return { tools: tools.filter((name) => name.startsWith(`${TOOL_PREFIX}_`)), calls };
+		return {
+			tools: tools.filter((name) => name.startsWith(`${TOOL_PREFIX}_`)),
+			calls,
+		};
 	} finally {
 		proc.kill();
 	}
@@ -147,20 +189,7 @@ errors.push(...findMachinePaths());
 
 let report: { tools: string[]; calls: string[] } | undefined;
 if (!existsSync(CLI)) {
-	if (process.env['CI']) {
-		const { assembleCliConfig, parseCliArgs } = await import('@delendai/core/public');
-		const args = parseCliArgs(
-			['--workspace=.', '--config=delendai.config.json', '--preset=swarm'],
-			root,
-		);
-		const { loadResult } = await assembleCliConfig(args);
-		for (const error of [...loadResult.errors, ...loadResult.registerErrors]) {
-			errors.push('message' in error && typeof error.message === 'string' ? error.message : String(error));
-		}
-		console.warn('mcp:check: no local runtime in CI; validated the vendored DelendAI graph.');
-	} else {
-		errors.push('DelendAI runtime link missing: run `bun tools/delendai-runtime.script.ts`.');
-	}
+	errors.push('DelendAI runtime link missing: run `bun run mcp:link`.');
 } else {
 	try {
 		report = await probe();
@@ -173,5 +202,7 @@ if (errors.length > 0) {
 	console.error(JSON.stringify({ ok: false, errors }, null, 2));
 	process.exitCode = 1;
 } else {
-	console.log(JSON.stringify({ ok: true, machinePaths: 0, ...report }, null, 2));
+	console.log(
+		JSON.stringify({ ok: true, machinePaths: 0, ...report }, null, 2)
+	);
 }

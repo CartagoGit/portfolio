@@ -25,9 +25,6 @@
 		"typecheck": "tsc --noEmit -p tsconfig.json",
 		"test": "vitest run"
 	},
-	"peerDependencies": {
-		"@delendai/core": "*"
-	},
 	"dependencies": {
 		"zod": "^4.4.3"
 	}

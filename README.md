@@ -499,7 +499,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. Without an install (GitHub Actions) and with `CI` set, it runs the path check and validates `delendai.config.json` with the vendored `@delendai/core` instead.
+`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. The project carries no `@delendai/*` dependency: the plugin's `@delendai/core/public` imports resolve through the same link (tsconfig `paths`, vitest alias), and the server hands the plugin its own core at load time. GitHub Actions installs the forge's stable release (tag `stable`, else the newest `v*` tag) before `bun install`, so CI runs the same checks.
 
 ---
 
@@ -509,7 +509,7 @@ bun run mcp:all           # all three in order
 
 - **Bun ≥ 1.3.14** (declared in `packageManager`).
 - **Node.js ≥ 22** (Angular 22 peer).
-- Local checkout of `DelendAI` at `~/.local/share/delendai/stable` (plugin only).
+- The stable DelendAI install at `~/.local/share/delendai/stable` (or `$DELENDAI_PATH`), never a development checkout (plugin only).
 
 ### Install and start
 

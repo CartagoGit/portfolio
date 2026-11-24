@@ -32,7 +32,7 @@ Publication is an independent delivery concern and must not block product comple
 
 ### S1 — Portable preparation and locked dependency install
 - **Status**: done
-- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `vendor/delendai-*.tgz`
+- **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `tools/check-delendai.script.ts`, `.github/workflows/portfolio-pages.yml`
 - **Gate**: type
 - acceptance:
   - "Frozen install succeeds in GitHub Actions without machine-specific paths."
