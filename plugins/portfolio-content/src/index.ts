@@ -4,8 +4,8 @@
  *
  * Every tool derives its answer from the working tree at call time, so
  * adding a page, a layer or a template needs no plugin change. Tools
- * are registered under their literal id (`portfolio_*`), which is what
- * the host verifies on activation.
+ * are registered as (`<namespacePrefix>_<id>`), which is
+ * what the host verifies on activation.
  *
  * Activation (host `delendai.config.json`):
  *
@@ -34,8 +34,8 @@ one directory per page, with a \`*.page.ts\` entry and nested
 \`*.component.ts\` files. The domain root holds the immutable exported
 contracts.
 
-Nothing here is a fixed list: call \`portfolio_architecture\`,
-\`portfolio_features\` and \`portfolio_domain\` to read the current shape
+Nothing here is a fixed list: call \`{prefix}_architecture\`,
+\`{prefix}_features\` and \`{prefix}_domain\` to read the current shape
 from disk.
 
 ## Design rules
@@ -109,15 +109,15 @@ const RUNBOOK = `# Plugin "portfolio-content" runbook
 
 Read-only tools; each one reads the working tree at call time.
 
-1. \`portfolio_architecture\` — call first: the layers (directories) of
+1. \`{prefix}_architecture\` — call first: the layers (directories) of
    the source root with sub-layers and file counts.
-2. \`portfolio_features\` — every page directory with its page file and
+2. \`{prefix}_features\` — every page directory with its page file and
    nested components. Pass \`pageId\` to narrow to one page.
-3. \`portfolio_domain\` — exported unions, interfaces, types and consts
+3. \`{prefix}_domain\` — exported unions, interfaces, types and consts
    of the domain root, parsed from source.
-4. \`portfolio_scss_audit\` — which directories' templates use each
+4. \`{prefix}_scss_audit\` — which directories' templates use each
    class selector of a stylesheet.
-5. \`portfolio_public_audit\` — call BEFORE merging a public template
+5. \`{prefix}_public_audit\` — call BEFORE merging a public template
    change. Returns \`{ ok, contentPaths, severity, findings, nextAction }\`
    with \`error\` for forbidden terms and per-se roots and \`warning\` for
    \`TODO(image)\` placeholders. Surface findings verbatim.
@@ -148,25 +148,26 @@ export default definePlugin({
 	},
 	register(ctx) {
 		// The loader already validated `ctx.options` against `OptionsSchema`.
-		const o = ctx.options as IPortfolioContentOptions;
+		const o = ctx.options as unknown as IPortfolioContentOptions;
 		const lazyFs = buildLazyFileSystem(ctx.workspace.root);
 		return {
 			tools: [
-				buildArchitectureTool({ fs: lazyFs, sourceRoot: o.sourceRoot }),
-				buildFeaturesTool({ fs: lazyFs, pagesRoot: o.pagesRoot }),
-				buildDomainTool({ fs: lazyFs, domainRoot: o.domainRoot }),
+				buildArchitectureTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, sourceRoot: o.sourceRoot }),
+				buildFeaturesTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, pagesRoot: o.pagesRoot }),
+				buildDomainTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, domainRoot: o.domainRoot }),
 				buildScssAuditTool({
+					namespacePrefix: ctx.namespacePrefix,
 					fs: lazyFs,
 					defaultSourcePath: o.scssAuditSourcePath,
 					templateRoots: o.contentRoots,
 				}),
-				buildAuditTool({ fs: lazyFs, options: o }),
+				buildAuditTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, options: o }),
 			],
 			knowledge: [
-				{ id: 'portfolio-architecture', title: 'Portfolio architecture', body: KNOWLEDGE_ARCHITECTURE },
+				{ id: 'portfolio-architecture', title: 'Portfolio architecture', body: KNOWLEDGE_ARCHITECTURE.replaceAll('{prefix}', ctx.namespacePrefix) },
 				{ id: 'portfolio-public-boundary-en', title: 'Public portfolio content boundary (English)', body: PUBLIC_BOUNDARY_EN },
 				{ id: 'portfolio-public-boundary-es', title: 'Frontera del contenido público (Español)', body: PUBLIC_BOUNDARY_ES },
-				{ id: 'portfolio-content-runbook', title: 'Portfolio-content runbook', body: RUNBOOK },
+				{ id: 'portfolio-content-runbook', title: 'Portfolio-content runbook', body: RUNBOOK.replaceAll('{prefix}', ctx.namespacePrefix) },
 			],
 		};
 	},

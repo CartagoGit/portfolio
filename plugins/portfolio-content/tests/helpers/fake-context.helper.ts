@@ -21,7 +21,7 @@ export type ToolHandler = (
 
 export const makeFakeContext = (
 	options: Record<string, unknown> = {},
-	namespacePrefix = 'portfolio',
+	namespacePrefix = 'delendai_portfolio',
 ): IMcpPluginContext =>
 	({
 		workspace: { root: '/ws', resolve: (p: string) => `/ws/${p}` },

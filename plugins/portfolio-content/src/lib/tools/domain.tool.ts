@@ -10,9 +10,11 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { buildDomainMap } from '../services/domain.service';
 
-export const DOMAIN_TOOL_ID = 'portfolio_domain';
+/** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
+export const DOMAIN_TOOL_ID = 'domain';
 
 export interface IBuildDomainToolOptions {
+	readonly namespacePrefix: string;
 	readonly fs: IFileSystem;
 	readonly domainRoot: string;
 }
@@ -40,7 +42,7 @@ export const buildDomainTool = (
 	tags: ['portfolio', 'domain'],
 	register: async (server) => {
 		server.registerTool(
-			DOMAIN_TOOL_ID,
+			`${options.namespacePrefix}_${DOMAIN_TOOL_ID}`,
 			{
 				description:
 					'Parse every non-spec `.ts` file under the domain root and return its exported unions (with members), interfaces, type aliases and consts. Read from disk at call time; pure read.',

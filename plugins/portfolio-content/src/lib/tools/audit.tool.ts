@@ -12,9 +12,11 @@ import type { IPortfolioContentOptions } from '../../contracts/interfaces/plugin
 import { runPublicAudit } from '../services/audit.service';
 import { discoverContentPaths } from '../services/content.service';
 
-export const AUDIT_TOOL_ID = 'portfolio_public_audit';
+/** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
+export const AUDIT_TOOL_ID = 'public_audit';
 
 export interface IBuildAuditToolOptions {
+	readonly namespacePrefix: string;
 	readonly fs: IFileSystem;
 	readonly options: IPortfolioContentOptions;
 }
@@ -43,7 +45,7 @@ export const buildAuditTool = (
 	tags: ['portfolio', 'audit'],
 	register: async (server) => {
 		server.registerTool(
-			AUDIT_TOOL_ID,
+			`${deps.namespacePrefix}_${AUDIT_TOOL_ID}`,
 			{
 				description:
 					'Discover every `*.html` template under the configured content roots (plus include/exclude globs) and report forbidden employer/client terms and per-se roots as errors and `TODO(image)` placeholders as warnings. Pure read.',

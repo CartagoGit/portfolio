@@ -10,9 +10,11 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { buildPageMap } from '../services/pages.service';
 
-export const FEATURES_TOOL_ID = 'portfolio_features';
+/** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
+export const FEATURES_TOOL_ID = 'features';
 
 export interface IBuildFeaturesToolOptions {
+	readonly namespacePrefix: string;
 	readonly fs: IFileSystem;
 	readonly pagesRoot: string;
 }
@@ -46,7 +48,7 @@ export const buildFeaturesTool = (
 	tags: ['portfolio', 'features'],
 	register: async (server) => {
 		server.registerTool(
-			FEATURES_TOOL_ID,
+			`${options.namespacePrefix}_${FEATURES_TOOL_ID}`,
 			{
 				description:
 					'Walk the pages root and return, per page directory, its `*.page.ts` file and every nested `*.component.ts`. Read from disk at call time; pure read.',

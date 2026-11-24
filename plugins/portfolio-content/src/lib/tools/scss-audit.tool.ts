@@ -10,9 +10,11 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { runScssAudit } from '../services/scss-audit.service';
 
-export const SCSS_AUDIT_TOOL_ID = 'portfolio_scss_audit';
+/** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
+export const SCSS_AUDIT_TOOL_ID = 'scss_audit';
 
 export interface IBuildScssAuditToolOptions {
+	readonly namespacePrefix: string;
 	readonly fs: IFileSystem;
 	readonly defaultSourcePath: string;
 	readonly templateRoots: readonly string[];
@@ -44,7 +46,7 @@ export const buildScssAuditTool = (
 	tags: ['portfolio', 'scss'],
 	register: async (server) => {
 		server.registerTool(
-			SCSS_AUDIT_TOOL_ID,
+			`${options.namespacePrefix}_${SCSS_AUDIT_TOOL_ID}`,
 			{
 				description:
 					'Read a SCSS file and report, for each class selector, the directories whose templates use it (unused, single owner or shared). Ownership comes from the templates on disk at call time. Pure read.',

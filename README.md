@@ -83,7 +83,7 @@ These are the non-negotiable principles of the project. If a change breaks one o
 
 ### Engineering principles
 
-12. **Layered architecture visible.** `app / core / domain / features / shared / styles` is a contract, not a suggestion. The `portfolio_architecture` plugin verifies it.
+12. **Layered architecture visible.** `app / core / domain / features / shared / styles` is a contract, not a suggestion. The `delendai_portfolio_architecture` tool reports it.
 13. **Typed domain contracts.** Pages, capabilities, panels, playground steps, etc., live in `src/domain/portfolio.types.interface.ts`. Features do not redefine types; they import them.
 14. **Single source of truth for content.** `src/domain/portfolio.data.constant.ts` centralises copy, links, technologies, telemetry. Pages read from there.
 15. **Local MCP plugin.** The repo includes a [`DelendAI`](https://github.com/CartagoGit/DelendAI) plugin that introspects the architecture, features, contracts, and audits the public content. This makes the repo *agent-readable* and shields it from drift.
@@ -97,7 +97,7 @@ This is the single most important editorial rule of the project, and it now live
 
 ### Layer 1 — `forbiddenTerms` (explicit list)
 
-The audit scans every public template declared in `plugins.portfolio-content.options.contentPaths` and rejects any substring in the `forbiddenTerms` list, case-insensitive. The portfolio's current list includes:
+The audit scans every public `*.html` template found under `src/app` and `src/pages` at call time and rejects any substring in the `forbiddenTerms` list, case-insensitive. The portfolio's current list includes:
 
 - `Beateam`, `Beateamer`, `Beateams`, `Beateam Group`, `Beateam Spain`, `Beateam App`, `BeateamApp`, `BeateamGroup`, `BeateamSpain`, `beateam.es`, `beateam.io`, `beateam.com`
 - `Mazinger`
@@ -133,7 +133,7 @@ The rule is intentionally binary: no phrase, no euphemism, no anonymisation make
 
 ### Verification
 
-Every public template in `plugins.portfolio-content.options.contentPaths` is scanned. Add a path there whenever a new public page ships. The gate runs with:
+Every public `*.html` template under the content roots is discovered at call time, so a new page needs no registration (`contentRoots`, `contentIncludeGlobs` and `contentExcludeGlobs` adjust the set). The gate runs with:
 
 ```bash
 bun run mcp:check         # host boot + audit
@@ -293,7 +293,7 @@ The contract lives in `src/lib/contracts/interfaces/architecture.interface.ts`:
 - `core → domain` (never features or shared).
 - `app → features + shared + core + domain`.
 
-The `portfolio_architecture` plugin walks the tree and reports any violation. Any PR that breaks it does not merge.
+The `delendai_portfolio_architecture` tool walks the tree and reports any violation. Any PR that breaks it does not merge.
 
 ### Shell and shared state
 
@@ -343,7 +343,7 @@ Features do not lift their own state for things that belong to the shell. If a f
 
 ### Plugins and orchestration
 
-`delendai` (local, via `file:/home/cartago/.local/share/delendai/stable/packages/core`). The `portfolio-content` plugin depends on `@delendai/core` as a `peerDependency` and on `zod` to define the input/output schemas of its tools.
+`delendai` (local install, linked on demand into the gitignored `.cache/delendai-runtime` by `bun tools/delendai-runtime.script.ts`, which runs on `bun install`; set `DELENDAI_PATH` to use another install). The `portfolio-content` plugin needs `@delendai/core` only for types and tests (the host supplies it at load time) and `zod` for the schemas of its tools.
 
 ### Stack decisions
 
@@ -425,10 +425,13 @@ This repo is one of the few that **includes its own MCP plugin** inside itself. 
 
 | Tool | Type | What it returns |
 | --- | --- | --- |
-| `portfolio_architecture` | read | The layer tree (`app / core / domain / features / shared / styles`) with its sub-folders and one-line responsibility. |
-| `portfolio_features` | read | Every feature and the components it owns, grouped. |
-| `portfolio_domain` | read | The public contracts extracted from `src/domain/portfolio.types.interface.ts`. |
-| `portfolio_public_audit` | read (with gate) | Content audit: `forbiddenTerms`, `perSeRoots`, `TODO(image)`, orphan features. |
+| `delendai_portfolio_architecture` | read | Every directory under `src` as a layer, with sub-layers and file counts, read from disk at call time. |
+| `delendai_portfolio_features` | read | Every directory under `src/pages` with its `*.page.ts` and nested `*.component.ts`. |
+| `delendai_portfolio_domain` | read | The exported unions, interfaces, types and consts parsed from `src/domain`. |
+| `delendai_portfolio_scss_audit` | read | Which directories' templates use each class selector of a stylesheet. |
+| `delendai_portfolio_public_audit` | read (with gate) | Content audit: `forbiddenTerms`, `perSeRoots`, `TODO(image)`. |
+
+Tool names are `<core prefix>_<plugin prefix>_<id>`; the ids are `architecture`, `features`, `domain`, `scss_audit` and `public_audit`. Nothing in the plugin lists pages or layers: all of it is derived from the working tree.
 
 ### Finding IDs
 
@@ -439,17 +442,15 @@ The audit emits findings with stable `id`s. The CI gate and the agent runbook ke
 | `per-se-root` | `error` | A root in `perSeRoots` (e.g. `beateam`) appeared in the template, case-insensitive, separator-collapsed. Publish blocker. |
 | `private-term` | `error` | A term in `forbiddenTerms` appeared in the template. Publish blocker. |
 | `image-todo` | `warning` | `TODO(image): …` placeholder is still in the committed HTML. |
-| `duplicated-content` | `info` | Path declared twice in `contentPaths`. |
-| `missing-content` | `info` | Declared path has no file yet. |
+| `duplicated-content` | `info` | A path was passed twice to the audit. |
+| `missing-content` | `info` | A requested path has no file. |
 | `unreadable-content` | `info` | The reader could not read the file. |
 
 ### Knowledge entries
 
-The plugin also loads procedural knowledge in `docs/delendai/knowledge/`:
+The plugin serves procedural knowledge itself:
 
-- `portfolio-architecture` — layer rules and dependencies.
-- `portfolio-features` — how to add a feature without breaking the boundary.
-- `portfolio-domain` — contract surface and hard rules.
+- `portfolio-architecture` — layer rules.
 - `portfolio-public-boundary-en` / `…-es` — bilingual publication rules.
 - `portfolio-content-runbook` — when to call each tool.
 
@@ -461,22 +462,9 @@ The plugin also loads procedural knowledge in `docs/delendai/knowledge/`:
 {
   "plugins": {
     "portfolio-content": {
-      "path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
+      "path": "plugins/portfolio-content/src/index.ts",
       "prefix": "portfolio",
       "options": {
-        "contentPaths": [
-          "src/app/portfolio-page.html",
-          "src/features/contact/contact-page.component.html",
-          "src/features/docker/docker-page.component.html",
-          "src/features/demos/demos-page.component.html",
-          "src/features/approach/approach-page.component.html",
-          "src/features/work/work-page.component.html",
-          "src/features/knowledge/knowledge-page.component.html",
-          "src/features/lab/lab-page.component.html",
-          "src/features/home/home-intro/home-intro.component.html",
-          "src/features/home/hero-monitor/hero-monitor.component.html",
-          "src/features/home/earth-globe/earth-globe.component.html"
-        ],
         "forbiddenTerms": [
           "Beateam",
           "Beateamer",
@@ -511,7 +499,7 @@ bun run mcp:check         # host boot + audit
 bun run mcp:all           # all three in order
 ```
 
-`DelendAI` is not published to npm. Projects use the fixed local 0.3.0 install at `~/.local/share/delendai/stable`.
+`DelendAI` is not published to npm. `bun install` (the `prepare` script) and `bun run mcp:check` link the local install into `.cache/delendai-runtime`; `.vscode/mcp.json` and `$schema` go through that link, so no machine path is committed. `mcp:check` starts the linked CLI over stdio, activates the plugin, calls every tool once and fails if a committed file contains a `/home/` or `/Users/` path. Without an install it only runs the path check when `CI` is set.
 
 ---
 
@@ -565,7 +553,7 @@ Add `PAGES_DEPLOY_TOKEN` as a GitHub Actions secret with write access to that ex
 
 - No stock image is allowed to stay as the final asset.
 - Every temporary image carries an HTML comment `<!-- TODO(image): ... -->`.
-- The `portfolio_public_audit` plugin enumerates all open `TODO(image)` placeholders. When a `TODO(image)` is not resolved before a release, it is documented in the associated proposal.
+- The `delendai_portfolio_public_audit` tool enumerates all open `TODO(image)` placeholders. When a `TODO(image)` is not resolved before a release, it is documented in the associated proposal.
 
 ### Current inventory
 

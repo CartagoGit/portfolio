@@ -23,7 +23,10 @@ async function collectTsFiles(directory: string, result: string[]): Promise<void
 
 const files: string[] = [];
 for (const root of ROOTS) await collectTsFiles(root, files);
+// The delendai plugin scaffold names a plugin's entry and public barrel `index.ts`.
+const PLUGIN_SCAFFOLD_ENTRY = /^plugins\/[^/]+\/src\/(public\/)?index\.ts$/;
 const invalid = files.filter((file) => {
+	if (PLUGIN_SCAFFOLD_ENTRY.test(relative(process.cwd(), file).replaceAll('\\', '/'))) return false;
 	const stem = file.slice(0, -3).split(/[\/]/).at(-1) ?? '';
 	const parts = stem.split('.');
 	return parts.length < 2 || !ROLES.has(parts.at(-1) ?? '');

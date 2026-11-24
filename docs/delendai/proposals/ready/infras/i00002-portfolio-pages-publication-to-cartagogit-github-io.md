@@ -6,6 +6,8 @@ status: ready
 type: proposal
 track: portfolio-publication
 date: 2026-11-23
+shipped-in:
+  - "2860949"
 ---
 
 # i00002 — Portfolio Pages publication to CartagoGit.github.io
@@ -29,19 +31,21 @@ Publication is an independent delivery concern and must not block product comple
 - global_gate: e2e
 
 ### S1 — Portable preparation and locked dependency install
-- **Status**: review
+- **Status**: done
 - **Files**: `package.json`, `bun.lock`, `tools/check-file-naming.script.ts`, `tsconfig.tools.json`, `vendor/delendai-*.tgz`
 - **Gate**: type
 - acceptance:
   - "Frozen install succeeds in GitHub Actions without machine-specific paths."
   - "Preparation validates naming, configuration, assets and lockfile consistency."
   - "Missing or invalid dependencies fail with actionable evidence."
-- review-state: in_review
+- review-state: done
 - review-implementer: microsoft-mai-code-2
+- review-reviewer: explore-independent-i00002-s1-reviewer
+- review-log: approved by explore-independent-i00002-s1-reviewer — verified at 2860949, validate exit 0 and tests 28/28 claimed, no recorded run cited; acceptance 3/3: (1) bun install --frozen-lockfile exited 0 from a clean node_modules; package.json and bun.lock contain no /home or machine-specific file dependencies. (2) ci:prepare exited 0: naming convention, local plugin typecheck, 28/28 tests, and full mcp:check passed. (3) The full configured host now imports 27/27 plugin packages and 35/35 DelendAI 0.3.0 tarballs; mcp:check loads declared plugins and returns ok=true rather than …
 
 ### S2 — Gated workflow, production artifact and publication
 - **Status**: pending
-- **Files**: `.github/workflows/portfolio-pages.yml`, `README.md`, `docs/deployment.md`, `angular.json`
+- **Files**: `.github/workflows/portfolio-pages.yml`, `README.md`, `docs/deployment.md`, `angular.json`, `tools/check-delendai.script.ts`
 - **Gate**: e2e
 - acceptance:
   - "Jobs execute in order preparation, tests, build, deploy."

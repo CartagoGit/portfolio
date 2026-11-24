@@ -26,3 +26,22 @@ export const buildInMemoryFs = (init: IInMemoryFileSystemInit): IFileSystem => {
 		},
 	};
 };
+
+/** Builds the directory table from file paths, so specs list files only. */
+export const buildFsFromFiles = (
+	files: Readonly<Record<string, string>>,
+): IFileSystem => {
+	const children = new Map<string, Set<string>>();
+	for (const file of Object.keys(files)) {
+		const parts = file.split('/');
+		for (let i = 0; i < parts.length; i += 1) {
+			const dir = parts.slice(0, i).join('/');
+			const set = children.get(dir) ?? new Set<string>();
+			set.add(parts[i] ?? '');
+			children.set(dir, set);
+		}
+	}
+	const dirs: Record<string, readonly string[]> = {};
+	for (const [dir, names] of children) if (dir !== '') dirs[dir] = [...names];
+	return buildInMemoryFs({ dirs, files });
+};

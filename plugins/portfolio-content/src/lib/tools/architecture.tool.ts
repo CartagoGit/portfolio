@@ -10,9 +10,11 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { buildArchitectureMap } from '../services/architecture.service';
 
-export const ARCHITECTURE_TOOL_ID = 'portfolio_architecture';
+/** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
+export const ARCHITECTURE_TOOL_ID = 'architecture';
 
 export interface IBuildArchitectureToolOptions {
+	readonly namespacePrefix: string;
 	readonly fs: IFileSystem;
 	readonly sourceRoot: string;
 }
@@ -39,7 +41,7 @@ export const buildArchitectureTool = (
 	tags: ['portfolio', 'architecture'],
 	register: async (server) => {
 		server.registerTool(
-			ARCHITECTURE_TOOL_ID,
+			`${options.namespacePrefix}_${ARCHITECTURE_TOOL_ID}`,
 			{
 				description:
 					'List every directory under the source root as a layer, with its sub-directories and file count. Read from disk at call time; pure read.',

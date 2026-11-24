@@ -1,5 +1,5 @@
 {
-	"$schema": "/home/cartago/.local/share/delendai/stable/packages/core/schema/delendai.config.schema.json",
+	"$schema": "./.cache/delendai-runtime/packages/core/schema/delendai.config.schema.json",
 	"cacheDir": ".cache/delendai",
 	"docsDir": "docs/delendai",
 	"plugins": {
@@ -33,22 +33,9 @@
 			}
 		},
 		"portfolio-content": {
-			"path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
+			"path": "plugins/portfolio-content/src/index.ts",
 			"prefix": "portfolio",
 			"options": {
-				"contentPaths": [
-					"src/app/page.html",
-					"src/pages/contact/contact.page.html",
-					"src/pages/docker/docker.page.html",
-					"src/pages/demos/demos.page.html",
-					"src/pages/approach/approach.page.html",
-					"src/pages/work/work.page.html",
-					"src/pages/knowledge/knowledge.page.html",
-					"src/pages/lab/lab.page.html",
-					"src/pages/home/home-intro/home-intro.component.html",
-					"src/pages/home/hero-monitor/hero-monitor.component.html",
-					"src/pages/home/earth-globe/earth-globe.component.html"
-				],
 				"forbiddenTerms": [
 					"Beateam",
 					"Beateamer",

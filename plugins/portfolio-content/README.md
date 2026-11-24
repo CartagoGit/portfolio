@@ -1,46 +1,55 @@
 # `@portfolio/delendai-portfolio-content`
 
-Local delendai plugin for the public portfolio. Loads at the
-canonical `plugins/portfolio-content/` path (the workspace has only
-this one plugin, kept local on purpose).
+Local DelendAI plugin for the public portfolio. Plugin id
+`portfolio-content`, tool prefix `portfolio`. Every tool reads the
+working tree at call time: no page, layer or label list is hardcoded,
+so adding a page or a layer needs no plugin change.
 
 ## Tools
 
-| Tool | What it adds |
-|---|---|
-| `portfolio_architecture` | Returns the layered shape of `src/` (app / core / domain / features / shared / styles) with the on-disk subfolders. |
-| `portfolio_features` | Lists every Angular component the features own, grouped by feature. |
-| `portfolio_domain` | Surfaces the public domain contracts (`PortfolioPageId`, `CapabilityId`, …) extracted from `src/domain/portfolio.types.interface.ts`. |
-| `portfolio_public_audit` | Support tool: scans public templates for forbidden employer/client terms, **per-se forbidden roots** (case-insensitive, separator-collapsed), and `TODO(image)` placeholders. Severity-labelled. |
+Served as `<core prefix>_<plugin prefix>_<id>`, for example
+`delendai_portfolio_architecture`.
 
-All tools are **read-only** — no writes, no network.
+| Id | What it reports |
+|---|---|
+| `architecture` | Every directory under `sourceRoot` as a layer, with sub-layers and file counts. |
+| `features` | Every directory under `pagesRoot` with its `*.page.ts` and nested `*.component.ts`. |
+| `domain` | Exported unions, interfaces, types and consts parsed from `domainRoot`. |
+| `scss_audit` | Which directories' templates use each class selector of a stylesheet. |
+| `public_audit` | Forbidden terms, per-se roots and `TODO(image)` placeholders in every discovered `*.html`. |
+
+All tools are read-only: no writes, no network.
 
 ### Audit finding IDs
 
 | `id` | Severity | Source |
 | --- | --- | --- |
-| `per-se-root` | `error` | A root in `perSeRoots` appeared in the template. Publish blocker. |
-| `private-term` | `error` | A term in `forbiddenTerms` appeared in the template. Publish blocker. |
-| `image-todo` | `warning` | `TODO(image): …` placeholder is still in the committed HTML. |
-| `duplicated-content` / `missing-content` / `unreadable-content` | `info` | Configuration / I/O diagnostics. |
+| `per-se-root` | `error` | A root in `perSeRoots` appeared (case-insensitive, separators collapsed). |
+| `private-term` | `error` | A term in `forbiddenTerms` appeared. |
+| `image-todo` | `warning` | A `TODO(image): ...` placeholder is still committed. |
+| `duplicated-content` / `missing-content` / `unreadable-content` | `info` | I/O diagnostics. |
 
-## Per-se forbidden roots
+## Options
 
-The audit runs a second pass over the configured `perSeRoots`. A root is matched case-insensitively with separators (`_ . - , /` whitespace) collapsed, so `beateam`, `Beateam`, `BEATEAM-dev`, `beateam.dev`, `bea team`, and `BeateamSpain` all trigger the same `per-se-root` finding. The host config keeps this short and surgical:
+Every option has a default, so an empty `options` block works. The
+`optionsSchema` is required for project-local plugins.
 
-```jsonc
-"perSeRoots": ["beateam"]
-```
-
-Adding a new root is one config line. Removing a root is a breaking editorial change and must be justified in a written proposal.
+| Option | Default | Meaning |
+|---|---|---|
+| `sourceRoot` | `src` | Its sub-directories are the layers. |
+| `pagesRoot` | `src/pages` | Its sub-directories are the pages. |
+| `domainRoot` | `src/domain` | Where domain contracts are parsed from. |
+| `contentRoots` | `["src/app", "src/pages"]` | Scanned recursively for `*.html`. |
+| `contentIncludeGlobs` / `contentExcludeGlobs` | `[]` | Add or remove audited templates. |
+| `forbiddenTerms` | `[]` | Case-insensitive substrings. |
+| `perSeRoots` | `[]` | Roots banned in any form. |
+| `locale` | `en` | `en` or `es` remediation text. |
+| `scssAuditSourcePath` | `src/app/page.scss` | Default stylesheet of `scss_audit`. |
 
 ## Knowledge entries
 
-- `portfolio-architecture` — layered shape + design rules.
-- `portfolio-features` — feature catalogue + adding a new feature.
-- `portfolio-domain` — contract surface + hard rules.
-- `portfolio-public-boundary-en` / `portfolio-public-boundary-es` — publication rules.
-- `portfolio-content-runbook` — when to call each tool.
+`portfolio-architecture`, `portfolio-public-boundary-en`,
+`portfolio-public-boundary-es` and `portfolio-content-runbook`.
 
 ## Layout
 
@@ -51,59 +60,31 @@ plugins/portfolio-content/
 ├── tsconfig.json
 ├── vitest.config.ts
 ├── src/
-│   ├── plugin.entrypoint.ts              ← definePlugin(...) — loadable entry
-│   ├── public/index.barrel.ts       ← barrel: re-exports engines + types
-│   └── lib/
-│       ├── contracts/interfaces/{architecture,features,domain}.interface.ts
-│       ├── services/{architecture,features,domain,audit}.ts ← pure engines
-│       └── tools/{architecture-tool,features-tool,domain-tool,audit-tool}.ts
+│   ├── index.ts                  <- definePlugin(...)
+│   ├── public/index.ts           <- barrel
+│   ├── contracts/interfaces/*.interface.ts
+│   └── lib/{services,tools}/
 └── tests/
-    ├── helpers/{fake-context,in-memory-fs}.ts
-    └── portfolio-content.spec.ts
+    ├── helpers/
+    └── src/lib/*.spec.ts
 ```
 
 ## Configuration (`delendai.config.json`)
 
 ```jsonc
-"plugins": {
-  "portfolio-content": {
-    "path": "plugins/portfolio-content/src/plugin.entrypoint.ts",
-    "prefix": "portfolio",
-    "options": {
-      "contentPaths": [
-        "src/app/portfolio-page.html",
-        "src/features/contact/contact-page.component.html",
-        "src/features/work/work-page.component.html"
-      ],
-      "forbiddenTerms": [
-        "Beateam",
-        "Beateamer",
-        "Beateams",
-        "Beateam Group",
-        "Beateam Spain",
-        "Beateam App",
-        "BeateamApp",
-        "BeateamGroup",
-        "BeateamSpain",
-        "beateam.es",
-        "beateam.io",
-        "beateam.com",
-        "Mazinger",
-        "MDM Platform",
-        "Gestion de Tarifas"
-      ],
-      "perSeRoots": ["beateam"],
-      "locale": "en"
-    }
+"portfolio-content": {
+  "path": "plugins/portfolio-content/src/index.ts",
+  "prefix": "portfolio",
+  "options": {
+    "forbiddenTerms": ["..."],
+    "perSeRoots": ["..."],
+    "locale": "en"
   }
 }
 ```
 
-## Run it
+## Develop
 
-```bash
-bun run mcp:check                 # host boot
-bun run mcp:test                  # plugin tests
-bun run mcp:typecheck             # plugin typecheck
-bun run mcp:all                   # all three gated
-```
+`bun run mcp:test`, `bun run mcp:typecheck` and `bun run mcp:check` from
+the repo root. `@delendai/core/public` resolves through the gitignored
+`.cache/delendai-runtime` link (`bun run mcp:link`, or `DELENDAI_PATH`).
