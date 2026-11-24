@@ -153,6 +153,8 @@ export const fr: ITranslationMap = {
 		docker: dockerFr,
 		lab: {
 			eyebrow: '02 / Laboratoire frontend',
+			labFullscreen: 'Afficher la galerie en plein écran',
+			labExitFullscreen: 'Rétablir la taille de la galerie',
 			titleLead: 'Un laboratoire pour',
 			titleEmphasis: 'des surfaces interactives',
 			titleTail: 'prêtes à livrer.',

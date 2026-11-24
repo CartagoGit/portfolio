@@ -1,6 +1,10 @@
 <section
 	class="demo-games"
+	[class.is-fullscreen]="fullscreen()"
 	[attr.aria-label]="'pages.demos.gamesAria' | translate">
+	<button class="demo-games__fullscreen" type="button" (click)="toggleFullscreen($event)">
+		{{ (fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate }}
+	</button>
 	<header
 		class="demo-games__tabs"
 		role="tablist"

@@ -26,6 +26,11 @@
 				<nav [attr.aria-label]="'pages.home.monitorDestinations' | translate">
 					@for (project of area.projects; track project.href) {
 						<a [href]="project.href" target="_blank" rel="noreferrer">
+							@if (project.imageSrc; as image) {
+								<img [src]="image" alt="" />
+							} @else if (project.iconPath; as iconPath) {
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="iconPath" [attr.fill]="project.color ?? 'currentColor'" /></svg>
+							}
 							{{ project.label }}
 							<span aria-hidden="true">↗</span>
 						</a>

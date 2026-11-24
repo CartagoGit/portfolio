@@ -217,6 +217,8 @@ export const es: ITranslationMap = {
 		},
 		lab: {
 			eyebrow: '02 / Laboratorio',
+			labFullscreen: 'Abrir galería a pantalla completa',
+			labExitFullscreen: 'Restaurar tamaño de la galería',
 			titleLead: 'Un laboratorio para',
 			titleEmphasis: 'superficies interactivas',
 			titleTail: 'que merecen entregarse.',

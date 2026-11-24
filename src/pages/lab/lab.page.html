@@ -20,6 +20,34 @@
 
 	<app-lab-dashboard />
 
+	<section
+		class="lab-page__signal-gallery"
+		[class.is-fullscreen]="galleryFullscreen()"
+		[attr.aria-label]="'pages.lab.experimentsDetail' | translate">
+		<header>
+			<div><p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p><h3>{{ 'pages.lab.experimentsTitle' | translate }}</h3></div>
+			<button type="button" (click)="toggleGalleryFullscreen($event)">{{ (galleryFullscreen() ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate }}</button>
+		</header>
+		<div class="lab-page__signal-grid">
+			<article class="lab-page__signal-card lab-page__signal-card--tune">
+				<p>{{ 'pages.lab.motionEyebrow' | translate }}</p><h3>{{ 'pages.lab.motionTitle' | translate }}</h3>
+				<div class="lab-page__signal-meter" [style.--signal-strength]="signalStrength() + '%'" aria-hidden="true"><i></i></div>
+				<output>{{ signalStrength() }}%</output>
+				<button type="button" (click)="tuneSignal()">{{ 'pages.lab.randomizeData' | translate }}</button>
+			</article>
+			<article class="lab-page__signal-card lab-page__signal-card--route" [attr.data-path]="packetPath()">
+				<p>{{ 'pages.lab.stateEyebrow' | translate }}</p><h3>{{ 'pages.lab.stateTitle' | translate }}</h3>
+				<div class="lab-page__packet-route" aria-hidden="true"><i>A</i><span></span><i>B</i><span></span><i>C</i><b></b></div>
+				<button type="button" (click)="routePacket()">{{ 'pages.lab.stateRun' | translate }}</button>
+			</article>
+			<article class="lab-page__signal-card lab-page__signal-card--queue">
+				<p>{{ 'pages.lab.concurrencyEyebrow' | translate }}</p><h3>{{ 'pages.lab.concurrencyTitle' | translate }}</h3>
+				<ul>@for (item of queue(); track item) { <li>{{ item }}</li> }</ul>
+				<div><button type="button" (click)="enqueue()">{{ 'pages.lab.runConcurrent' | translate }}</button><button type="button" (click)="dequeue()">{{ 'pages.lab.cancelConcurrent' | translate }}</button></div>
+			</article>
+		</div>
+	</section>
+
 	<section class="lab-page__experiments" aria-labelledby="lab-experiments-title">
 		<header>
 			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>

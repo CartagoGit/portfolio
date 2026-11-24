@@ -12,6 +12,22 @@
 	border-radius: 18px;
 	background: var(--surface);
 	box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+	position: relative;
+}
+
+.demo-games__fullscreen {
+	position: absolute;
+	z-index: 4;
+	top: .65rem;
+	right: .65rem;
+	min-height: 38px;
+	padding: .45rem .6rem;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--surface) 92%, transparent);
+	color: var(--ink);
+	font: 700 .72rem tokens.$font-mono, monospace;
+	backdrop-filter: blur(10px);
 }
 
 .demo-games__tabs {
@@ -24,6 +40,7 @@
 	scrollbar-width: thin;
 	border-bottom: var(--border-thin) solid var(--line);
 	background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+	padding-right: 190px;
 }
 
 .demo-games__tabs button {
@@ -74,6 +91,24 @@
 	to { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
+.demo-games:fullscreen,
+.demo-games.is-fullscreen {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+	width: 100vw;
+	height: 100dvh;
+	margin: 0;
+	overflow-y: auto;
+	border-radius: 0;
+	background: var(--canvas);
+}
+
+.demo-games:fullscreen .demo-games__stage,
+.demo-games.is-fullscreen .demo-games__stage {
+	min-height: calc(100dvh - 80px);
+}
+
 @media (max-width: 760px) {
 	.demo-games__stage {
 		min-height: 0;
@@ -82,6 +117,17 @@
 
 	.demo-games__tabs button {
 		padding-inline: 0.4rem;
+	}
+
+	.demo-games__tabs {
+		padding-right: .65rem;
+		padding-top: 3.65rem;
+	}
+
+	.demo-games__fullscreen {
+		left: .65rem;
+		right: .65rem;
+		text-align: center;
 	}
 }
 

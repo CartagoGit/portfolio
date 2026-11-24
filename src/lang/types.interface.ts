@@ -207,6 +207,8 @@ export interface ITranslationMap {
 		};
 		lab: {
 			eyebrow: string;
+			labFullscreen: string;
+			labExitFullscreen: string;
 			titleLead: string;
 			titleEmphasis: string;
 			titleTail: string;

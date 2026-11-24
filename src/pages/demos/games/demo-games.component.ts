@@ -44,6 +44,7 @@ export class DemoGamesComponent {
 	readonly activeGame = signal<IDemoGameId>('reflex');
 	readonly transitionAlternate = signal(false);
 	readonly transitionDirection = signal(1);
+	readonly fullscreen = signal(false);
 	readonly games = [
 		{ id: 'reflex' as const, labelKey: 'pages.demos.tabReflex' },
 		{ id: 'reaction' as const, labelKey: 'pages.demos.tabReaction' },
@@ -80,5 +81,21 @@ export class DemoGamesComponent {
 			.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
 		this.select(game.id);
 		queueMicrotask(() => tabs?.[nextIndex]?.focus());
+	}
+
+	async toggleFullscreen(event: MouseEvent): Promise<void> {
+		event.stopPropagation();
+		const stage = (event.currentTarget as Element | null)?.closest<HTMLElement>('.demo-games');
+		try {
+			if (document.fullscreenElement) {
+				await document.exitFullscreen();
+				this.fullscreen.set(false);
+			} else if (stage?.requestFullscreen) {
+				await stage.requestFullscreen();
+				this.fullscreen.set(true);
+			} else this.fullscreen.update((active) => !active);
+		} catch {
+			this.fullscreen.update((active) => !active);
+		}
 	}
 }

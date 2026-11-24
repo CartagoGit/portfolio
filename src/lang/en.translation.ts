@@ -223,6 +223,8 @@ export const en: ITranslationMap = {
 		},
 		lab: {
 			eyebrow: '02 / Frontend lab',
+			labFullscreen: 'Open lab gallery fullscreen',
+			labExitFullscreen: 'Restore lab gallery size',
 			titleLead: 'A lab for',
 			titleEmphasis: 'interactive surfaces',
 			titleTail: 'worth shipping.',

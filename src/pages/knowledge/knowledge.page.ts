@@ -6,6 +6,9 @@ import type { IHeroPanelId } from '../../domain/types.interface';
 interface IRelatedProject {
 	label: string;
 	href: string;
+	imageSrc?: string;
+	iconPath?: string;
+	color?: string;
 }
 
 interface IKnowledgeArea {
@@ -21,12 +24,19 @@ interface IKnowledgeArea {
 function publicProject(id: IHeroPanelId): IRelatedProject {
 	const panel = HERO_PANELS.find((entry) => entry.id === id);
 	if (!panel?.href) throw new Error(`Knowledge area requires a public project: ${id}`);
-	return { label: panel.label, href: panel.href };
+	return {
+		label: panel.label,
+		href: panel.href,
+		imageSrc: panel.iconAsset,
+		iconPath: panel.iconPath,
+		color: panel.color,
+	};
 }
 
 const PORTFOLIO_PROJECT: IRelatedProject = {
 	label: 'Portfolio',
 	href: 'https://github.com/CartagoGit/portfolio',
+	imageSrc: '/icons/cartago.svg',
 };
 
 const KNOWLEDGE_AREAS: readonly IKnowledgeArea[] = [

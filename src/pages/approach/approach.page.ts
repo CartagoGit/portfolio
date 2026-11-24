@@ -100,7 +100,7 @@ export class ApproachPageComponent {
 	}
 
 	termLabel(value: string): string {
-		return this._translate.instant(`content.terms.${contentKey(value)}`);
+		return this._translate.instantOr(`content.terms.${contentKey(value)}`, value);
 	}
 
 	selectCapability(id: ICapabilityId): void {
@@ -145,12 +145,17 @@ export class ApproachPageComponent {
 			return;
 		const element = this._detail()?.nativeElement;
 		if (!element || typeof element.animate !== 'function') return;
-		element.animate(
-			[
-				{ opacity: 0.45, transform: 'translateY(10px)' },
-				{ opacity: 1, transform: 'translateY(0)' },
-			],
-			{ duration: 260, easing: 'cubic-bezier(.22, 1, .36, 1)' }
-		);
+		const motion: Readonly<Record<ICapabilityId, readonly Keyframe[]>> = {
+			product: [{ opacity: 0, transform: 'translateX(22px)' }, { opacity: 1, transform: 'translateX(0)' }],
+			architecture: [{ opacity: 0, clipPath: 'inset(0 100% 0 0)' }, { opacity: 1, clipPath: 'inset(0 0 0 0)' }],
+			mobile: [{ opacity: 0, transform: 'translateY(24px) rotateX(8deg)' }, { opacity: 1, transform: 'translateY(0) rotateX(0)' }],
+			quality: [{ opacity: 0.25, filter: 'brightness(1.8)' }, { opacity: 1, filter: 'brightness(1)' }],
+			systems: [{ opacity: 0, transform: 'scale(.94) rotate(-2deg)' }, { opacity: 1, transform: 'scale(1) rotate(0)' }],
+			tooling: [{ opacity: 0, transform: 'translateX(-18px)', filter: 'blur(5px)' }, { opacity: 1, transform: 'translateX(0)', filter: 'blur(0)' }],
+		};
+		element.animate([...motion[this.activeCapability()]], {
+			duration: 380,
+			easing: 'cubic-bezier(.22, 1, .36, 1)',
+		});
 	}
 }
