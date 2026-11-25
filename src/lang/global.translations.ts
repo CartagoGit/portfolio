@@ -1,5 +1,7 @@
 import type { ILocale } from '../domain/types.interface';
 import { en } from './en.translation';
+import { SECONDARY_PRIORITY_OVERLAYS } from './secondary-priority.overlays';
+import { mergeTranslationOverlay } from './secondary-locales.types';
 import type { ITranslationMap } from './types.interface';
 
 type IGlobalLocale = Exclude<ILocale, 'en' | 'es' | 'fr' | 'de'>;
@@ -84,7 +86,7 @@ const COPY: Readonly<Record<IGlobalLocale, IGlobalCopy>> = {
 	'zh-CN': {
 		nav: ['首页', '项目', '实验室', '方法', '知识', 'Docker', '演示', '联系'],
 		home: ['产品前端工程', '作品先于', '空谈。', '', '没有什么比真实示例更能说明一个人的工作方式。', '探索代码、交互与交付决策：这个作品集就是证据。', '查看项目', '开始交流'],
-		pages: { work: ['真实', '项目。', '展示技术重点的开源案例。'], lab: ['交互', '实验室。', '亲手探索状态、动效、可访问性与数据。'], approach: ['可落地的', '方法。', '与真实产品交付相连的六项能力。'], knowledge: ['实用', '知识。', '按技术与项目整理的参考资料。'], docker: ['可复现的', '交付。', '跨机器保持一致的容器环境。'], demos: ['鲜活的', '实验。', '支持鼠标、键盘与触控的演示。'], contact: ['开始一次', '有价值的交流。', '告诉我目标、背景与约束。'] },
+		pages: { work: ['真实', '项目。', '展示技术重点的开源案例。'], lab: ['交互', '实验室。', '亲手探索状态、动效、可访问性与数据。'], approach: ['可落地的', '方法。', '与真实产品交付相连的六项能力。'], knowledge: ['实用', '知识。', '按技术与项目整理的参考资料。'], docker: ['可复现的', '交付。', '跨机器保持一致的容器环境。'], demos: ['鲜活的', '实验。', '支持鼠标、键盘与触控的演示。'], contact: ['开始一次', '有价值的交流。', '告诉我目标、背景与限制。'] },
 		skip: '跳到内容', send: '发送', availability: '可承接产品项目',
 	},
 	'zh-TW': {
@@ -138,7 +140,7 @@ function buildTranslation(locale: IGlobalLocale, copy: IGlobalCopy): ITranslatio
 		return { titleLead: lead, titleEmphasis: emphasis, titleTail: '', subtitle };
 	};
 	const [homeEyebrow, homeLead, homeEmphasis, homeTail, homeSubtitle, homeIntro, homeWork, homeContact] = copy.home;
-	return {
+	const localized: ITranslationMap = {
 		...en,
 		chrome: {
 			...en.chrome,
@@ -163,6 +165,7 @@ function buildTranslation(locale: IGlobalLocale, copy: IGlobalCopy): ITranslatio
 			contact: { ...en.pages.contact, ...page('contact'), formSubmit: copy.send },
 		},
 	};
+	return mergeTranslationOverlay(localized, SECONDARY_PRIORITY_OVERLAYS[locale]);
 }
 
 export const GLOBAL_TRANSLATIONS = Object.fromEntries(

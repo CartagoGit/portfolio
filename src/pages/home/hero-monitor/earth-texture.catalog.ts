@@ -5,6 +5,7 @@ import type {
 	IEarthTextureStyle,
 	ILocale,
 } from '../../../domain/types.interface';
+import { SECONDARY_EARTH_LABELS } from '../../../lang/secondary-priority.overlays';
 
 interface IEarthLocalLabels {
 	categories: Readonly<Record<IEarthTextureCategory, string>>;
@@ -46,6 +47,7 @@ const EARTH_TEXTURE_LABELS: Readonly<Partial<Record<ILocale, IEarthLocalLabels>>
 		origins: { observed: 'Beobachtete oder abgeleitete Karte', artist: 'Künstlerdarstellung — keine Beobachtung', canonical: 'Originales kanonisches Muster', owned: 'Eigene Cartago-Inhalte' },
 		closeSphere: 'Figur schließen',
 	},
+	...SECONDARY_EARTH_LABELS,
 };
 
 export const EARTH_TEXTURE_CATEGORIES: readonly IEarthTextureCategory[] = ['earth', 'planets', 'exoplanets', 'balls', 'figures', 'playful'];

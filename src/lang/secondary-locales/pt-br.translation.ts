@@ -1,5 +1,5 @@
 import { ptPt } from './pt-pt.translation';
-import { mapTranslationOverlay, type ISecondaryLocalePack } from '../secondary-locales.types';
+import { type ISecondaryLocalePack, mapTranslationOverlay } from '../secondary-locales.types';
 
 const REGION_REPLACEMENTS = [
 	['Portefólio', 'Portfólio'], ['portefólio', 'portfólio'], ['Contacto', 'Contato'], ['contacto', 'contato'],

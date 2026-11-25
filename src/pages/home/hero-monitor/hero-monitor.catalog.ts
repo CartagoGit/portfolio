@@ -6,6 +6,7 @@ import type {
 	ILocale,
 	IMonitorDestinationKind,
 } from '../../../domain/types.interface';
+import { SECONDARY_CHART_LABELS } from '../../../lang/secondary-priority.overlays';
 
 const CHART_TYPES: readonly IChartType[] = ['bars', 'line', 'area', 'dots', 'pulse', 'wave', 'grid', 'stacked', 'scatter', 'radar', 'donut', 'heatmap', 'treemap', 'stream'];
 
@@ -31,6 +32,7 @@ const CHART_LABELS: Readonly<Partial<Record<ILocale, Readonly<Record<IChartType,
 	es: { bars: 'Barras', line: 'Línea', area: 'Área', dots: 'Puntos', pulse: 'Pulso', wave: 'Onda', grid: 'Cuadrícula', stacked: 'Apilado', scatter: 'Dispersión', radar: 'Radar', donut: 'Rosquilla', heatmap: 'Mapa térmico', treemap: 'Mapa árbol', stream: 'Flujo' },
 	fr: { bars: 'Barres', line: 'Ligne', area: 'Aire', dots: 'Points', pulse: 'Impulsion', wave: 'Onde', grid: 'Grille', stacked: 'Empilé', scatter: 'Dispersion', radar: 'Radar', donut: 'Anneau', heatmap: 'Carte thermique', treemap: 'Arborescence', stream: 'Flux' },
 	de: { bars: 'Balken', line: 'Linie', area: 'Fläche', dots: 'Punkte', pulse: 'Impuls', wave: 'Welle', grid: 'Raster', stacked: 'Gestapelt', scatter: 'Streuung', radar: 'Radar', donut: 'Ring', heatmap: 'Wärmekarte', treemap: 'Baumkarte', stream: 'Strom' },
+	...SECONDARY_CHART_LABELS,
 };
 
 export const CHART_OPTIONS: readonly IChartOption[] = CHART_TYPES.map((id) => ({ id, label: CHART_LABELS.en![id], iconPath: CHART_ICON_PATHS[id] }));

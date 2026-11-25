@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LOCALES, LOCALE_LANGUAGE_GROUPS, resolveLocale } from './locale.helper';
+import { LOCALE_LANGUAGE_GROUPS, LOCALES, resolveLocale } from './locale.helper';
 
 describe('locale registry', () => {
 	it('exposes all twenty canonical route locales', () => {
