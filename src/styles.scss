@@ -207,6 +207,27 @@ video {
 	background: var(--canvas) !important;
 }
 
+:root.portfolio-fullscreen-mode,
+:root.portfolio-fullscreen-mode body {
+	overflow: hidden !important;
+}
+
+:root.portfolio-fullscreen-mode [data-fullscreen-inert] {
+	visibility: hidden !important;
+	pointer-events: none !important;
+	user-select: none !important;
+	opacity: 0 !important;
+}
+
+:root.portfolio-fullscreen-mode app-shell-header,
+:root.portfolio-fullscreen-mode app-shell-footer,
+:root.portfolio-fullscreen-mode .skip-link,
+:root.portfolio-fullscreen-mode app-command-palette {
+	visibility: hidden !important;
+	pointer-events: none !important;
+	opacity: 0 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

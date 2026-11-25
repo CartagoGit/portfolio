@@ -107,7 +107,9 @@ describe('HeroMonitorComponent', () => {
 		fixture.componentRef.setInput('locale', 'es');
 		fixture.componentRef.setInput('technologies', []);
 		fixture.detectChanges();
-		await fixture.componentInstance.toggleMonitorFullscreen(new MouseEvent('click'));
+		(fixture.nativeElement as HTMLElement)
+			.querySelector<HTMLButtonElement>('.hero-monitor__fullscreen')
+			?.click();
 		fixture.detectChanges();
 		expect(fixture.componentInstance.monitorFullscreen()).toBe(true);
 		expect((fixture.nativeElement as HTMLElement).classList.contains('hero-monitor-host--fullscreen')).toBe(true);

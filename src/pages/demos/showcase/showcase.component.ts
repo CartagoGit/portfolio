@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, type OnDestroy, signal } from '@angular/core';
+import { FullscreenCoordinatorService } from '../../../core/platform/fullscreen-coordinator.service';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 
 type IShowcaseScene = 'depth' | 'flow' | 'signal' | 'latency' | 'particles' | 'orbits';
@@ -26,7 +27,7 @@ const SHOWCASE_TABS: readonly IShowcaseTab[] = [
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { '(document:fullscreenchange)': 'syncFullscreen()' },
 })
-export class ShowcaseComponent {
+export class ShowcaseComponent implements OnDestroy {
 	readonly tabs = SHOWCASE_TABS;
 	readonly activeScene = signal<IShowcaseScene>('depth');
 	readonly pointer = signal({ x: 0, y: 0 });
@@ -39,7 +40,21 @@ export class ShowcaseComponent {
 	readonly fullscreen = signal(false);
 	readonly rotateX = computed(() => `${-this.pointer().y * 13}deg`);
 	readonly rotateY = computed(() => `${this.pointer().x * 15}deg`);
+
+	private readonly _fullscreenCoordinator = inject(FullscreenCoordinatorService);
+	private _fullscreenTarget?: HTMLElement;
+	private readonly _fullscreenSync = effect(() => {
+		const activeTarget = this._fullscreenCoordinator.active();
+		const target = this._fullscreenTarget;
+		if (target) this.fullscreen.set(activeTarget === target);
+	});
 	private _dragging = false;
+
+	ngOnDestroy(): void {
+		if (this._fullscreenTarget)
+			this._fullscreenCoordinator.deactivate(this._fullscreenTarget);
+		this._fullscreenSync.destroy();
+	}
 
 	selectScene(scene: IShowcaseScene): void {
 		this.activeScene.set(scene);
@@ -111,21 +126,18 @@ export class ShowcaseComponent {
 
 	async toggleFullscreen(event: MouseEvent): Promise<void> {
 		const showcase = (event.currentTarget as Element | null)?.closest<HTMLElement>('.showcase__stage');
-		try {
-			if (document.fullscreenElement) {
-				await document.exitFullscreen();
-				this.fullscreen.set(false);
-			} else if (showcase?.requestFullscreen) {
-				await showcase.requestFullscreen();
-				this.fullscreen.set(true);
-			} else this.fullscreen.update((active) => !active);
-		} catch {
-			this.fullscreen.update((active) => !active);
-		}
+		if (!showcase) return;
+		this._fullscreenTarget = showcase;
+		if (this._fullscreenCoordinator.active() === showcase)
+			this._fullscreenCoordinator.deactivate(showcase);
+		else
+			this._fullscreenCoordinator.activate(showcase);
+		this.fullscreen.set(this._fullscreenCoordinator.active() === showcase);
 	}
 
 	syncFullscreen(): void {
-		this.fullscreen.set(document.fullscreenElement?.matches('.showcase__stage') ?? false);
+		if (this._fullscreenTarget)
+			this.fullscreen.set(this._fullscreenCoordinator.active() === this._fullscreenTarget);
 	}
 
 	resetPointer(): void {

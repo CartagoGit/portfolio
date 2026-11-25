@@ -1,8 +1,12 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
+	effect,
+	inject,
+	type OnDestroy,
 	signal,
 } from '@angular/core';
+import { FullscreenCoordinatorService } from '../../../core/platform/fullscreen-coordinator.service';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { ColorGameComponent } from './color-game.component';
 import { DiceGameComponent } from './dice-game.component';
@@ -41,11 +45,18 @@ type IDemoGameId =
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { '(document:fullscreenchange)': 'syncFullscreen()' },
 })
-export class DemoGamesComponent {
+export class DemoGamesComponent implements OnDestroy {
 	readonly activeGame = signal<IDemoGameId>('reflex');
 	readonly transitionAlternate = signal(false);
 	readonly transitionDirection = signal(1);
 	readonly fullscreen = signal(false);
+	private readonly _fullscreenCoordinator = inject(FullscreenCoordinatorService);
+	private _fullscreenTarget?: HTMLElement;
+	private readonly _fullscreenSync = effect(() => {
+		const activeTarget = this._fullscreenCoordinator.active();
+		const target = this._fullscreenTarget;
+		if (target) this.fullscreen.set(activeTarget === target);
+	});
 	readonly games = [
 		{ id: 'reflex' as const, labelKey: 'pages.demos.tabReflex' },
 		{ id: 'reaction' as const, labelKey: 'pages.demos.tabReaction' },
@@ -56,6 +67,12 @@ export class DemoGamesComponent {
 		{ id: 'tap' as const, labelKey: 'pages.demos.tabTap' },
 		{ id: 'guess' as const, labelKey: 'pages.demos.tabGuess' },
 	] as const;
+
+	ngOnDestroy(): void {
+		if (this._fullscreenTarget)
+			this._fullscreenCoordinator.deactivate(this._fullscreenTarget);
+		this._fullscreenSync.destroy();
+	}
 
 	select(id: IDemoGameId): void {
 		if (id === this.activeGame()) return;
@@ -87,20 +104,17 @@ export class DemoGamesComponent {
 	async toggleFullscreen(event: MouseEvent): Promise<void> {
 		event.stopPropagation();
 		const stage = (event.currentTarget as Element | null)?.closest<HTMLElement>('.demo-games__stage');
-		try {
-			if (document.fullscreenElement) {
-				await document.exitFullscreen();
-				this.fullscreen.set(false);
-			} else if (stage?.requestFullscreen) {
-				await stage.requestFullscreen();
-				this.fullscreen.set(true);
-			} else this.fullscreen.update((active) => !active);
-		} catch {
-			this.fullscreen.update((active) => !active);
-		}
+		if (!stage) return;
+		this._fullscreenTarget = stage;
+		if (this._fullscreenCoordinator.active() === stage)
+			this._fullscreenCoordinator.deactivate(stage);
+		else
+			this._fullscreenCoordinator.activate(stage);
+		this.fullscreen.set(this._fullscreenCoordinator.active() === stage);
 	}
 
 	syncFullscreen(): void {
-		this.fullscreen.set(document.fullscreenElement?.matches('.demo-games__stage') ?? false);
+		if (this._fullscreenTarget)
+			this.fullscreen.set(this._fullscreenCoordinator.active() === this._fullscreenTarget);
 	}
 }

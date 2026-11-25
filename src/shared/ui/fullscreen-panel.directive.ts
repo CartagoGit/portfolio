@@ -1,6 +1,7 @@
 import {
 	type AfterViewInit,
 	Directive,
+	effect,
 	ElementRef,
 	inject,
 	input,
@@ -8,6 +9,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { FullscreenCoordinatorService } from '../../core/platform/fullscreen-coordinator.service';
 
 @Directive({
 	selector: '[appFullscreenPanel]',
@@ -20,10 +22,16 @@ export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	private readonly _element = inject(ElementRef<HTMLElement>);
 	private readonly _renderer = inject(Renderer2);
 	private readonly _document = inject(DOCUMENT);
+	private readonly _fullscreen = inject(FullscreenCoordinatorService);
 	private _button?: HTMLButtonElement;
 	private _removeClick?: () => void;
 	private _removeFullscreenChange?: () => void;
 	private _fallback = false;
+	private readonly _stateSync = effect(() => {
+		const active = this._fullscreen.active() === this._element.nativeElement;
+		this._fallback = active;
+		this._updateButton(active);
+	});
 
 	ngAfterViewInit(): void {
 		const host = this._element.nativeElement;
@@ -51,29 +59,21 @@ export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this._removeClick?.();
 		this._removeFullscreenChange?.();
+		this._fullscreen.deactivate(this._element.nativeElement);
 		this._button?.remove();
+		this._stateSync.destroy();
 	}
 
 	private async _toggle(event: MouseEvent): Promise<void> {
 		event.stopPropagation();
 		const host = this._element.nativeElement;
-		try {
-			if (this._document.fullscreenElement) await this._document.exitFullscreen();
-			else if (host.requestFullscreen) await host.requestFullscreen();
-			else {
-				this._fallback = !this._fallback;
-				this._updateButton(this._fallback);
-			}
-		} catch {
-			this._fallback = !this._fallback;
-			this._updateButton(this._fallback);
-		}
+		if (this._fullscreen.active() === host) this._fullscreen.deactivate(host);
+		else this._fullscreen.activate(host);
 	}
 
 	private _sync(): void {
-		const active = this._document.fullscreenElement === this._element.nativeElement;
-		this._fallback = false;
-		this._updateButton(active);
+		this._fallback = this._fullscreen.active() === this._element.nativeElement;
+		this._updateButton(this._fallback);
 	}
 
 	private _updateButton(active: boolean): void {

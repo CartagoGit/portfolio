@@ -91,25 +91,32 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	await page.waitForTimeout(800);
 	await expect(page.locator('.hero-monitor')).toHaveClass(/hero-monitor--expanded/);
 	await expect(page.locator('.hero-monitor__interface')).toHaveCSS('transform', fullscreenTransform);
+	await expect(page.locator('app-shell-header')).toHaveCSS('visibility', 'hidden');
+	await expect(page.locator('app-shell-footer')).toHaveCSS('visibility', 'hidden');
+	await expect(page.locator('[data-fullscreen-inert=""]')).not.toHaveCount(0);
+	await expect(page.locator('app-home-intro')).toHaveAttribute('inert', '');
+	await page.keyboard.press('Escape');
+	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/hero-monitor-host--fullscreen/);
+	await expect(page.locator('app-shell-header')).not.toHaveCSS('visibility', 'hidden');
+	await page.locator('.hero-monitor__fullscreen').click();
 	await page.locator('.hero-monitor__fullscreen').click();
 	await openRoute(page, { route: 'demos' });
 	await expect(page.locator('.showcase__footer button')).toHaveCount(1);
 	await expect(page.locator('.showcase__stage .showcase__fullscreen svg')).toHaveCount(1);
 	await page.locator('.showcase__fullscreen').click();
 	await expectAspectRatio(page.locator('.showcase__fullscreen-frame'), 16 / 9);
-	await page.locator('.showcase__fullscreen').click();
+	await page.keyboard.press('Escape');
 	await expect(page.locator('.demo-games__fullscreen svg')).toHaveCount(1);
-	await expect(page.locator('.demo-games__stage > .demo-games__fullscreen')).toHaveCount(1);
 	await page.locator('.demo-games__fullscreen').click();
 	await expectAspectRatio(page.locator('.demo-games__fullscreen-frame'), 8 / 5);
-	await page.locator('.demo-games__fullscreen').click();
+	await page.keyboard.press('Escape');
 	await openRoute(page, { route: 'lab' });
 	await expect(page.locator('.lab-page__signal-card > .lab-page__fullscreen')).toHaveCount(3);
 	await expect(page.locator('.lab-page__experiment-grid > * > .interactive-fullscreen-control')).toHaveCount(7);
 	await expect(page.locator('app-lab-dashboard > .interactive-fullscreen-control')).toHaveCount(1);
 	await page.locator('.lab-page__signal-card .lab-page__fullscreen').first().click();
 	await expectAspectRatio(page.locator('.lab-page__signal-card .lab-page__fullscreen-frame').first(), 8 / 5);
-	await page.locator('.lab-page__signal-card .lab-page__fullscreen').first().click();
+	await page.keyboard.press('Escape');
 });
 
 test('visual truth: twenty locales render native primary copy and Arabic remains RTL', async ({ page }) => {

@@ -50,6 +50,7 @@ import type {
 	IPublicLink,
 	ITechnology,
 } from '../../../domain/types.interface';
+import { FullscreenCoordinatorService } from '../../../core/platform/fullscreen-coordinator.service';
 
 /**
  * Interactive hero composition: live monitor with technology rail + sphere.
@@ -99,6 +100,19 @@ export class HeroMonitorComponent implements OnDestroy {
 	readonly activeDestinations = computed(() => monitorDestinations(this.activePreview()));
 	private readonly _platformId = inject(PLATFORM_ID);
 	private readonly _translate = inject(TranslateService);
+	private readonly _fullscreen = inject(FullscreenCoordinatorService);
+	private _fullscreenTarget?: HTMLElement;
+	private readonly _fullscreenSync = effect(() => {
+		const activeTarget = this._fullscreen.active();
+		const target = this._fullscreenTarget;
+		if (!target) return;
+		const active = activeTarget === target;
+		if (active !== this.monitorFullscreen()) {
+			this.monitorFullscreen.set(active);
+			if (active) this.monitorExpanded.set(true);
+			this._syncMonitorFullscreenScale();
+		}
+	});
 	private readonly _previewSync = effect(() => {
 		if (!isPlatformBrowser(this._platformId)) return;
 		this.showPreview(this.preview());
@@ -184,6 +198,8 @@ export class HeroMonitorComponent implements OnDestroy {
 			window.clearTimeout(this._chartTransitionTimer);
 		this._previewSync.destroy();
 		this._earthReturnSync.destroy();
+		if (this._fullscreenTarget) this._fullscreen.deactivate(this._fullscreenTarget);
+		this._fullscreenSync.destroy();
 	}
 
 	enterMonitor(): void {
@@ -371,10 +387,14 @@ export class HeroMonitorComponent implements OnDestroy {
 	async toggleMonitorFullscreen(event: MouseEvent): Promise<void> {
 		event.stopPropagation();
 		if (!isPlatformBrowser(this._platformId)) return;
-		const expand = !this.monitorFullscreen();
-		this.monitorFullscreen.set(expand);
-		this.monitorExpanded.set(expand || this.monitorExpanded());
-		if (expand) {
+		const target = (event.currentTarget as Element | null)?.closest<HTMLElement>('.hero-monitor');
+		if (!target) return;
+		this._fullscreenTarget = target;
+		if (this._fullscreen.active() === target) this._fullscreen.deactivate(target);
+		else {
+			this._fullscreen.activate(target);
+			this.monitorFullscreen.set(true);
+			this.monitorExpanded.set(true);
 			this._monitorHovered = true;
 			this._monitorOpening = false;
 			if (this._monitorCloseTimer !== undefined) {

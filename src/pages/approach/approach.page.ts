@@ -14,7 +14,6 @@ import type { ICapability, ICapabilityId } from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
 import { contentKey } from '../../lang/content-key.helper';
-import { FullscreenPanelDirective } from '../../shared/ui/fullscreen-panel.directive';
 
 interface ICapabilityVisual {
 	iconPath: string;
@@ -50,7 +49,7 @@ const CAPABILITY_VISUALS: Readonly<Record<ICapabilityId, ICapabilityVisual>> = {
 
 @Component({
 	selector: 'app-approach-page',
-	imports: [FullscreenPanelDirective, TranslatePipe],
+	imports: [TranslatePipe],
 	templateUrl: './approach.page.html',
 	styleUrl: './approach.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
