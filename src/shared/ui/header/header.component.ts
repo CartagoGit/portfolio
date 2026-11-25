@@ -47,6 +47,7 @@ export class HeaderComponent {
 	readonly themeMenuOpen = input.required<boolean>();
 	readonly themeMenuClosing = input.required<boolean>();
 	readonly navigate = output<IPageComponentId>();
+	readonly searchOpen = output<void>();
 	readonly menuToggle = output<void>();
 	readonly localeToggle = output<void>();
 	readonly localeSelect = output<ILocale>();

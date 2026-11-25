@@ -4,7 +4,6 @@ import {
 	effect,
 	inject,
 	type OnDestroy,
-	output,
 	signal,
 } from '@angular/core';
 import { FullscreenCoordinatorService } from '../../core/platform/fullscreen-coordinator.service';
@@ -40,7 +39,6 @@ import { WorkflowPlaygroundComponent } from './workflow-playground/workflow-play
 })
 export class LabPageComponent implements OnDestroy {
 	private readonly _fullscreenCoordinator = inject(FullscreenCoordinatorService);
-	readonly commandRequested = output<void>();
 	readonly signalStrength = signal(42);
 	readonly packetPath = signal(0);
 	readonly queue = signal<readonly string[]>(['A-01', 'B-02', 'C-03']);

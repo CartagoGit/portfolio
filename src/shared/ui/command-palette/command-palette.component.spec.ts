@@ -59,19 +59,17 @@ describe('CommandPaletteComponent', () => {
 		fixture.destroy();
 	});
 
-	it('filters localized commands and uses a platform-neutral Enter hint', async () => {
+	it('searches localized portfolio content and keeps a platform-neutral Enter hint', async () => {
 		const fixture = await createPalette(true);
 		const search = fixture.nativeElement.querySelector(
 			'.command-palette__search input'
 		) as HTMLInputElement;
-		search.value = 'contact';
+		search.value = 'Tetris';
 		search.dispatchEvent(new Event('input', { bubbles: true }));
 		fixture.detectChanges();
-		const links = fixture.nativeElement.querySelectorAll(
-			'.command-palette__commands a'
-		);
-		expect(links).toHaveLength(1);
-		expect(links[0]?.textContent).toContain('Start a conversation');
+		const links = fixture.nativeElement.querySelectorAll('.command-palette__commands a');
+		expect(links.length).toBeGreaterThan(0);
+		expect(links[0]?.textContent).toContain('Tetris');
 		expect(links[0]?.textContent).toContain('Enter');
 		fixture.destroy();
 	});
@@ -111,8 +109,12 @@ describe('CommandPaletteComponent', () => {
 		const close = vi.fn();
 		fixture.componentInstance.navigate.subscribe(navigate);
 		fixture.componentInstance.close.subscribe(close);
-		fixture.componentInstance.select('work');
-		expect(navigate).toHaveBeenCalledWith('work');
+		fixture.componentInstance.query.set('Tetris');
+		fixture.detectChanges();
+		const [result] = fixture.componentInstance.visibleCommands();
+		expect(result).toBeTruthy();
+		if (result) fixture.componentInstance.select(result);
+		expect(navigate).toHaveBeenCalledWith(result?.page);
 		expect(close).toHaveBeenCalledOnce();
 		fixture.destroy();
 	});

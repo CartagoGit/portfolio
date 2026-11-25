@@ -38,9 +38,15 @@ export interface ITranslationMap {
 			close: string;
 			searchLabel: string;
 			searchPlaceholder: string;
-			cmdViewWork: string;
-			cmdLab: string;
-			cmdContact: string;
+			searchResults: string;
+			searchEmpty: string;
+			searchOpen: string;
+			searchKindRoute: string;
+			searchKindProject: string;
+			searchKindTechnology: string;
+			searchKindDemo: string;
+			searchKindPlatform: string;
+			searchKindContent: string;
 		};
 		skipToContent: string;
 	};

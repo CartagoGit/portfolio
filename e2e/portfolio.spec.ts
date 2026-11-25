@@ -118,14 +118,17 @@ test('S14-04 route scroll, footer surfaces and back-to-top preserve locale/route
 	await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 });
 
-test('S14-05 command palette traps and restores focus', async ({ page }) => {
+test('S14-05 global search traps and restores focus', async ({ page }) => {
 	await openSpanishRoute(page, 'lab');
-	const trigger = page.getByRole('button', { name: 'Paleta de comandos' });
+	const trigger = page.getByRole('button', { name: 'Abrir buscador del portafolio' });
 	await trigger.click();
 	const dialog = page.getByRole('dialog');
 	await expect(dialog).toBeVisible();
-	await expect(dialog.locator('input[type="search"]')).toBeFocused();
+	const input = dialog.locator('input[type="search"]');
+	await expect(input).toBeFocused();
+	await input.fill('Tetris');
 	const lastCommand = dialog.locator('.command-palette__commands a').last();
+	await expect(lastCommand).toBeVisible();
 	await lastCommand.focus();
 	await page.keyboard.press('Tab');
 	await expect(dialog.locator('button')).toBeFocused();

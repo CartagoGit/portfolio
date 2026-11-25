@@ -36,15 +36,23 @@
 		</label>
 		<nav
 			class="command-palette__commands"
-			[attr.aria-label]="'chrome.commandPalette.title' | translate">
-			@for (command of visibleCommands(); track command.page) {
+			[attr.aria-label]="'chrome.commandPalette.searchResults' | translate">
+			@for (result of visibleCommands(); track result.id) {
 				<a
-					[routerLink]="routeFor(command.page)"
-					(click)="select(command.page)">
-					<span aria-hidden="true">{{ command.icon }}</span>
-					{{ command.labelKey | translate }}
+					[routerLink]="routeFor(result.page)"
+					(click)="select(result)">
+					<span class="command-palette__kind" aria-hidden="true">{{ resultKindIcon(result.kind) }}</span>
+					<div>
+						<b>{{ result.label }}</b>
+						<small>{{ result.detail }}</small>
+						<i>{{ resultKindLabel(result.kind) }}</i>
+					</div>
 					<kbd>Enter</kbd>
 				</a>
+			} @empty {
+				@if (query().trim().length >= 2) {
+					<p class="command-palette__empty">{{ 'chrome.commandPalette.searchEmpty' | translate }}</p>
+				}
 			}
 		</nav>
 	</section>

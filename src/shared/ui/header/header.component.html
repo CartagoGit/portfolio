@@ -79,6 +79,13 @@
 		</a>
 	</nav>
 	<div class="header__actions">
+		<button
+			class="header__search-button"
+			type="button"
+			(click)="searchOpen.emit()"
+			[attr.aria-label]="'chrome.commandPalette.searchOpen' | translate">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m20 20-4.3-4.3m2.3-5.2A7.5 7.5 0 1 1 3 10.5a7.5 7.5 0 0 1 15 0Z" /></svg>
+		</button>
 		<div class="header__locale">
 			<button
 				type="button"

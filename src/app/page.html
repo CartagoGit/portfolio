@@ -17,6 +17,7 @@
 		[themeMenuOpen]="shell.themeMenuOpen()"
 		[themeMenuClosing]="shell.themeMenuClosing()"
 		(navigate)="shell.setTransition($event)"
+		(searchOpen)="shell.commandOpen.set(true)"
 		(menuToggle)="shell.toggleMenu()"
 		(localeToggle)="shell.toggleLocaleMenu()"
 		(localeSelect)="shell.selectLocale($event)"
@@ -61,7 +62,7 @@
 		}
 
 		@if (shell.page() === 'lab') {
-			<app-lab-page (commandRequested)="shell.commandOpen.set(true)" />
+			<app-lab-page />
 		}
 
 		@if (shell.page() === 'contact') {

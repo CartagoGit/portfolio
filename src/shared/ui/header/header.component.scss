@@ -245,6 +245,32 @@
 	&__menu {
 		display: none;
 	}
+	&__search-button {
+		display: grid;
+		width: 2.35rem;
+		height: 2.35rem;
+		place-items: center;
+		padding: 0;
+		border: var(--border-thin) solid var(--line);
+		border-radius: 10px;
+		background: color-mix(in srgb, var(--surface) 65%, transparent);
+		color: var(--ink);
+	}
+	&__search-button svg {
+		width: 18px;
+		height: 18px;
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.8;
+	}
+	&__search-button:hover,
+	&__search-button:focus-visible {
+		border-color: var(--cyan);
+		color: var(--cyan);
+		@include motion.neon-glow;
+	}
 }
 
 @media (max-width: 900px) {

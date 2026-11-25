@@ -113,7 +113,26 @@ const COPY: Readonly<Record<IGlobalLocale, IGlobalCopy>> = {
 	},
 };
 
-function buildTranslation(copy: IGlobalCopy): ITranslationMap {
+const SEARCH_COPY: Readonly<Record<IGlobalLocale, Partial<ITranslationMap['chrome']['commandPalette']>>> = {
+	it: { title: 'Cerca nel portfolio', close: 'Chiudi ricerca', searchLabel: 'Cerca pagine, progetti, tecnologie e demo', searchPlaceholder: 'Prova “Docker”, “Angular” o “Tetris”', searchResults: 'Risultati del portfolio', searchEmpty: 'Nessun risultato corrisponde.', searchOpen: 'Apri la ricerca', searchKindRoute: 'Pagina', searchKindProject: 'Progetto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demo', searchKindPlatform: 'Piattaforma', searchKindContent: 'Contenuto' },
+	'pt-PT': { title: 'Pesquisar no portefólio', close: 'Fechar pesquisa', searchLabel: 'Pesquisar páginas, projetos, tecnologias e demos', searchPlaceholder: 'Experimente “Docker”, “Angular” ou “Tetris”', searchResults: 'Resultados da pesquisa', searchEmpty: 'Nenhum resultado corresponde.', searchOpen: 'Abrir pesquisa', searchKindRoute: 'Página', searchKindProject: 'Projeto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demonstração', searchKindPlatform: 'Plataforma', searchKindContent: 'Conteúdo' },
+	'pt-BR': { title: 'Pesquisar no portfólio', close: 'Fechar pesquisa', searchLabel: 'Pesquisar páginas, projetos, tecnologias e demos', searchPlaceholder: 'Experimente “Docker”, “Angular” ou “Tetris”', searchResults: 'Resultados da pesquisa', searchEmpty: 'Nenhum resultado corresponde.', searchOpen: 'Abrir pesquisa', searchKindRoute: 'Página', searchKindProject: 'Projeto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demo', searchKindPlatform: 'Plataforma', searchKindContent: 'Conteúdo' },
+	ru: { title: 'Поиск по портфолио', close: 'Закрыть поиск', searchLabel: 'Ищите страницы, проекты, технологии и демо', searchPlaceholder: 'Попробуйте «Docker», «Angular» или «Tetris»', searchResults: 'Результаты поиска', searchEmpty: 'Ничего не найдено.', searchOpen: 'Открыть поиск', searchKindRoute: 'Страница', searchKindProject: 'Проект', searchKindTechnology: 'Технология', searchKindDemo: 'Демо', searchKindPlatform: 'Платформа', searchKindContent: 'Контент' },
+	uk: { title: 'Пошук у портфоліо', close: 'Закрити пошук', searchLabel: 'Шукайте сторінки, проєкти, технології та демо', searchPlaceholder: 'Спробуйте «Docker», «Angular» або «Tetris»', searchResults: 'Результати пошуку', searchEmpty: 'Нічого не знайдено.', searchOpen: 'Відкрити пошук', searchKindRoute: 'Сторінка', searchKindProject: 'Проєкт', searchKindTechnology: 'Технологія', searchKindDemo: 'Демо', searchKindPlatform: 'Платформа', searchKindContent: 'Вміст' },
+	pl: { title: 'Szukaj w portfolio', close: 'Zamknij wyszukiwanie', searchLabel: 'Szukaj stron, projektów, technologii i demo', searchPlaceholder: 'Spróbuj „Docker”, „Angular” lub „Tetris”', searchResults: 'Wyniki wyszukiwania', searchEmpty: 'Brak pasujących wyników.', searchOpen: 'Otwórz wyszukiwanie', searchKindRoute: 'Strona', searchKindProject: 'Projekt', searchKindTechnology: 'Technologia', searchKindDemo: 'Demo', searchKindPlatform: 'Platforma', searchKindContent: 'Treść' },
+	hr: { title: 'Pretraži portfolio', close: 'Zatvori pretraživanje', searchLabel: 'Pretražuj stranice, projekte, tehnologije i demoe', searchPlaceholder: 'Pokušaj „Docker”, „Angular” ili „Tetris”', searchResults: 'Rezultati pretraživanja', searchEmpty: 'Nema odgovarajućih rezultata.', searchOpen: 'Otvori pretraživanje', searchKindRoute: 'Stranica', searchKindProject: 'Projekt', searchKindTechnology: 'Tehnologija', searchKindDemo: 'Demo', searchKindPlatform: 'Platforma', searchKindContent: 'Sadržaj' },
+	tr: { title: 'Portfolyoda ara', close: 'Aramayı kapat', searchLabel: 'Sayfa, proje, teknoloji ve demoları ara', searchPlaceholder: '“Docker”, “Angular” veya “Tetris” deneyin', searchResults: 'Arama sonuçları', searchEmpty: 'Eşleşen sonuç yok.', searchOpen: 'Portfolyo aramasını aç', searchKindRoute: 'Sayfa', searchKindProject: 'Proje', searchKindTechnology: 'Teknoloji', searchKindDemo: 'Demo', searchKindPlatform: 'Platform', searchKindContent: 'İçerik' },
+	ar: { title: 'ابحث في المحفظة', close: 'أغلق البحث', searchLabel: 'ابحث عن الصفحات والمشاريع والتقنيات والعروض', searchPlaceholder: 'جرّب “Docker” أو “Angular” أو “Tetris”', searchResults: 'نتائج البحث', searchEmpty: 'لا توجد نتائج مطابقة.', searchOpen: 'افتح البحث', searchKindRoute: 'صفحة', searchKindProject: 'مشروع', searchKindTechnology: 'تقنية', searchKindDemo: 'عرض', searchKindPlatform: 'منصة', searchKindContent: 'محتوى' },
+	hi: { title: 'पोर्टफोलियो में खोजें', close: 'खोज बंद करें', searchLabel: 'पेज, प्रोजेक्ट, तकनीक और डेमो खोजें', searchPlaceholder: '“Docker”, “Angular” या “Tetris” खोजें', searchResults: 'खोज परिणाम', searchEmpty: 'कोई परिणाम नहीं मिला।', searchOpen: 'खोज खोलें', searchKindRoute: 'पेज', searchKindProject: 'प्रोजेक्ट', searchKindTechnology: 'तकनीक', searchKindDemo: 'डेमो', searchKindPlatform: 'प्लेटफ़ॉर्म', searchKindContent: 'सामग्री' },
+	bn: { title: 'পোর্টফোলিওতে খুঁজুন', close: 'অনুসন্ধান বন্ধ করুন', searchLabel: 'পৃষ্ঠা, প্রজেক্ট, প্রযুক্তি ও ডেমো খুঁজুন', searchPlaceholder: '“Docker”, “Angular” বা “Tetris” লিখুন', searchResults: 'অনুসন্ধানের ফলাফল', searchEmpty: 'কোনো ফলাফল মেলেনি।', searchOpen: 'অনুসন্ধান খুলুন', searchKindRoute: 'পৃষ্ঠা', searchKindProject: 'প্রজেক্ট', searchKindTechnology: 'প্রযুক্তি', searchKindDemo: 'ডেমো', searchKindPlatform: 'প্ল্যাটফর্ম', searchKindContent: 'বিষয়বস্তু' },
+	'zh-CN': { title: '搜索作品集', close: '关闭搜索', searchLabel: '搜索页面、项目、技术和演示', searchPlaceholder: '试试“Docker”“Angular”或“Tetris”', searchResults: '搜索结果', searchEmpty: '没有匹配结果。', searchOpen: '打开搜索', searchKindRoute: '页面', searchKindProject: '项目', searchKindTechnology: '技术', searchKindDemo: '演示', searchKindPlatform: '平台', searchKindContent: '内容' },
+	'zh-TW': { title: '搜尋作品集', close: '關閉搜尋', searchLabel: '搜尋頁面、專案、技術與示範', searchPlaceholder: '試試「Docker」「Angular」或「Tetris」', searchResults: '搜尋結果', searchEmpty: '沒有符合的結果。', searchOpen: '開啟搜尋', searchKindRoute: '頁面', searchKindProject: '專案', searchKindTechnology: '技術', searchKindDemo: '示範', searchKindPlatform: '平台', searchKindContent: '內容' },
+	ja: { title: 'ポートフォリオを検索', close: '検索を閉じる', searchLabel: 'ページ、プロジェクト、技術、デモを検索', searchPlaceholder: '「Docker」「Angular」「Tetris」を試す', searchResults: '検索結果', searchEmpty: '一致する結果はありません。', searchOpen: '検索を開く', searchKindRoute: 'ページ', searchKindProject: 'プロジェクト', searchKindTechnology: '技術', searchKindDemo: 'デモ', searchKindPlatform: 'プラットフォーム', searchKindContent: 'コンテンツ' },
+	ko: { title: '포트폴리오 검색', close: '검색 닫기', searchLabel: '페이지, 프로젝트, 기술, 데모 검색', searchPlaceholder: '“Docker”, “Angular”, “Tetris” 검색', searchResults: '검색 결과', searchEmpty: '일치하는 결과가 없습니다.', searchOpen: '검색 열기', searchKindRoute: '페이지', searchKindProject: '프로젝트', searchKindTechnology: '기술', searchKindDemo: '데모', searchKindPlatform: '플랫폼', searchKindContent: '콘텐츠' },
+	id: { title: 'Cari dalam portofolio', close: 'Tutup pencarian', searchLabel: 'Cari halaman, proyek, teknologi, dan demo', searchPlaceholder: 'Coba “Docker”, “Angular”, atau “Tetris”', searchResults: 'Hasil pencarian', searchEmpty: 'Tidak ada hasil yang cocok.', searchOpen: 'Buka pencarian', searchKindRoute: 'Halaman', searchKindProject: 'Proyek', searchKindTechnology: 'Teknologi', searchKindDemo: 'Demo', searchKindPlatform: 'Platform', searchKindContent: 'Konten' },
+};
+
+function buildTranslation(locale: IGlobalLocale, copy: IGlobalCopy): ITranslationMap {
 	const page = (id: keyof IGlobalCopy['pages']): { titleLead: string; titleEmphasis: string; titleTail: string; subtitle: string } => {
 		const [lead, emphasis, subtitle] = copy.pages[id];
 		return { titleLead: lead, titleEmphasis: emphasis, titleTail: '', subtitle };
@@ -123,6 +142,7 @@ function buildTranslation(copy: IGlobalCopy): ITranslationMap {
 		...en,
 		chrome: {
 			...en.chrome,
+			commandPalette: { ...en.chrome.commandPalette, ...SEARCH_COPY[locale] },
 			header: {
 				...en.chrome.header,
 				navHome: copy.nav[0], navWork: copy.nav[1], navLab: copy.nav[2], navAbout: copy.nav[3],
@@ -146,5 +166,5 @@ function buildTranslation(copy: IGlobalCopy): ITranslationMap {
 }
 
 export const GLOBAL_TRANSLATIONS = Object.fromEntries(
-	Object.entries(COPY).map(([locale, copy]) => [locale, buildTranslation(copy)]),
+	Object.entries(COPY).map(([locale, copy]) => [locale, buildTranslation(locale as IGlobalLocale, copy)]),
 ) as Readonly<Record<IGlobalLocale, ITranslationMap>>;
