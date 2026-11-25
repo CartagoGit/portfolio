@@ -12,8 +12,8 @@ import type {
 } from '../../contracts/interfaces/scss-audit.interface';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { walkFiles } from './fs.service';
+import { parseScssSource } from './scss-audit.parser';
 
-const CLASS_SELECTOR_RE = /\.(-?[_a-zA-Z][\w-]*)/g;
 const CLASS_ATTR_RE = /\bclass(?:Name)?\s*=\s*["']([^"']+)["']/g;
 const NG_CLASS_RE = /\[class\.([\w-]+)\]/g;
 
@@ -29,9 +29,6 @@ const collectTemplateClasses = (source: string): ReadonlySet<string> => {
 	for (const match of source.matchAll(NG_CLASS_RE)) classes.add(match[1] ?? '');
 	return classes;
 };
-
-const stripComments = (scss: string): string =>
-	scss.replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, ' '));
 
 const nextActionFor = (counts: IScssAuditReport['counts']): string => {
 	if (counts.unused > 0)
@@ -63,27 +60,41 @@ export const runScssAudit = async (
 		}
 	}
 
-	const lines = stripComments(await fs.readText(request.sourcePath)).split('\n');
+	const source = await fs.readText(request.sourcePath);
+	const parsed = parseScssSource(source);
+	const dependencies = await Promise.all(parsed.dependencies.map(async (dependency) => {
+		if (dependency.target.startsWith('sass:') || /^(https?:)?\/\//.test(dependency.target)) return dependency;
+		const base = `${dirname(request.sourcePath)}/${dependency.target}`.replace(/^\.\//, '');
+		const lastSlash = base.lastIndexOf('/');
+		const dir = lastSlash < 0 ? '' : base.slice(0, lastSlash + 1);
+		const name = base.slice(lastSlash + 1);
+		const candidates = [
+			base,
+			`${base}.scss`,
+			`${dir}_${name}.scss`,
+			`src/styles/${dependency.target}.scss`,
+			`src/styles/${dependency.target}/_index.scss`,
+		];
+		const resolvedPath = (await Promise.all(candidates.map(async (candidate) => ({ candidate, exists: await fs.exists(candidate) })))).find(({ exists }) => exists)?.candidate;
+		return resolvedPath ? { ...dependency, resolvedPath } : dependency;
+	}));
+
 	const entries: IScssAuditEntry[] = [];
 	const seen = new Set<string>();
-	lines.forEach((line, index) => {
-		// Only selector lines (before a `{`), not property values like `0.5rem`.
-		const head = line.split('{')[0] ?? '';
-		if (!line.includes('{') || /:\s*[^;{]+;/.test(head)) return;
-		for (const match of head.matchAll(CLASS_SELECTOR_RE)) {
-			const className = match[1] ?? '';
+	for (const selector of parsed.selectors) {
+		for (const className of selector.classNames) {
 			if (seen.has(className)) continue;
 			seen.add(className);
 			const found = [...(owners.get(className) ?? [])].sort((a, b) => a.localeCompare(b));
 			entries.push({
 				selector: `.${className}`,
 				className,
-				line: index + 1,
+				line: selector.line,
 				owners: found,
 				status: found.length === 0 ? 'unused' : found.length === 1 ? 'single' : 'shared',
 			});
 		}
-	});
+	}
 
 	const counts = {
 		unused: entries.filter((entry) => entry.status === 'unused').length,
@@ -95,6 +106,8 @@ export const runScssAudit = async (
 		totalSelectors: entries.length,
 		counts,
 		entries,
+		dependencies,
+		customProperties: parsed.customProperties,
 		nextAction: nextActionFor(counts),
 	};
 };

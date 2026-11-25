@@ -84,6 +84,10 @@ export class DockerPageComponent {
 		return this._translate.instant(`content.dockerImages.${image.name}.status`);
 	}
 
+	imageStatusParts(image: IDockerImage): readonly string[] {
+		return this.imageStatus(image).split('·').map((part) => part.trim()).filter(Boolean);
+	}
+
 	imagePurpose(image: IDockerImage): string {
 		return this._translate.instant(`content.dockerImages.${image.name}.purpose`);
 	}

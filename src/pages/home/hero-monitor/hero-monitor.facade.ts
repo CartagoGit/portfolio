@@ -107,11 +107,18 @@ export class HeroMonitorFacade {
 	);
 	readonly chartPath = computed(() => buildChartPath(this.chartBars()));
 	private _panelTimer?: number;
+	private _panelFrame?: number;
 	private _effectTimer?: number;
 	selectPanel(panel: IHeroPanelId): void {
 		if (this.activePanel() === panel) return;
-		if (this._panelTimer !== undefined)
+		if (this._panelFrame !== undefined) {
+			cancelAnimationFrame(this._panelFrame);
+			this._panelFrame = undefined;
+		}
+		if (this._panelTimer !== undefined) {
 			window.clearTimeout(this._panelTimer);
+			this._panelTimer = undefined;
+		}
 		this.panelTransition.set(
 			nextHeroPanelTransition(this.panelTransition())
 		);
@@ -121,10 +128,17 @@ export class HeroMonitorFacade {
 		this._panelTimer = window.setTimeout(() => {
 			this._panelTimer = undefined;
 			this.activePanel.set(panel);
-			requestAnimationFrame(() => this.panelChanging.set(false));
+			this._panelFrame = requestAnimationFrame(() => {
+				this._panelFrame = undefined;
+				this.panelChanging.set(false);
+			});
 		}, 24);
 	}
 	clearPanel(): void {
+		if (this._panelFrame !== undefined) {
+			cancelAnimationFrame(this._panelFrame);
+			this._panelFrame = undefined;
+		}
 		if (this._panelTimer !== undefined)
 			window.clearTimeout(this._panelTimer);
 		this._panelTimer = undefined;
@@ -169,6 +183,8 @@ export class HeroMonitorFacade {
 			: PALETTE_GRADIENTS[this.palette()];
 	}
 	destroy(): void {
+		if (this._panelFrame !== undefined) cancelAnimationFrame(this._panelFrame);
+		this._panelFrame = undefined;
 		if (this._panelTimer !== undefined)
 			window.clearTimeout(this._panelTimer);
 		if (this._effectTimer !== undefined)

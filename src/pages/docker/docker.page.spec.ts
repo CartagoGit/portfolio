@@ -43,7 +43,7 @@ describe('DockerPageComponent', () => {
 		const fixture = TestBed.createComponent(DockerPageComponent);
 		fixture.detectChanges();
 		const card = fixture.nativeElement.querySelector('.docker-page__image') as HTMLElement;
-		expect(card.querySelector('header b')?.textContent).toContain('Maintenue');
+		expect(card.querySelector('.docker-page__status-badges b')?.textContent).toContain('Maintenue');
 		expect(card.querySelector('p')?.textContent).toContain('JavaScript reproductible');
 		TestBed.inject(TranslateService).setLocale('en');
 	});

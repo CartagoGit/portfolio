@@ -12,7 +12,7 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
-import { renderEarthFrame } from '../../../core/rendering/earth-globe.renderer';
+import { destroyEarthRenderer, renderEarthFrame } from '../../../core/rendering/earth-globe.renderer';
 import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types.interface';
 
 type IQuaternion = readonly [x: number, y: number, z: number, w: number];
@@ -216,8 +216,22 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this._destroyed = true;
 		this.stop();
+		this._textures.clear();
+		this._texture = undefined;
+		this._loadingTextures.clear();
+		if (this._canvas) destroyEarthRenderer(this._canvas);
 		this._depthSync.destroy();
 		this._textureStyleSync.destroy();
+	}
+
+	onContextLost(event: Event): void {
+		event.preventDefault();
+		this.stop();
+	}
+
+	onContextRestored(): void {
+		if (this.depth() === 'front' || this.depth() === 'front-ready' || this.preview())
+			this.start();
 	}
 
 	private _prepare(style: IEarthTextureStyle): void {

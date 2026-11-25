@@ -24,7 +24,7 @@ describe('runPublicAudit', () => {
 		expect(report.findings.map((f) => f.id)).toEqual(['per-se-root']);
 	});
 
-	it('flags duplicated and missing paths as info', async () => {
+	it('flags duplicates as info and treats missing coverage as a blocker', async () => {
 		const report = await runPublicAudit({
 			...base,
 			forbiddenTerms: [],
@@ -32,11 +32,19 @@ describe('runPublicAudit', () => {
 			contentPaths: ['b.html', 'b.html', 'gone.html'],
 		});
 		expect(report.findings.map((f) => f.id)).toEqual(['duplicated-content', 'missing-content']);
-		expect(report.ok).toBe(true);
+		expect(report.coverage).toEqual({ requested: 3, read: 1, missing: 1, unreadable: 0, duplicates: 1 });
+		expect(report.ok).toBe(false);
 	});
 
-	it('localises the next action', async () => {
-		const report = await runPublicAudit({ ...base, locale: 'es', contentPaths: ['a.html'] });
-		expect(report.nextAction).toContain('employers');
+	it('fails closed when discovery returns no templates', async () => {
+		const report = await runPublicAudit({ ...base, forbiddenTerms: [], perSeRoots: [], contentPaths: [] });
+		expect(report.ok).toBe(false);
+		expect(report.findings[0]?.id).toBe('coverage-empty');
+		expect(report.nextAction).toContain('no readable content');
+	});
+
+	it('rejects workspace traversal deterministically', async () => {
+		await expect(runPublicAudit({ ...base, contentPaths: ['../secret.html'] }))
+			.rejects.toThrow('Path escapes workspace boundary: ../secret.html');
 	});
 });

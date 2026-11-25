@@ -8,5 +8,9 @@ export interface IFileSystem {
 	readonly readDir: (workspaceRelative: string) => Promise<readonly string[]>;
 	readonly exists: (workspaceRelative: string) => Promise<boolean>;
 	readonly isDirectory: (workspaceRelative: string) => Promise<boolean>;
+	readonly readMetadata?: (workspaceRelative: string) => Promise<{
+		readonly size: number;
+		readonly mtimeMs: number;
+	}>;
 	readonly readText: (workspaceRelative: string) => Promise<string>;
 }

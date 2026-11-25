@@ -9,7 +9,7 @@ import { OptionsSchema } from '../src/lib/services/options.service';
 import { captureHandlers, makeFakeContext, type ToolHandler } from './helpers/fake-context.helper';
 
 const PREFIX = 'delendai_portfolio';
-const TOOLS = ['architecture', 'features', 'domain', 'scss_audit', 'public_audit'];
+const TOOLS = ['architecture', 'features', 'domain', 'scss_audit', 'public_audit', 'query'];
 
 let root: string;
 
@@ -54,7 +54,7 @@ describe('portfolio-content plugin', () => {
 	it('answers every tool with an empty argument object', async () => {
 		const handlers = await register();
 		for (const tool of TOOLS) {
-			const result = await call(handlers, tool);
+			const result = await call(handlers, tool, tool === 'query' ? { section: 'features' } : {});
 			expect(result, tool).toBeTypeOf('object');
 		}
 	});
@@ -76,5 +76,15 @@ describe('portfolio-content plugin', () => {
 	it('flags a forbidden term in a public template', async () => {
 		const handlers = await register({ forbiddenTerms: ['Acme Corp'] });
 		expect(JSON.stringify(await call(handlers, 'public_audit'))).toContain('Acme Corp');
+	});
+
+	it('projects bounded query evidence and reuses unchanged indexed files', async () => {
+		const handlers = await register();
+		const first = await call(handlers, 'query', { section: 'features', fields: ['id'], limit: 1, tokenBudget: 400 });
+		const second = await call(handlers, 'query', { section: 'features', fields: ['id'], limit: 1, tokenBudget: 400 });
+		expect(first.items[0]).toHaveProperty('id');
+		expect(Object.keys(first.items[0] ?? {})).toEqual(['id']);
+		expect(first.tokenEstimate).toBeLessThanOrEqual(400);
+		expect(second.cache.reusedFiles).toBeGreaterThan(0);
 	});
 });

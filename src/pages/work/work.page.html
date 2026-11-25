@@ -79,19 +79,15 @@
 		</header>
 		<div class="work-page__experiment-grid" [attr.aria-label]="'pages.demos.externalLinksAria' | translate">
 			@for (experiment of experiments; track experiment.demo.title) {
-				<a [href]="experiment.demo.url" target="_blank" rel="noreferrer">
-					<div class="work-page__experiment-icon" aria-hidden="true">
-						@if (experiment.visual.imageSrc; as image) {
-							<img [src]="image" alt="" />
-						} @else if (experiment.visual.iconPath; as iconPath) {
-							<svg viewBox="0 0 24 24"><path [attr.d]="iconPath" fill="currentColor" /></svg>
-						}
-					</div>
-					<span>{{ experiment.demo.number }}</span>
-					<h3>{{ experiment.demo.title }}</h3>
-					<p>{{ experiment.demo.summaryKey | translate }}</p>
-					<i aria-hidden="true">↗</i>
-				</a>
+				<app-evidence-card
+					[href]="experiment.demo.url"
+					[title]="experiment.demo.title"
+					[number]="experiment.demo.number"
+					[summary]="experiment.demo.summaryKey | translate"
+					[openLabel]="'pages.demos.openDemo' | translate"
+					[imageSrc]="experiment.visual.imageSrc"
+					[iconPath]="experiment.visual.iconPath"
+					[visualIdentity]="experiment.demo.title" />
 			}
 		</div>
 	</section>

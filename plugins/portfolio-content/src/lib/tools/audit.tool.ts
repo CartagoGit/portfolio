@@ -32,6 +32,13 @@ const FINDING = z.object({
 const OUTPUT = z.object({
 	ok: z.boolean(),
 	contentPaths: z.array(z.string()),
+	coverage: z.object({
+		requested: z.number(),
+		read: z.number(),
+		missing: z.number(),
+		unreadable: z.number(),
+		duplicates: z.number(),
+	}),
 	severity: z.object({ errors: z.number(), warnings: z.number(), info: z.number() }),
 	findings: z.array(FINDING),
 	nextAction: z.string(),

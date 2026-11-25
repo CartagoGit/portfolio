@@ -12,4 +12,9 @@ export class DiceGameComponent {
 		this.value.set(next);
 		this.rolls.update((rolls) => [next, ...rolls].slice(0, 6));
 	}
+
+	reset(): void {
+		this.value.set(1);
+		this.rolls.set([]);
+	}
 }

@@ -3,5 +3,7 @@
 		#canvas
 		class="earth-globe__canvas"
 		[class.is-active]="active()"
+		(webglcontextlost)="onContextLost($event)"
+		(webglcontextrestored)="onContextRestored()"
 		aria-hidden="true"></canvas>
 </div>

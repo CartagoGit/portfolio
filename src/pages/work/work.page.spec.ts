@@ -29,7 +29,7 @@ describe('WorkPageComponent', () => {
 		}
 		expect(new Set([...cards].map((card) => card.getAttribute('data-project'))).size).toBe(6);
 		expect(fixture.componentInstance.experiments).toHaveLength(4);
-		expect(element.querySelectorAll('.work-page__experiment-grid > a')).toHaveLength(4);
+		expect(element.querySelectorAll('.work-page__experiment-grid app-evidence-card')).toHaveLength(4);
 		expect(element.querySelector('#main-content')).toBeNull();
 	});
 	it('localizes project and platform copy from the content catalogue', async () => {

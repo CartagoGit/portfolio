@@ -4,6 +4,7 @@
 		<h3 id="rps-game-title">{{ 'pages.demos.rpsTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.rpsDetail' | translate }}</p>
 		<b>{{ score() }} <small>{{ 'pages.demos.rpsScore' | translate }}</small></b>
+		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
 	</div>
 	<div class="rps-game__board">
 		<div class="rps-game__choices">

@@ -4,6 +4,7 @@
 		<h3 id="dice-game-title">{{ 'pages.demos.diceTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.diceDetail' | translate }}</p>
 		<button type="button" (click)="roll()">{{ 'pages.demos.diceRoll' | translate }}</button>
+		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
 	</div>
 	<div class="dice-game__board">
 		<button class="dice-game__die" type="button" (click)="roll()" [attr.aria-label]="'pages.demos.diceRoll' | translate">{{ faces[value() - 1] }}</button>

@@ -25,4 +25,11 @@ export class RpsGameComponent {
 		this.outcome.set(win ? 'win' : 'lose');
 		if (win) this.score.update((score) => score + 1);
 	}
+
+	reset(): void {
+		this.userChoice.set('rock');
+		this.computerChoice.set('rock');
+		this.outcome.set('idle');
+		this.score.set(0);
+	}
 }

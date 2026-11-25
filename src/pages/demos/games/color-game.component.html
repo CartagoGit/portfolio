@@ -4,6 +4,7 @@
 		<h3 id="color-game-title">{{ 'pages.demos.colorTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.colorDetail' | translate }}</p>
 		<b>{{ score() }} <small>{{ 'pages.demos.colorScore' | translate }}</small></b>
+		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
 	</div>
 	<div class="color-game__board">
 		<div class="color-game__target" [style.--target-color]="colors[target()]"></div>

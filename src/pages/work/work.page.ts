@@ -18,6 +18,7 @@ import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
 import { contentKey } from '../../lang/content-key.helper';
 import { WorkProjectVisualComponent } from './work-project-visual.component';
+import { EvidenceCardComponent } from '../../shared/ui/evidence-card/evidence-card.component';
 
 interface IWorkProject {
 	panel: IHeroPanel;
@@ -32,7 +33,7 @@ interface IWorkExperiment {
 
 @Component({
 	selector: 'app-work-page',
-	imports: [TranslatePipe, WorkProjectVisualComponent],
+	imports: [TranslatePipe, WorkProjectVisualComponent, EvidenceCardComponent],
 	templateUrl: './work.page.html',
 	styleUrl: './work.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

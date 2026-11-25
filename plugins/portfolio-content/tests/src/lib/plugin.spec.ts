@@ -13,7 +13,7 @@ describe('portfolio-content plugin', () => {
 		const ctx = makeFakeContext();
 		const { toolIds, handlers, knowledgeIds } = await captureHandlers(plugin, ctx);
 		expect(toolIds.sort()).toEqual(
-			['architecture', 'domain', 'features', 'public_audit', 'scss_audit'].sort(),
+			['architecture', 'domain', 'features', 'public_audit', 'scss_audit', 'query'].sort(),
 		);
 		for (const id of toolIds) {
 			expect(handlers.has(`${ctx.namespacePrefix}_${id}`)).toBe(true);

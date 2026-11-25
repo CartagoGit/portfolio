@@ -17,4 +17,10 @@ export class ColorGameComponent {
 		}
 		this.message.set('wrong');
 	}
+
+	reset(): void {
+		this.target.set(0);
+		this.score.set(0);
+		this.message.set('prompt');
+	}
 }

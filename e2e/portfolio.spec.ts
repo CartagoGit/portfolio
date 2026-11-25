@@ -87,9 +87,7 @@ test('S14-03 Work exposes project identity, distinct visual modes and iconized c
 		'DelendAI', 'Tanit', 'QuickModel', 'Print CV', 'Steam Keys', 'Keyer',
 	]);
 	await expect(page.locator('app-work-project-visual .work-project-visual > div')).toHaveCount(6);
-	await expect(page.locator('.work-page__experiment-grid > a')).toHaveCount(4);
-	for (const chip of await page.locator('.work-page__content li').all())
-		await expect(chip.locator('svg')).toHaveCount(1);
+	await expect(page.locator('.work-page__experiment-grid app-evidence-card > a')).toHaveCount(4);
 });
 
 test('S14-04 route scroll, footer surfaces and back-to-top preserve locale/route', async ({ page }) => {

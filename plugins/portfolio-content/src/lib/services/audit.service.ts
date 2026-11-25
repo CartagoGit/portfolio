@@ -1,3 +1,5 @@
+import { assertWorkspaceRelativePath } from './fs.service';
+
 /**
  * Public-content audit (support tool). Scans the listed public
  * templates for forbidden terms (employer/client names) and image
@@ -14,7 +16,13 @@ const nextAction = (
 	locale: 'en' | 'es',
 	hasError: boolean,
 	hasWarning: boolean,
+	incompleteCoverage: boolean,
 ): string => {
+	if (incompleteCoverage) {
+		return locale === 'es'
+			? 'Corrige las raíces y rutas del audit: no se evaluó ningún contenido legible.'
+			: 'Fix the audit roots and paths: no readable content was evaluated.';
+	}
 	if (locale === 'es') {
 		if (hasError)
 			return 'Quita las referencias a employers o clientes antes de publicar.';
@@ -156,6 +164,13 @@ export interface IPublicAuditFinding {
 export interface IPublicAuditReport {
 	readonly ok: boolean;
 	readonly contentPaths: readonly string[];
+	readonly coverage: {
+		readonly requested: number;
+		readonly read: number;
+		readonly missing: number;
+		readonly unreadable: number;
+		readonly duplicates: number;
+	};
 	readonly severity: { readonly errors: number; readonly warnings: number; readonly info: number };
 	readonly findings: readonly IPublicAuditFinding[];
 	readonly nextAction: string;
@@ -191,9 +206,22 @@ export const runPublicAudit = async (
 	} = options;
 	const findings: IPublicAuditFinding[] = [];
 	const seen = new Set<string>();
+	const coverage = { requested: contentPaths.length, read: 0, missing: 0, unreadable: 0, duplicates: 0 };
+
+	if (contentPaths.length === 0) {
+		findings.push({
+			id: 'coverage-empty',
+			severity: 'error',
+			message: locale === 'es' ? 'No se descubrió ninguna plantilla pública para auditar.' : 'No public template was discovered for audit.',
+			location: { contentPath: '.' },
+			remediation: locale === 'es' ? 'Corrige contentRoots/includeGlobs y vuelve a ejecutar.' : 'Fix contentRoots/includeGlobs and rerun the audit.',
+		});
+	}
 
 	for (const contentPath of contentPaths) {
+		assertWorkspaceRelativePath(contentPath);
 		if (seen.has(contentPath)) {
+			coverage.duplicates += 1;
 			findings.push({
 				id: 'duplicated-content',
 				severity: 'info',
@@ -212,9 +240,10 @@ export const runPublicAudit = async (
 		seen.add(contentPath);
 
 		if (!(await reader.exists(contentPath))) {
+			coverage.missing += 1;
 			findings.push({
 				id: 'missing-content',
-				severity: 'info',
+				severity: 'error',
 				message:
 					locale === 'es'
 						? `Ruta solicitada sin archivo: ${contentPath}`
@@ -231,10 +260,12 @@ export const runPublicAudit = async (
 		let content: string;
 		try {
 			content = await reader.readText(contentPath);
+			coverage.read += 1;
 		} catch {
+			coverage.unreadable += 1;
 			findings.push({
 				id: 'unreadable-content',
-				severity: 'info',
+				severity: 'error',
 				message:
 					locale === 'es'
 						? `No se pudo leer el contenido de ${contentPath}; se omitió.`
@@ -291,10 +322,16 @@ export const runPublicAudit = async (
 
 	const counts = summarize(findings);
 	return {
-		ok: counts.errors === 0,
+		ok: counts.errors === 0 && coverage.read > 0,
 		contentPaths,
+		coverage,
 		severity: counts,
 		findings,
-		nextAction: nextAction(locale, counts.errors > 0, counts.warnings > 0),
+		nextAction: nextAction(
+			locale,
+			counts.errors > 0,
+			counts.warnings > 0,
+			coverage.read === 0 || coverage.missing > 0 || coverage.unreadable > 0,
+		),
 	};
 };

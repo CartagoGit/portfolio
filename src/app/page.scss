@@ -63,6 +63,11 @@
 	min-height: 0;
 }
 
+.route-stage:focus-visible {
+	outline: 2px solid var(--cyan);
+	outline-offset: -2px;
+}
+
 .hero {
 	position: relative;
 	display: grid;

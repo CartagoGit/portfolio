@@ -18,6 +18,17 @@ export interface IScssAuditReport {
 	readonly totalSelectors: number;
 	readonly counts: { readonly unused: number; readonly single: number; readonly shared: number };
 	readonly entries: readonly IScssAuditEntry[];
+	readonly dependencies: ReadonlyArray<{
+		readonly kind: 'use' | 'forward' | 'import';
+		readonly target: string;
+		readonly line: number;
+		readonly resolvedPath?: string;
+	}>;
+	readonly customProperties: ReadonlyArray<{
+		readonly name: string;
+		readonly line: number;
+		readonly kind: 'definition' | 'reference';
+	}>;
 	readonly nextAction: string;
 }
 

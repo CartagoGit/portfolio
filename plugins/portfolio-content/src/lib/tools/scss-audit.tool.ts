@@ -34,6 +34,21 @@ const OUTPUT = z.object({
 			status: z.enum(['unused', 'single', 'shared']),
 		}),
 	),
+	dependencies: z.array(
+		z.object({
+			kind: z.enum(['use', 'forward', 'import']),
+			target: z.string(),
+			line: z.number(),
+			resolvedPath: z.string().optional(),
+		}),
+	),
+	customProperties: z.array(
+		z.object({
+			name: z.string(),
+			line: z.number(),
+			kind: z.enum(['definition', 'reference']),
+		}),
+	),
 	nextAction: z.string(),
 	error: z.string().optional(),
 });
@@ -62,6 +77,8 @@ export const buildScssAuditTool = (
 						totalSelectors: 0,
 						counts: { unused: 0, single: 0, shared: 0 },
 						entries: [],
+						dependencies: [],
+						customProperties: [],
 						nextAction: 'Pass an existing `sourcePath`.',
 						error: `File not found: ${sourcePath}`,
 					});

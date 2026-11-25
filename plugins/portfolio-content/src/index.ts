@@ -25,6 +25,7 @@ import { buildAuditTool } from './lib/tools/audit.tool';
 import { buildDomainTool } from './lib/tools/domain.tool';
 import { buildFeaturesTool } from './lib/tools/features.tool';
 import { buildScssAuditTool } from './lib/tools/scss-audit.tool';
+import { buildQueryTool } from './lib/tools/query.tool';
 
 const KNOWLEDGE_ARCHITECTURE = `# Portfolio architecture
 
@@ -162,6 +163,7 @@ export default definePlugin({
 					templateRoots: o.contentRoots,
 				}),
 				buildAuditTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, options: o }),
+				buildQueryTool({ namespacePrefix: ctx.namespacePrefix, fs: lazyFs, options: o }),
 			],
 			knowledge: [
 				{ id: 'portfolio-architecture', title: 'Portfolio architecture', body: KNOWLEDGE_ARCHITECTURE.replaceAll('{prefix}', ctx.namespacePrefix) },

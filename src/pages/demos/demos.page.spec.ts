@@ -21,8 +21,8 @@ describe('DemosPageComponent', () => {
 		expect(element.querySelectorAll('app-demos-showcase [role="tab"]')).toHaveLength(6);
 		expect(element.querySelector('app-demo-games')).not.toBeNull();
 		expect(element.querySelectorAll('.demo-games__tabs [role="tab"]')).toHaveLength(8);
-		expect(element.querySelectorAll('.demos-page__links > a')).toHaveLength(5);
-		for (const link of element.querySelectorAll<HTMLAnchorElement>('.demos-page__links > a')) {
+		expect(element.querySelectorAll('.demos-page__links app-evidence-card')).toHaveLength(5);
+		for (const link of element.querySelectorAll<HTMLAnchorElement>('.demos-page__links app-evidence-card a')) {
 			expect(link.href.startsWith('https://')).toBe(true);
 		}
 		for (const demo of fixture.componentInstance.demos) {

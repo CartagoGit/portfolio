@@ -24,6 +24,7 @@
 					[attr.tabindex]="activeCapability() === capability.id ? 0 : -1"
 					[attr.aria-controls]="'capability-panel'"
 					[attr.aria-selected]="activeCapability() === capability.id"
+					[attr.data-capability]="capability.id"
 					[class.is-active]="activeCapability() === capability.id"
 					(click)="selectCapability(capability.id)"
 					(keydown)="onTabKeydown($event, index)">

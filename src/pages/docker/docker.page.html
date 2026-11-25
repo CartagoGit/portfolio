@@ -38,7 +38,6 @@
 				<header>
 					<img src="/icons/projects/docker.svg" [attr.alt]="'pages.docker.dockerAlt' | translate" />
 					<span>0{{ index + 1 }} / {{ images.length }}</span>
-					<b>{{ imageStatus(image) }}</b>
 				</header>
 				<div class="docker-page__image-title">
 					<span>cartagodocker</span>
@@ -51,6 +50,11 @@
 					}
 				</div>
 				<code>{{ image.command }}</code>
+				<div class="docker-page__status-badges" [attr.aria-label]="imageStatus(image)">
+					@for (part of imageStatusParts(image); track part) {
+						<b>{{ part }}</b>
+					}
+				</div>
 				<nav [attr.aria-label]="'pages.docker.destinationsAria' | translate">
 					<a [href]="image.hubHref" target="_blank" rel="noreferrer">
 						{{ 'pages.docker.hubLink' | translate }} ↗

@@ -18,19 +18,15 @@
 		class="demos-page__links"
 		[attr.aria-label]="'pages.demos.externalLinksAria' | translate">
 		@for (demo of demos; track demo.title) {
-			<a [href]="demo.url" target="_blank" rel="noreferrer" [attr.data-demo]="demo.title">
-				<div class="demos-page__link-logo" aria-hidden="true">
-					@if (demo.imageSrc; as image) {
-						<img [src]="image" alt="" width="64" height="64" />
-					} @else if (demo.iconPath; as iconPath) {
-						<svg viewBox="0 0 24 24"><path [attr.d]="iconPath" fill="currentColor" /></svg>
-					}
-				</div>
-				<span>{{ demo.number }}</span>
-				<b>{{ demo.title }}</b>
-				<p>{{ demo.summaryKey | translate }}</p>
-				<i>{{ 'pages.demos.openDemo' | translate }}</i>
-			</a>
+			<app-evidence-card
+				[href]="demo.url"
+				[title]="demo.title"
+				[number]="demo.number"
+				[summary]="demo.summaryKey | translate"
+				[openLabel]="'pages.demos.openDemo' | translate"
+				[imageSrc]="demo.imageSrc"
+				[iconPath]="demo.iconPath"
+				[visualIdentity]="demo.title" />
 		}
 	</section>
 </section>

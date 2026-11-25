@@ -1,7 +1,8 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { PUBLIC_LINKS, TECHNOLOGY_MARQUEE } from '../../domain/data.constant';
 import type {
 	ILanguageOption,
@@ -34,6 +35,7 @@ const THEME_TRANSITION_MS = 520;
  * bind to this facade rather than reaching into `ActivatedRoute`
  * directly.
  */
+@Injectable({ providedIn: 'root' })
 export class ShellFacade {
 	private readonly _route = inject(ActivatedRoute);
 	private readonly _router = inject(Router);
@@ -99,6 +101,7 @@ export class ShellFacade {
 	readonly commandOpen = signal(false);
 
 	readonly theme = signal<IThemeId>(DEFAULT_THEME);
+	private _pendingRouteFocus = false;
 
 	constructor() {
 		this.theme.set(this._detectInitialTheme());
@@ -117,6 +120,15 @@ export class ShellFacade {
 		this._route.data.subscribe((data) => {
 			this.page.set(this._asPage(data['page']));
 			this._refreshSeo();
+		});
+		this._router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+			const child = this._route.firstChild;
+			this.page.set(this._asPage(child?.snapshot.data['page']));
+			this._refreshSeo();
+			if (this._pendingRouteFocus) {
+				this._pendingRouteFocus = false;
+				queueMicrotask(() => this._document.getElementById('main-content')?.focus({ preventScroll: true }));
+			}
 		});
 		this._applyPreferredLocale();
 	}
@@ -195,6 +207,7 @@ export class ShellFacade {
 		this._document.documentElement.dataset['transitionDirection'] =
 			transitionDirection(this.page(), target);
 		this.closeMenus();
+		this._pendingRouteFocus = true;
 		if (!isPlatformBrowser(this._platformId)) return;
 		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	}

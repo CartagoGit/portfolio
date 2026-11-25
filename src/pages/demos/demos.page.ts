@@ -5,12 +5,13 @@ import type { IDemo } from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { DemoGamesComponent } from './games/demo-games.component';
 import { ShowcaseComponent } from './showcase/showcase.component';
+import { EvidenceCardComponent } from '../../shared/ui/evidence-card/evidence-card.component';
 
 interface IDemoCard extends IDemo, IDemoVisual {}
 
 @Component({
 	selector: 'app-demos-page',
-	imports: [DemoGamesComponent, ShowcaseComponent, TranslatePipe],
+	imports: [DemoGamesComponent, ShowcaseComponent, TranslatePipe, EvidenceCardComponent],
 	templateUrl: './demos.page.html',
 	styleUrl: './demos.page.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

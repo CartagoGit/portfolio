@@ -16,6 +16,9 @@ interface IGlobeProgram {
 	context: WebGLRenderingContext;
 	program: WebGLProgram;
 	texture: WebGLTexture;
+	buffer: WebGLBuffer;
+	vertex: WebGLShader;
+	fragment: WebGLShader;
 	image: HTMLCanvasElement;
 	rotation: WebGLUniformLocation;
 	textureEffect: WebGLUniformLocation;
@@ -37,14 +40,38 @@ export function renderEarthFrame(args: {
 	renderer.render(args.image, args.frame);
 }
 
+/** Releases all WebGL resources and context listeners owned by a canvas. */
+export function destroyEarthRenderer(canvas: HTMLCanvasElement): void {
+	const renderer = renderers.get(canvas);
+	if (!renderer) return;
+	renderer.destroy();
+	renderers.delete(canvas);
+}
+
 /** WebGL renderer for the interactive globe; CPU work is deliberately avoided. */
 export class EarthRenderer {
 	private _globeProgram: IGlobeProgram | null = null;
+	private _contextLost = false;
 
-	constructor(private readonly canvas: HTMLCanvasElement) {}
+	constructor(private readonly canvas: HTMLCanvasElement) {
+		canvas.addEventListener('webglcontextlost', this.onContextLost);
+		canvas.addEventListener('webglcontextrestored', this.onContextRestored);
+	}
+
+	private readonly onContextLost = (event: Event): void => {
+		event.preventDefault();
+		this._contextLost = true;
+		this._globeProgram = null;
+	};
+
+	private readonly onContextRestored = (): void => {
+		this._contextLost = false;
+		this._globeProgram = null;
+	};
 
 	/** Updates the rendering surface and draws the current frame. */
 	public render(image: HTMLCanvasElement, frame: IEarthFrame): void {
+		if (this._contextLost) return;
 		const { canvas } = this;
 		const deviceScale = Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.8);
 		const rect = canvas.getBoundingClientRect();
@@ -56,13 +83,15 @@ export class EarthRenderer {
 		if (canvas.width !== size || canvas.height !== size) {
 			canvas.width = size;
 			canvas.height = size;
-			this._globeProgram = null;
+			this.releaseProgram();
 		}
 
 		const globeProgram = this.getProgram(image);
 		if (!globeProgram) return;
 
 		const { context } = globeProgram;
+		if (context.isContextLost?.()) return;
+
 		const rotation = normalizedFrameRotation(frame);
 		context.viewport(0, 0, size, size);
 		context.clearColor(0, 0, 0, 0);
@@ -113,7 +142,8 @@ export class EarthRenderer {
 
 		const program = context.createProgram();
 		const texture = context.createTexture();
-		if (!program || !texture) return null;
+		const buffer = context.createBuffer();
+		if (!program || !texture || !buffer) return null;
 
 		context.attachShader(program, vertex);
 		context.attachShader(program, fragment);
@@ -128,8 +158,6 @@ export class EarthRenderer {
 		const textureEffect = context.getUniformLocation(program, 'textureEffect');
 		if (position < 0 || !rotation || !textureEffect) return null;
 
-		const buffer = context.createBuffer();
-		if (!buffer) return null;
 		context.bindBuffer(context.ARRAY_BUFFER, buffer);
 		context.bufferData(
 			context.ARRAY_BUFFER,
@@ -178,11 +206,34 @@ export class EarthRenderer {
 			context,
 			program,
 			texture,
+			buffer,
+			vertex,
+			fragment,
 			image,
 			rotation,
 			textureEffect,
 		};
 		return this._globeProgram;
+	}
+
+	/** Idempotent release for shaders, buffers, textures and listeners. */
+	destroy(): void {
+		this.releaseProgram();
+		this._contextLost = true;
+		this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
+		this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
+	}
+
+	private releaseProgram(): void {
+		const globeProgram = this._globeProgram;
+		if (globeProgram) {
+			globeProgram.context.deleteTexture(globeProgram.texture);
+			globeProgram.context.deleteBuffer(globeProgram.buffer);
+			globeProgram.context.deleteProgram(globeProgram.program);
+			globeProgram.context.deleteShader(globeProgram.vertex);
+			globeProgram.context.deleteShader(globeProgram.fragment);
+		}
+		this._globeProgram = null;
 	}
 }
 

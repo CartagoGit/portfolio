@@ -142,37 +142,110 @@
 			box-shadow: 0 20px 55px #0005;
 			transform: translateY(-4px);
 		}
-	}
 
-	&__image > header {
-		display: grid;
-		grid-template-columns: 42px minmax(0, 1fr) auto;
-		align-items: center;
-		gap: .65rem;
-
-		img {
-			width: 38px;
-			height: 38px;
-			object-fit: contain;
+		&::before,
+		&::after {
+			position: absolute;
+			z-index: -1;
+			content: '';
+			pointer-events: none;
 		}
 
-		> span {
-			color: var(--muted);
-			font: 700 .75rem tokens.$font-mono, monospace;
+		&::before {
+			inset: 0;
+			opacity: .17;
+			transition: opacity .4s ease, transform .6s tokens.$ease-standard;
 		}
 
-		> b {
-			position: relative;
-			overflow: hidden;
-			padding-inline: .65rem;
-			border: 1px solid color-mix(in srgb, var(--lime) 34%, var(--line));
-			border-radius: 999px;
-			background: color-mix(in srgb, var(--lime) 7%, var(--surface));
-			color: var(--ink);
-			font: 700 .75rem/1.2 tokens.$font-mono, monospace;
-			text-align: right;
+		&::after {
+			right: 1.2rem;
+			bottom: 1rem;
+			width: 86px;
+			height: 86px;
+			opacity: .18;
+			transition: opacity .35s ease, transform .55s tokens.$ease-standard;
+		}
 
-			&::before { position: absolute; inset: 0; content: ''; background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--cyan) 22%, transparent), transparent); transform: translateX(-120%); }
+		&:hover::before,
+		&:focus-within::before {
+			opacity: .38;
+		}
+
+		&:hover::after,
+		&:focus-within::after {
+			opacity: .36;
+		}
+
+		&[data-image='nodebun']::before {
+			background: repeating-linear-gradient(90deg, transparent 0 12%, color-mix(in srgb, var(--cyan) 24%, transparent) 12.2% 12.8%, transparent 13% 25%);
+			animation: docker-container-grid 8s linear infinite;
+		}
+
+		&[data-image='nodebun']::after {
+			border: 2px solid var(--cyan);
+			border-radius: 12px;
+			box-shadow: 15px 15px 0 -4px var(--surface), 15px 15px 0 -2px color-mix(in srgb, var(--cyan) 70%, transparent);
+		}
+
+		&[data-image='zsh']::before {
+			inset: 8% 0 58%;
+			background: linear-gradient(105deg, transparent 0 34%, color-mix(in srgb, var(--lime) 26%, transparent) 42%, transparent 50%);
+			animation: docker-shell-scan 4.2s ease-in-out infinite;
+		}
+
+		&[data-image='zsh']::after {
+			width: 16px;
+			height: 42px;
+			border-radius: 2px;
+			background: var(--lime);
+			box-shadow: -12px 0 0 -4px var(--surface), -12px 0 0 -2px color-mix(in srgb, var(--lime) 75%, transparent);
+			animation: docker-shell-cursor 1.2s steps(1) infinite;
+		}
+
+		&[data-image='ionic-cover']::before {
+			background: radial-gradient(circle at 78% 18%, #3880ff33, transparent 24%), radial-gradient(circle at 18% 86%, #5dbbff28, transparent 28%);
+		}
+
+		&[data-image='ionic-cover']::after {
+			width: 52px;
+			height: 92px;
+			border: 2px solid #5b9fff;
+			border-radius: 14px;
+			box-shadow: inset 0 -10px 0 color-mix(in srgb, #5b9fff 18%, transparent);
+			transform: rotate(8deg);
+		}
+
+		&[data-image='angular']::before {
+			background: conic-gradient(from -45deg at 75% 24%, transparent 0 18%, #dd003144 19% 27%, transparent 28% 100%);
+		}
+
+		&[data-image='angular']::after {
+			background: linear-gradient(145deg, #dd0031 0 45%, #c3002f 46% 72%, transparent 73%);
+			clip-path: polygon(50% 0, 96% 16%, 86% 78%, 50% 100%, 14% 78%, 4% 16%);
+			animation: docker-angular-turn 6s ease-in-out infinite;
+		}
+
+		&[data-image='nestjs-cover']::before {
+			background: radial-gradient(circle at 16% 32%, #e0234e44 0 2px, transparent 3px), radial-gradient(circle at 84% 28%, #e0234e44 0 2px, transparent 3px), radial-gradient(circle at 76% 76%, #e0234e44 0 2px, transparent 3px);
+			background-size: 44px 44px, 62px 62px, 52px 52px;
+		}
+
+		&[data-image='nestjs-cover']::after {
+			border: 2px solid #e0234e;
+			transform: rotate(45deg);
+			box-shadow: 22px 0 0 -6px var(--surface), 0 22px 0 -6px var(--surface);
+			animation: docker-nest-network 4s ease-in-out infinite;
+		}
+
+		&[data-image='docker-graphql']::before {
+			background: repeating-linear-gradient(60deg, transparent 0 34px, color-mix(in srgb, #e535ab 22%, transparent) 35px 36px), repeating-linear-gradient(-60deg, transparent 0 34px, color-mix(in srgb, #7de8ff 18%, transparent) 35px 36px);
+		}
+
+		&[data-image='docker-graphql']::after {
+			border: 2px solid #e535ab;
+			border-radius: 50%;
+			box-shadow: 28px 0 0 -8px var(--surface), 28px 0 0 -6px #e535ab, -14px 24px 0 -8px var(--surface), -14px 24px 0 -6px #e535ab;
+			animation: docker-graphql-orbit 8s linear infinite;
 		}
 	}
 
@@ -251,6 +324,77 @@
 		background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
 		color: var(--cyan);
 	}
+
+	&__status-badges {
+		display: flex;
+		max-width: min(270px, 62%);
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: .3rem;
+
+		b {
+			padding: .28rem .48rem;
+			border: 1px solid color-mix(in srgb, var(--cyan) 38%, var(--line));
+			border-radius: 999px;
+			background: color-mix(in srgb, var(--cyan) 9%, var(--surface));
+			color: var(--ink);
+			font: 700 .72rem/1.2 tokens.$font-mono, monospace;
+			white-space: nowrap;
+		}
+
+		b:first-child {
+			border-color: color-mix(in srgb, var(--lime) 48%, var(--line));
+			background: color-mix(in srgb, var(--lime) 10%, var(--surface));
+		}
+	}
+
+	&__image:hover .docker-page__status-badges b:first-child,
+	&__image:focus-within .docker-page__status-badges b:first-child {
+		animation: docker-status-maintained .9s ease;
+	}
+
+	&__image:hover .docker-page__status-badges b:nth-child(2),
+	&__image:focus-within .docker-page__status-badges b:nth-child(2) {
+		animation: docker-status-updated .9s ease .08s;
+	}
+
+	@keyframes docker-status-maintained {
+		50% {
+			transform: translateY(-3px);
+			box-shadow: 0 5px 18px color-mix(in srgb, var(--lime) 18%, transparent);
+		}
+	}
+
+	@keyframes docker-status-updated {
+		50% {
+			transform: translateX(3px);
+			box-shadow: 0 5px 18px color-mix(in srgb, var(--cyan) 18%, transparent);
+		}
+	}
+
+	@keyframes docker-container-grid {
+		to { background-position: 64px 0; }
+	}
+
+	@keyframes docker-shell-scan {
+		50% { transform: translateX(12%); opacity: .7; }
+	}
+
+	@keyframes docker-shell-cursor {
+		50% { opacity: .12; }
+	}
+
+	@keyframes docker-angular-turn {
+		50% { transform: rotate(9deg) scale(1.06); }
+	}
+
+	@keyframes docker-nest-network {
+		50% { transform: rotate(45deg) translate(5px, -5px) scale(1.06); }
+	}
+
+	@keyframes docker-graphql-orbit {
+		to { transform: rotate(1turn); }
+	}
 }
 
 @media (max-width: 860px) {
@@ -297,5 +441,14 @@
 	.docker-page__image:hover,
 	.docker-page__image:focus-within {
 		transform: none;
+	}
+
+	.docker-page__status-badges b {
+		animation: none !important;
+	}
+
+	.docker-page__image::before,
+	.docker-page__image::after {
+		animation: none !important;
 	}
 }
