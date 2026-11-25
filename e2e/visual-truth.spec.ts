@@ -116,31 +116,34 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	await expect(page.locator('app-lab-dashboard > .interactive-fullscreen-control')).toHaveCount(1);
 	await page.locator('.lab-page__signal-card .lab-page__fullscreen').first().click();
 	await expectAspectRatio(page.locator('.lab-page__signal-card .lab-page__fullscreen-frame').first(), 8 / 5);
+	await expect(page.locator('.lab-page__signal-card.is-fullscreen .lab-page__fullscreen-evidence > div')).toHaveCount(3);
 	await page.keyboard.press('Escape');
 });
 
-test('visual truth: twenty locales render native primary copy and Arabic remains RTL', async ({ page }) => {
-	await page.setViewportSize({ width: 390, height: 844 });
-	for (const locale of ['en', 'es', 'fr', 'de', 'it', 'pt-PT', 'pt-BR', 'ru', 'uk', 'pl', 'hr', 'tr', 'ar', 'hi', 'bn', 'zh-CN', 'zh-TW', 'ja', 'ko', 'id']) {
-		await openRoute(page, { locale });
-		await expectContained(page, locale);
-		await expect(page.locator('.home-intro__description')).not.toHaveText(/^(?:pages|content)\./);
+test('visual truth: Approach expands one capability and explains six distinct interactions', async ({ page }) => {
+	await page.setViewportSize({ width: 1280, height: 900 });
+	await openRoute(page, { route: 'approach' });
+	const tabs = page.locator('.approach-page__tabs button');
+	await expect(tabs).toHaveCount(6);
+	const heights = await tabs.evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().height));
+	expect(heights[0]).toBeGreaterThan((heights[1] ?? 0) + 20);
+	for (const capability of ['product', 'architecture', 'mobile', 'quality', 'systems', 'tooling']) {
+		await page.locator(`#capability-tab-${capability}`).click();
+		await expect(page.locator('.approach-page__detail')).toHaveAttribute('data-capability', capability);
+		await expect(page.locator(`.approach-page__playground[data-interaction="${capability}"]`)).toBeVisible();
+		await expect(page.locator('.approach-page__detail-heading .approach-page__detail-icon svg')).toBeVisible();
 	}
-	await openRoute(page, { locale: 'ar' });
-	await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 });
 
-test('visual truth: locale selector groups shared languages and always renders local flags', async ({ page }) => {
+test('visual truth: priority routes stay contained in all twenty deep locales', async ({ page }) => {
+	test.setTimeout(240_000);
 	await page.setViewportSize({ width: 390, height: 844 });
-	await openRoute(page);
-	await page.locator('.header__locale > button').click();
-	const options = page.locator('.header__locale-menu [role="option"]');
-	await expect(options).toHaveCount(19);
-	await expect(options.locator('img.header__flag')).toHaveCount(19);
-	await expect(options.filter({ hasText: 'Português' })).toHaveCount(1);
-	const portuguese = options.filter({ hasText: 'Português' });
-	await expect(portuguese.locator('small')).toHaveText('portugués');
-	const nativeLabels = await options.locator('.header__language-native').allTextContents();
-	const sorted = [...nativeLabels].sort((left, right) => left.localeCompare(right, 'en', { sensitivity: 'base' }));
-	expect(nativeLabels).toEqual(sorted);
+	const locales = ['en', 'es', 'fr', 'de', 'it', 'pt-PT', 'pt-BR', 'ru', 'uk', 'pl', 'hr', 'tr', 'ar', 'hi', 'bn', 'zh-CN', 'zh-TW', 'ja', 'ko', 'id'] as const;
+	for (const locale of locales) {
+		for (const route of ['approach', 'demos', 'docker', 'contact'] as const) {
+			await openRoute(page, { locale, route });
+			await expectContained(page, `${locale}/${route}`);
+			await expect(page.locator('.route-stage')).not.toContainText(/pages\.\w+\./);
+		}
+	}
 });

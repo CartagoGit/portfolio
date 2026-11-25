@@ -132,6 +132,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
 	.evidence-card, .evidence-card__logo { transition-duration: .01ms; }
-	.evidence-card::before { animation: none; }
+	.evidence-card::before { animation: none !important; }
 	.evidence-card:hover, .evidence-card:focus-visible, .evidence-card:hover .evidence-card__logo, .evidence-card:focus-visible .evidence-card__logo { transform: none; }
 }
