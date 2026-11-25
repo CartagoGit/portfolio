@@ -10,7 +10,7 @@ import {
 	viewChild,
 } from '@angular/core';
 import { CAPABILITIES, FALLBACK_CAPABILITY } from '../../domain/data.constant';
-import type { ICapability, ICapabilityId } from '../../domain/types.interface';
+import type { ICapability, ICapabilityId, ILocale } from '../../domain/types.interface';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
 import { contentKey } from '../../lang/content-key.helper';
@@ -45,6 +45,29 @@ const CAPABILITY_VISUALS: Readonly<Record<ICapabilityId, ICapabilityVisual>> = {
 		iconPath: 'M3 4h18v16H3V4Zm3 3 4 4-4 4v-3l1-1-1-1V7Zm7 8h5v2h-5v-2Z',
 		example: 'DelendAI, QuickModel and Keyer turn repeated engineering work into typed, reviewable CLI and MCP workflows.',
 	},
+};
+
+const INTERACTIVE_HINTS: Readonly<Record<ILocale, Readonly<Record<ICapabilityId, string>>>> = {
+	en: { product: 'Advance the workflow and inspect what changes at each gate.', architecture: 'Pulse the graph to trace a state change from UI to boundary.', mobile: 'Switch the viewport; the content contract stays intact.', quality: 'Toggle each quality gate and watch the release evidence update.', systems: 'Change the token while the same component keeps its contract.', tooling: 'Run the typed pipeline one stage at a time.' },
+	es: { product: 'Avanza el flujo y revisa qué cambia en cada puerta.', architecture: 'Pulsa la señal para seguir el cambio desde la interfaz al límite.', mobile: 'Cambia el viewport: el contrato de contenido se mantiene.', quality: 'Activa cada control y observa cómo cambia la evidencia de entrega.', systems: 'Cambia el token sin romper el contrato del componente.', tooling: 'Ejecuta la tubería tipada etapa a etapa.' },
+	fr: { product: 'Avancez le flux et observez chaque validation.', architecture: 'Suivez le changement de la vue jusqu’au domaine.', mobile: 'Changez le viewport sans casser le contenu.', quality: 'Activez chaque garde et observez la preuve de livraison.', systems: 'Changez le jeton, pas le contrat du composant.', tooling: 'Exécutez le pipeline typé étape par étape.' },
+	de: { product: 'Schalte den Ablauf vor und prüfe jedes Gate.', architecture: 'Verfolge den Zustandswechsel vom UI zur Grenze.', mobile: 'Wechsle das Viewport, ohne den Inhalt zu verlieren.', quality: 'Aktiviere jedes Gate und prüfe den Liefernachweis.', systems: 'Ändere den Token, nicht den Komponentenvertrag.', tooling: 'Führe die typisierte Pipeline schrittweise aus.' },
+	it: { product: 'Avanza il flusso e verifica ogni controllo.', architecture: 'Segui il cambio dalla UI al confine del dominio.', mobile: 'Cambia viewport senza rompere il contenuto.', quality: 'Attiva ogni controllo e osserva la prova di rilascio.', systems: 'Cambia il token senza cambiare il contratto.', tooling: 'Esegui la pipeline tipizzata passo dopo passo.' },
+	'pt-PT': { product: 'Avance o fluxo e reveja cada validação.', architecture: 'Siga a alteração da interface até ao domínio.', mobile: 'Mude o viewport sem quebrar o conteúdo.', quality: 'Ative cada controlo e veja a evidência de entrega.', systems: 'Mude o token sem alterar o contrato.', tooling: 'Execute a pipeline tipada passo a passo.' },
+	'pt-BR': { product: 'Avance o fluxo e revise cada validação.', architecture: 'Siga a mudança da interface até o domínio.', mobile: 'Troque o viewport sem quebrar o conteúdo.', quality: 'Ative cada controle e veja a evidência de entrega.', systems: 'Troque o token sem alterar o contrato.', tooling: 'Execute a pipeline tipada etapa por etapa.' },
+	ru: { product: 'Продвигайте поток и проверяйте каждое условие.', architecture: 'Проследите изменение от интерфейса к домену.', mobile: 'Меняйте размер экрана без потери контента.', quality: 'Включайте проверки и наблюдайте доказательства релиза.', systems: 'Меняйте токен, сохраняя контракт компонента.', tooling: 'Запускайте типизированный конвейер по шагам.' },
+	uk: { product: 'Просувайте потік і перевіряйте кожну умову.', architecture: 'Простежте зміну від інтерфейсу до домену.', mobile: 'Змінюйте viewport без втрати вмісту.', quality: 'Увімкніть перевірки й перегляньте докази релізу.', systems: 'Змінюйте токен, зберігаючи контракт компонента.', tooling: 'Запускайте типізований конвеєр крок за кроком.' },
+	pl: { product: 'Przesuwaj przepływ i sprawdzaj kolejne bramki.', architecture: 'Śledź zmianę od interfejsu do domeny.', mobile: 'Zmieniaj viewport bez utraty treści.', quality: 'Włączaj kontrole i obserwuj dowody wydania.', systems: 'Zmieniaj token bez zmiany kontraktu komponentu.', tooling: 'Uruchamiaj typowany potok krok po kroku.' },
+	hr: { product: 'Pomaknite tok i pregledajte svaku provjeru.', architecture: 'Pratite promjenu od sučelja do domene.', mobile: 'Promijenite viewport bez gubitka sadržaja.', quality: 'Uključite svaku provjeru i pratite dokaz izdanja.', systems: 'Promijenite token bez promjene ugovora komponente.', tooling: 'Pokrenite tipizirani cjevovod korak po korak.' },
+	tr: { product: 'Akışı ilerletip her geçidi inceleyin.', architecture: 'Değişikliği arayüzden alan sınırına izleyin.', mobile: 'İçeriği bozmadan görünümü değiştirin.', quality: 'Her kontrolü açın ve sürüm kanıtını izleyin.', systems: 'Bileşen sözleşmesini koruyup tokenı değiştirin.', tooling: 'Türlü hattı adım adım çalıştırın.' },
+	ar: { product: 'تقدّم في التدفق وافحص كل بوابة.', architecture: 'اتبع تغيّر الحالة من الواجهة إلى حدود النطاق.', mobile: 'غيّر العرض مع بقاء عقد المحتوى.', quality: 'فعّل كل فحص وشاهد دليل التسليم.', systems: 'غيّر الرمز مع بقاء عقد المكوّن.', tooling: 'شغّل خط الأنابيب المنمّط خطوة بخطوة.' },
+	hi: { product: 'फ्लो आगे बढ़ाकर हर जाँच देखें।', architecture: 'UI से डोमेन सीमा तक बदलाव ट्रेस करें।', mobile: 'व्यूपोर्ट बदलें, सामग्री अनुबंध नहीं।', quality: 'हर जाँच सक्रिय करें और रिलीज़ प्रमाण देखें।', systems: 'टोकन बदलें, घटक अनुबंध बनाए रखें।', tooling: 'टाइप्ड पाइपलाइन को चरण-दर-चरण चलाएँ।' },
+	bn: { product: 'ফ্লো এগিয়ে প্রতিটি গেট পরীক্ষা করুন।', architecture: 'UI থেকে ডোমেন সীমা পর্যন্ত বদল অনুসরণ করুন।', mobile: 'কনটেন্ট ভাঙা ছাড়া ভিউপোর্ট বদলান।', quality: 'প্রতিটি পরীক্ষা চালু করে রিলিজ প্রমাণ দেখুন।', systems: 'কম্পোনেন্ট চুক্তি রেখে টোকেন বদলান।', tooling: 'টাইপড পাইপলাইন ধাপে ধাপে চালান।' },
+	'zh-CN': { product: '推进流程并检查每个关卡。', architecture: '追踪状态从界面到领域边界的变化。', mobile: '切换视口，同时保留内容契约。', quality: '启用质量门禁并观察交付证据。', systems: '更换令牌，不改变组件契约。', tooling: '逐步运行类型化流水线。' },
+	'zh-TW': { product: '推進流程並檢查每個關卡。', architecture: '追蹤狀態從介面到領域邊界的變化。', mobile: '切換視窗，同時保留內容契約。', quality: '啟用品質門檻並觀察交付證據。', systems: '更換權杖，不改變元件契約。', tooling: '逐步執行型別化流水線。' },
+	ja: { product: 'フローを進めて各ゲートを確認します。', architecture: 'UI からドメイン境界まで状態変化を追跡します。', mobile: '表示幅を変えても内容契約を保ちます。', quality: '各品質ゲートを切り替えて証拠を確認します。', systems: 'トークンだけを変え、契約を保ちます。', tooling: '型付きパイプラインを一段ずつ実行します。' },
+	ko: { product: '흐름을 진행하며 각 관문을 확인하세요.', architecture: 'UI에서 도메인 경계까지 상태 변화를 추적하세요.', mobile: '뷰포트를 바꿔도 콘텐츠 계약을 유지합니다.', quality: '품질 게이트를 켜고 릴리스 증거를 확인하세요.', systems: '토큰만 바꾸고 컴포넌트 계약은 유지하세요.', tooling: '타입 파이프라인을 단계별로 실행하세요.' },
+	id: { product: 'Majukan alur dan periksa setiap gerbang.', architecture: 'Lacak perubahan dari UI ke batas domain.', mobile: 'Ganti viewport tanpa merusak konten.', quality: 'Aktifkan tiap pemeriksaan dan lihat bukti rilis.', systems: 'Ganti token tanpa mengubah kontrak komponen.', tooling: 'Jalankan pipeline bertipe tahap demi tahap.' },
 };
 
 @Component({
@@ -94,6 +117,13 @@ export class ApproachPageComponent {
 	readonly experienceBullets = computed(() =>
 		this._translate.instant('pages.approach.experienceBullets')
 	);
+	readonly interactionStep = signal(0);
+	readonly mobileViewports = ['390', '768', '1280'] as const;
+	readonly mobileViewport = signal<(typeof this.mobileViewports)[number]>('390');
+	readonly qualityChecks = signal<readonly boolean[]>([true, true, false, false]);
+	readonly qualityPassed = computed(() => this.qualityChecks().filter(Boolean).length);
+	readonly systemAccent = signal(0);
+	readonly interactiveHint = computed(() => INTERACTIVE_HINTS[this._translate.locale()][this.activeCapability()]);
 
 	capabilityExample(id: ICapabilityId): string {
 		return this._translate.instant(`content.capabilities.${id}.example`);
@@ -106,7 +136,31 @@ export class ApproachPageComponent {
 	selectCapability(id: ICapabilityId): void {
 		if (id === this.activeCapability()) return;
 		this.activeCapability.set(id);
+		this.interactionStep.set(0);
 		queueMicrotask(() => this._animateDetail());
+	}
+
+	capabilityIconPath(id: ICapabilityId): string {
+		return CAPABILITY_VISUALS[id].iconPath;
+	}
+
+	advanceInteraction(): void {
+		this.interactionStep.update((step) => (step + 1) % 4);
+	}
+
+	setMobileViewport(viewport: '390' | '768' | '1280'): void {
+		this.mobileViewport.set(viewport);
+		this.interactionStep.set(viewport === '390' ? 0 : viewport === '768' ? 1 : 2);
+	}
+
+	toggleQualityCheck(index: number): void {
+		this.qualityChecks.update((checks) => checks.map((checked, itemIndex) => itemIndex === index ? !checked : checked));
+		this.interactionStep.set(this.qualityChecks().filter(Boolean).length);
+	}
+
+	setSystemAccent(index: number): void {
+		this.systemAccent.set(index);
+		this.interactionStep.set(index);
 	}
 
 	onTabKeydown(event: KeyboardEvent, index: number): void {
@@ -123,16 +177,12 @@ export class ApproachPageComponent {
 				? 0
 				: event.key === 'End'
 					? this.capabilities().length - 1
-					: (index + delta + this.capabilities().length) %
-						this.capabilities().length;
+					: (index + delta + this.capabilities().length) % this.capabilities().length;
 		const target = this.capabilities()[targetIndex];
 		if (!target) return;
 		this.selectCapability(target.id);
 		queueMicrotask(() => {
-			const tab = this._document.querySelector<HTMLButtonElement>(
-				`#capability-tab-${target.id}`
-			);
-			tab?.focus();
+			this._document.querySelector<HTMLButtonElement>(`#capability-tab-${target.id}`)?.focus();
 		});
 	}
 

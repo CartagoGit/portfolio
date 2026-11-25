@@ -57,4 +57,21 @@ describe('ApproachPageComponent', () => {
 		expect(element.querySelector('.approach-page__example')?.textContent).toContain('Parcours');
 		TestBed.inject(TranslateService).setLocale('en');
 	});
+	it('changes the interaction contract with the selected capability', async () => {
+		await TestBed.configureTestingModule({ imports: [ApproachPageComponent] }).compileComponents();
+		const fixture = TestBed.createComponent(ApproachPageComponent);
+		fixture.detectChanges();
+		const component = fixture.componentInstance;
+		for (const capability of ['product', 'architecture', 'mobile', 'quality', 'systems', 'tooling'] as const) {
+			component.selectCapability(capability);
+			fixture.detectChanges();
+			expect((fixture.nativeElement as HTMLElement).querySelector('.approach-page__playground')?.getAttribute('data-interaction')).toBe(capability);
+		}
+		component.setMobileViewport('1280');
+		component.toggleQualityCheck(2);
+		component.setSystemAccent(2);
+		expect(component.mobileViewport()).toBe('1280');
+		expect(component.qualityChecks()[2]).toBe(true);
+		expect(component.systemAccent()).toBe(2);
+	});
 });

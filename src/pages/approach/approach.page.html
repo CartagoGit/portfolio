@@ -28,8 +28,13 @@
 					[class.is-active]="activeCapability() === capability.id"
 					(click)="selectCapability(capability.id)"
 					(keydown)="onTabKeydown($event, index)">
-					<span>0{{ index + 1 }}</span>
-					{{ capability.eyebrow.split(' / ')[1] }}
+					<span class="approach-page__tab-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24"><path [attr.d]="capabilityIconPath(capability.id)" fill="currentColor" /></svg>
+					</span>
+					<span class="approach-page__tab-copy">
+						<small>0{{ index + 1 }}</small>
+						<b>{{ capability.eyebrow.split(' / ')[1] }}</b>
+					</span>
 					<i aria-hidden="true">↘</i>
 				</button>
 			}
@@ -43,26 +48,80 @@
 			[attr.aria-labelledby]="'capability-tab-' + activeCapability()"
 			[attr.data-capability]="activeCapability()"
 			tabindex="0">
-			<div class="approach-page__detail-icon" aria-hidden="true">
-				<svg viewBox="0 0 24 24">
-					<path [attr.d]="selectedVisual().iconPath" fill="currentColor" />
-				</svg>
-			</div>
-			<p class="approach-page__detail-eyebrow">
-				{{ selectedCapability().eyebrow }}
-			</p>
-			<h3>{{ selectedCapability().title }}</h3>
-			<p>{{ selectedCapability().detail }}</p>
+			<header class="approach-page__detail-heading">
+				<div class="approach-page__detail-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24"><path [attr.d]="selectedVisual().iconPath" fill="currentColor" /></svg>
+				</div>
+				<div>
+					<p class="approach-page__detail-eyebrow">{{ selectedCapability().eyebrow }}</p>
+					<h3>{{ selectedCapability().title }}</h3>
+				</div>
+			</header>
+			<p class="approach-page__detail-copy">{{ selectedCapability().detail }}</p>
 			<p class="approach-page__example">{{ capabilityExample(activeCapability()) }}</p>
+
+			<section
+				class="approach-page__playground"
+				[attr.data-interaction]="activeCapability()"
+				[attr.aria-label]="interactiveHint()">
+				<p>{{ interactiveHint() }}</p>
+				@switch (activeCapability()) {
+					@case ('product') {
+						<div class="approach-page__workflow" [attr.data-step]="interactionStep()">
+							@for (step of ['INPUT', 'MODEL', 'VERIFY', 'SHIP']; track step; let index = $index) {
+								<span [class.is-active]="interactionStep() === index" [class.is-complete]="interactionStep() > index">{{ step }}</span>
+							}
+						</div>
+						<button type="button" (click)="advanceInteraction()" [attr.aria-label]="interactiveHint()">→</button>
+					}
+					@case ('architecture') {
+						<div class="approach-page__graph" [attr.data-step]="interactionStep()">
+							<span>UI</span><i></i><span>SIGNALS</span><i></i><span>API</span><i></i><span>DOMAIN</span>
+						</div>
+						<button type="button" (click)="advanceInteraction()" [attr.aria-label]="interactiveHint()">↻</button>
+					}
+					@case ('mobile') {
+						<div class="approach-page__viewport-picker" role="group">
+							@for (viewport of mobileViewports; track viewport) {
+								<button type="button" [class.is-active]="mobileViewport() === viewport" (click)="setMobileViewport(viewport)">{{ viewport }}</button>
+							}
+						</div>
+						<div class="approach-page__device" [attr.data-viewport]="mobileViewport()"><i>01</i><b></b><span></span><span></span></div>
+					}
+					@case ('quality') {
+						<div class="approach-page__quality-grid">
+							@for (check of ['UNIT', 'A11Y', 'TYPE', 'E2E']; track check; let index = $index) {
+								<button type="button" [class.is-pass]="qualityChecks()[index]" [attr.aria-pressed]="qualityChecks()[index]" (click)="toggleQualityCheck(index)"><i></i>{{ check }}</button>
+							}
+						</div>
+						<output>{{ qualityPassed() }} / 4</output>
+					}
+					@case ('systems') {
+						<div class="approach-page__tokens" role="group">
+							@for (accent of ['cyan', 'lime', 'violet']; track accent; let index = $index) {
+								<button type="button" [class.is-active]="systemAccent() === index" [attr.data-accent]="accent" (click)="setSystemAccent(index)"></button>
+							}
+						</div>
+						<div class="approach-page__token-card" [attr.data-accent]="systemAccent()"><i></i><strong>{{ selectedCapability().tools[0] }}</strong><span>STATE · MOTION · A11Y</span></div>
+					}
+					@case ('tooling') {
+						<div class="approach-page__terminal" [attr.data-step]="interactionStep()">
+							<code>$ delendai verify --scope=portfolio</code>
+							@for (line of ['resolve', 'typecheck', 'test', 'publish-ready']; track line; let index = $index) {
+								<span [class.is-complete]="interactionStep() > index">{{ line }}</span>
+							}
+						</div>
+						<button type="button" (click)="advanceInteraction()" [attr.aria-label]="interactiveHint()">▶</button>
+					}
+				}
+			</section>
+
 			<div class="approach-page__tools">
 				@for (tool of selectedCapability().tools; track $index) {
 					<span>{{ termLabel(tool) }}</span>
 				}
 			</div>
-			<footer>
-				<i aria-hidden="true"></i>
-				{{ selectedCapability().proof }}
-			</footer>
+			<footer><i aria-hidden="true"></i>{{ selectedCapability().proof }}</footer>
 		</article>
 	</div>
 </section>
