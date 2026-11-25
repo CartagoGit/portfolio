@@ -1,5 +1,4 @@
 <section
-	id="main-content"
 	class="lab-page"
 	aria-labelledby="lab-title">
 	<header class="lab-page__heading">
@@ -33,6 +32,13 @@
 				<div class="lab-page__signal-meter" [style.--signal-strength]="signalStrength() + '%'" aria-hidden="true"><i></i></div>
 				<output>{{ signalStrength() }}%</output>
 				<button type="button" (click)="tuneSignal()">{{ 'pages.lab.randomizeData' | translate }}</button>
+				@if (fullscreenCard() === 'tune') {
+					<div class="lab-page__fullscreen-evidence" aria-label="P50 · P90 · P99">
+						@for (sample of [24, 58, 92]; track sample) {
+							<div><span>P{{ $index === 0 ? 50 : $index === 1 ? 90 : 99 }}</span><i [style.--sample-strength]="sample + '%'">{{ sample }}%</i></div>
+						}
+					</div>
+				}
 				</div>
 			</article>
 			<article class="lab-page__signal-card lab-page__signal-card--route" data-experiment="route" [class.is-fullscreen]="fullscreenCard() === 'route'" [attr.data-path]="packetPath()">
@@ -41,6 +47,13 @@
 				<p>{{ 'pages.lab.stateEyebrow' | translate }}</p><h3>{{ 'pages.lab.stateTitle' | translate }}</h3>
 				<div class="lab-page__packet-route" aria-hidden="true"><i>A</i><span></span><i>B</i><span></span><i>C</i><b></b></div>
 				<button type="button" (click)="routePacket()">{{ 'pages.lab.stateRun' | translate }}</button>
+				@if (fullscreenCard() === 'route') {
+					<div class="lab-page__fullscreen-evidence lab-page__fullscreen-evidence--routes">
+						@for (sample of [0, 1, 2]; track sample) {
+							<div [class.is-active]="packetPath() === sample"><span>A</span><i></i><span>B</span><i></i><span>C</span></div>
+						}
+					</div>
+				}
 				</div>
 			</article>
 			<article class="lab-page__signal-card lab-page__signal-card--queue" data-experiment="queue" [class.is-fullscreen]="fullscreenCard() === 'queue'">
@@ -49,6 +62,11 @@
 				<p>{{ 'pages.lab.concurrencyEyebrow' | translate }}</p><h3>{{ 'pages.lab.concurrencyTitle' | translate }}</h3>
 				<ul>@for (item of queue(); track item) { <li>{{ item }}</li> }</ul>
 				<div><button type="button" (click)="enqueue()">{{ 'pages.lab.runConcurrent' | translate }}</button><button type="button" (click)="dequeue()">{{ 'pages.lab.cancelConcurrent' | translate }}</button></div>
+				@if (fullscreenCard() === 'queue') {
+					<div class="lab-page__fullscreen-evidence lab-page__fullscreen-evidence--queue">
+						@for (item of ['A-01', 'B-02', 'C-03', 'D-04', 'E-05', 'F-06']; track item) { <span>{{ item }}</span> }
+					</div>
+				}
 				</div>
 			</article>
 		</div>

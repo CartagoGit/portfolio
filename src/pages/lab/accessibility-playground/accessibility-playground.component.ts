@@ -6,11 +6,12 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 import { contrastRatio } from '../helpers/contrast-ratio.helper';
 
 @Component({
 	selector: 'app-accessibility-playground',
-	imports: [ReactiveFormsModule, TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, ReactiveFormsModule, TranslatePipe],
 	templateUrl: './accessibility-playground.component.html',
 	styleUrl: './accessibility-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

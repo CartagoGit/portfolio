@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 interface IDataRow { id: string; score: number; latency: number; ready: boolean; }
 
 @Component({
 	selector: 'app-data-playground',
-	imports: [TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './data-playground.component.html',
 	styleUrl: './data-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

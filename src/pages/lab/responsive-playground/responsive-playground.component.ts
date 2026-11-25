@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 @Component({
 	selector: 'app-responsive-playground',
-	imports: [TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './responsive-playground.component.html',
 	styleUrl: './responsive-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

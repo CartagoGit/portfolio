@@ -17,4 +17,5 @@
 	<p class="state-machine-playground__status">
 		{{ (state() === 'success' ? 'pages.lab.stateSuccessMessage' : state() === 'error' ? 'pages.lab.stateErrorMessage' : state() === 'running' ? 'pages.lab.stateRunningMessage' : 'pages.lab.stateIdleMessage') | translate }}
 	</p>
+	<app-lab-fullscreen-evidence kind="state-machine" />
 </article>

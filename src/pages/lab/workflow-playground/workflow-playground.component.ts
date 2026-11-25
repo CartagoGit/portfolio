@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
 import { TranslateService } from '../../../lang/translate.service';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 type IWorkflowStepId = 'discover' | 'model' | 'build' | 'verify';
 
@@ -20,7 +21,7 @@ const STEP_COPY: Readonly<Record<IWorkflowStepId, { label: string; hint: string 
 
 @Component({
 	selector: 'app-workflow-playground',
-	imports: [TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './workflow-playground.component.html',
 	styleUrl: './workflow-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

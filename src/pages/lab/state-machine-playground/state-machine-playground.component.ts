@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, type OnDestroy, signal } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 type IFlowState = 'idle' | 'running' | 'success' | 'error';
 
 @Component({
 	selector: 'app-state-machine-playground',
-	imports: [TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './state-machine-playground.component.html',
 	styleUrl: './state-machine-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

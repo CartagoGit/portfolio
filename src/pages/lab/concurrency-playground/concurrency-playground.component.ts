@@ -6,6 +6,7 @@ import {
 	signal,
 } from '@angular/core';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 type ITaskStatus = 'idle' | 'running' | 'done';
 
@@ -23,7 +24,7 @@ const TASKS: readonly IConcurrentTask[] = [
 
 @Component({
 	selector: 'app-concurrency-playground',
-	imports: [TranslatePipe],
+	imports: [LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './concurrency-playground.component.html',
 	styleUrl: './concurrency-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

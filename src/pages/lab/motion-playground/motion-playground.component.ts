@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../lang/translate.pipe';
+import { LabFullscreenEvidenceComponent } from '../../../shared/ui/lab-fullscreen-evidence/lab-fullscreen-evidence.component';
 
 type IMotionEasing = 'standard' | 'spring' | 'linear';
 
 @Component({
 	selector: 'app-motion-playground',
-	imports: [FormsModule, TranslatePipe],
+	imports: [FormsModule, LabFullscreenEvidenceComponent, TranslatePipe],
 	templateUrl: './motion-playground.component.html',
 	styleUrl: './motion-playground.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,

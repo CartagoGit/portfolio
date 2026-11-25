@@ -7,6 +7,7 @@ import {
 	input,
 	type OnDestroy,
 	Renderer2,
+	signal,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { FullscreenCoordinatorService } from '../../core/platform/fullscreen-coordinator.service';
@@ -14,7 +15,7 @@ import { FullscreenCoordinatorService } from '../../core/platform/fullscreen-coo
 @Directive({
 	selector: '[appFullscreenPanel]',
 	standalone: true,
-	host: { '[class.is-fallback-fullscreen]': '_fallback' },
+	host: { '[class.is-fallback-fullscreen]': '_fallback()' },
 })
 export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	readonly fullscreenLabel = input('Open interactive panel fullscreen');
@@ -26,10 +27,10 @@ export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	private _button?: HTMLButtonElement;
 	private _removeClick?: () => void;
 	private _removeFullscreenChange?: () => void;
-	private _fallback = false;
+	private readonly _fallback = signal(false);
 	private readonly _stateSync = effect(() => {
 		const active = this._fullscreen.active() === this._element.nativeElement;
-		this._fallback = active;
+		this._fallback.set(active);
 		this._updateButton(active);
 	});
 
@@ -72,8 +73,9 @@ export class FullscreenPanelDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private _sync(): void {
-		this._fallback = this._fullscreen.active() === this._element.nativeElement;
-		this._updateButton(this._fallback);
+		const active = this._fullscreen.active() === this._element.nativeElement;
+		this._fallback.set(active);
+		this._updateButton(active);
 	}
 
 	private _updateButton(active: boolean): void {
