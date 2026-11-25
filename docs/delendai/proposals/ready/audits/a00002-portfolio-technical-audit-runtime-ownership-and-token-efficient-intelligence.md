@@ -120,6 +120,26 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Stale proposal references are updated or superseded."
   - "The proposal depends on f00001 publication without duplicating f00002 locale scope."
 
+### S9 — Fail-closed public audit and workspace path boundary
+- **Status**: pending
+- **Files**: `plugins/portfolio-content/src/lib/services/fs.service.ts`, `plugins/portfolio-content/src/lib/services/audit.service.ts`, `plugins/portfolio-content/src/lib/tools/audit.tool.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`
+- **Gate**: type
+- acceptance:
+  - "Missing content roots, unreadable files and zero discovered templates make the public audit non-ok, not info-only."
+  - "Every filesystem path supplied to the plugin is normalised and proven to remain below workspaceRoot."
+  - "Path traversal, absolute escapes and symlink-like escape cases fail with a deterministic error."
+  - "The audit reports coverage counts separately from findings and exposes nextAction as a publish-blocking condition when coverage is incomplete."
+  - "The host tool schema keeps ok false for missing/escape paths while preserving private-content findings."
+
+## external audit follow-up — 2026-11-25
+
+CI/publication findings belong to the publication workstream and are not duplicated here. Runtime-quality work remains: S2/S3 incremental indexes, S4 route splitting, S5 WebGL lifecycle, S6 SCSS structural parser, S7 security/performance gates and S9 fail-closed/path-safe public audit.
+
+- The public audit's old `info` treatment for missing/unreadable coverage is a blocker under S9, not a permissive success.
+- `buildNodeFileSystem` must enforce a workspace boundary for every relative operation.
+- Nominal lazy routes and GPU resource release remain unfinished despite UI-level evidence.
+- Token-budgeted output must be measured in tests, not described only in documentation.
+
 ## acceptance
 
 - Architecture reports app/core/domain/pages/shared/styles.
@@ -162,3 +182,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - Runtime lifecycle owners are explicit.
 - Stale proposal references are updated or superseded.
 - The proposal depends on f00001 publication without duplicating f00002 locale scope.
+- Missing content roots, unreadable files and zero discovered templates make the public audit non-ok, not info-only.
+- Every filesystem path supplied to the plugin is normalised and proven to remain below workspaceRoot.
+- Path traversal, absolute escapes and symlink-like escape cases fail with a deterministic error.
+- The audit reports coverage counts separately from findings and exposes nextAction as a publish-blocking condition when coverage is incomplete.
+- The host tool schema keeps ok false for missing/escape paths while preserving private-content findings.

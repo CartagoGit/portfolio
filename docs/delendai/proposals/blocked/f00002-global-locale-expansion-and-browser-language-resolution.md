@@ -88,12 +88,19 @@ Brand names, project names, package names and technical identifiers remain uncha
 - **Files**: `src/lang/en.content.ts`, `src/lang/es.content.ts`, `src/lang/fr.content.ts`, `src/lang/de.content.ts`, `src/lang/it.ts`, `src/lang/pt-PT.ts`, `src/lang/pt-BR.ts`, `src/lang/ru.ts`, `src/lang/uk.ts`, `src/lang/pl.ts`, `src/lang/hr.ts`, `src/lang/tr.ts`, `src/lang/ar.ts`, `src/lang/hi.ts`, `src/lang/bn.ts`, `src/lang/zh-CN.ts`, `src/lang/zh-TW.ts`, `src/lang/ja.ts`, `src/lang/ko.ts`, `src/lang/id.ts`, `src/lang/index.barrel.ts`, `src/lang/types.interface.ts`, `src/lang/i18n-parity.spec.ts`
 - **Gate**: translation shape/interpolation parity + editorial glossary audit
 - **Acceptance**: every supported locale satisfies `ITranslationMap`; no visible/ARIA key is missing; names and technical identifiers follow the glossary; Chinese script variants stay distinct; Arabic RTL copy is complete.
+- "Portuguese PT/BR collapse to one selector group while preserving route resolution."
+- "All twenty routes have complete visible/ARIA copy; English fallback is reserved for explicitly immutable technical glossary terms and not whole route/home/monitor blocks."
+- "Each locale's native/translated label pairs, flag asset and sort key are tested."
+- "Searchable language rows stay keyboard/touch usable at 390px."
 
 ### S3 — Searchable language selector and flags
 - **Status**: pending
 - **Files**: `src/shared/ui/header/**`, `public/icons/flags/**`
 - **Gate**: keyboard, touch and 390px Playwright audit
 - **Acceptance**: twenty locales fit in a searchable menu, selected locale is marked, native-name labels are readable, flags/icons are optional presentation rather than meaning, focus remains stable and no layout shift occurs.
+- "Header button uses the active locale's local flag asset."
+- "The selector renders one Portuguese group, one English group and distinct Chinese script groups."
+- "Rows are ordered by native locale name and display current-language helper copy beneath the native name."
 
 ### S4 — SEO alternates, metadata and RTL layout
 - **Status**: pending
