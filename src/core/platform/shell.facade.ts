@@ -10,7 +10,7 @@ import type {
 	IThemeId,
 } from '../../domain/types.interface';
 import { TranslateService } from '../../lang/translate.service';
-import { detectPreferredLocale, LOCALES, persistLocale, resolveLocale } from './locale.helper';
+import { detectPreferredLocale, LOCALE_LANGUAGE_GROUPS, persistLocale, resolveLocale } from './locale.helper';
 import { buildDescription, buildTitle } from './seo.helper';
 import { PAGE_ORDER, routeFor, transitionDirection } from './routing.helper';
 import {
@@ -43,9 +43,28 @@ export class ShellFacade {
 	private readonly _platformId = inject(PLATFORM_ID);
 	private readonly _translate = inject(TranslateService);
 
-	readonly languages = computed<readonly ILanguageOption[]>(() =>
-		LOCALES.map(({ id, label, detail, flag }) => ({ id, label, detail, flag }))
-	);
+	readonly languages = computed<readonly ILanguageOption[]>(() => {
+		const active = this.locale();
+		let displayNames: Intl.DisplayNames | undefined;
+		try {
+			displayNames = new Intl.DisplayNames([active], { type: 'language' });
+		} catch {
+			displayNames = undefined;
+		}
+		return LOCALE_LANGUAGE_GROUPS
+			.map((group) => {
+				const routeLocale = group.locales.includes(active)
+					? active
+					: group.locales[0];
+				return {
+					id: routeLocale as ILocale,
+					label: group.label,
+					detail: displayNames?.of(group.languageTag) ?? group.label,
+					flag: group.flag,
+				};
+			})
+			.sort((left, right) => left.label.localeCompare(right.label, 'en', { sensitivity: 'base' }));
+	});
 	/** Theme definitions surfaced to the dropdown; label/detail come from the
 	 * active locale's translation map so the swatch + copy stay in sync. */
 	readonly themes = computed<

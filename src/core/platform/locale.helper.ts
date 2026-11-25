@@ -129,3 +129,33 @@ export function readLocaleCookie(doc: Document): string | null {
  * module is the single source of truth for runtime routing and the selector.
  */
 export const LOCALES = LOCALE_DEFINITIONS;
+
+export interface ILocaleLanguageGroup {
+	readonly key: string;
+	readonly locales: readonly ILocale[];
+	readonly label: string;
+	readonly languageTag: string;
+	readonly flag: string;
+}
+
+export const LOCALE_LANGUAGE_GROUPS: readonly ILocaleLanguageGroup[] = [
+	{ key: 'ar', locales: ['ar'], label: 'العربية', languageTag: 'ar', flag: '/icons/flags/ar.svg' },
+	{ key: 'bn', locales: ['bn'], label: 'বাংলা', languageTag: 'bn', flag: '/icons/flags/bn.svg' },
+	{ key: 'zh-cn', locales: ['zh-CN'], label: '中文（简体）', languageTag: 'zh-Hans', flag: '/icons/flags/zh-cn.svg' },
+	{ key: 'zh-tw', locales: ['zh-TW'], label: '中文（繁體）', languageTag: 'zh-Hant', flag: '/icons/flags/zh-tw.svg' },
+	{ key: 'hr', locales: ['hr'], label: 'Hrvatski', languageTag: 'hr', flag: '/icons/flags/hr.svg' },
+	{ key: 'de', locales: ['de'], label: 'Deutsch', languageTag: 'de', flag: '/icons/flags/de.svg' },
+	{ key: 'en', locales: ['en'], label: 'English', languageTag: 'en', flag: '/icons/flags/en.svg' },
+	{ key: 'es', locales: ['es'], label: 'Español', languageTag: 'es', flag: '/icons/flags/es.svg' },
+	{ key: 'fr', locales: ['fr'], label: 'Français', languageTag: 'fr', flag: '/icons/flags/fr.svg' },
+	{ key: 'hi', locales: ['hi'], label: 'हिन्दी', languageTag: 'hi', flag: '/icons/flags/hi.svg' },
+	{ key: 'id', locales: ['id'], label: 'Bahasa Indonesia', languageTag: 'id', flag: '/icons/flags/id.svg' },
+	{ key: 'it', locales: ['it'], label: 'Italiano', languageTag: 'it', flag: '/icons/flags/it.svg' },
+	{ key: 'ja', locales: ['ja'], label: '日本語', languageTag: 'ja', flag: '/icons/flags/ja.svg' },
+	{ key: 'ko', locales: ['ko'], label: '한국어', languageTag: 'ko', flag: '/icons/flags/ko.svg' },
+	{ key: 'pl', locales: ['pl'], label: 'Polski', languageTag: 'pl', flag: '/icons/flags/pl.svg' },
+	{ key: 'pt', locales: ['pt-PT', 'pt-BR'], label: 'Português', languageTag: 'pt', flag: '/icons/flags/pt.svg' },
+	{ key: 'ru', locales: ['ru'], label: 'Русский', languageTag: 'ru', flag: '/icons/flags/ru.svg' },
+	{ key: 'tr', locales: ['tr'], label: 'Türkçe', languageTag: 'tr', flag: '/icons/flags/tr.svg' },
+	{ key: 'uk', locales: ['uk'], label: 'Українська', languageTag: 'uk', flag: '/icons/flags/uk.svg' },
+];

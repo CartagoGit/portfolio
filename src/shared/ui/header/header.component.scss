@@ -128,13 +128,19 @@
 		border-radius: 3px;
 	}
 	&__flag {
-		display: inline-grid;
+		display: block;
 		width: 1.65rem;
 		height: 1.35rem;
-		place-items: center;
+		object-fit: cover;
+		border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
 		border-radius: 5px;
-		font-size: 1.2rem;
-		line-height: 1;
+		background: var(--surface-2);
+	}
+	&__locale-menu b:first-of-type {
+		display: block;
+		color: var(--ink);
+		font-size: .78rem;
+		line-height: 1.2;
 	}
 	&__locale-menu,
 	&__theme-menu {

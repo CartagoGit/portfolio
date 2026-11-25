@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LOCALES, resolveLocale } from './locale.helper';
+import { LOCALES, LOCALE_LANGUAGE_GROUPS, resolveLocale } from './locale.helper';
 
 describe('locale registry', () => {
 	it('exposes all twenty canonical route locales', () => {
@@ -28,5 +28,13 @@ describe('locale registry', () => {
 		expect(resolveLocale('xx-YY')).toBeNull();
 		expect(resolveLocale('')).toBeNull();
 		expect(resolveLocale(undefined)).toBeNull();
+	});
+
+	it('collapses Portuguese regional routes into one visual language group', () => {
+		expect(LOCALE_LANGUAGE_GROUPS).toHaveLength(19);
+		const portuguese = LOCALE_LANGUAGE_GROUPS.filter(({ locales }) => locales.includes('pt-PT') || locales.includes('pt-BR'));
+		expect(portuguese).toHaveLength(1);
+		expect(portuguese[0]?.locales).toEqual(['pt-PT', 'pt-BR']);
+		expect(LOCALE_LANGUAGE_GROUPS.every(({ flag }) => flag.startsWith('/icons/flags/') && flag.endsWith('.svg'))).toBe(true);
 	});
 });

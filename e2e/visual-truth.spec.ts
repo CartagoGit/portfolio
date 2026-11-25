@@ -129,3 +129,18 @@ test('visual truth: twenty locales render native primary copy and Arabic remains
 	await openRoute(page, { locale: 'ar' });
 	await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 });
+
+test('visual truth: locale selector groups shared languages and always renders local flags', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await openRoute(page);
+	await page.locator('.header__locale > button').click();
+	const options = page.locator('.header__locale-menu [role="option"]');
+	await expect(options).toHaveCount(19);
+	await expect(options.locator('img.header__flag')).toHaveCount(19);
+	await expect(options.filter({ hasText: 'Português' })).toHaveCount(1);
+	const portuguese = options.filter({ hasText: 'Português' });
+	await expect(portuguese.locator('small')).toHaveText('portugués');
+	const nativeLabels = await options.locator('.header__language-native').allTextContents();
+	const sorted = [...nativeLabels].sort((left, right) => left.localeCompare(right, 'en', { sensitivity: 'base' }));
+	expect(nativeLabels).toEqual(sorted);
+});
