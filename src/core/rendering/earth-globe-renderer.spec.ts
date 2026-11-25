@@ -98,7 +98,7 @@ describe('renderEarthFrame', () => {
 			linkProgram: vi.fn(),
 			getProgramParameter: vi.fn(() => true),
 			getAttribLocation: vi.fn(() => 0),
-			getUniformLocation: vi.fn(() => ({}) as WebGLUniformLocation),
+			getUniformLocation: vi.fn(() => ({})),
 			bindBuffer: vi.fn(),
 			bufferData: vi.fn(),
 			useProgram: vi.fn(),

@@ -4,9 +4,9 @@ import { join, relative } from 'node:path';
 const ROOTS = ['src', 'config', 'tools', 'plugins', 'e2e'] as const;
 const ROLES = new Set([
 	'adapter', 'barrel', 'browser', 'catalog', 'component', 'config', 'connector', 'constant',
-	'content', 'data', 'entrypoint', 'facade', 'helper', 'interface', 'locale', 'model', 'page',
-	'pipe', 'plugin', 'registry', 'renderer', 'routes', 'routing', 'script', 'seo', 'server',
-	'service', 'spec', 'theme', 'tool', 'translation', 'types', 'visuals',
+	'content', 'data', 'directive', 'entrypoint', 'facade', 'helper', 'interface', 'locale', 'model', 'overlays', 'page',
+	'pipe', 'plugin', 'parser', 'registry', 'renderer', 'routes', 'routing', 'script', 'seo', 'server',
+	'service', 'spec', 'theme', 'tool', 'translation', 'translations', 'types', 'visuals',
 ]);
 const SKIPPED_DIRECTORIES = new Set(['node_modules', '.dist', 'dist', '.angular', '.cache']);
 

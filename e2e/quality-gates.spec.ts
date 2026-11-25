@@ -2,9 +2,9 @@ import { expect, type Page, test } from '@playwright/test';
 
 const ROUTES = ['', 'work', 'lab', 'approach', 'knowledge', 'docker', 'demos', 'contact'] as const;
 
-async function open(page: Page, route = '', locale = 'es'): Promise<void> {
-	await page.goto(`/${locale}${route ? `/${route}` : ''}`, { waitUntil: 'networkidle' });
-	await expect(page.locator('html')).toHaveAttribute('lang', locale);
+async function open(page: Page, route = ''): Promise<void> {
+	await page.goto(`/es${route ? `/${route}` : ''}`, { waitUntil: 'networkidle' });
+	await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 }
 
 test('A11Y-01 route navigation restores focus to truthful content', async ({ page }) => {
@@ -12,7 +12,7 @@ test('A11Y-01 route navigation restores focus to truthful content', async ({ pag
 	await page.getByRole('link', { name: 'Laboratorio', exact: true }).first().click();
 	await expect(page).toHaveURL(/\/es\/lab$/);
 	await expect(page.locator('#main-content')).toBeFocused();
-	await expect(page.getByRole('heading', { name: /Interactivo|interactivo/i })).toBeVisible();
+	await expect(page.locator('#lab-title')).toBeVisible();
 });
 
 test('A11Y-02 every route stays accessible-named and contained at 390px', async ({ page }) => {

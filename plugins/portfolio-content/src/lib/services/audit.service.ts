@@ -5,9 +5,9 @@ import { assertWorkspaceRelativePath } from './fs.service';
  * templates for forbidden terms (employer/client names) and image
  * placeholders (`TODO(image):`). Severity ladder:
  *
- *   - `error`   — private-work references; publish blocker.
+ *   - `error`   — private-work references or incomplete/read-failed coverage; publish blocker.
  *   - `warning` — `TODO(image)` placeholder; pre-publish hygiene.
- *   - `info`    — missing files / duplicates / IO errors.
+ *   - `info`    — duplicate paths; no longer masks missing content.
  */
 
 const IMAGE_TODO_PATTERN = /TODO\(image\):\s*([^\n]+)/g;

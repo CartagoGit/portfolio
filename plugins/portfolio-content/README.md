@@ -15,10 +15,15 @@ Served as `<core prefix>_<plugin prefix>_<id>`, for example
 | `architecture` | Every directory under `sourceRoot` as a layer, with sub-layers and file counts. |
 | `features` | Every directory under `pagesRoot` with its `*.page.ts` and nested `*.component.ts`. |
 | `domain` | Exported unions, interfaces, types and consts parsed from `domainRoot`. |
-| `scss_audit` | Which directories' templates use each class selector of a stylesheet. |
-| `public_audit` | Forbidden terms, per-se roots and `TODO(image)` placeholders in every discovered `*.html`. |
+| `scss_audit` | Structural SCSS dependencies, custom properties and template ownership. |
+| `public_audit` | Forbidden terms, per-se roots, placeholders and fail-closed coverage diagnostics. |
+| `query` | Section query with field projection, pagination, measured token budget and metadata cache reuse. |
 
-All tools are read-only: no writes, no network.
+All tools are read-only: no writes, no network. The Node file-system adapter rejects absolute paths, `..` traversal and symlink escapes outside the workspace root.
+
+### Incremental index
+
+`ContentIndexService` records path, SHA-256 digest, owner section, byte size and mtime. A section query reuses unchanged entries by metadata and rebuilds deterministically after a changed or corrupt snapshot. Changed files invalidate only their recorded owner.
 
 ### Audit finding IDs
 
@@ -27,7 +32,8 @@ All tools are read-only: no writes, no network.
 | `per-se-root` | `error` | A root in `perSeRoots` appeared (case-insensitive, separators collapsed). |
 | `private-term` | `error` | A term in `forbiddenTerms` appeared. |
 | `image-todo` | `warning` | A `TODO(image): ...` placeholder is still committed. |
-| `duplicated-content` / `missing-content` / `unreadable-content` | `info` | I/O diagnostics. |
+| `coverage-empty` / `missing-content` / `unreadable-content` | `error` | Publish-blocking incomplete coverage. |
+| `duplicated-content` | `info` | Duplicate input path. |
 
 ## Options
 

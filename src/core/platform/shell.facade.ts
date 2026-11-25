@@ -127,7 +127,11 @@ export class ShellFacade {
 			this._refreshSeo();
 			if (this._pendingRouteFocus) {
 				this._pendingRouteFocus = false;
-				queueMicrotask(() => this._document.getElementById('main-content')?.focus({ preventScroll: true }));
+				queueMicrotask(() => {
+					this._document.getElementById('main-content')?.focus({ preventScroll: true });
+					if (isPlatformBrowser(this._platformId))
+						window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+				});
 			}
 		});
 		this._applyPreferredLocale();
