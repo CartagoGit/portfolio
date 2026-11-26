@@ -7,7 +7,9 @@ type: proposal
 track: portfolio-quality
 date: 2026-11-23
 shipped-in:
+  - "f4d9ae1"
   - "fb56d85"
+  - "6241bdd"
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
@@ -48,8 +50,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - review-log: approved by microsoft-mai-code-2 — verified at fb56d85, validate exit 0 and tests 41/41 claimed, no recorded run cited; acceptance 5/5: (1) portfolio_architecture derives those six source layers and its service tests passed. (2) buildPageMap discovers *.page.ts and nested *.component.ts; plugin tests passed. (3) Domain service reads the configured domain root and plugin tests confirm exported contracts. (4) Service/plugin tests cover missing roots and failed reads, with mcp:check exit 0. (5) mcp:check registered architecture, features, domain, scss_audit, public_audit and query under the configured prefix. — Independent review of current application/plugin topology; plugin typecheck, all tests and registration passed.
 
 ### S2 — Hash-index project content with incremental invalidation
-- **Status**: pending
-- **Files**: `plugins/portfolio-content/src/lib/services/content-index.service.ts`, `plugins/portfolio-content/src/lib/services/content-index.spec.ts`, `plugins/portfolio-content/src/lib/helpers/content-hash.helper.ts`, `plugins/portfolio-content/src/lib/helpers/content-hash.spec.ts`, `plugins/portfolio-content/src/lib/types/content-index.interface.ts`
+- **Status**: done
+- **Files**: `plugins/portfolio-content/src/lib/services/content-index.service.ts`, `plugins/portfolio-content/tests/src/lib/content-index.service.spec.ts`, `plugins/portfolio-content/src/lib/helpers/content-hash.helper.ts`, `plugins/portfolio-content/tests/src/lib/content-hash.helper.spec.ts`, `plugins/portfolio-content/src/contracts/interfaces/content-index.interface.ts`
 - **Gate**: type
 - acceptance:
   - "The index records stable path, content digest, owner section and size metadata."
@@ -57,9 +59,13 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "A changed file invalidates only dependent sections."
   - "Corruption falls back to a deterministic rebuild."
   - "Tests prove no stale output after edits."
+- review-state: done
+- review-implementer: Cartago
+- review-reviewer: microsoft-mai-code-2
+- review-log: approved by microsoft-mai-code-2 — independent historical reconciliation verified at f4d9ae1 against the current tree, validate exit 0, 43/43 plugin tests passing, typecheck and mcp:check passing; acceptance 5/5: (1) IContentIndexEntry records stable path, SHA-256 digest, owner section, size and mtime metadata. (2) Metadata signatures reuse unchanged inputs. (3) Section-scoped index instances invalidate only changed owners. (4) Restore rejects corrupt snapshots and synchronization deterministically rebuilds SHA-256 entries. (5) Unit and integration evidence proves fresh changed/reused paths after edits. — Corrected stale proposal references to the actual tests/ and contracts/ locations; the historical human implementation required reconciliation rather than replayed submission.
 
 ### S3 — Section queries and compact token-budgeted responses
-- **Status**: pending
+- **Status**: done
 - **Files**: `plugins/portfolio-content/src/lib/tools/architecture.tool.ts`, `plugins/portfolio-content/src/lib/tools/features.tool.ts`, `plugins/portfolio-content/src/lib/tools/domain.tool.ts`, `plugins/portfolio-content/src/lib/tools/scss-audit.tool.ts`, `plugins/portfolio-content/src/lib/tools/audit.tool.ts`, `plugins/portfolio-content/src/lib/tools/query.tool.ts`, `plugins/portfolio-content/src/lib/helpers/projection.helper.ts`, `plugins/portfolio-content/tests/src/lib/projection.helper.spec.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`
 - **Gate**: type
 - acceptance:
@@ -68,6 +74,12 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Pagination or truncation metadata is explicit."
   - "Responses remain within a measured token budget."
   - "Queries do not reread unchanged full files."
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: Explore-rereview-6241bdd
+- review-log: requested_changes by Explore — b3375a0: compactProjection checks item-array size but final tokenEstimate adds count/total/offset/truncated/nextOffset metadata, so the final projection can cross tokenBudget near the boundary. Reproduce with many small items and a tight budget; fix the loop to measure the final envelope and add a regression test that asserts tokenEstimate <= budget at the boundary.
+- review-log: resubmitted by microsoft-mai-code-2 — resubmitted; answers the request above: Addressed Explore's review in 6241bdd: the limiter now estimates items plus count/total/offset/truncated/nextOffset and the 128-token boundary has a regression test; 43/43 plugin tests, typecheck and mcp:check pass.
+- review-log: approved by Explore-rereview-6241bdd — verified at 6241bdd, validate exit 0 and tests 43/43 claimed, no recorded run cited; acceptance 5/5: (1) All six tools consume the shared PROJECTION_INPUT and apply compactProjection to their primary evidence collection. (2) Every tool returns count/total and field-projected items; the integration spec covers all direct tools. (3) Shared output schema exposes offset/truncated/nextOffset and helper tests cover oversized items. (4) The complete envelope including pagination metadata is measured before each push and the 128-token regression passes. (5) Query reuses ContentIndexService section results and its cache-reuse test remains passing. — Fresh independent verification passed all five criteria and the prior review blocker after commit 6241bdd.
 
 ### S4 — Replace nominal lazy routes with real route-level splitting
 - **Status**: pending
