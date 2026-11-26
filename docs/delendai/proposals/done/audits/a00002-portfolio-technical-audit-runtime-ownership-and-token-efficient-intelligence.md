@@ -2,7 +2,7 @@
 id: a00002
 title: "Portfolio technical audit, runtime ownership and token-efficient intelligence"
 kind: audit
-status: ready
+status: done
 type: proposal
 track: portfolio-quality
 date: 2026-11-23
@@ -15,6 +15,10 @@ shipped-in:
   - "8dfcd25"
   - "6a9fc03"
   - "8f93d0f"
+last-transition-id: c41c7701-8b0d-4da7-be51-016129131301
+last-correlation-id: c41c7701-8b0d-4da7-be51-016129131301
+last-transition-from: ready
+last-transition-at: 2026-11-26T19:43:00.181Z
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
