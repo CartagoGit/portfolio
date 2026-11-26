@@ -58,3 +58,40 @@ test('WEBGL-01 repeated route entry owns a single canvas and no stale globe node
 		await expect(page.locator('app-earth-globe')).toHaveCount(0);
 	}
 });
+
+test('SEC-02 contact delivery reports truthful failure and accepted success', async ({ page }) => {
+	let accepted = false;
+	await page.route('https://formsubmit.co/ajax/**', async (route) => {
+		const headers = {
+			'access-control-allow-origin': '*',
+			'access-control-allow-methods': 'POST, OPTIONS',
+			'access-control-allow-headers': 'accept, content-type',
+		};
+		if (route.request().method() === 'OPTIONS') {
+			await route.fulfill({ status: 204, headers });
+			return;
+		}
+		await route.fulfill({
+			status: accepted ? 200 : 503,
+			contentType: 'application/json',
+			headers,
+			body: JSON.stringify({ success: accepted }),
+		});
+	});
+
+	await open(page, 'contact');
+	await page.locator('#contact-email').fill('person@example.test');
+	await page.locator('#contact-message').fill('A detailed project brief with enough information.');
+	const submit = page.locator('.contact-form button[type="submit"]');
+	await submit.click();
+	await expect(page.locator('.contact-form__feedback.is-error')).toContainText('No se envió nada');
+	await expect(page.locator('.contact-form__feedback.is-success')).toHaveCount(0);
+	await expect(page.locator('.contact-form__feedback.is-error a')).toHaveAttribute('href', /^mailto:/);
+
+	accepted = true;
+	await submit.click();
+	await expect(page.locator('.contact-form__feedback.is-success')).toContainText('aceptó tu mensaje');
+	await expect(page.locator('.contact-form__feedback.is-error')).toHaveCount(0);
+	await expect(page.locator('#contact-email')).toHaveValue('');
+	await expect(page.locator('#contact-message')).toHaveValue('');
+});
