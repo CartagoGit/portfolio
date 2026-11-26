@@ -44,6 +44,26 @@ const selectFields = (item: Record<string, unknown>, fields: readonly string[] |
 	return Object.fromEntries(fields.filter((field) => field in item).map((field) => [field, item[field]]));
 };
 
+const projectionPayload = (
+	items: readonly Record<string, unknown>[],
+	total: number,
+	offset: number,
+): ICompactProjection => {
+	const truncated = offset + items.length < total;
+	const payload = {
+		items,
+		count: items.length,
+		total,
+		offset,
+		truncated,
+		...(truncated ? { nextOffset: offset + items.length } : {}),
+	};
+	return {
+		...payload,
+		tokenEstimate: Math.ceil(JSON.stringify(payload).length / 4),
+	};
+};
+
 export function compactProjection(options: ICompactProjectionOptions): ICompactProjection {
 	const needle = options.filter?.toLocaleLowerCase().trim() ?? '';
 	const matched = options.items.filter((item) => !needle || JSON.stringify(item).toLocaleLowerCase().includes(needle));
@@ -54,7 +74,7 @@ export function compactProjection(options: ICompactProjectionOptions): ICompactP
 	const candidates = matched.slice(offset, offset + limit).map((item) => selectFields(item, options.fields));
 	const items: Record<string, unknown>[] = [];
 	for (const item of candidates) {
-		const estimate = Math.ceil(JSON.stringify({ items: [...items, item] }).length / 4);
+		const estimate = projectionPayload([...items, item], total, offset).tokenEstimate;
 		if (estimate > tokenBudget) {
 			if (items.length === 0)
 				items.push({ __truncated: true, keys: Object.keys(item), reason: 'item exceeds token budget' });
@@ -62,15 +82,5 @@ export function compactProjection(options: ICompactProjectionOptions): ICompactP
 		}
 		items.push(item);
 	}
-	const truncated = offset + items.length < total;
-	const payload = JSON.stringify({ items, count: items.length, total, offset, truncated });
-	return {
-		items,
-		count: items.length,
-		total,
-		offset,
-		truncated,
-		...(truncated ? { nextOffset: offset + items.length } : {}),
-		tokenEstimate: Math.ceil(payload.length / 4),
-	};
+	return projectionPayload(items, total, offset);
 }

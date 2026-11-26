@@ -23,4 +23,15 @@ describe('compactProjection', () => {
 		expect(result.truncated).toBe(true);
 		expect(result.nextOffset).toBe(1);
 	});
+
+	it('keeps the complete paginated payload inside the token budget', () => {
+		const result = compactProjection({
+			items: Array.from({ length: 80 }, (_, index) => ({ id: index, label: 'portfolio-section-evidence' })),
+			limit: 80,
+			tokenBudget: 128,
+		});
+		expect(result.tokenEstimate).toBeLessThanOrEqual(128);
+		expect(result.truncated).toBe(true);
+		expect(result.nextOffset).toBe(result.offset + result.count);
+	});
 });
