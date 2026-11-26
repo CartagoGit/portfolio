@@ -19,6 +19,8 @@
 | Fullscreen control | `src/styles/motion/_index.scss` mixin `fullscreen-control` | One icon-only geometry/aria contract; each feature chooses the smallest interactive target. |
 | Globe texture cache | `EarthGlobeComponent` | Quaternion/input owns loading and a four-entry LRU budget; the renderer only uploads/draws the current canvas. |
 | Public visual assets | `public/images/{brand,games,globe,profile}` | Domain-owned folders; no root-level brand/portrait/globe files. |
+| Demos interaction | `DemosPageComponent`, `ArcadeGamesComponent`, `DemoGamesComponent`, `ShowcaseComponent` | The route composes a six-game arcade, six-scene showcase and eight compact laboratory games; each game owns state while shared shells and control primitives own interaction mechanics. |
+| Docker visual identity | `PUBLIC_LINKS` | The Docker Hub mark is resolved once from the platform catalogue and reused by footer, Work directory and Docker cards; templates do not carry a duplicate path. |
 
 ## SCSS ownership
 
@@ -29,12 +31,13 @@ The monitor cascade now loads four concern-owned partials:
 3. `monitor-laptop-final` — physical laptop, orb and desktop/mobile spatial contract.
 4. `monitor-accessibility-final` — readable labels, overflow, chart representations and globe overlay.
 
-The former runtime imports for `console-final` and `console-layout-final` were removed because their rules had no remaining independent owner after the physical layout and chrome contracts were established.
+The former `console-final` and `console-layout-final` partials are deleted because no runtime import or independent owner remained. The active cascade contains only `home-refinement`, `console-header-final`, `monitor-laptop-final` and `monitor-accessibility-final`.
 
 ## Reuse and testability
 
 - `demoVisual(title)` is consumed by both Demos and Work.
 - Technology chip marks are resolved once by `workTechnologyVisual(label)` rather than encoded in the template.
+- Docker cards consume the `PUBLIC_LINKS` Docker visual instead of hardcoding an asset path.
 - Earth labels and options are no longer embedded in `HeroMonitorComponent`.
 - Globe controls now test category/texture output without constructing the full monitor.
 - Project visual modes are directly tested for all six `IHeroPanelId` values.
@@ -42,6 +45,13 @@ The former runtime imports for `console-final` and `console-layout-final` were r
 - Route/page specs remain part of the full app test matrix and cover composition plus localized output.
 - Fullscreen targets only the interactive surface: monitor, showcase stage, active game board or individual Lab experiment card.
 - `e2e/visual-truth.spec.ts` names viewport/route/theme/locale failures separately from functional smoke tests.
+
+## Tool ownership
+
+- `tools/check-*.script.ts` files own validation gates and remain flat, discoverable entry points.
+- `tools/generators/` owns reproducible asset generation; the duplicate root generator is removed.
+- `tools/link-delendai-core.script.ts` owns optional local tooling linkage.
+- Product scripts in `package.json` compose these owners into `check`, `quality` and `mcp` gates; templates and services do not shell out to tooling.
 
 ## Review rationale
 

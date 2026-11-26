@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { PUBLIC_LINKS } from '../../domain/data.constant';
 import { TranslatePipe } from '../../lang/translate.pipe';
 import { TranslateService } from '../../lang/translate.service';
 
@@ -11,6 +12,11 @@ interface IDockerImage {
 	hubHref: string;
 	sourceHref: string;
 }
+
+const DOCKER_PLATFORM = PUBLIC_LINKS.find(({ label }) => label === 'Docker Hub');
+if (!DOCKER_PLATFORM?.imageSrc)
+	throw new Error('Missing canonical Docker Hub visual in PUBLIC_LINKS');
+const DOCKER_VISUAL_SRC = DOCKER_PLATFORM.imageSrc;
 
 const DOCKER_IMAGES: readonly IDockerImage[] = [
 	{
@@ -79,6 +85,7 @@ const DOCKER_IMAGES: readonly IDockerImage[] = [
 export class DockerPageComponent {
 	private readonly _translate = inject(TranslateService);
 	readonly images = DOCKER_IMAGES;
+	readonly dockerVisualSrc = DOCKER_VISUAL_SRC;
 
 	imageStatus(image: IDockerImage): string {
 		return this._translate.instant(`content.dockerImages.${image.name}.status`);

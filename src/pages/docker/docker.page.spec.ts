@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TranslateService } from '../../lang/translate.service';
+import { PUBLIC_LINKS } from '../../domain/data.constant';
 import { DockerPageComponent } from './docker.page';
 
 describe('DockerPageComponent', () => {
@@ -33,9 +34,11 @@ describe('DockerPageComponent', () => {
 			expect(image.sourceHref.startsWith('https://github.com/')).toBe(true);
 		}
 		const marks = element.querySelectorAll<HTMLImageElement>('.docker-page__image header img');
-		expect(new Set(Array.from(marks, ({ src }) => new URL(src).pathname))).toEqual(
-			new Set(['/icons/projects/docker.svg'])
-		);
+		const dockerLink = PUBLIC_LINKS.find(({ label }) => label === 'Docker Hub');
+		expect(fixture.componentInstance.dockerVisualSrc).toBe(dockerLink?.imageSrc);
+		expect(marks).toHaveLength(6);
+		for (const mark of marks)
+			expect(new URL(mark.src).pathname).toBe(dockerLink?.imageSrc);
 	});
 	it('localizes image status and purpose', async () => {
 		await TestBed.configureTestingModule({ imports: [DockerPageComponent] }).compileComponents();
