@@ -32,6 +32,8 @@ const OUTPUT = z.object({
 			kind: z.enum(['use', 'forward', 'import']),
 			target: z.string(),
 			line: z.number(),
+			importedBy: z.string().optional(),
+			depth: z.number().optional(),
 			resolvedPath: z.string().optional(),
 		}),
 	),

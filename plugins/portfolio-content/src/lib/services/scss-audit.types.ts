@@ -4,6 +4,9 @@ export interface IScssDependency {
 	readonly kind: IScssDirectiveKind;
 	readonly target: string;
 	readonly line: number;
+	readonly importedBy?: string;
+	readonly depth?: number;
+	readonly resolvedPath?: string;
 }
 
 export interface IScssSelector {

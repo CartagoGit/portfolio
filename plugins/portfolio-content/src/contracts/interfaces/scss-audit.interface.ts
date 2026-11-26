@@ -9,7 +9,13 @@ export interface IScssAuditEntry {
 	readonly line: number;
 	/** Directories (pages or components) whose templates use the class. */
 	readonly owners: readonly string[];
-	/** `unused` (no template), `single` (one owner) or `shared`. */
+	/** Concrete template locations that establish each directory owner. */
+	readonly ownerLocations: ReadonlyArray<{
+		readonly directory: string;
+		readonly filePath: string;
+		readonly line: number;
+	}>;
+	/** `unused` (no template), `single' (one owner) or `shared`. */
 	readonly status: 'unused' | 'single' | 'shared';
 }
 
@@ -22,6 +28,8 @@ export interface IScssAuditReport {
 		readonly kind: 'use' | 'forward' | 'import';
 		readonly target: string;
 		readonly line: number;
+		readonly importedBy?: string;
+		readonly depth?: number;
 		readonly resolvedPath?: string;
 	}>;
 	readonly customProperties: ReadonlyArray<{
