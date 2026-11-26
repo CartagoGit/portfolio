@@ -13,6 +13,7 @@ shipped-in:
   - "2603a38"
   - "b191499"
   - "8dfcd25"
+  - "6a9fc03"
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
@@ -145,7 +146,7 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - review-log: approved by Explore-a00002-s7 — verified at 8dfcd25, validate exit 0 and tests 6/6 claimed, no recorded run cited; acceptance 6/6: (1) SEC-01 covers all routes and rejects non-HTTPS or unsafe new-tab links; check-public-boundary is green. (2) SEC-02 intercepts preflight, returns 503 and verifies no success plus an honest error/mailto fallback, then accepts 200 and verifies success and reset. (3) A11Y-01 restores focus to route content and MOTION-01 proves the orbit animation is disabled. (4) A11Y-02 traverses all eight routes at 390px and fails on overflow or unnamed visible controls. (5) Production build prerenders 160 routes; check-bundle-budget reports 29 chunks within 360k/260k/760k limits. (6) WEBGL-01 performs three route cycles and requires one owned canvas with no stale globe node after exit. — Independent review approved 8dfcd25. All six S7 criteria are named and automated; lint E2E, public-boundary, build, bundle budget and 6/6 quality-gate browser tests pass.
 
 ### S8 — Reconcile audit documentation and proposal ownership
-- **Status**: pending
+- **Status**: done
 - **Files**: `plugins/portfolio-content/README.md`, `docs/architecture-s17.md`, `docs/delendai/README.md`, `docs/delendai/proposals/ready/feats/f00001-portfolio-experience-completion.md`, `docs/delendai/proposals/blocked/f00002-global-locale-expansion-and-browser-language-resolution.md`
 - **Gate**: lint
 - acceptance:
@@ -154,6 +155,10 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Runtime lifecycle owners are explicit."
   - "Stale proposal references are updated or superseded."
   - "The proposal records the f00001 product-quality handoff, keeps publication independent and does not duplicate f00002 locale scope."
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: Explore-a00002-s8
+- review-log: approved by Explore-a00002-s8 — verified at 6a9fc03, validate exit 0 and tests 45/45 claimed, no recorded run cited; acceptance 5/5: (1) Plugin README and DelendAI docs match source/pages/domain layout, tool ids and the actual IFileSystem/captureHandlers architecture. (2) Index fields and invalidation are documented; projection budget now states 1200 default, 128-4096 range and full envelope measurement before each item. (3) architecture-s17 documents EarthGlobeComponent RAF/texture teardown, EarthRenderer GPU/listener idempotence and HeroMonitorFacade timer/late-call ownership wit… (4) a00002 S8 points to architecture-s17.md and the real f00001 filename; historical why/follow-up text now states S2-S7 are complete and only S9 remains. (5) a00002 explicitly delegates publication to independent infrastructure; f00001 finishes product work and f00002 remains blocked by that product gate, with local… — Independent review approved 6a9fc03. All five S8 criteria pass; declared paths exist, no f00001 S15/architecture-audit stale references remain, and mcp:all passes 45/45 with host activation.
 
 ### S9 — Fail-closed public audit and workspace path boundary
 - **Status**: pending
