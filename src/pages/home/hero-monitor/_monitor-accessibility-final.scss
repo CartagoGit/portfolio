@@ -569,103 +569,83 @@ app-hero-monitor .hero-monitor__chart[data-chart='stream'] path {
 }
 
 @media (max-width: 540px) {
+  app-hero-monitor .hero-monitor__header {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    grid-template-rows: 72px 96px !important;
+    height: 168px;
+    min-height: 168px;
+  }
+  app-hero-monitor .hero-monitor__motion-control { grid-row: 1; width: 56px; height: 72px; min-height: 72px; }
+  app-hero-monitor .hero-monitor__banner-link,
+  app-hero-monitor .hero-monitor__banner { grid-column: 2; grid-row: 1; height: 72px !important; min-height: 72px !important; }
+  app-hero-monitor .hero-monitor__platform-rail { grid-column: 1 / -1; grid-row: 2; height: 96px; grid-template-rows: 44px 44px; }
+  app-hero-monitor .hero-monitor__platform-row {
+    grid-template-columns: repeat(6, minmax(44px, 1fr)) !important;
+    grid-template-rows: 44px;
+    height: 44px;
+    overflow-x: auto;
+  }
+  app-hero-monitor .hero-monitor__platform-row > :is(a, button),
+  app-hero-monitor .hero-monitor__console-effects button { min-height: 44px !important; height: 44px; }
+
   app-hero-monitor .hero-monitor__body {
-    grid-template-columns: 96px minmax(0, 1fr);
-  }
-  app-hero-monitor .hero-monitor__chart-switcher {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  app-hero-monitor .hero-monitor__destination-list {
-    grid-auto-columns: minmax(145px, 76%);
-  }
-}
-
-@media (max-width: 900px) {
-  app-hero-monitor .hero-monitor__earth-controls {
-    bottom: max(1.25rem, env(safe-area-inset-bottom)) !important;
     display: grid;
-    width: min(430px, calc(100vw - 1rem)) !important;
-    max-height: 46dvh;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: auto auto auto auto auto !important;
-    gap: .38rem;
-    padding: .55rem;
-    overflow-x: hidden;
-    overflow-y: auto;
-    box-sizing: border-box;
-    overscroll-behavior: contain;
+    width: 100%;
+    height: auto;
+    min-height: 650px;
+    flex: none;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 66px minmax(0, 1fr);
   }
-
-  app-hero-monitor .hero-monitor__earth-categories,
-  app-hero-monitor .hero-monitor__earth-textures {
-    grid-column: 1;
+  app-hero-monitor .hero-monitor__selector,
+  app-hero-monitor .hero-monitor__selector[data-section] {
+    grid-row: 1;
     display: flex;
     width: 100%;
-    min-width: 0;
-    max-width: 100%;
+    height: 66px;
+    flex-direction: row;
     gap: .35rem;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: .1rem;
-    scrollbar-width: thin;
+    padding: .35rem;
+    border: 0;
+    border-bottom: 1px solid var(--line);
     scroll-snap-type: x proximity;
   }
+  app-hero-monitor .hero-monitor__selector button { min-width: 132px; min-height: 56px; height: 56px; flex: 0 0 auto; }
+  app-hero-monitor .hero-monitor__selector span,
+  app-hero-monitor .hero-monitor__chart-switcher button span { font-size: .75rem !important; }
+  app-hero-monitor .hero-monitor__canvas {
+    grid-row: 2;
+    min-height: 580px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(420px, 1fr) 150px;
+  }
+  app-hero-monitor .hero-monitor__chart-switcher { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  app-hero-monitor .hero-monitor__chart-switcher button { min-height: 44px !important; padding: .28rem .2rem; }
+  app-hero-monitor .hero-monitor__fullscreen.interactive-fullscreen-control { width: 44px; min-width: 44px; height: 44px; min-height: 44px; top: 0; }
 
-  app-hero-monitor .hero-monitor__earth-categories { grid-row: 1; }
-  app-hero-monitor .hero-monitor__earth-textures { grid-row: 2; }
-
+  app-hero-monitor .hero-monitor__orb--one:is(.hero-monitor--front-ready, .hero-monitor--front, .hero-monitor--out-front) {
+    top: 34% !important;
+    width: min(76vw, 390px) !important;
+    height: min(76vw, 390px) !important;
+  }
+  app-hero-monitor .hero-monitor__earth-controls {
+    bottom: max(.5rem, env(safe-area-inset-bottom)) !important;
+    width: calc(100vw - 1rem) !important;
+    max-height: 50dvh;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto auto auto !important;
+  }
+  app-hero-monitor .hero-monitor__earth-categories,
+  app-hero-monitor .hero-monitor__earth-textures { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; overflow: visible !important; }
+  app-hero-monitor .hero-monitor__earth-categories { grid-column: 1 !important; grid-row: 1 !important; }
+  app-hero-monitor .hero-monitor__earth-textures { grid-column: 1 !important; grid-row: 2 !important; }
   app-hero-monitor .hero-monitor__earth-categories button,
-  app-hero-monitor .hero-monitor__earth-textures button {
-    min-width: max-content;
-    min-height: 40px;
-    flex: 0 0 auto;
-    font-size: .75rem;
-    white-space: nowrap;
-    scroll-snap-align: start;
-  }
-
-  app-hero-monitor .hero-monitor__earth-origin,
-  app-hero-monitor .hero-monitor__earth-drag-hint {
-    grid-column: 1;
-    min-width: 0;
-    white-space: normal;
-    overflow-wrap: normal;
-    word-break: normal;
-    font-size: .75rem !important;
-  }
-
-  app-hero-monitor .hero-monitor__earth-origin { grid-row: 3; }
-  app-hero-monitor .hero-monitor__earth-drag-hint { grid-row: 4; }
-
-  app-hero-monitor .hero-monitor__earth-close {
-    grid-column: 1;
-    grid-row: 5;
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    height: auto;
-    font-size: .75rem !important;
-  }
-
-  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-close {
-    grid-column: 1;
-    grid-row: 5;
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    height: auto;
-    font-size: .75rem !important;
-  }
-
-  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-origin {
-    grid-column: 1 !important;
-    grid-row: 3 !important;
-  }
-
-  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-drag-hint {
-    grid-column: 1 !important;
-    grid-row: 4 !important;
-  }
+  app-hero-monitor .hero-monitor__earth-textures button { min-width: 0 !important; min-height: 46px !important; height: 46px; font-size: .75rem !important; white-space: normal; }
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-origin { grid-column: 1 !important; grid-row: 3 !important; }
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-drag-hint { grid-column: 1 !important; grid-row: 4 !important; }
+  app-hero-monitor .hero-monitor__earth-controls .hero-monitor__earth-close { position: sticky; z-index: 3; bottom: 0; grid-column: 1 !important; grid-row: 5 !important; width: 100%; height: 46px !important; min-height: 46px !important; }
 }
 
 /* Human-review control contract: full-height banner, readable labelled actions,

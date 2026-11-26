@@ -45,3 +45,14 @@ The scrim value exactly matches the active theme token in all four cases; contro
 - browser regression: 7/7 pass.
 - new named visual matrix: `e2e/visual-truth.spec.ts`.
 - production + 160-route SSR prerender: pass.
+
+## Corrective pass — 2026-11-26
+
+- At 390×844 the monitor no longer scales the full 780 px desktop composition down to unreadable text. The header becomes a 56 px control plus banner row followed by two explicit 44 px platform/action rows.
+- Project/technology selection is a 66 px horizontal rail; each button is at least 56 × 132 px. Chart controls use four columns at 12 px labels and 44 px targets. Destinations stay in a horizontal snap rail with 12 px labels.
+- Globe controls use a one-column panel with 46 px 2-column category/texture buttons. Origin/hint occupy their own rows and the close action is sticky, full-width and 44 px on the fifth row.
+- Browser measurement confirms the close action remains inside the 844 px viewport, the globe selects Saturn, and dismiss restores the monitor. `S16-01 mobile monitor and globe controls are readable and touchable` passes.
+- Desktop and mobile visual review confirms Earth clouds, Saturn/rings, rugby geometry, football pattern and Cartago logo/portrait presets remain recognisable; the shader owns these shape-specific paths rather than relying on a generic sphere alone.
+- Human status: **ready for visible approval**. The automated evidence removes the prior measured mobile failures; `review-state` must remain `changes_requested` until the user accepts the visible result.
+
+- Visual matrix: the eight route/theme/fullscreen/S16 tests passed in one run; the twenty-locale deep matrix passed separately in 4.0 minutes under one worker. Total evidence: **9/9 visual tests** green across the two invocations.

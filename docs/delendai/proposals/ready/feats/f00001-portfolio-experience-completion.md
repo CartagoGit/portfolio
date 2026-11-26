@@ -208,11 +208,11 @@ Publication is explicitly owned by the dedicated infrastructure proposal; no dep
 
 ### S16 — Visual corrections, truth audit and final polish
 - **Status**: pending
-- **Files**: `docs/visual-audit-s16.md`, `src/app/page.scss`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/domain/types.interface.ts`, `src/pages/home/earth-globe`, `src/pages/home/hero-monitor`, `src/pages/work`, `public/images/globe`, `public/images/brand`, `public/images/profile`, `tools/generators/generate-globe-assets.py`
+- **Files**: `docs/visual-audit-s16.md`, `e2e/visual-truth.spec.ts`, `src/app/page.scss`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/domain/types.interface.ts`, `src/pages/home/earth-globe`, `src/pages/home/hero-monitor`, `src/pages/work`, `public/images/globe`, `public/images/brand`, `public/images/profile`, `tools/generators/generate-globe-assets.py`
 - **Gate**: visual browser audit at 1366×768 + tablet + 390×844 in light and dark themes, focused tests, lint/typecheck/build
 - **Acceptance**: correct the accepted-slice feedback in this proposal: the desktop monitor expands into available space and never overlaps labels/icons/destinations; footer chrome does not become an opaque slab, only controls receive button backgrounds; Work retains project-specific effects and correct logos/icons while expanding the verified catalogue; football/basketball/tennis/golf/rugby/volleyball textures wrap canonically, brand/banner spheres remain undistorted, Saturn rings share scale/orientation/rotation with the planet, exoplanets read as high-detail labelled artist impressions, and additional Earth day/night/cloud/terrain/bathymetry/thermal variants remain sharp; every changed route is manually inspected for correct marks, readable text and no visual regressions at all required viewports.
 - **Theme correction requirement**: opening the globe, its scrim, texture controls, close button and information copy must use active theme tokens (including light/solar/mono), not a permanent base dark/blue palette.
-- **Evidence**: `docs/visual-audit-s16.md` records twelve route/theme/viewport states, tokenized overlay measurements for light/dark/solar/mono, thirty WebGL presets at error 0, zero footer chrome, zero icon/text collisions, zero broken assets and six distinct Work visual systems.
+- **Evidence**: `docs/visual-audit-s16.md` records the 2026-11-26 corrective pass, 44–46 px touch targets, 12 px mobile labels, a sticky in-viewport globe exit and the `S16-01` automated proof alongside the four-theme/30-preset visual matrix.
 - review-state: changes_requested
 - review-implementer: microsoft-mai-code-2
 - review-reviewer: cartago-user

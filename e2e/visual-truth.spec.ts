@@ -147,3 +147,31 @@ test('visual truth: priority routes stay contained in all twenty deep locales', 
 		}
 	}
 });
+
+test('S16-01 mobile monitor and globe controls are readable and touchable', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await openRoute(page);
+	const monitor = page.locator('app-hero-monitor');
+	await monitor.scrollIntoViewIfNeeded();
+	const monitorTargets = monitor.locator('.hero-monitor__selector button, .hero-monitor__platform-row > a, .hero-monitor__platform-row > button, .hero-monitor__chart-switcher button');
+	const targetHeights = await monitorTargets.evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().height));
+	expect(Math.min(...targetHeights)).toBeGreaterThanOrEqual(44);
+	const labelSizes = await monitor.locator('.hero-monitor__selector button span, .hero-monitor__chart-switcher button span, .hero-monitor__technology-toggle span').evaluateAll((elements) => elements.map((element) => Number.parseFloat(getComputedStyle(element).fontSize)));
+	expect(Math.min(...labelSizes)).toBeGreaterThanOrEqual(12);
+	await expectContained(page, 'S16/mobile monitor');
+
+	await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+	const controls = page.locator('.hero-monitor__earth-controls.is-active');
+	await expect(controls).toBeVisible();
+	const controlHeights = await controls.locator('button:visible').evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().height));
+	expect(Math.min(...controlHeights)).toBeGreaterThanOrEqual(44);
+	const close = controls.locator('.hero-monitor__earth-close');
+	await expect(close).toBeInViewport();
+	const closeBox = await close.boundingBox();
+	expect(closeBox ? closeBox.y + closeBox.height : 900).toBeLessThanOrEqual(844);
+	await page.getByRole('tab', { name: 'Planetas', exact: true }).click();
+	await page.getByRole('button', { name: 'Saturno', exact: true }).click();
+	await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'saturn');
+	await close.click();
+	await expect(controls).toHaveCount(0);
+});
