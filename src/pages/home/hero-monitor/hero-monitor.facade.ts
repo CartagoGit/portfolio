@@ -109,8 +109,9 @@ export class HeroMonitorFacade {
 	private _panelTimer?: number;
 	private _panelFrame?: number;
 	private _effectTimer?: number;
+	private _destroyed = false;
 	selectPanel(panel: IHeroPanelId): void {
-		if (this.activePanel() === panel) return;
+		if (this._destroyed || this.activePanel() === panel) return;
 		if (this._panelFrame !== undefined) {
 			cancelAnimationFrame(this._panelFrame);
 			this._panelFrame = undefined;
@@ -162,6 +163,7 @@ export class HeroMonitorFacade {
 		);
 	}
 	setEffect(effect: Exclude<IHeroEffect, 'idle'>): void {
+		if (this._destroyed) return;
 		if (this._effectTimer !== undefined)
 			window.clearTimeout(this._effectTimer);
 		this.effect.set('idle');
@@ -183,11 +185,15 @@ export class HeroMonitorFacade {
 			: PALETTE_GRADIENTS[this.palette()];
 	}
 	destroy(): void {
+		if (this._destroyed) return;
+		this._destroyed = true;
 		if (this._panelFrame !== undefined) cancelAnimationFrame(this._panelFrame);
 		this._panelFrame = undefined;
 		if (this._panelTimer !== undefined)
 			window.clearTimeout(this._panelTimer);
+		this._panelTimer = undefined;
 		if (this._effectTimer !== undefined)
 			window.clearTimeout(this._effectTimer);
+		this._effectTimer = undefined;
 	}
 }

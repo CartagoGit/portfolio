@@ -24,6 +24,25 @@ interface IGlobeProgram {
 	textureEffect: WebGLUniformLocation;
 }
 
+interface IGpuProgramResources {
+	readonly program?: WebGLProgram | null;
+	readonly texture?: WebGLTexture | null;
+	readonly buffer?: WebGLBuffer | null;
+	readonly vertex?: WebGLShader | null;
+	readonly fragment?: WebGLShader | null;
+}
+
+function releaseGpuProgramResources(
+	context: WebGLRenderingContext,
+	resources: IGpuProgramResources,
+): void {
+	if (resources.texture) context.deleteTexture(resources.texture);
+	if (resources.buffer) context.deleteBuffer(resources.buffer);
+	if (resources.program) context.deleteProgram(resources.program);
+	if (resources.vertex) context.deleteShader(resources.vertex);
+	if (resources.fragment) context.deleteShader(resources.fragment);
+}
+
 const renderers = new WeakMap<HTMLCanvasElement, EarthRenderer>();
 
 /** Draws a frame through a reusable renderer owned by the canvas. */
@@ -52,6 +71,7 @@ export function destroyEarthRenderer(canvas: HTMLCanvasElement): void {
 export class EarthRenderer {
 	private _globeProgram: IGlobeProgram | null = null;
 	private _contextLost = false;
+	private _destroyed = false;
 
 	constructor(private readonly canvas: HTMLCanvasElement) {
 		canvas.addEventListener('webglcontextlost', this.onContextLost);
@@ -71,7 +91,7 @@ export class EarthRenderer {
 
 	/** Updates the rendering surface and draws the current frame. */
 	public render(image: HTMLCanvasElement, frame: IEarthFrame): void {
-		if (this._contextLost) return;
+		if (this._destroyed || this._contextLost) return;
 		const { canvas } = this;
 		const deviceScale = Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.8);
 		const rect = canvas.getBoundingClientRect();
@@ -138,25 +158,35 @@ export class EarthRenderer {
 			type: context.FRAGMENT_SHADER,
 			source: EARTH_GLOBE_SHADERS.fragment,
 		});
-		if (!vertex || !fragment) return null;
+		if (!vertex || !fragment) {
+			releaseGpuProgramResources(context, { vertex, fragment });
+			return null;
+		}
 
 		const program = context.createProgram();
 		const texture = context.createTexture();
 		const buffer = context.createBuffer();
-		if (!program || !texture || !buffer) return null;
+		if (!program || !texture || !buffer) {
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
+			return null;
+		}
 
 		context.attachShader(program, vertex);
 		context.attachShader(program, fragment);
 		context.linkProgram(program);
 		if (!context.getProgramParameter(program, context.LINK_STATUS)) {
 			console.error('WebGL program link failed:', context.getProgramInfoLog(program));
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
 			return null;
 		}
 
 		const position = context.getAttribLocation(program, 'position');
 		const rotation = context.getUniformLocation(program, 'rotation');
 		const textureEffect = context.getUniformLocation(program, 'textureEffect');
-		if (position < 0 || !rotation || !textureEffect) return null;
+		if (position < 0 || !rotation || !textureEffect) {
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
+			return null;
+		}
 
 		context.bindBuffer(context.ARRAY_BUFFER, buffer);
 		context.bufferData(
@@ -218,6 +248,8 @@ export class EarthRenderer {
 
 	/** Idempotent release for shaders, buffers, textures and listeners. */
 	destroy(): void {
+		if (this._destroyed) return;
+		this._destroyed = true;
 		this.releaseProgram();
 		this._contextLost = true;
 		this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
@@ -227,11 +259,7 @@ export class EarthRenderer {
 	private releaseProgram(): void {
 		const globeProgram = this._globeProgram;
 		if (globeProgram) {
-			globeProgram.context.deleteTexture(globeProgram.texture);
-			globeProgram.context.deleteBuffer(globeProgram.buffer);
-			globeProgram.context.deleteProgram(globeProgram.program);
-			globeProgram.context.deleteShader(globeProgram.vertex);
-			globeProgram.context.deleteShader(globeProgram.fragment);
+			releaseGpuProgramResources(globeProgram.context, globeProgram);
 		}
 		this._globeProgram = null;
 	}

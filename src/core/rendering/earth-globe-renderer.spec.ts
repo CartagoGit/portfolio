@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { destroyEarthRenderer, renderEarthFrame } from './earth-globe.renderer';
+import { destroyEarthRenderer, EarthRenderer, renderEarthFrame } from './earth-globe.renderer';
 
 describe('renderEarthFrame', () => {
 	it('sizes the canvas before requesting the WebGL context', () => {
@@ -137,5 +137,68 @@ describe('renderEarthFrame', () => {
 		expect(deletes.program).toHaveBeenCalledTimes(1);
 		expect(deletes.texture).toHaveBeenCalledTimes(1);
 		expect(deletes.buffer).toHaveBeenCalledTimes(1);
+	});
+
+	it('releases partial GPU setup and listeners exactly once after link failure', () => {
+		const canvas = document.createElement('canvas');
+		Object.defineProperty(canvas, 'clientWidth', { value: 320 });
+		const shader = {} as WebGLShader;
+		const program = {} as WebGLProgram;
+		const texture = {} as WebGLTexture;
+		const buffer = {} as WebGLBuffer;
+		const deletes = {
+			shader: vi.fn(),
+			program: vi.fn(),
+			texture: vi.fn(),
+			buffer: vi.fn(),
+		};
+		const context = {
+			VERTEX_SHADER: 1,
+			FRAGMENT_SHADER: 2,
+			COMPILE_STATUS: 3,
+			LINK_STATUS: 4,
+			createShader: vi.fn(() => shader),
+			shaderSource: vi.fn(),
+			compileShader: vi.fn(),
+			getShaderParameter: vi.fn(() => true),
+			createProgram: vi.fn(() => program),
+			createTexture: vi.fn(() => texture),
+			createBuffer: vi.fn(() => buffer),
+			attachShader: vi.fn(),
+			linkProgram: vi.fn(),
+			getProgramParameter: vi.fn(() => false),
+			getProgramInfoLog: vi.fn(() => 'link failed'),
+			deleteShader: deletes.shader,
+			deleteProgram: deletes.program,
+			deleteTexture: deletes.texture,
+			deleteBuffer: deletes.buffer,
+		} as unknown as WebGLRenderingContext;
+		canvas.getContext = vi.fn(() => context) as unknown as typeof canvas.getContext;
+		const removeListener = vi.spyOn(canvas, 'removeEventListener');
+		const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+		const renderer = new EarthRenderer(canvas);
+
+		try {
+			renderer.render(document.createElement('canvas'), {
+				angle: 0,
+				axisX: 0,
+				axisY: 1,
+				axisZ: 0,
+				foreground: true,
+			});
+			renderer.destroy();
+			renderer.destroy();
+
+			expect(deletes.shader).toHaveBeenCalledTimes(2);
+			expect(deletes.program).toHaveBeenCalledTimes(1);
+			expect(deletes.texture).toHaveBeenCalledTimes(1);
+			expect(deletes.buffer).toHaveBeenCalledTimes(1);
+			expect(removeListener).toHaveBeenCalledTimes(2);
+			expect(removeListener).toHaveBeenCalledWith('webglcontextlost', expect.any(Function));
+			expect(removeListener).toHaveBeenCalledWith('webglcontextrestored', expect.any(Function));
+		} finally {
+			consoleError.mockRestore();
+			removeListener.mockRestore();
+		}
 	});
 });

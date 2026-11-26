@@ -46,4 +46,26 @@ describe('HeroMonitorFacade', () => {
 			vi.useRealTimers();
 		}
 	});
+
+	it('cancels all queued work and remains inert after destroy', () => {
+		vi.useFakeTimers();
+		try {
+			const facade = new HeroMonitorFacade();
+			facade.selectPanel('overview');
+			facade.setEffect('shake');
+			expect(vi.getTimerCount()).toBe(2);
+
+			facade.destroy();
+			facade.destroy();
+			facade.selectPanel('quality');
+			facade.setEffect('glitch');
+			vi.runAllTimers();
+
+			expect(facade.activePanel()).toBeNull();
+			expect(facade.effect()).toBe('idle');
+			expect(vi.getTimerCount()).toBe(0);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
 });

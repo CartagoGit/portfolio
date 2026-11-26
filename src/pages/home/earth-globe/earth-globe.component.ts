@@ -131,7 +131,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	}
 
 	start(): void {
-		if (!isPlatformBrowser(this._platformId)) return;
+		if (!isPlatformBrowser(this._platformId) || this._destroyed) return;
 		this._spinning = true;
 		this.active.set(true);
 		this._prepare(this.textureStyle());
@@ -216,6 +216,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this._destroyed = true;
 		this.stop();
+		this._drag = undefined;
 		this._textures.clear();
 		this._texture = undefined;
 		this._loadingTextures.clear();
