@@ -9,7 +9,8 @@
 | Chart/destination metadata | `hero-monitor.catalog.ts` | Pure labels, icon paths and effect registries; directly tested. |
 | Globe metadata | `earth-texture.catalog.ts` | 30 typed presets, categories, locale labels and origin labels; directly tested. |
 | Globe controls | `EarthGlobeControlsComponent` | Category tabs, texture buttons, ARIA state and close emission. Parent owns only the selected values. |
-| Globe rendering | `EarthGlobeComponent` + `EarthRenderer` | Quaternion/input lifecycle is separate from WebGL upload, shader compilation and frame rendering. |
+| Globe rendering | `EarthGlobeComponent` + `EarthRenderer` | The component owns input, RAF, texture LRU and route teardown; the renderer owns WebGL upload, shader compilation, context listeners and idempotent GPU release. |
+| Runtime teardown | `HeroMonitorFacade` + fullscreen coordinator owners | Queued panel/effect timers and frames are cancelled and cleared; destroyed facades reject late scheduling. Named WEBGL-01 evidence proves repeated route entry owns one canvas and no stale node. |
 | Work visual art | `WorkProjectVisualComponent` | Six decorative project modes with one typed `IHeroPanelId` contract. |
 | Work technology marks | `work-visuals.constant.ts` | One lookup translates technology terms into semantic SVG/color pairs. |
 | Demo marks | `demo-visuals.constant.ts` | Shared mark ownership for Work and Demos catalogues. |
@@ -38,7 +39,7 @@ The former runtime imports for `console-final` and `console-layout-final` were r
 - Globe controls now test category/texture output without constructing the full monitor.
 - Project visual modes are directly tested for all six `IHeroPanelId` values.
 - The extracted catalogues have direct integrity/parity tests.
-- Route/page tests still cover composition and localized output at 43 files / 98 tests.
+- Route/page specs remain part of the full app test matrix and cover composition plus localized output.
 - Fullscreen targets only the interactive surface: monitor, showcase stage, active game board or individual Lab experiment card.
 - `e2e/visual-truth.spec.ts` names viewport/route/theme/locale failures separately from functional smoke tests.
 

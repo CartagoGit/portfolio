@@ -95,3 +95,15 @@ plugins/portfolio-content/
 the repo root. `@delendai/core/public` resolves through
 `node_modules/@delendai/core`, which `bun install` links to the machine's
 stable DelendAI (`bun run mcp:link`; `DELENDAI_PATH` picks another install).
+
+### Projection and token budget
+
+Every tool accepts the shared `fields`, `filter`, `offset`, `limit` and
+`tokenBudget` inputs. `tokenBudget` defaults to 1200 and is bounded to
+128–4096 tokens. `compactProjection` estimates each candidate against the
+complete output envelope—items plus `count`, `total`, `offset`,
+`truncated` and `nextOffset`—before appending another item, so the emitted
+`tokenEstimate` cannot exceed the requested budget because metadata was
+omitted from the loop. When one projected item is too large, the response
+uses a concise `__truncated` placeholder with the original keys instead
+of silently returning unrelated evidence.

@@ -62,13 +62,12 @@ plugins/portfolio-content/
     └── src/lib/*.spec.ts
 ```
 
-Engine functions take injectable readers (`IPortfolioAuditReader`) so
-the engine is side-effect-free. Tool builders return
-`IToolRegistration[]` and use `toolJson` / `toolOk` / `toolError` from
-`@delendai/core/public` for the contract envelope. Every tool
-declares both `inputSchema` and `outputSchema`; tests instantiate a
-fake `IMcpPluginContext` and capture the registered handlers so the
-plugin can be exercised without spinning up a transport.
+Engine functions receive the read-only `IFileSystem` port, so services
+remain deterministic and testable with in-memory trees. Tool builders
+use `compactProjection` plus `toolJson` from `@delendai/core/public` and
+declare both `inputSchema` and `outputSchema`. The test suite uses
+`makeFakeContext` and `captureHandlers` to exercise registered handlers
+without starting a transport.
 
 The legacy single-file variant of the plugin was rewritten in place;
 the canonical path is `plugins/portfolio-content/src/index.ts`

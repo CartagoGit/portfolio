@@ -29,7 +29,7 @@ The external audit identified architecture drift between the DelendAI portfolio 
 
 - Redesigning the public portfolio or changing its visual identity.
 - Implementing global locale expansion owned by f00002.
-- Changing the hosting target or delivery mechanism owned by f00001 S15.
+- Changing the hosting target or delivery mechanism; publication belongs to an independent infrastructure workstream.
 - Vendoring, packaging or configuring external DelendAI distributions.
 - Replacing Angular, WebGL, Angular Router or the portfolio-content plugin with a new framework.
 
@@ -146,14 +146,14 @@ The external audit identified architecture drift between the DelendAI portfolio 
 
 ### S8 — Reconcile audit documentation and proposal ownership
 - **Status**: pending
-- **Files**: `plugins/portfolio-content/README.md`, `docs/architecture-audit.md`, `docs/delendai/README.md`, `docs/delendai/proposals/ready/feats/f00001-portfolio-experience-completion-and-pages-publication.md`, `docs/delendai/proposals/blocked/f00002-global-locale-expansion-and-browser-language-resolution.md`
+- **Files**: `plugins/portfolio-content/README.md`, `docs/architecture-s17.md`, `docs/delendai/README.md`, `docs/delendai/proposals/ready/feats/f00001-portfolio-experience-completion.md`, `docs/delendai/proposals/blocked/f00002-global-locale-expansion-and-browser-language-resolution.md`
 - **Gate**: lint
 - acceptance:
   - "Documentation matches the page and component topology."
   - "The cache/index contract and token budget are documented."
   - "Runtime lifecycle owners are explicit."
   - "Stale proposal references are updated or superseded."
-  - "The proposal depends on f00001 publication without duplicating f00002 locale scope."
+  - "The proposal records the f00001 product-quality handoff, keeps publication independent and does not duplicate f00002 locale scope."
 
 ### S9 — Fail-closed public audit and workspace path boundary
 - **Status**: pending
@@ -168,12 +168,12 @@ The external audit identified architecture drift between the DelendAI portfolio 
 
 ## external audit follow-up — 2026-11-25
 
-CI/publication findings belong to the publication workstream and are not duplicated here. Runtime-quality work remains: S2/S3 incremental indexes, S4 route splitting, S5 WebGL lifecycle, S6 SCSS structural parser, S7 security/performance gates and S9 fail-closed/path-safe public audit.
+CI/publication findings belong to the publication workstream and are not duplicated here. S2–S7 reconciled incremental indexing, route splitting, WebGL teardown, structural SCSS parsing and named security/accessibility/performance gates. Only S9 still owns the fail-closed/public-path boundary, while S8 keeps this record aligned with the live docs.
 
-- The public audit's old `info` treatment for missing/unreadable coverage is a blocker under S9, not a permissive success.
-- `buildNodeFileSystem` must enforce a workspace boundary for every relative operation.
-- Nominal lazy routes and GPU resource release remain unfinished despite UI-level evidence.
-- Token-budgeted output must be measured in tests, not described only in documentation.
+- The public audit's old `info` treatment for missing/unreadable coverage is still a blocker under S9, not a permissive success.
+- `buildNodeFileSystem` must enforce a workspace boundary for every relative operation; S9 owns the proof.
+- Route splitting and GPU teardown are now implemented and measured by S4/S5 evidence rather than described as unfinished.
+- Token-budgeted output is measured in tests and documented by the plugin README; no acceptance can rely on prose alone.
 
 ## acceptance
 
@@ -216,7 +216,7 @@ CI/publication findings belong to the publication workstream and are not duplica
 - The cache/index contract and token budget are documented.
 - Runtime lifecycle owners are explicit.
 - Stale proposal references are updated or superseded.
-- The proposal depends on f00001 publication without duplicating f00002 locale scope.
+- The proposal records the f00001 product-quality handoff, keeps publication independent and does not duplicate f00002 locale scope.
 - Missing content roots, unreadable files and zero discovered templates make the public audit non-ok, not info-only.
 - Every filesystem path supplied to the plugin is normalised and proven to remain below workspaceRoot.
 - Path traversal, absolute escapes and symlink-like escape cases fail with a deterministic error.
