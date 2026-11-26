@@ -13,9 +13,36 @@
 	@include interaction.game-copy;
 }
 
+.reaction-game__metrics {
+	@include interaction.game-metrics;
+}
+
+.reaction-game__actions {
+	@include interaction.action-cluster;
+	margin-top: 1rem;
+}
+
+.reaction-game__board {
+	@include interaction.game-board;
+	@include interaction.board-surface;
+}
+
+.reaction-game__status {
+	@include interaction.game-status;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.reaction-game__status strong {
+	color: var(--cyan);
+}
+
 .reaction-game__surface {
 	width: 100%;
 	min-height: 240px;
+	padding: 1rem;
 	border: var(--border-thin) solid var(--line);
 	border-radius: 18px;
 	background: var(--surface-2);
@@ -27,31 +54,42 @@
 		transform 0.18s ease;
 }
 
-.reaction-game__surface[data-phase='ready'] {
+.reaction-game__surface[data-cue='waiting'] {
+	border-color: var(--blue);
+	color: var(--blue);
+}
+
+.reaction-game__surface[data-cue='go'] {
 	border-color: var(--lime);
 	background: color-mix(in srgb, var(--lime) 72%, var(--surface));
 	color: var(--canvas);
-	transform: scale(1.015);
+	transform: scale(1.01);
 }
 
-.reaction-game__surface[data-phase='early'] {
-	border-color: #ff7a59;
-	background: color-mix(in srgb, #ff7a59 12%, var(--surface));
-	color: #ff7a59;
+.reaction-game__surface[data-cue='early'] {
+	border-color: var(--danger);
+	background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+	color: var(--danger);
+}
+
+.reaction-game__surface[data-cue='complete'] {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
 }
 
 @media (max-width: 760px) {
 	.reaction-game {
 		@include interaction.game-layout-mobile;
 	}
+
+	.reaction-game__actions {
+		justify-content: center;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.reaction-game__surface {
 		transition-duration: 0.01ms;
-	}
-
-	.reaction-game__surface[data-phase='ready'] {
-		transform: none;
+		transform: none !important;
 	}
 }

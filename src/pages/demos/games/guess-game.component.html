@@ -1,14 +1,40 @@
-<section class="guess-game" aria-labelledby="guess-game-title">
+<section class="guess-game" aria-labelledby="guess-game-title" [attr.data-phase]="phase()">
 	<div class="guess-game__copy">
 		<p>{{ 'pages.demos.guessEyebrow' | translate }}</p>
 		<h3 id="guess-game-title">{{ 'pages.demos.guessTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.guessDetail' | translate }}</p>
-		<small>{{ 'pages.demos.guessAttempts' | translate }}: {{ attempts() }}</small>
-		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		<dl class="guess-game__metrics">
+			<div><dt>{{ 'pages.demos.guessAttempts' | translate }}</dt><dd>{{ attempts() }} / {{ maxAttempts }}</dd></div>
+			<div><dt>RANGE</dt><dd>{{ lowerBound() }}—{{ upperBound() }}</dd></div>
+		</dl>
+		<div class="guess-game__actions">
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
 	</div>
 	<form class="guess-game__form" (submit)="$event.preventDefault(); submit()">
-		<label>{{ 'pages.demos.guessLabel' | translate }}<input type="number" min="1" max="50" inputmode="numeric" [value]="guessValue() ?? ''" (input)="setGuess($event)" /></label>
-		<button type="submit">{{ 'pages.demos.guessTry' | translate }}</button>
-		<p aria-live="polite" [attr.data-state]="state()">{{ ('pages.demos.guess' + state()[0]!.toUpperCase() + state().slice(1)) | translate }}</p>
+		<p class="guess-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ feedbackKey() | translate }}
+		</p>
+		<label for="guess-game-value">
+			{{ 'pages.demos.guessLabel' | translate }}
+			<input
+				id="guess-game-value"
+				type="number"
+				min="1"
+				max="50"
+				step="1"
+				inputmode="numeric"
+				autocomplete="off"
+				[value]="guessValue() ?? ''"
+				[disabled]="phase() === 'result'"
+				[attr.aria-describedby]="'guess-game-feedback'"
+				(input)="setGuess($event)" />
+		</label>
+		<div class="guess-game__form-actions">
+			<button type="submit" [disabled]="phase() === 'result'">{{ 'pages.demos.guessTry' | translate }}</button>
+		</div>
+		<p id="guess-game-feedback" class="guess-game__feedback" aria-live="polite" [attr.data-state]="state()">
+			{{ feedbackKey() | translate }} · {{ remaining() }} / {{ maxAttempts }}
+		</p>
 	</form>
 </section>

@@ -6,26 +6,31 @@ import { MemoryGameComponent } from './memory-game.component';
 describe('MemoryGameComponent', () => {
 	afterEach(() => TestBed.inject(TranslateService).setLocale('en'));
 
-	it('matches pairs and resets without mutating the two-copy deck', async () => {
+	it('matches pairs and completes an explicit round before reset', async () => {
 		vi.useFakeTimers();
 		try {
 			await TestBed.configureTestingModule({ imports: [MemoryGameComponent] }).compileComponents();
 			const fixture = TestBed.createComponent(MemoryGameComponent);
 			const component = fixture.componentInstance;
-			const values = component.values();
-			const first = 0;
-			const second = values.findIndex((value, index) => index > 0 && value === values[first]);
-			component.openCard(first);
-			component.openCard(second);
-			vi.advanceTimersByTime(300);
-			expect(component.matched()).toEqual([first, second]);
-			expect(component.moves()).toBe(1);
+			for (const first of [0, 1, 2, 3, 4, 5]) {
+				const firstIndex = component.values().findIndex(
+					(value, index) => value === first && !component.matched().includes(index)
+				);
+				const secondIndex = component.values().findIndex(
+					(value, index) => index !== firstIndex && value === first && !component.matched().includes(index)
+				);
+				component.openCard(firstIndex);
+				component.openCard(secondIndex);
+				vi.advanceTimersByTime(300);
+			}
+			expect(component.matched()).toHaveLength(12);
+			expect(component.moves()).toBe(6);
+			expect(component.phase()).toBe('result');
+			expect(component.best()).toBe(6);
 			component.reset();
+			expect(component.phase()).toBe('ready');
 			expect(component.matched()).toEqual([]);
-			expect(component.moves()).toBe(0);
-			expect([...component.values()].sort((a, b) => a - b)).toEqual([
-				0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5,
-			]);
+			expect([...component.values()].sort((a, b) => a - b)).toEqual([0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
 			fixture.destroy();
 		} finally {
 			vi.useRealTimers();

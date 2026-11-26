@@ -13,21 +13,34 @@
 	@include interaction.game-copy;
 }
 
+.memory-game__metrics {
+	@include interaction.game-metrics;
+}
+
+.memory-game__actions {
+	@include interaction.action-cluster;
+	margin-top: 1rem;
+}
+
+.memory-game__board {
+	@include interaction.game-board;
+	@include interaction.board-surface;
+}
+
+.memory-game__status {
+	@include interaction.game-status;
+	width: 100%;
+}
+
 .memory-game__grid {
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 0.65rem;
+	@include interaction.choice-grid(4);
 }
 
 .memory-game__grid button {
-	position: relative;
-	display: grid;
+	@include interaction.grid-cell;
 	aspect-ratio: 1;
-	place-items: center;
 	overflow: hidden;
-	border: var(--border-thin) solid var(--line);
 	border-radius: 12px;
-	background: var(--surface-2);
 	color: transparent;
 	font: 800 clamp(1rem, 4vw, 1.45rem) tokens.$font-mono, monospace;
 	transition:
@@ -48,6 +61,7 @@
 	background: color-mix(in srgb, var(--lime) 14%, var(--surface));
 	color: var(--lime);
 	box-shadow: 0 0 0 1px color-mix(in srgb, var(--lime) 30%, transparent);
+	opacity: 1;
 }
 
 .memory-game__grid button span {
@@ -59,10 +73,14 @@
 	.memory-game {
 		@include interaction.game-layout-mobile;
 	}
+
+	.memory-game__actions {
+		justify-content: center;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.memory-game__grid button {
-		transition-duration: 0.01ms;
+	.memory-game__grid {
+		@include interaction.reduced-motion-controls;
 	}
 }

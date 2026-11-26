@@ -22,47 +22,29 @@
 	</header>
 	<div
 		class="demo-games__stage"
-		id="demo-panel-{{ activeGame() }}"
-		role="tabpanel"
+		[attr.data-game]="activeGame()"
 		[class.is-alternate]="transitionAlternate()"
 		[style.--demo-entry-direction]="transitionDirection()"
-		[attr.aria-labelledby]="'demo-tab-' + activeGame()"
-		[attr.data-game]="activeGame()"
 		[class.is-fallback-fullscreen]="fullscreen()">
-		<button
-			class="demo-games__fullscreen interactive-fullscreen-control"
-			type="button"
-			[attr.aria-label]="(fullscreen() ? 'pages.demos.gamesExitFullscreen' : 'pages.demos.gamesFullscreen') | translate"
-			(click)="toggleFullscreen($event)">
-			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
-		</button>
+		<div class="demo-games__control-cluster">
+			<button
+				class="demo-games__fullscreen"
+				type="button"
+				[attr.aria-label]="(fullscreen() ? 'pages.demos.gamesExitFullscreen' : 'pages.demos.gamesFullscreen') | translate"
+				[attr.aria-pressed]="fullscreen()"
+				(click)="toggleFullscreen($event)">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+			</button>
+		</div>
 		<div class="demo-games__fullscreen-frame">
-			@switch (activeGame()) {
-				@case ('reflex') {
-					<app-reflex-game />
-				}
-				@case ('reaction') {
-					<app-reaction-game />
-				}
-				@case ('memory') {
-					<app-memory-game />
-				}
-				@case ('dice') {
-					<app-dice-game />
-				}
-				@case ('rps') {
-					<app-rps-game />
-				}
-				@case ('color') {
-					<app-color-game />
-				}
-				@case ('tap') {
-					<app-tap-game />
-				}
-				@case ('guess') {
-					<app-guess-game />
-				}
-			}
+			<div class="demo-games__panel" id="demo-panel-reflex" role="tabpanel" aria-labelledby="demo-tab-reflex" [hidden]="activeGame() !== 'reflex'"><app-reflex-game /></div>
+			<div class="demo-games__panel" id="demo-panel-reaction" role="tabpanel" aria-labelledby="demo-tab-reaction" [hidden]="activeGame() !== 'reaction'"><app-reaction-game /></div>
+			<div class="demo-games__panel" id="demo-panel-memory" role="tabpanel" aria-labelledby="demo-tab-memory" [hidden]="activeGame() !== 'memory'"><app-memory-game /></div>
+			<div class="demo-games__panel" id="demo-panel-dice" role="tabpanel" aria-labelledby="demo-tab-dice" [hidden]="activeGame() !== 'dice'"><app-dice-game /></div>
+			<div class="demo-games__panel" id="demo-panel-rps" role="tabpanel" aria-labelledby="demo-tab-rps" [hidden]="activeGame() !== 'rps'"><app-rps-game /></div>
+			<div class="demo-games__panel" id="demo-panel-color" role="tabpanel" aria-labelledby="demo-tab-color" [hidden]="activeGame() !== 'color'"><app-color-game /></div>
+			<div class="demo-games__panel" id="demo-panel-tap" role="tabpanel" aria-labelledby="demo-tab-tap" [hidden]="activeGame() !== 'tap'"><app-tap-game /></div>
+			<div class="demo-games__panel" id="demo-panel-guess" role="tabpanel" aria-labelledby="demo-tab-guess" [hidden]="activeGame() !== 'guess'"><app-guess-game /></div>
 		</div>
 	</div>
 </section>

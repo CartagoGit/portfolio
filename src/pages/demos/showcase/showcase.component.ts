@@ -18,6 +18,7 @@ const SHOWCASE_TABS: readonly IShowcaseTab[] = [
 	{ id: 'particles', index: '05', labelKey: 'pages.demos.showcaseTabParticles' },
 	{ id: 'orbits', index: '06', labelKey: 'pages.demos.showcaseTabOrbits' },
 ];
+const INITIAL_SIGNAL_BARS = [42, 68, 36, 84, 57, 76, 48, 92] as const;
 
 @Component({
 	selector: 'app-demos-showcase',
@@ -32,7 +33,7 @@ export class ShowcaseComponent implements OnDestroy {
 	readonly activeScene = signal<IShowcaseScene>('depth');
 	readonly pointer = signal({ x: 0, y: 0 });
 	readonly signalRevision = signal(0);
-	readonly signalBars = signal<readonly number[]>([42, 68, 36, 84, 57, 76, 48, 92]);
+	readonly signalBars = signal<readonly number[]>(INITIAL_SIGNAL_BARS);
 	readonly flowVariant = signal(0);
 	readonly latency = signal(48);
 	readonly particleSeed = signal(0);
@@ -40,6 +41,28 @@ export class ShowcaseComponent implements OnDestroy {
 	readonly fullscreen = signal(false);
 	readonly rotateX = computed(() => `${-this.pointer().y * 13}deg`);
 	readonly rotateY = computed(() => `${this.pointer().x * 15}deg`);
+	readonly sceneLabelKey = computed(() =>
+		SHOWCASE_TABS.find(({ id }) => id === this.activeScene())?.labelKey
+		?? 'pages.demos.showcaseTabDepth',
+	);
+	readonly sceneReadout = computed(() => {
+		switch (this.activeScene()) {
+			case 'depth':
+				return `X ${this.pointer().x.toFixed(2)} · Y ${this.pointer().y.toFixed(2)}`;
+			case 'flow':
+				return `${String(this.flowVariant() + 1).padStart(2, '0')} / 03`;
+			case 'signal': {
+				const average = this.signalBars().reduce((total, value) => total + value, 0) / this.signalBars().length;
+				return `AVG ${Math.round(average)}%`;
+			}
+			case 'latency':
+				return `${this.latency()} ms`;
+			case 'particles':
+				return `FIELD ${String(this.particleSeed() + 1).padStart(2, '0')}`;
+			case 'orbits':
+				return `${this.orbitTilt()}°`;
+		}
+	});
 
 	private readonly _fullscreenCoordinator = inject(FullscreenCoordinatorService);
 	private _fullscreenTarget?: HTMLElement;
@@ -58,7 +81,6 @@ export class ShowcaseComponent implements OnDestroy {
 
 	selectScene(scene: IShowcaseScene): void {
 		this.activeScene.set(scene);
-		this.resetPointer();
 	}
 
 	moveScene(event: PointerEvent): void {
@@ -91,10 +113,12 @@ export class ShowcaseComponent implements OnDestroy {
 				this.pointer.set({ x: Math.random() * 1.6 - 0.8, y: Math.random() * 1.2 - 0.6 });
 				break;
 			case 'flow':
-				this.flowVariant.update((variant) => (variant + 1) % 3);
+				this.stepFlow(1);
 				break;
 			case 'signal':
-				this.signalBars.set(this.signalBars().map(() => 30 + Math.round(Math.random() * 65)));
+				this.signalBars.set(this.signalBars().map((value, index) =>
+					30 + ((value + this.signalRevision() * 11 + index * 7) % 66),
+				));
 				break;
 			case 'latency':
 				this.latency.set(12 + Math.round(Math.random() * 120));
@@ -103,13 +127,14 @@ export class ShowcaseComponent implements OnDestroy {
 				this.particleSeed.update((seed) => seed + 1);
 				break;
 			case 'orbits':
-				this.orbitTilt.update((tilt) => (tilt + 18) % 72);
+				this.stepOrbit(1);
 				break;
 		}
 		this.signalRevision.update((revision) => revision + 1);
 	}
 
 	onStageKeydown(event: KeyboardEvent): void {
+		if (event.target instanceof HTMLElement && event.target.closest('button')) return;
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
 			this.interactScene();
@@ -117,11 +142,41 @@ export class ShowcaseComponent implements OnDestroy {
 		}
 		if (!event.key.startsWith('Arrow')) return;
 		event.preventDefault();
-		const pointer = this.pointer();
-		this.pointer.set({
-			x: Math.max(-1, Math.min(1, pointer.x + (event.key === 'ArrowRight' ? 0.15 : event.key === 'ArrowLeft' ? -0.15 : 0))),
-			y: Math.max(-1, Math.min(1, pointer.y + (event.key === 'ArrowDown' ? 0.15 : event.key === 'ArrowUp' ? -0.15 : 0))),
-		});
+		const direction = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1;
+		if (this.activeScene() === 'depth') {
+			const pointer = this.pointer();
+			this.pointer.set({
+				x: Math.max(-1, Math.min(1, pointer.x + (event.key === 'ArrowRight' ? 0.15 : event.key === 'ArrowLeft' ? -0.15 : 0))),
+				y: Math.max(-1, Math.min(1, pointer.y + (event.key === 'ArrowDown' ? 0.15 : event.key === 'ArrowUp' ? -0.15 : 0))),
+			});
+			return;
+		}
+		this.stepScene(direction);
+	}
+
+	stepScene(direction: 1 | -1): void {
+		switch (this.activeScene()) {
+			case 'flow':
+				this.stepFlow(direction);
+				break;
+			case 'signal':
+				this.signalBars.set(direction > 0
+					? [...this.signalBars().slice(1), this.signalBars()[0] ?? 42]
+					: [this.signalBars().at(-1) ?? 92, ...this.signalBars().slice(0, -1)]);
+				break;
+			case 'latency':
+				this.latency.update((latency) => Math.max(12, Math.min(132, latency + direction * 8)));
+				break;
+			case 'particles':
+				this.particleSeed.update((seed) => Math.max(0, seed + direction));
+				break;
+			case 'orbits':
+				this.stepOrbit(direction);
+				break;
+			case 'depth':
+				break;
+		}
+		this.signalRevision.update((revision) => revision + 1);
 	}
 
 	async toggleFullscreen(event: MouseEvent): Promise<void> {
@@ -145,22 +200,51 @@ export class ShowcaseComponent implements OnDestroy {
 	}
 
 	resetScene(): void {
-		this.resetPointer();
-		this.flowVariant.set(0);
-		this.signalBars.set([42, 68, 36, 84, 57, 76, 48, 92]);
-		this.latency.set(48);
-		this.particleSeed.set(0);
-		this.orbitTilt.set(0);
+		switch (this.activeScene()) {
+			case 'depth':
+				this.resetPointer();
+				break;
+			case 'flow':
+				this.flowVariant.set(0);
+				break;
+			case 'signal':
+				this.signalBars.set(INITIAL_SIGNAL_BARS);
+				break;
+			case 'latency':
+				this.latency.set(48);
+				break;
+			case 'particles':
+				this.particleSeed.set(0);
+				break;
+			case 'orbits':
+				this.orbitTilt.set(0);
+				break;
+		}
 		this.signalRevision.update((revision) => revision + 1);
 	}
 
-	onTabsKeydown(event: KeyboardEvent): void {
-		if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+	onTabsKeydown(event: KeyboardEvent, index: number): void {
+		const delta = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+		if (!delta && event.key !== 'Home' && event.key !== 'End') return;
 		event.preventDefault();
-		const current = SHOWCASE_TABS.findIndex(({ id }) => id === this.activeScene());
-		const direction = event.key === 'ArrowRight' ? 1 : -1;
-		const next = (current + direction + SHOWCASE_TABS.length) % SHOWCASE_TABS.length;
-		const scene = SHOWCASE_TABS[next];
-		if (scene) this.selectScene(scene.id);
+		const nextIndex = event.key === 'Home'
+			? 0
+			: event.key === 'End'
+				? this.tabs.length - 1
+				: (index + delta + this.tabs.length) % this.tabs.length;
+		const scene = this.tabs[nextIndex];
+		if (!scene) return;
+		const tabs = (event.currentTarget as HTMLElement | null)
+			?.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+		this.selectScene(scene.id);
+		queueMicrotask(() => tabs?.[nextIndex]?.focus());
+	}
+
+	private stepFlow(direction: 1 | -1): void {
+		this.flowVariant.update((variant) => (variant + direction + 3) % 3);
+	}
+
+	private stepOrbit(direction: 1 | -1): void {
+		this.orbitTilt.update((tilt) => (tilt + direction * 18 + 72) % 72);
 	}
 }

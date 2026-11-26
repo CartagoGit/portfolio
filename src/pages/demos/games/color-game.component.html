@@ -1,18 +1,39 @@
-<section class="color-game" aria-labelledby="color-game-title">
+<section class="color-game" aria-labelledby="color-game-title" [attr.data-phase]="phase()">
 	<div class="color-game__copy">
 		<p>{{ 'pages.demos.colorEyebrow' | translate }}</p>
 		<h3 id="color-game-title">{{ 'pages.demos.colorTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.colorDetail' | translate }}</p>
-		<b>{{ score() }} <small>{{ 'pages.demos.colorScore' | translate }}</small></b>
-		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		<dl class="color-game__metrics">
+			<div><dt>{{ 'pages.demos.colorScore' | translate }}</dt><dd>{{ score() }} / {{ choiceCount }}</dd></div>
+			<div><dt>{{ 'pages.demos.arcade.round' | translate }}</dt><dd>{{ round() }}</dd></div>
+			<div><dt>{{ 'pages.demos.reactionBest' | translate }}</dt><dd>{{ best() }}</dd></div>
+		</dl>
+		<div class="color-game__actions">
+			<button type="button" [disabled]="phase() === 'running'" (click)="start()">{{ 'pages.demos.reactionStart' | translate }}</button>
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
 	</div>
 	<div class="color-game__board">
-		<div class="color-game__target" [style.--target-color]="colors[target()]"></div>
-		<div class="color-game__options" [attr.aria-label]="'pages.demos.colorChoices' | translate">
+		<p class="color-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ ('pages.demos.color' + message()[0]!.toUpperCase() + message().slice(1)) | translate }}
+		</p>
+		<div class="color-game__target" [style.--target-color]="colors[target()]" [attr.aria-label]="'pages.demos.colorChoice' | translate:{ index: target() + 1 }">
+			<span aria-hidden="true">{{ target() + 1 }}</span>
+		</div>
+		<div class="color-game__options" data-roving-grid role="group" [attr.aria-label]="'pages.demos.colorChoices' | translate">
 			@for (color of colors; track color) {
-				<button type="button" [style.--choice-color]="color" (click)="choose($index)" [attr.aria-label]="'pages.demos.colorChoice' | translate:{ index: $index + 1 }"></button>
+				<button
+					type="button"
+					[disabled]="phase() !== 'running'"
+					[style.--choice-color]="color"
+					[attr.tabindex]="focusedChoice() === $index ? 0 : -1"
+					[attr.aria-label]="'pages.demos.colorChoice' | translate:{ index: $index + 1 }"
+					(click)="choose($index)"
+					(focus)="focusedChoice.set($index)"
+					(keydown)="onChoiceKeydown($event, $index)">
+					<span aria-hidden="true">{{ $index + 1 }}</span>
+				</button>
 			}
 		</div>
-		<p aria-live="polite">{{ ('pages.demos.color' + message()[0]!.toUpperCase() + message().slice(1)) | translate }}</p>
 	</div>
 </section>

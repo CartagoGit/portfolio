@@ -1,15 +1,26 @@
-<section class="dice-game" aria-labelledby="dice-game-title">
+<section class="dice-game" aria-labelledby="dice-game-title" [attr.data-phase]="phase()">
 	<div class="dice-game__copy">
 		<p>{{ 'pages.demos.diceEyebrow' | translate }}</p>
 		<h3 id="dice-game-title">{{ 'pages.demos.diceTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.diceDetail' | translate }}</p>
-		<button type="button" (click)="roll()">{{ 'pages.demos.diceRoll' | translate }}</button>
-		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		<dl class="dice-game__metrics">
+			<div><dt>{{ 'pages.demos.arcade.round' | translate }}</dt><dd>{{ round() }}</dd></div>
+			<div><dt>AVG</dt><dd>{{ average() ?? '—' }}</dd></div>
+		</dl>
+		<div class="dice-game__actions">
+			<button type="button" [disabled]="phase() === 'running'" (click)="roll()">{{ 'pages.demos.diceRoll' | translate }}</button>
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
 	</div>
 	<div class="dice-game__board">
-		<button class="dice-game__die" type="button" (click)="roll()" [attr.aria-label]="'pages.demos.diceRoll' | translate">{{ faces[value() - 1] }}</button>
-		<div class="dice-game__history" aria-live="polite">
-			@for (roll of rolls(); track $index) { <span>{{ faces[roll - 1] }}</span> }
+		<p class="dice-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			{{ phaseLabelKey() | translate }} · <strong>{{ value() }}</strong>
+		</p>
+		<button class="dice-game__die" type="button" [disabled]="phase() === 'running'" (click)="roll()" [attr.aria-label]="('pages.demos.diceRoll' | translate) + ': ' + value()">
+			{{ faces[value() - 1] }}
+		</button>
+		<div class="dice-game__history" aria-label="6" aria-live="polite">
+			@for (roll of rolls(); track $index) { <span [attr.aria-label]="roll">{{ faces[roll - 1] }}</span> }
 		</div>
 	</div>
 </section>

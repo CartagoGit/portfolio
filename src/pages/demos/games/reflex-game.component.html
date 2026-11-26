@@ -1,28 +1,41 @@
-<section class="reflex-game" aria-labelledby="reflex-game-title">
+<section class="reflex-game" aria-labelledby="reflex-game-title" [attr.data-phase]="phase()">
 	<div class="reflex-game__copy">
 		<p>{{ 'pages.demos.gameEyebrow' | translate }}</p>
 		<h3 id="reflex-game-title">{{ 'pages.demos.gameHeading' | translate }}</h3>
 		<p>{{ 'pages.demos.gameDetail' | translate }}</p>
-		<b>
-			{{ score() }}
-			<small>{{ 'pages.demos.gameSignalsLabel' | translate }}</small>
-		</b>
-		<button type="button" (click)="reset()">
-			{{ 'pages.demos.resetButton' | translate }}
-		</button>
+		<dl class="reflex-game__metrics">
+			<div><dt>{{ 'pages.demos.gameSignalsLabel' | translate }}</dt><dd>{{ score() }} / {{ targetCount }}</dd></div>
+			<div><dt>{{ 'pages.demos.arcade.round' | translate }}</dt><dd>{{ round() }}</dd></div>
+			<div><dt>{{ 'pages.demos.colorWrong' | translate }}</dt><dd>{{ misses() }}</dd></div>
+		</dl>
+		<div class="reflex-game__actions">
+			<button type="button" [disabled]="phase() === 'running'" (click)="start()">{{ 'pages.demos.reactionStart' | translate }}</button>
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
 	</div>
-	<div
-		class="reflex-game__grid"
-		role="group"
-		[attr.aria-label]="'pages.demos.reflexGridAria' | translate">
-		@for (cell of cells; track cell) {
-			<button
-				type="button"
-				[class.is-target]="target() === cell"
-				[attr.aria-label]="(target() === cell ? 'pages.demos.reflexTargetAria' : 'pages.demos.reflexCellAria') | translate: { index: cell + 1 }"
-				(click)="hit(cell)">
-				<i aria-hidden="true"></i>
-			</button>
-		}
+	<div class="reflex-game__board">
+		<p class="reflex-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ feedbackKey() | translate }}
+		</p>
+		<div
+			class="reflex-game__grid"
+			data-roving-grid
+			role="group"
+			[attr.aria-label]="'pages.demos.reflexGridAria' | translate">
+			@for (cell of cells; track cell) {
+				<button
+					type="button"
+					[class.is-target]="target() === cell"
+					[disabled]="phase() !== 'running'"
+					[attr.tabindex]="focusedCell() === cell ? 0 : -1"
+					[attr.aria-current]="phase() === 'running' && target() === cell ? 'true' : null"
+					[attr.aria-label]="(target() === cell ? 'pages.demos.reflexTargetAria' : 'pages.demos.reflexCellAria') | translate: { index: cell + 1 }"
+					(click)="hit(cell)"
+					(focus)="focusedCell.set(cell)"
+					(keydown)="onGridKeydown($event, cell)">
+					<i aria-hidden="true"></i>
+				</button>
+			}
+		</div>
 	</div>
 </section>

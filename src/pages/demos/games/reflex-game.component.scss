@@ -13,24 +13,34 @@
 	@include interaction.game-copy;
 }
 
+.reflex-game__metrics {
+	@include interaction.game-metrics;
+}
+
+.reflex-game__actions {
+	@include interaction.action-cluster;
+	margin-top: 1rem;
+}
+
+.reflex-game__board {
+	@include interaction.game-board;
+	@include interaction.board-surface;
+}
+
+.reflex-game__status {
+	@include interaction.game-status;
+	width: 100%;
+}
+
 .reflex-game__grid {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 0.7rem;
+	@include interaction.choice-grid(3);
+	max-width: 390px;
 }
 
 .reflex-game__grid button {
-	position: relative;
-	display: grid;
+	@include interaction.grid-cell;
 	aspect-ratio: 1;
-	place-items: center;
-	border: var(--border-thin) solid var(--line);
 	border-radius: 14px;
-	background: var(--surface-2);
-	transition:
-		transform 0.18s ease,
-		border-color 0.18s ease,
-		background 0.18s ease;
 }
 
 .reflex-game__grid button:hover,
@@ -59,15 +69,14 @@
 	.reflex-game {
 		@include interaction.game-layout-mobile;
 	}
+
+	.reflex-game__actions {
+		justify-content: center;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.reflex-game__grid button {
-		transition-duration: 0.01ms;
-	}
-
-	.reflex-game__grid button:hover,
-	.reflex-game__grid button:focus-visible {
-		transform: none;
+	.reflex-game__grid {
+		@include interaction.reduced-motion-controls;
 	}
 }

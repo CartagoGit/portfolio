@@ -1,17 +1,40 @@
-<section class="rps-game" aria-labelledby="rps-game-title">
+<section class="rps-game" aria-labelledby="rps-game-title" [attr.data-phase]="phase()">
 	<div class="rps-game__copy">
 		<p>{{ 'pages.demos.rpsEyebrow' | translate }}</p>
 		<h3 id="rps-game-title">{{ 'pages.demos.rpsTitle' | translate }}</h3>
 		<p>{{ 'pages.demos.rpsDetail' | translate }}</p>
-		<b>{{ score() }} <small>{{ 'pages.demos.rpsScore' | translate }}</small></b>
-		<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		<dl class="rps-game__metrics">
+			<div><dt>{{ 'pages.demos.rpsScore' | translate }}</dt><dd>{{ score() }}</dd></div>
+			<div><dt>{{ 'pages.demos.arcade.round' | translate }}</dt><dd>{{ round() }}</dd></div>
+			<div><dt>±</dt><dd>{{ losses() }} / {{ draws() }}</dd></div>
+		</dl>
+		<div class="rps-game__actions">
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
 	</div>
 	<div class="rps-game__board">
-		<div class="rps-game__choices">
+		<div class="rps-game__duel" aria-hidden="true"><span>{{ userSymbol() }}</span><b>VS</b><span>{{ computerSymbol() }}</span></div>
+		<div
+			class="rps-game__choices"
+			data-roving-grid
+			role="group"
+			[attr.aria-label]="'pages.demos.rpsDetail' | translate">
 			@for (choice of choices; track choice.id) {
-				<button type="button" [attr.aria-label]="choice.labelKey | translate" (click)="play(choice.id)"><i aria-hidden="true">{{ choice.symbol }}</i><span>{{ choice.labelKey | translate }}</span></button>
+				<button
+					type="button"
+					[disabled]="phase() === 'running'"
+					[class.is-selected]="userChoice() === choice.id"
+					[attr.tabindex]="focusedChoice() === $index ? 0 : -1"
+					[attr.aria-label]="choice.labelKey | translate"
+					(click)="play(choice.id)"
+					(focus)="focusedChoice.set($index)"
+					(keydown)="onChoiceKeydown($event, $index)">
+					<i aria-hidden="true">{{ choice.symbol }}</i><span>{{ choice.labelKey | translate }}</span>
+				</button>
 			}
 		</div>
-		<p aria-live="polite">{{ ('pages.demos.rps' + outcome()[0]!.toUpperCase() + outcome().slice(1)) | translate }}</p>
+		<p class="rps-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ ('pages.demos.rps' + outcome()[0]!.toUpperCase() + outcome().slice(1)) | translate }}
+		</p>
 	</div>
 </section>

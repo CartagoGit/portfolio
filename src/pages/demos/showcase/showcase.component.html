@@ -14,9 +14,8 @@
 	<div
 		class="showcase__tabs"
 		role="tablist"
-		[attr.aria-label]="'pages.demos.showcaseTabsAria' | translate"
-		(keydown)="onTabsKeydown($event)">
-		@for (tab of tabs; track tab.id) {
+		[attr.aria-label]="'pages.demos.showcaseTabsAria' | translate">
+		@for (tab of tabs; track tab.id; let index = $index) {
 			<button
 				type="button"
 				role="tab"
@@ -25,7 +24,8 @@
 				[attr.aria-selected]="activeScene() === tab.id"
 				[attr.tabindex]="activeScene() === tab.id ? 0 : -1"
 				[class.is-active]="activeScene() === tab.id"
-				(click)="selectScene(tab.id)">
+				(click)="selectScene(tab.id)"
+				(keydown)="onTabsKeydown($event, index)">
 				<span>{{ tab.index }}</span>
 				{{ tab.labelKey | translate }}
 			</button>
@@ -42,26 +42,20 @@
 		[style.--showcase-flow]="flowVariant()"
 		[style.--showcase-latency]="latency() + 'ms'"
 		[style.--showcase-orbit-tilt]="orbitTilt() + 'deg'"
+		[style.--showcase-particle-seed]="particleSeed()"
 		role="tabpanel"
 		tabindex="0"
 		[attr.id]="'showcase-panel-' + activeScene()"
 		[attr.aria-labelledby]="'showcase-tab-' + activeScene()"
+		aria-describedby="showcase-scene-status showcase-hint"
 		(pointerdown)="beginScene($event)"
 		(pointermove)="moveScene($event)"
 		(pointerup)="endScene($event)"
 		(pointercancel)="endScene($event)"
 		(keydown)="onStageKeydown($event)">
-		<button
-			class="showcase__fullscreen interactive-fullscreen-control"
-			type="button"
-			[attr.aria-label]="(fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate"
-			(click)="toggleFullscreen($event)"
-			(pointerdown)="$event.stopPropagation()">
-			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
-		</button>
 		<div class="showcase__fullscreen-frame">
 			@if (activeScene() === 'depth') {
-				<div class="showcase__depth" aria-hidden="true">
+				<div class="showcase__visual showcase__depth" aria-hidden="true">
 					<div class="showcase__orbit showcase__orbit--one"></div>
 					<div class="showcase__orbit showcase__orbit--two"></div>
 					<div class="showcase__cube">
@@ -79,7 +73,7 @@
 					<span>{{ 'pages.demos.showcaseDepthDetail' | translate }}</span>
 				</div>
 			} @else if (activeScene() === 'flow') {
-				<div class="showcase__flow" [class.is-alternate]="flowVariant() !== 0" aria-hidden="true">
+				<div class="showcase__visual showcase__flow" [attr.data-variant]="flowVariant()" aria-hidden="true">
 					<svg viewBox="0 0 720 320" preserveAspectRatio="none">
 						<path d="M72 185 C145 40 228 255 310 122 S505 245 640 88" />
 						<path d="M72 185 C180 280 245 88 365 188 S545 84 640 88" />
@@ -94,10 +88,8 @@
 					<span>{{ 'pages.demos.showcaseFlowDetail' | translate }}</span>
 				</div>
 			} @else if (activeScene() === 'signal') {
-				<div class="showcase__signal" aria-hidden="true">
-					<div class="showcase__radar">
-						<i></i><i></i><i></i><i></i>
-					</div>
+				<div class="showcase__visual showcase__signal" aria-hidden="true">
+					<div class="showcase__radar"><i></i><i></i><i></i><i></i></div>
 					<div class="showcase__signal-bars">
 						@for (bar of signalBars(); track $index) {
 							<span [style.--signal-value]="bar + '%'" [style.--bar-index]="$index"></span>
@@ -110,9 +102,12 @@
 					<span>{{ 'pages.demos.showcaseSignalDetail' | translate }}</span>
 				</div>
 			} @else if (activeScene() === 'latency') {
-				<div class="showcase__latency" aria-hidden="true">
-					<span></span><span></span><span></span>
-					<b>{{ latency() }} ms</b>
+				<div class="showcase__visual showcase__latency" aria-hidden="true">
+					<div class="showcase__latency-scale">
+						<span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="showcase__latency-pulse"><i></i><i></i><i></i></div>
+					<b>{{ latency() }}<small>ms</small></b>
 				</div>
 				<div class="showcase__copy">
 					<p>{{ 'pages.demos.showcaseFlowKicker' | translate }}</p>
@@ -120,8 +115,9 @@
 					<span>{{ 'pages.demos.showcaseFlowDetail' | translate }}</span>
 				</div>
 			} @else if (activeScene() === 'particles') {
-				<div class="showcase__particles" aria-hidden="true" [attr.data-seed]="particleSeed()">
-					@for (particle of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]; track particle) {
+				<div class="showcase__visual showcase__particles" aria-hidden="true" [attr.data-seed]="particleSeed()">
+					<b></b>
+					@for (particle of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]; track particle) {
 						<i [style.--particle-index]="particle"></i>
 					}
 				</div>
@@ -131,7 +127,7 @@
 					<span>{{ 'pages.demos.showcaseSignalDetail' | translate }}</span>
 				</div>
 			} @else {
-				<div class="showcase__orbits" aria-hidden="true">
+				<div class="showcase__visual showcase__orbits" aria-hidden="true">
 					<div class="showcase__orbit-stage"><i></i><i></i><i></i><b>GO</b></div>
 				</div>
 				<div class="showcase__copy">
@@ -140,17 +136,29 @@
 					<span>{{ 'pages.demos.showcaseDepthDetail' | translate }}</span>
 				</div>
 			}
-			<button class="showcase__activate" type="button" (pointerdown)="$event.stopPropagation()" (click)="interactScene()">
-				{{ 'pages.demos.showcaseInteract' | translate }}
-			</button>
-			<p class="showcase__hint">{{ 'pages.demos.showcaseHint' | translate }}</p>
+
+			<div class="showcase__controls" (pointerdown)="$event.stopPropagation()">
+				<button class="showcase__activate" type="button" (click)="interactScene()">
+					{{ 'pages.demos.showcaseInteract' | translate }}
+				</button>
+				<button type="button" (click)="resetScene()">
+					<span aria-hidden="true">↻</span>
+					{{ 'pages.demos.showcaseReset' | translate }}
+				</button>
+				<button
+					class="showcase__fullscreen"
+					type="button"
+					[attr.aria-label]="(fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate"
+					[attr.aria-pressed]="fullscreen()"
+					(click)="toggleFullscreen($event)">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+				</button>
+			</div>
+			<p class="showcase__status" id="showcase-scene-status" aria-live="polite">
+				<span>{{ sceneLabelKey() | translate }}</span>
+				<strong>{{ sceneReadout() }}</strong>
+			</p>
+			<p class="showcase__hint" id="showcase-hint">{{ 'pages.demos.showcaseHint' | translate }}</p>
 		</div>
 	</div>
-
-	<footer class="showcase__footer">
-		<button type="button" (click)="resetScene()">
-			<span aria-hidden="true">↻</span>
-			{{ 'pages.demos.showcaseReset' | translate }}
-		</button>
-	</footer>
 </section>

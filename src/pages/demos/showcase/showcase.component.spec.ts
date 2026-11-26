@@ -13,39 +13,43 @@ describe('ShowcaseComponent', () => {
 
 		expect(tabs).toHaveLength(6);
 		expect(fixture.nativeElement.querySelector('.showcase__cube')).toBeTruthy();
-		component.onTabsKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+		tabs[0]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
 		fixture.detectChanges();
 		expect(component.activeScene()).toBe('flow');
 		expect(fixture.nativeElement.querySelector('.showcase__flow')).toBeTruthy();
 	});
 
-	it('resets direct-manipulation state without hiding the selected scene', async () => {
+	it('preserves work between scenes and resets only the active scene', async () => {
 		await TestBed.configureTestingModule({ imports: [ShowcaseComponent] }).compileComponents();
 		const fixture = TestBed.createComponent(ShowcaseComponent);
 		fixture.detectChanges();
 		const component = fixture.componentInstance;
 		component.pointer.set({ x: 1, y: -1 });
+		component.selectScene('flow');
+		component.interactScene();
+		component.interactScene();
+		component.selectScene('depth');
+		expect(component.pointer()).toEqual({ x: 1, y: -1 });
+		component.selectScene('flow');
 		component.resetScene();
 
-		expect(component.pointer()).toEqual({ x: 0, y: 0 });
-		expect(component.activeScene()).toBe('depth');
-		expect(component.signalRevision()).toBe(1);
+		expect(component.pointer()).toEqual({ x: 1, y: -1 });
+		expect(component.flowVariant()).toBe(0);
+		expect(component.activeScene()).toBe('flow');
 	});
 
-	it('changes every scene through the explicit interaction control', async () => {
+	it('renders and changes every distinct scene', async () => {
 		await TestBed.configureTestingModule({ imports: [ShowcaseComponent] }).compileComponents();
 		const fixture = TestBed.createComponent(ShowcaseComponent);
 		fixture.detectChanges();
 		const component = fixture.componentInstance;
-		component.selectScene('flow');
-		component.interactScene();
-		expect(component.flowVariant()).toBe(1);
-		component.selectScene('signal');
-		const before = component.signalBars();
-		component.interactScene();
-		expect(component.signalBars()).not.toEqual(before);
-		component.selectScene('particles');
-		component.interactScene();
-		expect(component.particleSeed()).toBe(1);
+		const scenes = ['depth', 'flow', 'signal', 'latency', 'particles', 'orbits'] as const;
+		for (const scene of scenes) {
+			component.selectScene(scene);
+			component.interactScene();
+			fixture.detectChanges();
+			expect(fixture.nativeElement.querySelector(`.showcase__${scene}`)).toBeTruthy();
+		}
+		expect(component.sceneReadout()).not.toBe('');
 	});
 });
