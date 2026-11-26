@@ -14,6 +14,7 @@ shipped-in:
   - "b191499"
   - "8dfcd25"
   - "6a9fc03"
+  - "8f93d0f"
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
@@ -161,8 +162,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - review-log: approved by Explore-a00002-s8 — verified at 6a9fc03, validate exit 0 and tests 45/45 claimed, no recorded run cited; acceptance 5/5: (1) Plugin README and DelendAI docs match source/pages/domain layout, tool ids and the actual IFileSystem/captureHandlers architecture. (2) Index fields and invalidation are documented; projection budget now states 1200 default, 128-4096 range and full envelope measurement before each item. (3) architecture-s17 documents EarthGlobeComponent RAF/texture teardown, EarthRenderer GPU/listener idempotence and HeroMonitorFacade timer/late-call ownership wit… (4) a00002 S8 points to architecture-s17.md and the real f00001 filename; historical why/follow-up text now states S2-S7 are complete and only S9 remains. (5) a00002 explicitly delegates publication to independent infrastructure; f00001 finishes product work and f00002 remains blocked by that product gate, with local… — Independent review approved 6a9fc03. All five S8 criteria pass; declared paths exist, no f00001 S15/architecture-audit stale references remain, and mcp:all passes 45/45 with host activation.
 
 ### S9 — Fail-closed public audit and workspace path boundary
-- **Status**: pending
-- **Files**: `plugins/portfolio-content/src/lib/services/fs.service.ts`, `plugins/portfolio-content/src/lib/services/audit.service.ts`, `plugins/portfolio-content/src/lib/tools/audit.tool.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`
+- **Status**: done
+- **Files**: `plugins/portfolio-content/src/lib/services/fs.service.ts`, `plugins/portfolio-content/src/lib/services/audit.service.ts`, `plugins/portfolio-content/src/lib/tools/audit.tool.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`, `plugins/portfolio-content/tests/src/lib/audit.service.spec.ts`, `plugins/portfolio-content/tests/src/lib/fs.service.spec.ts`, `plugins/portfolio-content/README.md`
 - **Gate**: type
 - acceptance:
   - "Missing content roots, unreadable files and zero discovered templates make the public audit non-ok, not info-only."
@@ -170,15 +171,19 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Path traversal, absolute escapes and symlink-like escape cases fail with a deterministic error."
   - "The audit reports coverage counts separately from findings and exposes nextAction as a publish-blocking condition when coverage is incomplete."
   - "The host tool schema keeps ok false for missing/escape paths while preserving private-content findings."
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: Explore-a00002-s9
+- review-log: approved by Explore-a00002-s9 — verified at 8f93d0f, validate exit 0 and tests 51/51 claimed, no recorded run cited; acceptance 5/5: (1) coverage-empty, missing-content and unreadable-content stay error-severity; ok requires read>0 with zero errors, and 51 tests cover zero discovery, missing and… (2) assertWorkspaceRelativePath normalizes separators and dot segments; Node adapter rechecks resolve/isInside and realpath/isInside before every operation. (3) Lexical, absolute and Windows paths throw WorkspaceBoundaryError with the supplied path; symlink reals outside the root produce path-escape findings instead of… (4) coverage adds invalid alongside requested/read/missing/unreadable/duplicates; nextAction distinguishes zero readable content from partial incomplete coverage a… (5) MCP output retains ok, coverage, severity and findings; service and integration tests prove private-term/path-escape coexist for explicit input and escaped dis… — Independent review approved 8f93d0f. All five S9 criteria pass, 51/51 plugin tests and mcp:check pass. The prior minor normalized-message inconsistency was fixed and re-reviewed.
 
 ## external audit follow-up — 2026-11-25
 
-CI/publication findings belong to the publication workstream and are not duplicated here. S2–S7 reconciled incremental indexing, route splitting, WebGL teardown, structural SCSS parsing and named security/accessibility/performance gates. Only S9 still owns the fail-closed/public-path boundary, while S8 keeps this record aligned with the live docs.
+CI/publication findings belong to the publication workstream and are not duplicated here. S2–S9 reconciled incremental indexing, route splitting, WebGL teardown, structural SCSS parsing, named security/accessibility/performance gates, documentation ownership and the fail-closed public/path boundary.
 
-- The public audit's old `info` treatment for missing/unreadable coverage is still a blocker under S9, not a permissive success.
-- `buildNodeFileSystem` must enforce a workspace boundary for every relative operation; S9 owns the proof.
-- Route splitting and GPU teardown are now implemented and measured by S4/S5 evidence rather than described as unfinished.
-- Token-budgeted output is measured in tests and documented by the plugin README; no acceptance can rely on prose alone.
+- The public audit now treats missing, unreadable, invalid and zero-template coverage as publish-blocking errors.
+- `buildNodeFileSystem` enforces workspace-relative normalization, lexical containment, resolved containment and symlink-realpath containment for every operation.
+- Route splitting and GPU teardown are measured by S4/S5 evidence rather than described as unfinished.
+- Token-budgeted output is measured in tests and documented by the plugin README; no acceptance relies on prose alone.
 
 ## acceptance
 
