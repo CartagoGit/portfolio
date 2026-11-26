@@ -11,6 +11,7 @@ import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import type { IPortfolioContentOptions } from '../../contracts/interfaces/plugin-options.interface';
 import { runPublicAudit } from '../services/audit.service';
 import { discoverContentPaths } from '../services/content.service';
+import { WorkspaceBoundaryError } from '../services/fs.service';
 import { compactProjection, type IProjectionArguments, PROJECTION_INPUT, PROJECTION_OUTPUT } from '../helpers/projection.helper';
 
 /** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
@@ -38,6 +39,7 @@ const OUTPUT = z.object({
 		read: z.number(),
 		missing: z.number(),
 		unreadable: z.number(),
+		invalid: z.number(),
 		duplicates: z.number(),
 	}),
 	severity: z.object({ errors: z.number(), warnings: z.number(), info: z.number() }),
@@ -63,14 +65,21 @@ export const buildAuditTool = (
 			},
 			async (args: { contentPaths?: readonly string[] } & IProjectionArguments) => {
 				const o = deps.options;
-				const contentPaths =
-					args.contentPaths ??
-					(await discoverContentPaths({
-						fs: deps.fs,
-						roots: o.contentRoots,
-						includeGlobs: o.contentIncludeGlobs,
-						excludeGlobs: o.contentExcludeGlobs,
-					}));
+				let contentPaths: readonly string[];
+				try {
+					contentPaths = args.contentPaths ??
+						(await discoverContentPaths({
+							fs: deps.fs,
+							roots: o.contentRoots,
+							includeGlobs: o.contentIncludeGlobs,
+							excludeGlobs: o.contentExcludeGlobs,
+						}));
+				} catch (error) {
+					if (error instanceof WorkspaceBoundaryError)
+						contentPaths = [error.suppliedPath];
+					else
+						contentPaths = o.contentRoots;
+				}
 				const report = await runPublicAudit({
 					contentPaths,
 					forbiddenTerms: o.forbiddenTerms,

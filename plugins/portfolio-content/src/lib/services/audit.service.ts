@@ -1,4 +1,4 @@
-import { assertWorkspaceRelativePath } from './fs.service';
+import { assertWorkspaceRelativePath, WorkspaceBoundaryError } from './fs.service';
 
 /**
  * Public-content audit (support tool). Scans the listed public
@@ -17,11 +17,16 @@ const nextAction = (
 	hasError: boolean,
 	hasWarning: boolean,
 	incompleteCoverage: boolean,
+	hasReadableContent: boolean,
 ): string => {
 	if (incompleteCoverage) {
+		if (!hasReadableContent)
+			return locale === 'es'
+				? 'Corrige las raíces y rutas del audit: no se evaluó ningún contenido legible.'
+				: 'Fix the audit roots and paths: no readable content was evaluated.';
 		return locale === 'es'
-			? 'Corrige las raíces y rutas del audit: no se evaluó ningún contenido legible.'
-			: 'Fix the audit roots and paths: no readable content was evaluated.';
+			? 'Corrige las rutas rechazadas, ausentes o ilegibles: la cobertura del audit está incompleta y bloquea la publicación.'
+			: 'Fix rejected, missing or unreadable paths: audit coverage is incomplete and blocks publication.';
 	}
 	if (locale === 'es') {
 		if (hasError)
@@ -169,6 +174,7 @@ export interface IPublicAuditReport {
 		readonly read: number;
 		readonly missing: number;
 		readonly unreadable: number;
+		readonly invalid: number;
 		readonly duplicates: number;
 	};
 	readonly severity: { readonly errors: number; readonly warnings: number; readonly info: number };
@@ -194,6 +200,21 @@ export interface IPublicAuditOptions {
 	readonly reader: IPublicAuditReader;
 }
 
+const pathEscapeFinding = (
+	contentPath: string,
+	locale: 'en' | 'es',
+): IPublicAuditFinding => ({
+	id: 'path-escape',
+	severity: 'error',
+	message: locale === 'es'
+		? `Ruta rechazada fuera del workspace: ${contentPath}`
+		: `Path rejected outside the workspace: ${contentPath}`,
+	location: { contentPath },
+	remediation: locale === 'es'
+		? 'Usa una ruta relativa dentro del workspace; no se evalúa ningún recurso externo.'
+		: 'Use a relative path inside the workspace; no external resource is evaluated.',
+});
+
 export const runPublicAudit = async (
 	options: IPublicAuditOptions,
 ): Promise<IPublicAuditReport> => {
@@ -206,7 +227,7 @@ export const runPublicAudit = async (
 	} = options;
 	const findings: IPublicAuditFinding[] = [];
 	const seen = new Set<string>();
-	const coverage = { requested: contentPaths.length, read: 0, missing: 0, unreadable: 0, duplicates: 0 };
+	const coverage = { requested: contentPaths.length, read: 0, missing: 0, unreadable: 0, invalid: 0, duplicates: 0 };
 
 	if (contentPaths.length === 0) {
 		findings.push({
@@ -219,17 +240,25 @@ export const runPublicAudit = async (
 	}
 
 	for (const contentPath of contentPaths) {
-		assertWorkspaceRelativePath(contentPath);
-		if (seen.has(contentPath)) {
+		let normalizedPath: string;
+		try {
+			normalizedPath = assertWorkspaceRelativePath(contentPath);
+		} catch (error) {
+			if (!(error instanceof WorkspaceBoundaryError)) throw error;
+			coverage.invalid += 1;
+			findings.push(pathEscapeFinding(contentPath, locale));
+			continue;
+		}
+		if (seen.has(normalizedPath)) {
 			coverage.duplicates += 1;
 			findings.push({
 				id: 'duplicated-content',
 				severity: 'info',
 				message:
 					locale === 'es'
-						? `Ruta duplicada en la auditoría: ${contentPath}`
-						: `Duplicate audited path: ${contentPath}`,
-				location: { contentPath },
+						? `Ruta duplicada en la auditoría: ${normalizedPath}`
+						: `Duplicate audited path: ${normalizedPath}`,
+				location: { contentPath: normalizedPath },
 				remediation:
 					locale === 'es'
 						? 'Quita la entrada duplicada para reducir trabajo del audit.'
@@ -237,18 +266,37 @@ export const runPublicAudit = async (
 			});
 			continue;
 		}
-		seen.add(contentPath);
+		seen.add(normalizedPath);
 
-		if (!(await reader.exists(contentPath))) {
+		let exists: boolean;
+		try {
+			exists = await reader.exists(normalizedPath);
+		} catch (error) {
+			if (error instanceof WorkspaceBoundaryError) {
+				coverage.invalid += 1;
+				findings.push(pathEscapeFinding(normalizedPath, locale));
+				continue;
+			}
+			coverage.unreadable += 1;
+			findings.push({
+				id: 'unreadable-content',
+				severity: 'error',
+				message: locale === 'es' ? `No se pudo inspeccionar ${normalizedPath}.` : `Could not inspect ${normalizedPath}.`,
+				location: { contentPath: normalizedPath },
+				remediation: locale === 'es' ? 'Comprueba los permisos y vuelve a ejecutar.' : 'Check permissions and rerun the audit.',
+			});
+			continue;
+		}
+		if (!exists) {
 			coverage.missing += 1;
 			findings.push({
 				id: 'missing-content',
 				severity: 'error',
 				message:
 					locale === 'es'
-						? `Ruta solicitada sin archivo: ${contentPath}`
-						: `Requested path has no file: ${contentPath}`,
-				location: { contentPath },
+						? `Ruta solicitada sin archivo: ${normalizedPath}`
+						: `Requested path has no file: ${normalizedPath}`,
+				location: { contentPath: normalizedPath },
 				remediation:
 					locale === 'es'
 						? 'Crea el archivo o ajusta las rutas de la auditoría.'
@@ -259,18 +307,23 @@ export const runPublicAudit = async (
 
 		let content: string;
 		try {
-			content = await reader.readText(contentPath);
+			content = await reader.readText(normalizedPath);
 			coverage.read += 1;
-		} catch {
+		} catch (error) {
+			if (error instanceof WorkspaceBoundaryError) {
+				coverage.invalid += 1;
+				findings.push(pathEscapeFinding(normalizedPath, locale));
+				continue;
+			}
 			coverage.unreadable += 1;
 			findings.push({
 				id: 'unreadable-content',
 				severity: 'error',
 				message:
 					locale === 'es'
-						? `No se pudo leer el contenido de ${contentPath}; se omitió.`
-						: `Could not read ${contentPath}; skipped.`,
-				location: { contentPath },
+						? `No se pudo leer el contenido de ${normalizedPath}; se omitió.`
+						: `Could not read ${normalizedPath}; skipped.`,
+				location: { contentPath: normalizedPath },
 				remediation:
 					locale === 'es'
 						? 'Comprueba los permisos del archivo o ajústalo a la configuración del plugin.'
@@ -288,7 +341,7 @@ export const runPublicAudit = async (
 						? `Término privado detectado: "${hit.term}"`
 						: `Private term detected: "${hit.term}"`,
 				location: {
-					contentPath,
+					contentPath: normalizedPath,
 					line: content.slice(0, hit.index).split('\n').length,
 				},
 				remediation:
@@ -307,7 +360,7 @@ export const runPublicAudit = async (
 						? `Raíz prohibida per-se: "${hit.root}"`
 						: `Per-se forbidden root: "${hit.root}"`,
 				location: {
-					contentPath,
+					contentPath: normalizedPath,
 					line: content.slice(0, hit.rawIndex).split('\n').length,
 				},
 				remediation:
@@ -317,7 +370,7 @@ export const runPublicAudit = async (
 			});
 		}
 
-		findings.push(...findImageTodos(contentPath, content, locale));
+		findings.push(...findImageTodos(normalizedPath, content, locale));
 	}
 
 	const counts = summarize(findings);
@@ -331,7 +384,8 @@ export const runPublicAudit = async (
 			locale,
 			counts.errors > 0,
 			counts.warnings > 0,
-			coverage.read === 0 || coverage.missing > 0 || coverage.unreadable > 0,
+			coverage.read === 0 || coverage.missing > 0 || coverage.unreadable > 0 || coverage.invalid > 0,
+			coverage.read > 0,
 		),
 	};
 };

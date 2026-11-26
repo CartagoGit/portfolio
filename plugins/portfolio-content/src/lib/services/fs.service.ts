@@ -62,8 +62,8 @@ export const buildNodeFileSystem = async (
 };
 
 export class WorkspaceBoundaryError extends Error {
-	constructor(path: string) {
-		super(`Path escapes workspace boundary: ${path}`);
+	constructor(readonly suppliedPath: string) {
+		super(`Path escapes workspace boundary: ${suppliedPath}`);
 		this.name = 'WorkspaceBoundaryError';
 	}
 }

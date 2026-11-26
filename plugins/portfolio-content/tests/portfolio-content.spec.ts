@@ -108,4 +108,23 @@ describe('portfolio-content plugin', () => {
 			expect(result).toHaveProperty('truncated');
 		}
 	});
+
+	it('keeps valid findings when public-audit input contains an escaped path', async () => {
+		const handlers = await register({ forbiddenTerms: ['Acme Corp'] });
+		const result = await call(handlers, 'public_audit', {
+			contentPaths: ['src/pages/home/home.page.html', '../secret.html'],
+		});
+		expect(result['ok']).toBe(false);
+		expect(result['coverage']).toMatchObject({ requested: 2, read: 1, invalid: 1 });
+		expect((result['findings'] as Array<{ id: string }>).map(({ id }) => id))
+			.toEqual(expect.arrayContaining(['private-term', 'path-escape']));
+	});
+
+	it('fails closed when public-audit discovery receives an escaped root', async () => {
+		const handlers = await register({ contentRoots: ['../outside'] });
+		const result = await call(handlers, 'public_audit');
+		expect(result['ok']).toBe(false);
+		expect(result['coverage']).toMatchObject({ requested: 1, read: 0, invalid: 1 });
+		expect((result['findings'] as Array<{ id: string }>).map(({ id }) => id)).toEqual(['path-escape']);
+	});
 });

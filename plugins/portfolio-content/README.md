@@ -34,6 +34,7 @@ All tools are read-only: no writes, no network. The Node file-system adapter rej
 | `image-todo` | `warning` | A `TODO(image): ...` placeholder is still committed. |
 | `coverage-empty` / `missing-content` / `unreadable-content` | `error` | Publish-blocking incomplete coverage. |
 | `duplicated-content` | `info` | Duplicate input path. |
+| `path-escape` | `error` | A supplied/discovered path leaves the workspace through lexical traversal or a symlink. |
 
 ## Options
 
