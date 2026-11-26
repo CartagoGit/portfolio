@@ -1,10 +1,32 @@
-export interface ICompactProjectionOptions {
-	readonly items: readonly Record<string, unknown>[];
+import { z } from 'zod';
+
+export const PROJECTION_INPUT = {
+	fields: z.array(z.string()).max(20).optional(),
+	filter: z.string().max(200).optional(),
+	offset: z.number().int().nonnegative().default(0),
+	limit: z.number().int().min(1).max(100).default(20),
+	tokenBudget: z.number().int().min(128).max(4096).default(1200),
+} as const;
+
+export const PROJECTION_OUTPUT = {
+	count: z.number(),
+	total: z.number(),
+	offset: z.number(),
+	truncated: z.boolean(),
+	nextOffset: z.number().optional(),
+	tokenEstimate: z.number(),
+} as const;
+
+export interface IProjectionArguments {
 	readonly fields?: readonly string[];
 	readonly filter?: string;
 	readonly offset?: number;
 	readonly limit?: number;
 	readonly tokenBudget?: number;
+}
+
+export interface ICompactProjectionOptions extends IProjectionArguments {
+	readonly items: readonly Record<string, unknown>[];
 }
 
 export interface ICompactProjection {

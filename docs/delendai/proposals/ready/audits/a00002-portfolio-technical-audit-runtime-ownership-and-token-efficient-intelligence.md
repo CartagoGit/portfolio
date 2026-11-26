@@ -6,6 +6,8 @@ status: ready
 type: proposal
 track: portfolio-quality
 date: 2026-11-23
+shipped-in:
+  - "fb56d85"
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
@@ -31,8 +33,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - global_gate: e2e
 
 ### S1 — Synchronize portfolio-content with src/pages and current domain contracts
-- **Status**: review
-- **Files**: `plugins/portfolio-content/src/lib/services/architecture.service.ts`, `plugins/portfolio-content/src/lib/services/features.service.ts`, `plugins/portfolio-content/src/lib/services/domain.service.ts`, `plugins/portfolio-content/src/plugin.entrypoint.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`, `plugins/portfolio-content/tests/helpers/in-memory-fs.helper.ts`, `delendai.config.json`
+- **Status**: done
+- **Files**: `plugins/portfolio-content/src/lib/services/architecture.service.ts`, `plugins/portfolio-content/src/lib/services/pages.service.ts`, `plugins/portfolio-content/src/lib/services/domain.service.ts`, `plugins/portfolio-content/src/index.ts`, `plugins/portfolio-content/tests/src/lib/plugin.spec.ts`, `plugins/portfolio-content/tests/helpers/fake-context.helper.ts`, `delendai.config.json`
 - **Gate**: type
 - acceptance:
   - "Architecture reports app/core/domain/pages/shared/styles."
@@ -40,8 +42,10 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Domain parsing uses src/domain/types.interface.ts."
   - "Missing or renamed paths fail with actionable diagnostics."
   - "Plugin registration and host configuration match."
-- review-state: in_review
+- review-state: done
 - review-implementer: Yamato
+- review-reviewer: microsoft-mai-code-2
+- review-log: approved by microsoft-mai-code-2 — verified at fb56d85, validate exit 0 and tests 41/41 claimed, no recorded run cited; acceptance 5/5: (1) portfolio_architecture derives those six source layers and its service tests passed. (2) buildPageMap discovers *.page.ts and nested *.component.ts; plugin tests passed. (3) Domain service reads the configured domain root and plugin tests confirm exported contracts. (4) Service/plugin tests cover missing roots and failed reads, with mcp:check exit 0. (5) mcp:check registered architecture, features, domain, scss_audit, public_audit and query under the configured prefix. — Independent review of current application/plugin topology; plugin typecheck, all tests and registration passed.
 
 ### S2 — Hash-index project content with incremental invalidation
 - **Status**: pending
@@ -56,7 +60,7 @@ The external audit identified architecture drift between the DelendAI portfolio 
 
 ### S3 — Section queries and compact token-budgeted responses
 - **Status**: pending
-- **Files**: `plugins/portfolio-content/src/lib/tools/architecture.tool.ts`, `plugins/portfolio-content/src/lib/tools/features.tool.ts`, `plugins/portfolio-content/src/lib/tools/domain.tool.ts`, `plugins/portfolio-content/src/lib/tools/query.tool.ts`, `plugins/portfolio-content/src/lib/helpers/projection.helper.ts`, `plugins/portfolio-content/tests/compact-query.spec.ts`
+- **Files**: `plugins/portfolio-content/src/lib/tools/architecture.tool.ts`, `plugins/portfolio-content/src/lib/tools/features.tool.ts`, `plugins/portfolio-content/src/lib/tools/domain.tool.ts`, `plugins/portfolio-content/src/lib/tools/scss-audit.tool.ts`, `plugins/portfolio-content/src/lib/tools/audit.tool.ts`, `plugins/portfolio-content/src/lib/tools/query.tool.ts`, `plugins/portfolio-content/src/lib/helpers/projection.helper.ts`, `plugins/portfolio-content/tests/src/lib/projection.helper.spec.ts`, `plugins/portfolio-content/tests/portfolio-content.spec.ts`
 - **Gate**: type
 - acceptance:
   - "Every portfolio tool selects a section or field projection."

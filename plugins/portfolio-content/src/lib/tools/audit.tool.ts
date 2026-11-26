@@ -11,6 +11,7 @@ import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import type { IPortfolioContentOptions } from '../../contracts/interfaces/plugin-options.interface';
 import { runPublicAudit } from '../services/audit.service';
 import { discoverContentPaths } from '../services/content.service';
+import { compactProjection, type IProjectionArguments, PROJECTION_INPUT, PROJECTION_OUTPUT } from '../helpers/projection.helper';
 
 /** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
 export const AUDIT_TOOL_ID = 'public_audit';
@@ -27,7 +28,7 @@ const FINDING = z.object({
 	message: z.string(),
 	location: z.object({ contentPath: z.string(), line: z.number().optional() }),
 	remediation: z.string(),
-});
+}).partial().passthrough();
 
 const OUTPUT = z.object({
 	ok: z.boolean(),
@@ -42,6 +43,7 @@ const OUTPUT = z.object({
 	severity: z.object({ errors: z.number(), warnings: z.number(), info: z.number() }),
 	findings: z.array(FINDING),
 	nextAction: z.string(),
+	...PROJECTION_OUTPUT,
 });
 
 export const buildAuditTool = (
@@ -56,10 +58,10 @@ export const buildAuditTool = (
 			{
 				description:
 					'Discover every `*.html` template under the configured content roots (plus include/exclude globs) and report forbidden employer/client terms and per-se roots as errors and `TODO(image)` placeholders as warnings. Pure read.',
-				inputSchema: z.object({ contentPaths: z.array(z.string()).optional() }),
+				inputSchema: z.object({ contentPaths: z.array(z.string()).optional(), ...PROJECTION_INPUT }),
 				outputSchema: OUTPUT,
 			},
-			async (args: { contentPaths?: readonly string[] }) => {
+			async (args: { contentPaths?: readonly string[] } & IProjectionArguments) => {
 				const o = deps.options;
 				const contentPaths =
 					args.contentPaths ??
@@ -76,7 +78,8 @@ export const buildAuditTool = (
 					locale: o.locale,
 					reader: deps.fs,
 				});
-				return toolJson(report);
+				const { items: findings, ...projection } = compactProjection({ items: report.findings.map((finding) => ({ ...finding })), ...args });
+				return toolJson({ ...report, findings, ...projection });
 			},
 		);
 	},

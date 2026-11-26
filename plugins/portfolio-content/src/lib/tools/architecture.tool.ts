@@ -9,6 +9,7 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { buildArchitectureMap } from '../services/architecture.service';
+import { compactProjection, type IProjectionArguments, PROJECTION_INPUT, PROJECTION_OUTPUT } from '../helpers/projection.helper';
 
 /** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
 export const ARCHITECTURE_TOOL_ID = 'architecture';
@@ -22,15 +23,9 @@ export interface IBuildArchitectureToolOptions {
 const OUTPUT = z.object({
 	ok: z.literal(true),
 	sourceRoot: z.string(),
-	layers: z.array(
-		z.object({
-			id: z.string(),
-			root: z.string(),
-			subLayers: z.array(z.string()),
-			fileCount: z.number(),
-		}),
-	),
+	layers: z.array(z.record(z.string(), z.unknown())),
 	generatedAt: z.string(),
+	...PROJECTION_OUTPUT,
 });
 
 export const buildArchitectureTool = (
@@ -45,15 +40,16 @@ export const buildArchitectureTool = (
 			{
 				description:
 					'List every directory under the source root as a layer, with its sub-directories and file count. Read from disk at call time; pure read.',
-				inputSchema: z.object({ only: z.array(z.string()).optional() }),
+				inputSchema: z.object({ only: z.array(z.string()).optional(), ...PROJECTION_INPUT }),
 				outputSchema: OUTPUT,
 			},
-			async (args: { only?: readonly string[] }) => {
+			async (args: { only?: readonly string[] } & IProjectionArguments) => {
 				const map = await buildArchitectureMap(
 					{ fs: options.fs, sourceRoot: options.sourceRoot },
 					args.only ? { only: args.only } : {},
 				);
-				return toolJson({ ok: true as const, ...map });
+				const { items: layers, ...projection } = compactProjection({ items: map.layers.map((layer) => ({ ...layer })), ...args });
+				return toolJson({ ok: true as const, ...map, layers, ...projection });
 			},
 		);
 	},

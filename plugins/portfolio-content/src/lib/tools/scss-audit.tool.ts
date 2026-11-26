@@ -9,6 +9,7 @@ import { toolJson, type IToolRegistration } from '@delendai/core/public';
 
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import { runScssAudit } from '../services/scss-audit.service';
+import { compactProjection, type IProjectionArguments, PROJECTION_INPUT, PROJECTION_OUTPUT } from '../helpers/projection.helper';
 
 /** Tool id; the host registers it as `<namespacePrefix>_<id>`. */
 export const SCSS_AUDIT_TOOL_ID = 'scss_audit';
@@ -25,15 +26,7 @@ const OUTPUT = z.object({
 	sourcePath: z.string(),
 	totalSelectors: z.number(),
 	counts: z.object({ unused: z.number(), single: z.number(), shared: z.number() }),
-	entries: z.array(
-		z.object({
-			selector: z.string(),
-			className: z.string(),
-			line: z.number(),
-			owners: z.array(z.string()),
-			status: z.enum(['unused', 'single', 'shared']),
-		}),
-	),
+	entries: z.array(z.record(z.string(), z.unknown())),
 	dependencies: z.array(
 		z.object({
 			kind: z.enum(['use', 'forward', 'import']),
@@ -51,6 +44,7 @@ const OUTPUT = z.object({
 	),
 	nextAction: z.string(),
 	error: z.string().optional(),
+	...PROJECTION_OUTPUT,
 });
 
 export const buildScssAuditTool = (
@@ -65,10 +59,10 @@ export const buildScssAuditTool = (
 			{
 				description:
 					'Read a SCSS file and report, for each class selector, the directories whose templates use it (unused, single owner or shared). Ownership comes from the templates on disk at call time. Pure read.',
-				inputSchema: z.object({ sourcePath: z.string().optional() }),
+				inputSchema: z.object({ sourcePath: z.string().optional(), ...PROJECTION_INPUT }),
 				outputSchema: OUTPUT,
 			},
-			async (args: { sourcePath?: string }) => {
+			async (args: { sourcePath?: string } & IProjectionArguments) => {
 				const sourcePath = args.sourcePath ?? options.defaultSourcePath;
 				if (!(await options.fs.exists(sourcePath))) {
 					return toolJson({
@@ -81,13 +75,19 @@ export const buildScssAuditTool = (
 						customProperties: [],
 						nextAction: 'Pass an existing `sourcePath`.',
 						error: `File not found: ${sourcePath}`,
+						count: 0,
+						total: 0,
+						offset: args.offset ?? 0,
+						truncated: false,
+						tokenEstimate: 0,
 					});
 				}
 				const report = await runScssAudit(
 					{ fs: options.fs },
 					{ sourcePath, templateRoots: options.templateRoots },
 				);
-				return toolJson({ ok: true, ...report });
+				const { items: entries, ...projection } = compactProjection({ items: report.entries.map((entry) => ({ ...entry })), ...args });
+				return toolJson({ ok: true, ...report, entries, ...projection });
 			},
 		);
 	},

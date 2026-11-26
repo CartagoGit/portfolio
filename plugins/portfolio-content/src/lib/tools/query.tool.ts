@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { toolJson, type IToolRegistration } from '@delendai/core/public';
 import type { IFileSystem } from '../../contracts/interfaces/fs.interface';
 import type { IPortfolioContentOptions } from '../../contracts/interfaces/plugin-options.interface';
-import { compactProjection } from '../helpers/projection.helper';
+import { compactProjection, type IProjectionArguments, PROJECTION_INPUT, PROJECTION_OUTPUT } from '../helpers/projection.helper';
 import { ContentIndexService } from '../services/content-index.service';
 import { buildArchitectureMap } from '../services/architecture.service';
 import { runPublicAudit } from '../services/audit.service';
@@ -54,13 +54,8 @@ const OUTPUT = z.object({
 	ok: z.literal(true),
 	section: z.enum(['architecture', 'features', 'domain', 'scss', 'audit']),
 	items: z.array(z.record(z.string(), z.unknown())),
-	count: z.number(),
-	total: z.number(),
-	offset: z.number(),
-	truncated: z.boolean(),
-	nextOffset: z.number().optional(),
-	tokenEstimate: z.number(),
 	cache: z.object({ changedFiles: z.number(), reusedFiles: z.number() }),
+	...PROJECTION_OUTPUT,
 });
 
 export const buildQueryTool = (options: IBuildQueryToolOptions): IToolRegistration => {
@@ -77,15 +72,11 @@ export const buildQueryTool = (options: IBuildQueryToolOptions): IToolRegistrati
 					description: 'Select one portfolio section, then filter/project/paginate its compact evidence. Unchanged file metadata reuses the section result without rereading sources.',
 					inputSchema: z.object({
 						section: z.enum(['architecture', 'features', 'domain', 'scss', 'audit']),
-						fields: z.array(z.string()).max(20).optional(),
-						filter: z.string().max(200).optional(),
-						offset: z.number().int().nonnegative().default(0),
-						limit: z.number().int().min(1).max(100).default(20),
-						tokenBudget: z.number().int().min(128).max(4096).default(1200),
+						...PROJECTION_INPUT,
 					}),
 					outputSchema: OUTPUT,
 				},
-				async (args) => {
+				async (args: IProjectionArguments & { section: ISection }) => {
 					const paths = await SECTION_PATHS(options.fs, options.options, args.section);
 					const index = indexes.get(args.section) ?? new ContentIndexService(options.fs);
 					indexes.set(args.section, index);

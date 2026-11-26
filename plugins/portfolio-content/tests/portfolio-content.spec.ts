@@ -87,4 +87,25 @@ describe('portfolio-content plugin', () => {
 		expect(first.tokenEstimate).toBeLessThanOrEqual(400);
 		expect(second.cache.reusedFiles).toBeGreaterThan(0);
 	});
+
+	it('projects every direct tool response with the same bounded pagination contract', async () => {
+		const handlers = await register({ forbiddenTerms: ['Acme Corp'] });
+		const cases = [
+			['architecture', 'layers', 'id'],
+			['features', 'pages', 'id'],
+			['domain', 'contracts', 'name'],
+			['scss_audit', 'entries', 'selector'],
+			['public_audit', 'findings', 'id'],
+		] as const;
+		for (const [tool, collection, field] of cases) {
+			const result = await call(handlers, tool, { fields: [field], limit: 1, tokenBudget: 400 });
+			expect(result[collection], tool).toHaveLength(1);
+			expect(Object.keys(result[collection][0] ?? {})).toEqual([field]);
+			expect(result.count, tool).toBe(1);
+			expect(result.total, tool).toBeGreaterThanOrEqual(1);
+			expect(result.tokenEstimate, tool).toBeLessThanOrEqual(400);
+			expect(result).toHaveProperty('offset', 0);
+			expect(result).toHaveProperty('truncated');
+		}
+	});
 });
