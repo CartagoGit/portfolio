@@ -1,5 +1,6 @@
 import type { ITranslationMap } from './types.interface';
 import { contentEn } from './content/en.content';
+import { ARCADE_TRANSLATIONS } from './arcade.translation';
 
 /**
  * English source of truth for the portfolio's UI copy.
@@ -482,12 +483,13 @@ export const en: ITranslationMap = {
 			sourceLink: 'Source',
 		},
 		demos: {
+			arcade: ARCADE_TRANSLATIONS.en,
 			eyebrow: '06 / Demos',
-			titleLead: 'Small experiments,',
-			titleEmphasis: 'shipped for real.',
+			titleLead: 'Six playable games.',
+			titleEmphasis: 'A real arcade.',
 			titleTail: '',
 			subtitle:
-				'Each demo is a self-contained interface designed to be poked at — keyboard, mouse, or touch.',
+				'Start with six score-driven mini-games, then explore the interaction laboratory and public projects.',
 			showcaseEyebrow: '07 / Interactive showcase',
 			showcaseTitleLead: 'Depth, data and motion',
 			showcaseTitleEmphasis: 'with a reason.',

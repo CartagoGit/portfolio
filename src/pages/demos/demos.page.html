@@ -10,9 +10,17 @@
 		<p>{{ 'pages.demos.subtitle' | translate }}</p>
 	</div>
 
-	<app-demos-showcase />
+	<app-arcade-games />
 
-	<app-demo-games />
+	<section class="demos-page__laboratory" aria-labelledby="demos-laboratory-title">
+		<header class="demos-page__laboratory-heading">
+			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>
+			<h3 id="demos-laboratory-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
+			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
+		</header>
+		<app-demos-showcase />
+		<app-demo-games />
+	</section>
 
 	<section
 		class="demos-page__links"

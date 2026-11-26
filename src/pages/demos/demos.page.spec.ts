@@ -19,8 +19,11 @@ describe('DemosPageComponent', () => {
 		const element = fixture.nativeElement as HTMLElement;
 		expect(element.querySelector('app-demos-showcase')).not.toBeNull();
 		expect(element.querySelectorAll('app-demos-showcase [role="tab"]')).toHaveLength(6);
-		expect(element.querySelector('app-demo-games')).not.toBeNull();
-		expect(element.querySelectorAll('.demo-games__tabs [role="tab"]')).toHaveLength(8);
+		const arcade = element.querySelector('app-arcade-games');
+		const showcase = element.querySelector('app-demos-showcase');
+		expect(arcade).not.toBeNull();
+		expect(arcade?.querySelectorAll('[role="tab"]')).toHaveLength(6);
+		expect(Boolean(arcade && showcase && (arcade.compareDocumentPosition(showcase) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
 		expect(element.querySelectorAll('.demos-page__links app-evidence-card')).toHaveLength(5);
 		for (const link of element.querySelectorAll<HTMLAnchorElement>('.demos-page__links app-evidence-card a')) {
 			expect(link.href.startsWith('https://')).toBe(true);

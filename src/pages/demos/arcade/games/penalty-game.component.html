@@ -1,0 +1,104 @@
+<app-arcade-game-shell
+	[titleKey]="'penalty'"
+	[descriptionKey]="'penaltyDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[livesLabelKey]="'shots'"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="penalty-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="'penalty' | arcadeText"
+		[attr.data-result]="lastResult()"
+		(keydown)="onKeydown($event)">
+		<div class="penalty-game__stadium" aria-hidden="true">
+			<span class="penalty-game__floodlight penalty-game__floodlight--left"></span>
+			<span class="penalty-game__floodlight penalty-game__floodlight--right"></span>
+			<div class="penalty-game__crowd">
+				<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+			</div>
+		</div>
+		<div class="penalty-game__pitch" aria-hidden="true">
+			<span class="penalty-game__grass-line penalty-game__grass-line--one"></span>
+			<span class="penalty-game__grass-line penalty-game__grass-line--two"></span>
+			<span class="penalty-game__penalty-mark"></span>
+		</div>
+		<div class="penalty-game__goal">
+			<span class="penalty-game__net"></span>
+			<span class="penalty-game__frame penalty-game__frame--left"></span>
+			<span class="penalty-game__frame penalty-game__frame--right"></span>
+			<span class="penalty-game__frame penalty-game__frame--top"></span>
+			<span
+				class="penalty-game__keeper"
+				[style.left.%]="zonePosition(keeperZone())">
+				<i></i><b></b><em></em><small></small><strong></strong>
+			</span>
+			@for (zone of zones; track zone) {
+				<button
+					type="button"
+					class="penalty-game__target penalty-game__zone"
+					[class.is-selected]="selectedZone() === zone"
+					[style.left.%]="zonePosition(zone)"
+					[attr.aria-pressed]="selectedZone() === zone"
+					[attr.aria-label]="('zone' | arcadeText) + ' ' + (zone + 1)"
+					[disabled]="phase() !== 'running'"
+					(click)="selectZone(zone)">
+					{{ zone + 1 }}
+				</button>
+			}
+		</div>
+		@if (shotBursts().length === 0) {
+			<span class="penalty-game__ball penalty-game__ball--ready" [style.left.%]="zonePosition(selectedZone())" aria-hidden="true"><i></i></span>
+		}
+		@for (burst of shotBursts(); track burst.id) {
+			<span
+				class="penalty-game__ball"
+				[attr.data-result]="burst.result"
+				[style.left.%]="zonePosition(burst.zone)"
+				aria-hidden="true"><i></i></span>
+			@if (burst.result === 'goal') {
+				<span class="penalty-game__goal-burst" [style.left.%]="zonePosition(burst.zone)" aria-hidden="true">
+					<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+				</span>
+			}
+		}
+		<div class="penalty-game__shots" [attr.aria-label]="'shots' | arcadeText">
+			@for (shot of shotSlots; track shot) {
+				<span [class.is-goal]="$index < goals()" [class.is-shot]="$index < shots()"></span>
+			}
+		</div>
+		<strong class="penalty-game__score" aria-live="polite">{{ goals() }} / 5 · {{ 'goal' | arcadeText }}</strong>
+	</div>
+	<div
+		arcade-actions
+		class="penalty-game__controls"
+		role="group"
+		[attr.aria-label]="'controls' | arcadeText"
+		(keydown)="onKeydown($event)">
+		<div class="penalty-game__zone-tray">
+			<div class="penalty-game__tray-label">
+				<span>{{ 'zone' | arcadeText }}</span><kbd>A / D · ← / → · {{ 'touch' | arcadeText }}</kbd>
+			</div>
+			<div class="penalty-game__zone-chips" aria-hidden="true">
+				@for (zone of zones; track zone) {
+					<span [class.is-selected]="selectedZone() === zone">
+						<span>0{{ zone + 1 }}</span>{{ 'zone' | arcadeText }} {{ zone + 1 }}
+					</span>
+				}
+			</div>
+		</div>
+		<button
+			type="button"
+			class="penalty-game__shoot"
+			[disabled]="phase() !== 'running'"
+			(click)="shoot()">
+			<span aria-hidden="true"><i></i></span><strong>{{ 'shoot' | arcadeText }}</strong><kbd>SPACE</kbd>
+		</button>
+	</div>
+</app-arcade-game-shell>

@@ -1,0 +1,54 @@
+<section class="arcade-game-shell" [attr.data-phase]="phase()">
+	<header class="arcade-game-shell__heading">
+		<p>{{ 'pages.demos.arcade.eyebrow' | translate }}</p>
+		<h3>{{ titleKey() | arcadeText }}</h3>
+		<span>{{ descriptionKey() | arcadeText }}</span>
+	</header>
+
+	<dl class="arcade-game-shell__hud">
+		<div>
+			<dt>{{ 'pages.lab.dataScore' | translate }}</dt>
+			<dd data-hud-score>{{ score() }}</dd>
+		</div>
+		<div>
+			<dt>{{ livesLabelKey() | arcadeText }}</dt>
+			<dd data-hud-lives>{{ lives() }}</dd>
+		</div>
+		<div>
+			<dt>{{ 'time' | arcadeText }}</dt>
+			<dd data-hud-time>{{ time() }}s</dd>
+		</div>
+		<div class="arcade-game-shell__hud-status">
+			<dt>{{ 'pages.lab.dataStatus' | translate }}</dt>
+			<dd data-hud-status>{{ statusKey() | arcadeText }}</dd>
+		</div>
+	</dl>
+
+	<div class="arcade-game-shell__arena">
+		<div class="arcade-game-shell__playfield">
+			<ng-content select="[arcade-stage]" />
+		</div>
+		<div class="arcade-game-shell__actions">
+			<ng-content select="[arcade-actions]" />
+		</div>
+	</div>
+
+	<div class="arcade-game-shell__footer">
+		<p aria-live="polite" data-arcade-announcement>{{ statusKey() | arcadeText }}</p>
+		<div>
+			<button
+				type="button"
+				data-arcade-action="start"
+				[disabled]="phase() === 'running'"
+				(click)="start($event)">
+				{{ 'pages.demos.reactionStart' | translate }}
+			</button>
+			<button
+				type="button"
+				data-arcade-action="reset"
+				(click)="resetGame.emit()">
+				{{ 'pages.demos.resetButton' | translate }}
+			</button>
+		</div>
+	</div>
+</section>

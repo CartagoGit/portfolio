@@ -16,6 +16,7 @@ import { tr } from './secondary-locales/tr.translation';
 import { uk } from './secondary-locales/uk.translation';
 import { zhCn } from './secondary-locales/zh-cn.translation';
 import { zhTw } from './secondary-locales/zh-tw.translation';
+import { ARCADE_TRANSLATIONS } from './arcade.translation';
 
 const RAW_PACKS = {
 	it, 'pt-PT': ptPt, 'pt-BR': ptBr, ru, uk, pl, hr, tr, ar, hi, bn, 'zh-CN': zhCn, 'zh-TW': zhTw, ja, ko, id,
@@ -144,7 +145,10 @@ export const SECONDARY_PRIORITY_OVERLAYS = Object.fromEntries(
 		const selected = selectPriorityOverlay(pack.translation);
 		const completed = mergeOverlays(selected, DEEP_COMPLETIONS[id] ?? {});
 		const withPageBase = mergeOverlays(completed, PAGE_BASE_OVERRIDES[id]);
-		return [id, mergeOverlays(withPageBase, deriveApproachOverlay(withPageBase))];
+		const withArcade = mergeOverlays(withPageBase, {
+			pages: { demos: { arcade: ARCADE_TRANSLATIONS[id] } },
+		});
+		return [id, mergeOverlays(withArcade, deriveApproachOverlay(withArcade))];
 	}),
 ) as Readonly<Record<ISecondaryLocale, ITranslationOverlay>>;
 

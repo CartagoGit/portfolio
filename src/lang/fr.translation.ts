@@ -2,6 +2,7 @@ import type { ITranslationMap } from './types.interface';
 import { en } from './en.translation';
 import { contentFr } from './content/fr.content';
 import { approachFr, dockerFr, knowledgeFr, workFr } from './content/pages-fr.content';
+import { ARCADE_TRANSLATIONS } from './arcade.translation';
 
 /** French copy for shell, routes and localized domain content. */
 export const fr: ITranslationMap = {
@@ -237,11 +238,12 @@ export const fr: ITranslationMap = {
 			stateEyebrow: 'Machine à états', stateTitle: 'Modéliser chaque résultat.', stateDetail: 'Parcourez succès, erreur et réinitialisation avec un état explicite.', stateIdle: 'Inactif', stateRunning: 'En cours', stateSuccess: 'Succès', stateError: 'Erreur', stateRun: 'Lancer le succès', stateFail: 'Lancer l’erreur', stateIdleMessage: 'Prêt pour une nouvelle requête.', stateRunningMessage: 'La requête expose son état d’exécution.', stateSuccessMessage: 'La requête termine dans l’état de succès.', stateErrorMessage: 'L’erreur reste visible et peut être réinitialisée.',
 		},
 		demos: {
+			arcade: ARCADE_TRANSLATIONS.fr,
 			eyebrow: '06 / Démos',
-			titleLead: 'Petites expériences,',
-			titleEmphasis: 'réellement utilisables.',
+			titleLead: 'Six jeux jouables.',
+			titleEmphasis: 'Un véritable arcade.',
 			titleTail: '',
-			subtitle: 'Chaque démo est une interface autonome à explorer au clavier, à la souris ou au toucher.',
+			subtitle: 'Commencez par six mini-jeux à score, puis explorez le laboratoire d’interaction et les projets publics.',
 			showcaseEyebrow: '07 / Vitrine interactive',
 			showcaseTitleLead: 'Profondeur, données et mouvement',
 			showcaseTitleEmphasis: 'avec une intention.',

@@ -1,5 +1,6 @@
 import type { ITranslationMap } from './types.interface';
 import { contentEs } from './content/es.content';
+import { ARCADE_TRANSLATIONS } from './arcade.translation';
 
 /**
  * Spanish translation map. Every key must satisfy `ITranslationMap`;
@@ -467,12 +468,13 @@ export const es: ITranslationMap = {
 			sourceLink: 'Código fuente',
 		},
 		demos: {
+			arcade: ARCADE_TRANSLATIONS.es,
 			eyebrow: '06 / Demos',
-			titleLead: 'Pequeños experimentos,',
-			titleEmphasis: 'entregados de verdad.',
+			titleLead: 'Seis juegos jugables.',
+			titleEmphasis: 'Un arcade de verdad.',
 			titleTail: '',
 			subtitle:
-				'Cada demo es una interfaz autocontenida pensada para que se pruebe con teclado, ratón o pantalla táctil.',
+				'Empieza por seis minijuegos con puntuación y continúa con el laboratorio de interacción y los proyectos públicos.',
 			showcaseEyebrow: '07 / Showcase interactivo',
 			showcaseTitleLead: 'Profundidad, datos y movimiento',
 			showcaseTitleEmphasis: 'con intención.',

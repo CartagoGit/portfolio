@@ -2,6 +2,7 @@ import type { ITranslationMap } from './types.interface';
 import { en } from './en.translation';
 import { contentDe } from './content/de.content';
 import { approachDe, dockerDe, knowledgeDe, workDe } from './content/pages-de.content';
+import { ARCADE_TRANSLATIONS } from './arcade.translation';
 
 /** German copy for shell, routes and localized domain content. */
 export const de: ITranslationMap = {
@@ -237,11 +238,12 @@ export const de: ITranslationMap = {
 			stateEyebrow: 'Zustandsautomat', stateTitle: 'Jedes Ergebnis modellieren.', stateDetail: 'Erfolg, Fehler und Reset durch einen expliziten Zustandsautomaten steuern.', stateIdle: 'Wartet', stateRunning: 'Läuft', stateSuccess: 'Erfolg', stateError: 'Fehler', stateRun: 'Erfolg starten', stateFail: 'Fehler starten', stateIdleMessage: 'Bereit für eine neue Anfrage.', stateRunningMessage: 'Die Anfrage besitzt einen sichtbaren Laufstatus.', stateSuccessMessage: 'Die Anfrage endete im Erfolgszustand.', stateErrorMessage: 'Der Fehler bleibt sichtbar und kann sicher zurückgesetzt werden.',
 		},
 		demos: {
+			arcade: ARCADE_TRANSLATIONS.de,
 			eyebrow: '06 / Demos',
-			titleLead: 'Kleine Experimente,',
-			titleEmphasis: 'echte Interaktionen.',
+			titleLead: 'Sechs spielbare Spiele.',
+			titleEmphasis: 'Eine echte Arcade.',
 			titleTail: '',
-			subtitle: 'Jede Demo ist eine eigenständige Oberfläche zum Ausprobieren mit Tastatur, Maus oder Touch.',
+			subtitle: 'Beginne mit sechs punktebasierten Minispielen, erkunde dann das Interaktionslabor und öffentliche Projekte.',
 			showcaseEyebrow: '07 / Interaktive Vitrine',
 			showcaseTitleLead: 'Tiefe, Daten und Bewegung',
 			showcaseTitleEmphasis: 'mit Absicht.',
@@ -271,7 +273,7 @@ export const de: ITranslationMap = {
 			showcaseHint: 'Bewege den Zeiger über die Fläche oder nutze die Tabs. Touch und reduzierte Bewegung erhalten den vollständigen Zustand ohne Präzisionsgeste.',
 			showcaseReset: 'Interaktion zurücksetzen',
 			deprecatedNotice: 'Einige Demos sind ältere Netlify-Versionen; sie bleiben verlinkt, solange die Originale erreichbar sind.', openDemo: 'Demo öffnen ↗',
-			gameEyebrow: 'Interaktionslabor', gameHeading: 'Reflexe und direkte Rückmeldung testen.', gameDetail: 'Triff das aktive Signal und beobachte die Zustandsänderung ohne Neuladen.', gameSignalsLabel: 'Signale getroffen', resetButton: 'Zurücksetzen',
+			gameEyebrow: 'Interaktionslabor', gameHeading: 'Reflexe und direkte Rückmeldung testen.', gameDetail: 'Triff das aktive Signal und behalte die Zustandsänderung ohne Neuladen im Auge.', gameSignalsLabel: 'Signale getroffen', resetButton: 'Zurücksetzen',
 			reactionEyebrow: 'Reaktionszeit', reactionHeading: 'Warten, beobachten, drücken.', reactionDetail: 'Eine einzelne Oberfläche misst eine Aktion und behält die Bestzeit dieser Sitzung.',
 			memoryEyebrow: 'Verteilter Zustand', memoryHeading: 'Finde alle sechs Paare.', memoryDetail: 'Jede Karte behält während der Sitzung ihren offenen, passenden oder verdeckten Zustand.',
 			tabReflex: 'Reflexe', tabReaction: 'Reaktion', tabMemory: 'Gedächtnis', tabDice: 'Würfel', tabRps: 'Schere Stein', tabColor: 'Farbe', tabTap: 'Taps', tabGuess: 'Raten',

@@ -440,6 +440,7 @@ export interface ITranslationMap {
 			sourceLink: string;
 		};
 		demos: {
+			arcade: IArcadeTranslationMap;
 			eyebrow: string;
 			titleLead: string;
 			titleEmphasis: string;
@@ -640,4 +641,49 @@ export interface ITranslationMap {
 			mono: { label: string; detail: string };
 		};
 	};
+}
+
+export interface IArcadeTranslationMap {
+	readonly eyebrow: string;
+	readonly title: string;
+	readonly detail: string;
+	readonly tabsAria: string;
+	readonly lives: string;
+	readonly time: string;
+	readonly ready: string;
+	readonly running: string;
+	readonly won: string;
+	readonly lost: string;
+	readonly hit: string;
+	readonly goal: string;
+	readonly saved: string;
+	readonly runner: string;
+	readonly shooter: string;
+	readonly lanes: string;
+	readonly penalty: string;
+	readonly rpg: string;
+	readonly maze: string;
+	readonly runnerDetail: string;
+	readonly shooterDetail: string;
+	readonly lanesDetail: string;
+	readonly penaltyDetail: string;
+	readonly rpgDetail: string;
+	readonly mazeDetail: string;
+	readonly jump: string;
+	readonly fire: string;
+	readonly left: string;
+	readonly right: string;
+	readonly up: string;
+	readonly down: string;
+	readonly shoot: string;
+	readonly attack: string;
+	readonly guard: string;
+	readonly spell: string;
+	readonly heal: string;
+	readonly keeper: string;
+	readonly round: string;
+	readonly shots: string;
+	readonly zone: string;
+	readonly collectibles: string;
+	readonly centre: string;
 }

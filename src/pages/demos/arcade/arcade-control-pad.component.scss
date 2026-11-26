@@ -1,0 +1,268 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+	width: 100%;
+	min-width: 0;
+}
+
+.arcade-control-pad {
+	--control-accent: var(--cyan);
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(.8rem, 3vw, 1.55rem);
+	padding: .2rem;
+
+	&[data-tone='danger'] { --control-accent: var(--danger); }
+	&[data-tone='lime'] { --control-accent: var(--lime); }
+
+	&__console {
+		display: flex;
+		min-width: 0;
+		align-items: center;
+		gap: .65rem;
+	}
+
+	&__pad {
+		position: relative;
+		flex: 0 0 132px;
+		width: 132px;
+		height: 94px;
+		filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--shadow-strong) 68%, transparent));
+	}
+
+	&__direction {
+		position: absolute;
+		z-index: 2;
+		display: grid;
+		width: 44px;
+		min-width: 44px;
+		height: 44px;
+		min-height: 44px;
+		padding: 0;
+		place-items: center;
+		border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 32%, var(--line));
+		border-radius: 12px;
+		background:
+			linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 92%, var(--ice) 2%), var(--canvas));
+		box-shadow:
+			inset 0 1px 0 color-mix(in srgb, var(--ice) 9%, transparent),
+			0 5px 0 color-mix(in srgb, var(--shadow-strong) 80%, transparent);
+		color: var(--ink);
+		font: 900 1rem tokens.$font-mono, monospace;
+		transition:
+			transform tokens.$motion-fast tokens.$ease-emphasized,
+			border-color tokens.$motion-fast ease,
+			background tokens.$motion-fast ease,
+			box-shadow tokens.$motion-fast ease;
+		touch-action: manipulation;
+
+		&--up { top: 0; left: 44px; }
+		&--left { top: 25px; left: 0; }
+		&--right { top: 25px; right: 0; }
+		&--down { bottom: 0; left: 44px; }
+
+		&:hover:not(:disabled),
+		&:focus-visible {
+			border-color: var(--cyan);
+			background: color-mix(in srgb, var(--cyan) 13%, var(--surface-2));
+			color: var(--cyan);
+			box-shadow: 0 5px 0 color-mix(in srgb, var(--shadow-strong) 80%, transparent), 0 0 18px color-mix(in srgb, var(--cyan) 16%, transparent);
+		}
+
+		&:active:not(:disabled),
+		&--pressed {
+			border-color: var(--cyan);
+			background: color-mix(in srgb, var(--cyan) 22%, var(--surface-2));
+			box-shadow: inset 0 3px 8px color-mix(in srgb, var(--shadow-strong) 48%, transparent), 0 0 20px color-mix(in srgb, var(--cyan) 24%, transparent);
+			transform: translateY(4px) scale(.94);
+		}
+
+		&:disabled {
+			cursor: default;
+			opacity: .34;
+			filter: saturate(.4);
+		}
+	}
+
+	&__stick {
+		position: absolute;
+		z-index: 3;
+		top: 30px;
+		left: 49px;
+		display: grid;
+		width: 34px;
+		height: 34px;
+		place-items: center;
+		border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 42%, var(--line));
+		border-radius: 50%;
+		background: radial-gradient(circle at 36% 28%, color-mix(in srgb, var(--ice) 46%, var(--surface-2)), var(--canvas) 72%);
+		box-shadow: inset 0 0 0 5px color-mix(in srgb, var(--canvas) 72%, transparent), 0 0 0 5px color-mix(in srgb, var(--surface) 82%, transparent), 0 0 14px color-mix(in srgb, var(--cyan) 18%, transparent);
+		pointer-events: none;
+
+		i {
+			width: 8px;
+			aspect-ratio: 1;
+			border-radius: 50%;
+			background: var(--cyan);
+			box-shadow: 0 0 9px var(--cyan);
+		}
+	}
+
+	&__input-labels {
+		display: grid;
+		gap: .28rem;
+		color: var(--muted);
+		font: 700 .54rem tokens.$font-mono, monospace;
+
+		> span {
+			display: flex;
+			align-items: center;
+			gap: .3rem;
+			min-height: 25px;
+			padding: .24rem .38rem;
+			border: var(--border-thin) solid color-mix(in srgb, var(--line) 88%, transparent);
+			border-radius: 8px;
+			background: color-mix(in srgb, var(--canvas) 82%, transparent);
+			white-space: nowrap;
+		}
+
+		svg {
+			width: 14px;
+			height: 14px;
+			fill: none;
+			stroke: var(--cyan);
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 1.6;
+		}
+
+		kbd,
+		small {
+			font: inherit;
+			letter-spacing: .04em;
+		}
+	}
+
+	&__action-cluster {
+		position: relative;
+		display: grid;
+		min-width: 102px;
+		place-items: center;
+	}
+
+	&__action-halo {
+		position: absolute;
+		width: 76px;
+		aspect-ratio: 1;
+		border: var(--border-thin) solid color-mix(in srgb, var(--control-accent) 28%, transparent);
+		border-radius: 50%;
+		background: radial-gradient(circle, color-mix(in srgb, var(--control-accent) 9%, transparent), transparent 68%);
+		animation: arcade-control-halo 2.2s ease-in-out infinite;
+	}
+
+	&__action {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		width: 72px;
+		height: 72px;
+		padding: .5rem .3rem;
+		place-items: center;
+		border: 2px solid color-mix(in srgb, var(--control-accent) 68%, var(--line));
+		border-radius: 50%;
+		background:
+			radial-gradient(circle at 34% 24%, color-mix(in srgb, var(--control-accent) 24%, var(--surface-2)), transparent 42%),
+			linear-gradient(145deg, color-mix(in srgb, var(--control-accent) 14%, var(--surface-2)), var(--canvas));
+		box-shadow:
+			inset 0 1px 0 color-mix(in srgb, var(--ice) 12%, transparent),
+			0 6px 0 color-mix(in srgb, var(--shadow-strong) 72%, transparent),
+			0 0 20px color-mix(in srgb, var(--control-accent) 18%, transparent);
+		color: var(--ink);
+		transition:
+			transform tokens.$motion-fast tokens.$ease-emphasized,
+			box-shadow tokens.$motion-fast ease;
+		touch-action: manipulation;
+
+		strong {
+			font: 900 .56rem tokens.$font-mono, monospace;
+			letter-spacing: .04em;
+			text-transform: uppercase;
+		}
+
+		kbd {
+			position: absolute;
+			bottom: -1.2rem;
+			padding: .16rem .34rem;
+			border: var(--border-thin) solid color-mix(in srgb, var(--control-accent) 44%, var(--line));
+			border-radius: 5px;
+			background: var(--canvas);
+			color: var(--muted);
+			font: 700 .45rem tokens.$font-mono, monospace;
+		}
+
+		&:hover:not(:disabled),
+		&:focus-visible {
+			box-shadow: 0 6px 0 color-mix(in srgb, var(--shadow-strong) 72%, transparent), 0 0 30px color-mix(in srgb, var(--control-accent) 32%, transparent);
+			transform: translateY(-2px);
+		}
+
+		&:active:not(:disabled),
+		&--pressed {
+			box-shadow: inset 0 4px 9px color-mix(in srgb, var(--shadow-strong) 55%, transparent), 0 0 28px color-mix(in srgb, var(--control-accent) 38%, transparent);
+			transform: translateY(5px) scale(.92);
+		}
+
+		&:disabled {
+			cursor: default;
+			opacity: .4;
+			filter: saturate(.4);
+		}
+	}
+
+	&__action-icon {
+		position: relative;
+		display: grid;
+		width: 24px;
+		height: 15px;
+		place-items: center;
+
+		&::before,
+		&::after,
+		i {
+			position: absolute;
+			background: var(--control-accent);
+			content: '';
+			box-shadow: 0 0 8px color-mix(in srgb, var(--control-accent) 52%, transparent);
+		}
+
+		&::before { width: 18px; height: 2px; border-radius: 999px; }
+		&::after { right: 2px; width: 7px; height: 7px; border: 2px solid var(--control-accent); border-bottom: 0; border-left: 0; background: transparent; transform: rotate(45deg); }
+		i { right: 0; width: 4px; height: 4px; border-radius: 50%; }
+	}
+}
+
+@keyframes arcade-control-halo {
+	50% { opacity: .42; transform: scale(1.14); }
+}
+
+@media (max-width: 640px) {
+	.arcade-control-pad {
+		justify-content: space-between;
+		gap: .55rem;
+
+		&__console { gap: .4rem; }
+		&__input-labels { display: none; }
+ 		&__action-cluster { min-width: 92px; }
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arcade-control-pad {
+		&__action-halo { animation: none; }
+		&__direction,
+		&__action { transition: none; }
+	}
+}

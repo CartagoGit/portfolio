@@ -1,0 +1,86 @@
+<app-arcade-game-shell
+	[titleKey]="'runner'"
+	[descriptionKey]="'runnerDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="runner-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="('runner' | arcadeText) + '. ' + ('runnerDetail' | arcadeText)"
+		[attr.data-status]="statusKey()"
+		(keydown)="onKeydown($event)"
+		(pointerdown)="onPointerDown()">
+		<div class="runner-game__sky" aria-hidden="true">
+			<span class="runner-game__moon"><i></i></span>
+			<div class="runner-game__clouds"><i></i><i></i><i></i></div>
+			<div class="runner-game__city runner-game__city--far">
+				<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+			</div>
+			<div class="runner-game__city runner-game__city--near">
+				<i></i><i></i><i></i><i></i><i></i><i></i>
+			</div>
+			<span class="runner-game__haze"></span>
+		</div>
+
+		<div class="runner-game__track" aria-hidden="true">
+			<span class="runner-game__road-glow"></span>
+			<span class="runner-game__lane-line runner-game__lane-line--one"></span>
+			<span class="runner-game__lane-line runner-game__lane-line--two"></span>
+			@for (obstacle of obstacles(); track obstacle.id) {
+				<span
+					class="runner-game__obstacle"
+					[class.runner-game__obstacle--low]="obstacle.id % 2 === 0"
+					[style.left.%]="obstacle.x"
+					[style.width.%]="obstacle.width">
+					<i></i><b></b>
+				</span>
+			}
+			<span
+				class="runner-game__player"
+				[class.is-hit]="hit()"
+				[class.is-airborne]="playerY() > .5"
+				[style.--runner-lift]="playerY() + 'px'">
+				<span class="runner-game__runner-shadow"></span>
+				<i class="runner-game__runner-head"></i>
+				<i class="runner-game__runner-body"></i>
+				<i class="runner-game__runner-arm"></i>
+				<i class="runner-game__runner-leg runner-game__runner-leg--front"></i>
+				<i class="runner-game__runner-leg runner-game__runner-leg--back"></i>
+			</span>
+			<div class="runner-game__dust">
+				<i></i><i></i><i></i><i></i><i></i>
+			</div>
+			@if (hit()) {
+				@for (burst of [hitSequence()]; track burst) {
+					<span class="runner-game__hit-burst">
+						<i></i><i></i><i></i><i></i><i></i><i></i>
+					</span>
+				}
+			}
+		</div>
+
+		<div class="runner-game__readout" aria-hidden="true">
+			<span>SECTOR 07</span><i></i><strong>+{{ score() }}</strong>
+		</div>
+		<div class="runner-game__scanline" aria-hidden="true"></div>
+	</div>
+	<app-arcade-control-pad
+		arcade-actions
+		class="runner-game__control-pad"
+		[disabled]="phase() !== 'running'"
+		[directions]="controlDirections"
+		[actionLabelKey]="'jump'"
+		[actionHint]="'SPACE / ↑'"
+		[actionTone]="'lime'"
+		[actionClass]="'runner-game__controls'"
+		[keyboardHint]="'W / ↑ / SPACE'"
+		(directionChange)="onControlDirection($event)"
+		(action)="jump()" />
+</app-arcade-game-shell>
