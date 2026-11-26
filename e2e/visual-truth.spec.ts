@@ -101,7 +101,7 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	await page.locator('.hero-monitor__fullscreen').click();
 	await page.locator('.hero-monitor__fullscreen').click();
 	await openRoute(page, { route: 'demos' });
-	await expect(page.locator('.showcase__footer button')).toHaveCount(1);
+	await expect(page.locator('.showcase__controls .showcase__fullscreen')).toHaveCount(1);
 	await expect(page.locator('.showcase__stage .showcase__fullscreen svg')).toHaveCount(1);
 	await page.locator('.showcase__fullscreen').click();
 	await expectAspectRatio(page.locator('.showcase__fullscreen-frame'), 16 / 9);

@@ -126,9 +126,12 @@
 .demo-games__stage:fullscreen > .demo-games__fullscreen-frame,
 .demo-games__stage.is-fallback-fullscreen > .demo-games__fullscreen-frame {
 	display: grid;
-	width: min(1180px, 100%);
-	min-height: calc(100dvh - 100px);
+	width: min(1180px, 100%, calc((100dvh - 8rem) * 8 / 5));
+	min-height: 0;
+	max-height: calc(100dvh - 8rem);
+	aspect-ratio: 8 / 5;
 	align-items: center;
+	overflow: auto;
 }
 
 @keyframes demo-stage-in-a {
@@ -165,6 +168,14 @@
 	.demo-games__stage {
 		min-height: 0;
 		padding: 1.1rem;
+	}
+
+	.demo-games__stage:fullscreen > .demo-games__fullscreen-frame,
+	.demo-games__stage.is-fallback-fullscreen > .demo-games__fullscreen-frame {
+		min-height: calc(100dvh - 7.5rem);
+		max-height: none;
+		aspect-ratio: auto;
+		align-items: start;
 	}
 }
 

@@ -47,7 +47,7 @@ const fr = defineArcadeCopy([
 	'Course sans fin', 'Tir de précision', 'Course par voies', 'Penalty en cinq tirs', 'Combat au tour par tour', 'Explorateur du labyrinthe',
 	'Sautez les obstacles, gardez vos vies et prolongez la course.', 'Visez vite avant la disparition de chaque cible chronométrée.', 'Changez de voie, évitez le trafic et traversez le parcours.', 'Choisissez une zone et battez le gardien en cinq essais.', 'Battez trois ennemis avec attaque, garde, sort et soin.', 'Collectez chaque cristal pendant que le gardien vous poursuit.',
 	'Sauter', 'Tirer', 'Gauche', 'Droite', 'Haut', 'Bas', 'Frapper', 'Attaquer', 'Garder', 'Sort', 'Soigner', 'Gardien', 'Manche', 'Tirs', 'Secteur', 'Cristaux', 'Milieu',
-	'Contrôles', 'D-pad + action', 'Entrée', 'Touches + tactile', 'Plein écran', 'Quitter la vue', 'Étendre la vue', 'Contrôles directionnels', 'Tactile',
+	'Contrôles', 'Croix directionnelle + action', 'Entrée', 'Touches + tactile', 'Plein écran', 'Quitter la vue', 'Étendre la vue', 'Contrôles directionnels', 'Tactile',
 ] as const);
 
 const de = defineArcadeCopy([
@@ -56,7 +56,7 @@ const de = defineArcadeCopy([
 	'Endlosläufer', 'Zielschießen', 'Spurenrennen', 'Fünf-Elfmeter-Serie', 'Rundenkampf', 'Labyrinthsammler',
 	'Überspringe Hindernisse, schütze deine Leben und halte den Lauf.', 'Ziele rasch an, bevor die befristeten Ziele verschwinden.', 'Wechsle Spuren, weiche Verkehr aus und überstehe die Strecke.', 'Wähle eine Ecke und bezwinge den Torwart in fünf Versuchen.', 'Besiege drei Gegner mit Angriff, Deckung, Zauber und Heilung.', 'Sammle alle Kristalle, während der Wächter dich verfolgt.',
 	'Springen', 'Feuern', 'Links', 'Rechts', 'Oben', 'Unten', 'Schießen', 'Angreifen', 'Deckung', 'Zauber', 'Heilen', 'Torwart', 'Runde', 'Schüsse', 'Bereich', 'Kristalle', 'Mitte',
-	'Steuerung', 'D-Pad + Aktion', 'Eingabe', 'Tasten + Touch', 'Vollbild', 'Ansicht verlassen', 'Ansicht erweitern', 'Richtungssteuerung', 'Touch',
+	'Steuerung', 'D-Pad + Aktion', 'Eingabe', 'Tasten + Berührung', 'Vollbild', 'Ansicht verlassen', 'Ansicht erweitern', 'Richtungssteuerung', 'Berührung',
 ] as const);
 
 const it = defineArcadeCopy([

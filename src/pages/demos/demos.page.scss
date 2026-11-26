@@ -229,6 +229,23 @@
 	}
 }
 
+.demos-page__deferred-placeholder {
+	min-height: 22rem;
+	border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 20%, var(--line));
+	border-radius: 20px;
+	background:
+		linear-gradient(110deg, transparent 0 32%, color-mix(in srgb, var(--cyan) 8%, transparent) 48%, transparent 64%),
+		var(--surface-2);
+	background-size: 220% 100%;
+	animation: demos-deferred-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes demos-deferred-shimmer {
+	to {
+		background-position: -120% 0;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.demos-page__links > a {
 		transition-duration: 0.01ms;
@@ -240,6 +257,10 @@
 	}
 
 	.demos-page__links > a::before {
+		animation: none;
+	}
+
+	.demos-page__deferred-placeholder {
 		animation: none;
 	}
 }

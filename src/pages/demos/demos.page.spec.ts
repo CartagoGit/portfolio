@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { DeferBlockBehavior, DeferBlockState, TestBed } from '@angular/core/testing';
 import type { ILocale } from '../../domain/types.interface';
 import { TranslateService } from '../../lang/translate.service';
 import { DemosPageComponent } from './demos.page';
@@ -6,6 +6,7 @@ import { DemosPageComponent } from './demos.page';
 async function createPage(locale: ILocale = 'en') {
 	await TestBed.configureTestingModule({
 		imports: [DemosPageComponent],
+		deferBlockBehavior: DeferBlockBehavior.Manual,
 	}).compileComponents();
 	TestBed.inject(TranslateService).setLocale(locale);
 	const fixture = TestBed.createComponent(DemosPageComponent);
@@ -13,9 +14,21 @@ async function createPage(locale: ILocale = 'en') {
 	return fixture;
 }
 
+async function renderDeferredTree(fixture: Awaited<ReturnType<typeof createPage>>): Promise<void> {
+	const renderBlocks = async (blocks: Awaited<ReturnType<typeof fixture.getDeferBlocks>>): Promise<void> => {
+		for (const block of blocks) {
+			await block.render(DeferBlockState.Complete);
+			await renderBlocks(await block.getDeferBlocks());
+		}
+	};
+	await renderBlocks(await fixture.getDeferBlocks());
+	fixture.detectChanges();
+}
+
 describe('DemosPageComponent', () => {
 	it('composes interactive games before five correctly marked demos', async () => {
 		const fixture = await createPage();
+		await renderDeferredTree(fixture);
 		const element = fixture.nativeElement as HTMLElement;
 		expect(element.querySelector('app-demos-showcase')).not.toBeNull();
 		expect(element.querySelectorAll('app-demos-showcase [role="tab"]')).toHaveLength(6);

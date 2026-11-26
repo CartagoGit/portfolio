@@ -10,7 +10,11 @@
 		<p>{{ 'pages.demos.subtitle' | translate }}</p>
 	</div>
 
-	<app-arcade-games />
+	@defer (on immediate) {
+		<app-arcade-games />
+	} @placeholder {
+		<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+	}
 
 	<section class="demos-page__laboratory" aria-labelledby="demos-laboratory-title">
 		<header class="demos-page__laboratory-heading">
@@ -18,8 +22,16 @@
 			<h3 id="demos-laboratory-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
 			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
 		</header>
-		<app-demos-showcase />
-		<app-demo-games />
+		@defer (on immediate) {
+			<app-demos-showcase />
+		} @placeholder {
+			<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+		}
+		@defer (on immediate) {
+			<app-demo-games />
+		} @placeholder {
+			<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+		}
 	</section>
 
 	<section

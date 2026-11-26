@@ -55,12 +55,12 @@
 			[attr.aria-labelledby]="'arcade-tab-' + activeGame()"
 			[attr.data-arcade-game]="activeGame()">
 			@switch (activeGame()) {
-				@case ('runner') { <app-runner-game /> }
-				@case ('shooter') { <app-shooter-game /> }
-				@case ('lanes') { <app-lane-rush-game /> }
-				@case ('penalty') { <app-penalty-game /> }
-				@case ('rpg') { <app-rpg-battle-game /> }
-				@case ('maze') { <app-maze-collector-game /> }
+				@case ('runner') { @defer (on immediate) { <app-runner-game /> } }
+				@case ('shooter') { @defer (on immediate) { <app-shooter-game /> } }
+				@case ('lanes') { @defer (on immediate) { <app-lane-rush-game /> } }
+				@case ('penalty') { @defer (on immediate) { <app-penalty-game /> } }
+				@case ('rpg') { @defer (on immediate) { <app-rpg-battle-game /> } }
+				@case ('maze') { @defer (on immediate) { <app-maze-collector-game /> } }
 			}
 		</div>
 	</div>
