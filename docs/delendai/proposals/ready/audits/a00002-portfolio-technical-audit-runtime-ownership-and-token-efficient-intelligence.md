@@ -82,7 +82,7 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - review-log: approved by Explore-rereview-6241bdd — verified at 6241bdd, validate exit 0 and tests 43/43 claimed, no recorded run cited; acceptance 5/5: (1) All six tools consume the shared PROJECTION_INPUT and apply compactProjection to their primary evidence collection. (2) Every tool returns count/total and field-projected items; the integration spec covers all direct tools. (3) Shared output schema exposes offset/truncated/nextOffset and helper tests cover oversized items. (4) The complete envelope including pagination metadata is measured before each push and the 128-token regression passes. (5) Query reuses ContentIndexService section results and its cache-reuse test remains passing. — Fresh independent verification passed all five criteria and the prior review blocker after commit 6241bdd.
 
 ### S4 — Replace nominal lazy routes with real route-level splitting
-- **Status**: pending
+- **Status**: done
 - **Files**: `src/app/app.routes.ts`, `src/app/app.routes.server.ts`, `src/app/page.component.ts`, `src/app/page.html`, `src/app/page.scss`, `src/app/app.spec.ts`, `angular.json`
 - **Gate**: e2e
 - acceptance:
@@ -91,6 +91,10 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Direct refresh, SSR and prerender preserve locale and navigation."
   - "Production chunks prove page isolation."
   - "Navigation and back-to-top remain correct."
+- review-state: done
+- review-implementer: Cartago
+- review-reviewer: microsoft-mai-code-2
+- review-log: approved by microsoft-mai-code-2 — independent historical reconciliation verified at f4d9ae1 against the current tree, validate exit 0, production build 160/160 prerendered routes and 29 budgeted JS chunks, plus S14-04 passing; acceptance 5/5: (1) PageComponent imports shell chrome only, not any page implementation. (2) The shell and all eight page routes use dynamic loadComponent boundaries. (3) Server routes enumerate 20 locales across eight pages and the build prerenders 160 localized URLs; direct browser navigation retains lang. (4) Named home/work/lab/approach/knowledge/contact/demos route chunks are emitted and the deterministic bundle budget passes. (5) S14-04 proves route scroll reset, back-to-top, URL and locale preservation. — No new implementation delta was needed; this closes the stale pending state with fresh e2e/build evidence.
 
 ### S5 — Harden WebGL and timer lifecycle ownership
 - **Status**: pending
