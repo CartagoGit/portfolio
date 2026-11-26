@@ -10,6 +10,7 @@ shipped-in:
   - "f4d9ae1"
   - "fb56d85"
   - "6241bdd"
+  - "2603a38"
 ---
 
 # a00002 — Portfolio technical audit, runtime ownership and token-efficient intelligence
@@ -97,8 +98,8 @@ The external audit identified architecture drift between the DelendAI portfolio 
 - review-log: approved by microsoft-mai-code-2 — independent historical reconciliation verified at f4d9ae1 against the current tree, validate exit 0, production build 160/160 prerendered routes and 29 budgeted JS chunks, plus S14-04 passing; acceptance 5/5: (1) PageComponent imports shell chrome only, not any page implementation. (2) The shell and all eight page routes use dynamic loadComponent boundaries. (3) Server routes enumerate 20 locales across eight pages and the build prerenders 160 localized URLs; direct browser navigation retains lang. (4) Named home/work/lab/approach/knowledge/contact/demos route chunks are emitted and the deterministic bundle budget passes. (5) S14-04 proves route scroll reset, back-to-top, URL and locale preservation. — No new implementation delta was needed; this closes the stale pending state with fresh e2e/build evidence.
 
 ### S5 — Harden WebGL and timer lifecycle ownership
-- **Status**: pending
-- **Files**: `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/earth-globe.renderer.spec.ts`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/hero-monitor/hero-monitor.facade.ts`, `src/pages/home/hero-monitor/hero-monitor.facade.spec.ts`
+- **Status**: done
+- **Files**: `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/earth-globe-renderer.spec.ts`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/hero-monitor/hero-monitor.facade.ts`, `src/pages/home/hero-monitor/hero-monitor.facade.spec.ts`
 - **Gate**: e2e
 - acceptance:
   - "Destroy cancels animation frames, observers, delayed work and timers."
@@ -106,6 +107,10 @@ The external audit identified architecture drift between the DelendAI portfolio 
   - "Context loss pauses rendering safely."
   - "Context restoration rebuilds state safely."
   - "Repeated route and theme entry shows no duplicate loops or leaked listeners."
+- review-state: done
+- review-implementer: microsoft-mai-code-2
+- review-reviewer: Explore-rereview-2603a38
+- review-log: approved by Explore-rereview-2603a38 — verified at 2603a38, validate exit 0 and tests 377/377 claimed, no recorded run cited; acceptance 5/5: (1) EarthGlobeComponent.stop cancels RAF; HeroMonitorFacade.destroy cancels RAF and both timers, clears handles, guards repeat destruction, and unit coverage prove… (2) EarthRenderer has an idempotent destroyed guard; release handles both distinct shaders plus program/texture/buffer once, removes two listeners once, and cleans… (3) Renderer and component context-lost paths stop work and render early-returns; S14-02 passes. (4) Renderer clears its cached program on restoration and lazily rebuilds; the component restarts only when the globe is foreground or preview. (5) WEBGL-01 passes three route cycles with one canvas and no stale globe node; post-destroy facade and component guards prevent replacement loops and timers. — Independent approval of 2603a38 after correction of a false review assumption about two distinct shader handles. Lint/typecheck exit 0, 377/377 unit tests pass, and S14-02 plus WEBGL-01 pass.
 
 ### S6 — Implement structural SCSS ownership audit
 - **Status**: pending
