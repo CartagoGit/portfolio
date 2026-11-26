@@ -199,59 +199,8 @@ This proposal turns the requested polish into a dependency-ordered program with 
 
 ### S14 — Regression, accessibility and responsive tests
 - **Status**: pending
-- **Files**: `tools`, `plugins/portfolio-content`, `e2e`
+- **Files**: `docs/regression-audit-s14.md`, `e2e/portfolio.spec.ts`, `e2e/quality-gates.spec.ts`, `e2e/visual-truth.spec.ts`, `e2e/arcade-games.spec.ts`, `e2e/demos-laboratory.spec.ts`, `e2e/lab-fullscreen-evidence.spec.ts`, `tools/check-public-boundary.script.ts`, `tools/check-bundle-budget.script.ts`, `plugins/portfolio-content`, `package.json`
 - **Gate**: all tests + browser smoke suite
-- **Acceptance**: regression coverage includes monitor state persistence, globe stacking/return, texture catalogue, destination metadata, footer opacity/back-to-top locale, project ordering, theme adaptation, command-palette focus, all route tabs and mobile overflow. Browser checks produce named failure evidence rather than screenshots alone.
-
-Publication is explicitly owned by the dedicated infrastructure proposal; no deploy files belong to this proposal.
-
-### S16 — Visual corrections, truth audit and final polish
-- **Status**: pending
-- **Files**: `docs/visual-audit-s16.md`, `src/app/page.scss`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/domain/types.interface.ts`, `src/pages/home/earth-globe`, `src/pages/home/hero-monitor`, `src/pages/work`, `public/images/globe`, `public/images/brand`, `public/images/profile`, `tools/generators/generate-globe-assets.py`
-- **Gate**: visual browser audit at 1366×768 + tablet + 390×844 in light and dark themes, focused tests, lint/typecheck/build
-- **Acceptance**: correct the accepted-slice feedback in this proposal: the desktop monitor expands into available space and never overlaps labels/icons/destinations; footer chrome does not become an opaque slab, only controls receive button backgrounds; Work retains project-specific effects and correct logos/icons while expanding the verified catalogue; football/basketball/tennis/golf/rugby/volleyball textures wrap canonically, brand/banner spheres remain undistorted, Saturn rings share scale/orientation/rotation with the planet, exoplanets read as high-detail labelled artist impressions, and additional Earth day/night/cloud/terrain/bathymetry/thermal variants remain sharp; every changed route is manually inspected for correct marks, readable text and no visual regressions at all required viewports.
-- **Theme correction requirement**: opening the globe, its scrim, texture controls, close button and information copy must use active theme tokens (including light/solar/mono), not a permanent base dark/blue palette.
-- **Evidence**: `docs/visual-audit-s16.md` records twelve route/theme/viewport states, tokenized overlay measurements for light/dark/solar/mono, thirty WebGL presets at error 0, zero footer chrome, zero icon/text collisions, zero broken assets and six distinct Work visual systems.
-- review-state: changes_requested
-- review-implementer: microsoft-mai-code-2
-- review-reviewer: cartago-user
-- review-log: requested_changes by cartago-user — Human product review rejects the current evidence: several globe textures and object renders are not recognisable; monitor controls do not provide the required coherent transitions/effects; the monitor header has an unintended empty space; responsive interaction is not explicitly functional per desktop/tablet/smartphone. Rework must pass the new named visual/device matrix and be accepted on visible output, not only build/tests.
-
-### S17 — Component boundaries, clean architecture and reuse
-- **Status**: pending
-- **Files**: `docs/architecture-s17.md`, `src/domain/demo-visuals.constant.ts`, `src/pages/demos/demos.page.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.spec.ts`, `src/pages/home/hero-monitor/earth-texture.catalog.ts`, `src/pages/home/hero-monitor/earth-texture-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.catalog.ts`, `src/pages/home/hero-monitor/hero-monitor-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/pages/work/work-visuals.constant.ts`, `src/pages/work/work-project-visual.component.ts`, `src/pages/work/work-project-visual.component.html`, `src/pages/work/work-project-visual.component.scss`, `src/pages/work/work-project-visual.component.spec.ts`, `src/pages/work/work.page.ts`, `src/pages/work/work.page.html`, `src/pages/work/work.page.spec.ts`
-- **Gate**: architecture review + focused unit tests + lint/typecheck/build
-- **Acceptance**: route page components remain thin composition roots; cohesive interaction systems are split into focused standalone components; non-UI algorithms live in typed helpers/services; repeated SCSS and template structures are consolidated into tokens, mixins or reusable components; no component owns unrelated route/page concerns, no duplicated last-wins visual system is accepted, and every extracted public contract has direct tests. The review must identify why each helper/component boundary is cohesive, not merely smaller by line count.
-- **Evidence**: `docs/architecture-s17.md` identifies each owner and rationale; catalog/control/visual helpers have direct specs, HeroMonitor no longer owns static catalogue data or Earth control markup, Work/Demos share visual registries and two redundant console SCSS partials were removed from the runtime cascade.
-- review-state: changes_requested
-- review-implementer: microsoft-mai-code-2
-- review-reviewer: cartago-user
-- review-log: requested_changes by cartago-user — Human architecture/product review rejects the current evidence: icon ownership is still inconsistent (for example Docker differs between footer and other surfaces), demos remain too basic, reusable motion/control primitives are incomplete, and tools are not yet organised consistently into scripts/checks by role. Rework must demonstrate canonical registries, shared primitives and measurable reuse.
-
-## dependency graph
-
-- S2 feeds S1, S5, S7, S8 and S9.
-- S1 establishes monitor interactions before route-wide transition testing.
-- S5–S10 can proceed independently after S2 data is stable.
-- S3 and S4 establish shell interactions before S12 global motion/overflow validation.
-- S13 consumes all new UI keys after route work lands.
-- S16 reopens the visual product quality of S1/S3/S5 after human review and must close before S14 certification.
-- S17 must refactor S5–S13 cross-cutting ownership before S14; feature completion cannot be used to accept god components, duplicated styles or untestable inline logic.
-- S14 validates all product slices.
-- `f00002` depends on a completed `f00001`; publication is independent and must not block locale work.
-
-## acceptance
-
-- All requested monitor behaviours are correct: stable preview across section switching, iconized toggle, two chart rows, readable destination links, richer globe presets, visible close action, truthful lower monitor stacking and no active-hover residue.
-- Technology previews provide a real definition and practical use statement per technology, not generic filler text.
-- The globe offers real-cloud Earth, several additional real Earth variants, Sun/Moon and all planets (including Pluto), exoplanet artist impressions labelled as such, real/canonical sports-ball patterns, and a branded/joke/portrait collection; Saturn renders real rings, preset origin is explicit, assets are high-resolution/lazy-loaded, orientation survives texture changes, and no preset causes layout shift.
-- Work, Approach, Knowledge, Docker, Demos, Lab and Contact are complete, responsive, theme-correct and coherent as one product.
-- Shared interactions, route composition and visual systems follow clean component/service/helper boundaries with reused tokens, templates and algorithms; new UI is not accepted through a monolithic page component or duplicate SCSS patches.
-- Every route and interactive state is visually attractive at desktop, tablet and mobile: correct icons/logos, no duplicated plates, no overlapping labels, no reversed/mirrored memory text, no pixelated globe mappings, no generic cards where a project had a deliberate effect, and no shell correction that changes an unrelated surface.
-- Public profile evidence is current enough to support the curated order and copy; every destination is verified or intentionally omitted with a truthful reason.
-- Footer, back-to-top, locale, command palette and route/tab transitions work without visual jumps or input regressions.
-- Contact delivery has a documented, tested integration boundary and never falsely reports success.
-- EN/ES/FR/DE remain type-complete and SSR-prerendered; visible and ARIA text is readable at the supported viewport sizes, and informative content is never silently truncated.
-- Lint, typecheck, all unit/integration tests, browser audits, production build and SSR build pass.
-- Product completion is independent from publication; deployment evidence is tracked in its own infrastructure proposal.
-- Locale expansion is deferred to `f00002`; `f00001` finishes product work only.
+- **Evidence**: `docs/regression-audit-s14.md` maps every S14 requirement to a named test; the complete Playwright run is 27/27 passing, including all routes, four responsive viewports, four themes, twenty deep locales and repeated WebGL entry.
+- **Acceptance**: regression coverage includes monitor state persistence, globe stacking/return, texture catalogue, destination metadata, footer opacity/back-to-top locale, project ordering, theme adaptation, command-palette focus, all route tabs and mobile overflow; browser checks produce named failure evidence rather than screenshots alone.
+```
