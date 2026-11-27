@@ -87,6 +87,14 @@ test('S14-03 Work exposes project identity, distinct visual modes and iconized c
 		'DelendAI', 'Tanit', 'QuickModel', 'Print CV', 'Steam Keys', 'Keyer',
 	]);
 	await expect(page.locator('app-work-project-visual .work-project-visual > div')).toHaveCount(6);
+	const visualModes = await page.locator('app-work-project-visual .work-project-visual > div').evaluateAll((elements) =>
+		elements.map((element) => [...element.classList].find((name) => name.startsWith('work-project-visual__')) ?? ''),
+	);
+	expect(new Set(visualModes).size).toBe(6);
+	for (const card of await cards.all()) {
+		await expect(card.locator('.work-page__identity img, .work-page__identity svg')).toHaveCount(1);
+		expect(await card.locator('.work-page__content li svg path[d]').count()).toBe(await card.locator('.work-page__content li').count());
+	}
 	await expect(page.locator('.work-page__experiment-grid app-evidence-card > a')).toHaveCount(4);
 });
 
@@ -145,9 +153,13 @@ test('S14-06 route tabs are keyboard usable and every mobile route stays contain
 
 	await openSpanishRoute(page, 'demos');
 	await expect(page.locator('app-demos-showcase [role="tab"]')).toHaveCount(6);
-	await page.locator('app-demos-showcase [role="tab"]').nth(1).click();
+	await page.locator('app-demos-showcase [role="tab"]').first().focus();
+	await page.keyboard.press('ArrowRight');
 	await expect(page.locator('.showcase__stage')).toHaveAttribute('data-scene', 'flow');
 	await expect(page.locator('.demo-games__tabs [role="tab"]')).toHaveCount(8);
+	await page.getByRole('tab', { name: 'Reflejos', exact: true }).focus();
+	await page.keyboard.press('ArrowRight');
+	await expect(page.locator('.demo-games__stage')).toHaveAttribute('data-game', 'reaction');
 	await page.getByRole('tab', { name: 'Memoria', exact: true }).click();
 	await expect(page.locator('.memory-game__grid button')).toHaveCount(12);
 	for (const [label, game, component] of [

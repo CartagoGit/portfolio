@@ -198,13 +198,15 @@ This proposal turns the requested polish into a dependency-ordered program with 
 - review-log: approved by explore-independent-s13-reviewer-20261123 — verified at a35de8d, validate exit 0 and tests 87/87 claimed, no recorded run cited
 
 ### S14 — Regression, accessibility and responsive tests
-- **Status**: pending
+- **Status**: review
 - **Files**: `docs/regression-audit-s14.md`, `e2e/portfolio.spec.ts`, `e2e/quality-gates.spec.ts`, `e2e/visual-truth.spec.ts`, `e2e/arcade-games.spec.ts`, `e2e/demos-laboratory.spec.ts`, `e2e/lab-fullscreen-evidence.spec.ts`, `tools/check-public-boundary.script.ts`, `tools/check-bundle-budget.script.ts`, `plugins/portfolio-content`, `package.json`
 - **Gate**: all tests + browser smoke suite
-- **Evidence**: `docs/regression-audit-s14.md` maps every S14 requirement to a named test; the complete Playwright run is 27/27 passing, including all routes, four responsive viewports, four themes, twenty deep locales and repeated WebGL entry.
+- **Evidence**: `docs/regression-audit-s14.md` maps every S14 requirement to a named test; the complete Playwright run is 29/29 passing, including all routes, four responsive viewports, all eight themes, twenty deep locales, real coarse-touch taps at 320 × 568 and repeated WebGL entry.
 - **Acceptance**: regression coverage includes monitor state persistence, globe stacking/return, texture catalogue, destination metadata, footer opacity/back-to-top locale, project ordering, theme adaptation, command-palette focus, all route tabs and mobile overflow; browser checks produce named failure evidence rather than screenshots alone.
 
 Publication is explicitly owned by the dedicated infrastructure proposal; no deploy files belong to this proposal.
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S16 — Visual corrections, truth audit and final polish
 - **Status**: review

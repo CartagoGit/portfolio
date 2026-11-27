@@ -7,7 +7,7 @@ const VIEWPORTS = [
 	{ name: 'tablet', width: 768, height: 1024 },
 	{ name: 'smartphone', width: 390, height: 844 },
 ] as const;
-const THEMES = ['light', 'dark', 'solar', 'mono'] as const;
+const THEMES = ['dark', 'light', 'midnight', 'ocean', 'forest', 'sunset', 'solar', 'mono'] as const;
 
 async function openRoute(
 	page: Page,
@@ -56,15 +56,32 @@ for (const viewport of VIEWPORTS) {
 
 test('visual truth: all themes keep monitor and globe controls in the active token system', async ({ page }) => {
 	await page.setViewportSize({ width: 1280, height: 900 });
+	const themeTokens = new Set<string>();
 	for (const theme of THEMES) {
 		await page.addInitScript((id) => localStorage.setItem('cartago-theme', id), theme);
 		await openRoute(page);
 		await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+		const activeTokens = await page.evaluate(() => {
+			const root = getComputedStyle(document.documentElement);
+			const control = getComputedStyle(document.querySelector('.hero-monitor__technology-toggle')!);
+			return {
+				primary: root.getPropertyValue('--cyan').trim(),
+				surface: root.getPropertyValue('--surface').trim(),
+				controlColor: control.color,
+				controlBackground: control.backgroundColor,
+			};
+		});
+		expect(activeTokens.primary).not.toBe('');
+		expect(activeTokens.surface).not.toBe('');
+		expect(activeTokens.controlColor).not.toBe('rgba(0, 0, 0, 0)');
+		expect(activeTokens.controlBackground).not.toBe('rgba(0, 0, 0, 0)');
+		themeTokens.add(`${activeTokens.primary}/${activeTokens.surface}`);
 		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
 		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 		await expectContained(page, `${theme}/globe`);
 		await page.locator('.hero-monitor__earth-close').click();
 	}
+	expect(themeTokens.size).toBe(THEMES.length);
 });
 
 test('visual truth: interactive product surfaces keep an explicit fullscreen exit path', async ({ page }) => {
@@ -174,4 +191,41 @@ test('S16-01 mobile monitor and globe controls are readable and touchable', asyn
 	await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'saturn');
 	await close.click();
 	await expect(controls).toHaveCount(0);
+});
+
+test('visual truth: coarse touch input remains direct at 320px', async ({ browser }) => {
+	test.setTimeout(120_000);
+	const context = await browser.newContext({
+		baseURL: 'http://localhost:4410',
+		viewport: { width: 320, height: 568 },
+		hasTouch: true,
+		isMobile: true,
+	});
+	const page = await context.newPage();
+	try {
+		await page.addInitScript(() => localStorage.setItem('cartago-theme', 'ocean'));
+		await openRoute(page);
+		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).tap();
+		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
+		await page.getByRole('tab', { name: 'Planetas', exact: true }).tap();
+		await page.getByRole('button', { name: 'Saturno', exact: true }).tap();
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'saturn');
+		await page.locator('.hero-monitor__earth-close').tap();
+
+		await openRoute(page, { route: 'demos' });
+		await page.locator('#showcase-tab-flow').tap();
+		await page.locator('.showcase__activate').tap();
+		await expect(page.locator('.showcase__stage')).toHaveAttribute('data-scene', 'flow');
+		await page.locator('#demo-tab-dice').tap();
+		await page.locator('.dice-game__die').tap();
+		await expect(page.locator('.dice-game__history span')).not.toHaveCount(0);
+		await page.locator('#arcade-tab-penalty').tap();
+		const penalty = page.locator('app-penalty-game');
+		await penalty.locator('[data-arcade-action="start"]').tap();
+		await penalty.locator('.penalty-game__controls button').tap();
+		await expect(penalty.locator('[data-hud-lives]')).toHaveText('4');
+		await expectContained(page, '320px/coarse-touch/demos');
+	} finally {
+		await context.close();
+	}
 });
