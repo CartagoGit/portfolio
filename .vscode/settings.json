@@ -65,7 +65,7 @@
 	],
 
 	// La paleta está pensada para un tema oscuro (el proyecto es dark-first).
-	"workbench.colorTheme": "Default Dark Modern",
+	"workbench.colorTheme": "Dark Modern",
 
 	"workbench.colorCustomizations": {
 		// ── Chrome de Peacock (base #1678ff) ────────────────────────────────
