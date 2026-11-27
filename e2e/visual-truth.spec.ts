@@ -313,6 +313,66 @@ test('S16-01 mobile monitor and globe controls are readable and touchable', asyn
 	await expect(controls).toHaveCount(0);
 });
 
+test('monitor header keeps the intrinsic banner ratio without covering the controls', async ({ page }) => {
+	await page.setViewportSize({ width: 1280, height: 900 });
+	await openRoute(page);
+	const monitor = page.locator('app-hero-monitor');
+	const header = monitor.locator('.hero-monitor__header');
+	await monitor.scrollIntoViewIfNeeded();
+	await monitor.hover();
+	const desktop = await header.evaluate((element) => {
+		const motion = element.querySelector<HTMLElement>('.hero-monitor__motion-control');
+		const banner = element.querySelector<HTMLElement>('.hero-monitor__banner-link');
+		const image = element.querySelector<HTMLImageElement>('.hero-monitor__banner');
+		const rail = element.querySelector<HTMLElement>('.hero-monitor__platform-rail');
+		if (!motion || !banner || !image || !rail) throw new Error('Missing monitor header geometry');
+		return {
+			bannerRatio: image.offsetWidth / image.offsetHeight,
+			motionRight: motion.offsetLeft + motion.offsetWidth,
+			bannerLeft: banner.offsetLeft,
+			bannerRight: banner.offsetLeft + banner.offsetWidth,
+			railLeft: rail.offsetLeft,
+			railClientWidth: rail.clientWidth,
+			railScrollWidth: rail.scrollWidth,
+		};
+	});
+	expect(desktop.bannerRatio).toBeCloseTo(1023 / 300, 2);
+	expect(desktop.motionRight).toBeLessThanOrEqual(desktop.bannerLeft);
+	expect(desktop.bannerRight).toBeLessThanOrEqual(desktop.railLeft);
+	expect(desktop.railScrollWidth).toBeLessThanOrEqual(desktop.railClientWidth);
+
+	await monitor.locator('.hero-monitor__platform-row > a').first().click();
+	const detail = monitor.locator('.hero-monitor__preview-detail');
+	await expect(detail).toContainText('LinkedIn es un destino público');
+	expect((await detail.innerText()).length).toBeGreaterThan(140);
+	const typography = await monitor.evaluate((element) => {
+		const status = element.querySelector<HTMLElement>('.hero-monitor__preview-status');
+		const copy = element.querySelector<HTMLElement>('.hero-monitor__preview-detail');
+		if (!status || !copy) throw new Error('Missing monitor preview typography');
+		return {
+			status: Number.parseFloat(getComputedStyle(status).fontSize),
+			copy: Number.parseFloat(getComputedStyle(copy).fontSize),
+		};
+	});
+	expect(typography.status).toBeLessThan(typography.copy * 0.8);
+
+	await page.setViewportSize({ width: 390, height: 844 });
+	const mobile = await header.evaluate((element) => {
+		const banner = element.querySelector<HTMLElement>('.hero-monitor__banner-link');
+		const image = element.querySelector<HTMLImageElement>('.hero-monitor__banner');
+		const rail = element.querySelector<HTMLElement>('.hero-monitor__platform-rail');
+		if (!banner || !image || !rail) throw new Error('Missing mobile monitor header geometry');
+		return {
+			bannerRatio: image.offsetWidth / image.offsetHeight,
+			bannerBottom: banner.offsetTop + banner.offsetHeight,
+			railTop: rail.offsetTop,
+		};
+	});
+	expect(mobile.bannerRatio).toBeCloseTo(1023 / 300, 2);
+	expect(mobile.railTop).toBeGreaterThanOrEqual(mobile.bannerBottom);
+	await captureVisual(page, 'monitor-header-intrinsic-mobile');
+});
+
 test('visual truth: coarse touch input remains direct at 320px', async ({ browser }) => {
 	test.setTimeout(120_000);
 	const context = await browser.newContext({

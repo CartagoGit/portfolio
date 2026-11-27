@@ -298,15 +298,17 @@ app-hero-monitor {
 		}
 
 		&__preview-meta {
-			p,
-			span { font-size: 0.75rem; }
+			gap: 0.4rem;
 		}
 
-		&__preview-detail { font-size: 0.75rem; }
+		&__preview-kind { font-size: 0.62rem; }
+		&__preview-status { font-size: 0.57rem; }
+		&__preview-detail { font-size: 0.82rem; }
 
 		&__preview-stack {
 			b,
-			a { font-size: 0.75rem; }
+			a,
+			> span { font-size: 0.58rem; }
 		}
 
 		&__destinations {
@@ -910,42 +912,7 @@ app-hero-monitor {
 		}
 
 		&__header {
-			@media (max-width: 540px) {
-				grid-template-columns: 56px minmax(0, 1fr) !important;
-				grid-template-rows: 72px 96px !important;
-				height: 168px;
-				min-height: 168px;
-			}
-
-			/* Last-wins desktop review override also applies to narrow screens. */
-			grid-template-columns: 72px minmax(190px, 0.82fr) minmax(330px, 1.18fr) !important;
 		}
-
-		&__motion-control {
-			@media (max-width: 540px) {
-				grid-row: 1;
-				width: 56px;
-				height: 72px;
-				min-height: 72px;
-			}
-		}
-
-		&__banner-link,
-		&__banner {
-			@media (max-width: 540px) {
-				grid-column: 2;
-				grid-row: 1;
-				height: 72px !important;
-				min-height: 72px !important;
-			}
-
-			height: 86px !important;
-			min-height: 86px !important;
-			max-height: 86px !important;
-		}
-
-		&__banner-link { display: block; }
-		&__banner { object-fit: cover !important; }
 
 		&__platform-rail {
 			@media (max-width: 540px) {
@@ -957,6 +924,8 @@ app-hero-monitor {
 		}
 
 		&__platform-row {
+			grid-template-columns: repeat(4, 34px) minmax(58px, 0.65fr) minmax(96px, 1.35fr) !important;
+
 			@media (max-width: 540px) {
 				grid-template-columns: repeat(6, minmax(44px, 1fr)) !important;
 				grid-template-rows: 44px;
@@ -965,8 +934,6 @@ app-hero-monitor {
 
 				> :is(a, button) { min-height: 44px !important; height: 44px !important; }
 			}
-
-			grid-template-columns: repeat(4, 34px) repeat(2, minmax(76px, 1fr)) !important;
 		}
 
 		&__console-effects {

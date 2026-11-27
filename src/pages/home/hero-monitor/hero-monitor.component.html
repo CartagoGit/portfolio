@@ -175,14 +175,18 @@
 				<div class="hero-monitor__screen">
 					@if (activePreview(); as contextualPreview) {
 						@for (item of previewItems(); track item.label) {
-							<article class="hero-monitor__preview" [attr.data-effect]="effect()">
+							<article
+								class="hero-monitor__preview"
+								[attr.data-effect]="effect()"
+								[attr.data-kind]="item.kind"
+								[style.--preview-accent]="item.color ?? 'var(--cyan)'">
 								<div class="hero-monitor__preview-copy">
 									<div class="hero-monitor__preview-meta">
-										<p>{{ previewKindLabel(item.kind) }}</p>
-										<span>{{ item.status }}</span>
+										<p class="hero-monitor__preview-kind">{{ previewKindLabel(item.kind) }}</p>
+										<span class="hero-monitor__preview-status">{{ item.status }}</span>
 									</div>
 									<div class="hero-monitor__preview-title">
-										<div class="hero-monitor__preview-icon" [style.--preview-accent]="item.color ?? 'var(--cyan)'">
+										<div class="hero-monitor__preview-icon">
 											@if (item.imageSrc) {
 												<img [src]="item.imageSrc" alt="" />
 											} @else if (item.iconPath) {

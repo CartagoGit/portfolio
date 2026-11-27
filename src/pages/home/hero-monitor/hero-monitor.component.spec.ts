@@ -106,7 +106,7 @@ describe('HeroMonitorComponent', () => {
 		}
 	});
 
-	it('keeps the curated technology definition in the preview', async () => {
+	it('keeps specific platform and technology definitions with useful portfolio context', async () => {
 		await TestBed.configureTestingModule({
 			imports: [HeroMonitorComponent],
 		}).compileComponents();
@@ -123,8 +123,17 @@ describe('HeroMonitorComponent', () => {
 		fixture.detectChanges();
 
 		fixture.componentInstance.previewTechnology(technology);
-		expect(fixture.componentInstance.previewItems()[0]?.detail).not.toBe(technology.detail);
-		expect(fixture.componentInstance.previewItems()[0]?.detail).toContain('Lenguaje tipado');
+		const technologyDetail = fixture.componentInstance.previewItems()[0]?.detail ?? '';
+		expect(technologyDetail).not.toBe(technology.detail);
+		expect(technologyDetail).toContain('Lenguaje tipado');
+		expect(technologyDetail).toContain('TypeScript forma parte');
+		expect(technologyDetail.length).toBeGreaterThan(140);
+
+		fixture.componentInstance.showLinkPreview(fixture.componentInstance.platformLinks[0]!);
+		const platformDetail = fixture.componentInstance.previewItems()[0]?.detail ?? '';
+		expect(platformDetail).toContain('Perfil profesional');
+		expect(platformDetail).toContain('LinkedIn es un destino público');
+		expect(platformDetail.length).toBeGreaterThan(140);
 		TestBed.inject(TranslateService).setLocale('en');
 	});
 

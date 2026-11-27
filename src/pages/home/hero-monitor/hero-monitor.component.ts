@@ -86,16 +86,12 @@ export class HeroMonitorComponent implements OnDestroy {
 			...active,
 			detail: projectDetailKey
 				? this._translate.instant(projectDetailKey)
-				: active.kind === 'technology'
-					? active.detail || this._translate.instant('pages.home.monitorTechnologyDetail', { label: active.label })
-					: active.kind === 'project'
-						? active.detail
-						: this._translate.instant('pages.home.monitorPlatformDetail', { label: active.label }),
-			status: active.kind === 'project'
+				: this._previewDetail(active),
+			status: active.status ?? (active.kind === 'project'
 				? this._translate.instant('pages.home.monitorProjectStatus')
 				: active.kind === 'platform'
 					? this._translate.instant('pages.home.monitorPlatformStatus')
-					: this._translate.instant('pages.home.monitorTechnologyStatus'),
+					: this._translate.instant('pages.home.monitorTechnologyStatus')),
 		}];
 	});
 	readonly activeDestinations = computed(() => monitorDestinations(this.activePreview()));
@@ -314,14 +310,18 @@ export class HeroMonitorComponent implements OnDestroy {
 	}
 
 	showLinkPreview(link: IPublicLink): void {
+		const fallbackDetail = link.detail ?? this._translate.instant(
+			link.group === 'project'
+				? 'pages.home.monitorExternalProjectDetail'
+				: 'pages.home.monitorPlatformDetail',
+			{ label: link.label },
+		);
 		this.showPreview({
 			kind: link.group,
 			label: link.label,
-			detail: link.detail ?? this._translate.instant(
-				link.group === 'project'
-					? 'pages.home.monitorExternalProjectDetail'
-					: 'pages.home.monitorPlatformDetail',
-				{ label: link.label }
+			detail: this._translate.instantOr(
+				`content.publicLinkDetails.${contentKey(link.label)}`,
+				fallbackDetail,
 			),
 			href: link.href,
 			status: this._translate.instant(
@@ -444,6 +444,19 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	projectStatus(id: IHeroPanelId): string {
 		return this._translate.instant(`content.projects.${id}.status`);
+	}
+
+	private _previewDetail(active: IMonitorPreview): string {
+		const context = active.kind === 'technology'
+			? this._translate.instant('pages.home.monitorTechnologyDetail', { label: active.label })
+			: active.kind === 'platform'
+				? this._translate.instant('pages.home.monitorPlatformDetail', { label: active.label })
+				: '';
+		const primary = active.detail.trim();
+		const normalizedContext = context.trim();
+		if (!normalizedContext || primary === normalizedContext) return primary || normalizedContext;
+		const separator = /[.!?。！？…]$/u.test(primary) ? ' ' : '. ';
+		return `${primary}${separator}${normalizedContext}`;
 	}
 
 	technologyDetail(label: string): string {

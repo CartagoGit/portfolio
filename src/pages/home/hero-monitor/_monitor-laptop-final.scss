@@ -104,28 +104,37 @@ app-hero-monitor {
 
 		&__header {
 			--header-control-width: 72px;
+			--monitor-header-height: 86px;
+			--monitor-banner-width: 293.25px;
 			--monitor-control-transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.28s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 			position: relative;
-			flex: 0 0 86px;
+			flex: 0 0 var(--monitor-header-height);
 			display: grid;
-			grid-template-columns: var(--header-control-width) minmax(220px, 0.95fr) minmax(240px, 1.05fr);
+			grid-template-columns: var(--header-control-width) var(--monitor-banner-width) minmax(0, 1fr);
 			align-items: stretch;
-			height: 86px;
-			min-height: 86px;
+			height: var(--monitor-header-height);
+			min-height: var(--monitor-header-height);
 			margin: 0;
 			overflow: hidden;
 
-			@media (min-width: 901px) {
-				--header-control-width: clamp(96px, 9vw, 118px);
-				grid-template-columns: var(--header-control-width) minmax(250px, 1.08fr) minmax(250px, 0.92fr);
-			}
-
 			@media (max-width: 900px) {
 				--header-control-width: 72px;
-				grid-template-columns: var(--header-control-width) minmax(0, 1fr);
-				grid-template-rows: 72px auto;
+				--monitor-header-height: 72px;
+				--monitor-banner-width: 245.52px;
+				grid-template-columns: var(--header-control-width) var(--monitor-banner-width) minmax(0, 1fr);
+				grid-template-rows: var(--monitor-header-height) 76px;
 				height: auto;
 				min-height: 148px;
+			}
+
+			@media (max-width: 540px) {
+				--header-control-width: 64px;
+				--monitor-header-height: 64px;
+				--monitor-banner-width: 218.24px;
+				grid-template-columns: var(--header-control-width) var(--monitor-banner-width) minmax(0, 1fr);
+				grid-template-rows: var(--monitor-header-height) 96px;
+				height: 160px;
+				min-height: 160px;
 			}
 		}
 
@@ -133,10 +142,11 @@ app-hero-monitor {
 			position: relative !important;
 			z-index: 2;
 			grid-column: 1;
+			grid-row: 1;
 			inset: auto;
 			width: var(--header-control-width);
-			height: 86px;
-			min-height: 86px;
+			height: var(--monitor-header-height);
+			min-height: var(--monitor-header-height);
 			aspect-ratio: auto;
 			border-right: 1px solid var(--line);
 			transition: var(--monitor-control-transition), background-position 0.48s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s ease;
@@ -167,11 +177,9 @@ app-hero-monitor {
 			}
 
 			@media (max-width: 900px) {
-				grid-column: 1;
-				grid-row: 1;
-				width: 72px;
-				height: 64px;
-				min-height: 64px;
+				width: var(--header-control-width);
+				height: var(--monitor-header-height);
+				min-height: var(--monitor-header-height);
 				background-position: center, center;
 				background-size: cover, cover;
 				background-repeat: no-repeat, no-repeat;
@@ -199,20 +207,21 @@ app-hero-monitor {
 
 		&__banner-link {
 			grid-column: 2;
-			width: 100%;
+			grid-row: 1;
+			display: block;
+			width: var(--monitor-banner-width);
 			min-width: 0;
-			aspect-ratio: auto;
+			height: var(--monitor-header-height);
+			min-height: var(--monitor-header-height);
+			max-height: var(--monitor-header-height);
+			aspect-ratio: 1023 / 300;
+			overflow: hidden;
 			transition: filter 0.25s ease, background-position 0.35s ease;
 
 			&:hover %laptop-monitor-banner,
 			&:focus-visible %laptop-monitor-banner {
 				filter: brightness(1.08) saturate(1.08);
 				transform: scale(1.018);
-			}
-
-			@media (min-width: 901px) {
-				width: 100%;
-				aspect-ratio: auto;
 			}
 
 			@media (max-width: 900px) {
@@ -230,16 +239,12 @@ app-hero-monitor {
 			@extend %laptop-monitor-banner !optional;
 			display: block;
 			width: 100%;
-			object-fit: cover !important;
+			height: 100%;
+			min-height: 0;
+			object-fit: contain !important;
 			object-position: center !important;
 			background: var(--surface-2);
 			transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s ease;
-
-			@media (max-width: 900px) {
-				height: 64px;
-				min-height: 64px;
-				max-height: 64px;
-			}
 
 			@media (prefers-reduced-motion: reduce) {
 				transition-duration: 0.01ms;
@@ -274,7 +279,7 @@ app-hero-monitor {
 
 		&__platform-row {
 			display: grid;
-			grid-template-columns: repeat(5, 34px) minmax(0, 1fr);
+			grid-template-columns: repeat(4, 34px) minmax(58px, 0.65fr) minmax(96px, 1.35fr);
 			grid-template-rows: 34px;
 			align-items: center;
 			width: 100%;
@@ -614,45 +619,42 @@ app-hero-monitor {
 			align-items: center;
 			justify-content: space-between;
 			gap: 0.5rem;
+		}
 
-			p,
-			span {
-				margin: 0;
-				font-family: tokens.$font-mono, monospace;
-				line-height: 1.3;
-			}
+		&__preview-kind {
+			margin: 0;
+			color: color-mix(in srgb, var(--ink) 72%, var(--cyan));
+			font: 700 0.62rem tokens.$font-mono, monospace;
+			letter-spacing: 0.08em;
+			line-height: 1.3;
+			text-transform: uppercase;
+		}
 
-			p {
-				color: var(--cyan);
-				font-size: 0.61rem;
-				font-weight: 700;
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
-			}
+		&__preview-status {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.3rem;
+			max-width: 62%;
+			padding: 0.2rem 0.42rem;
+			border: 1px solid color-mix(in srgb, var(--preview-accent, var(--cyan)) 34%, var(--line));
+			border-radius: 999px;
+			background: linear-gradient(90deg,
+				color-mix(in srgb, var(--preview-accent, var(--cyan)) 13%, var(--surface)),
+				color-mix(in srgb, var(--preview-accent, var(--cyan)) 5%, var(--surface-2)));
+			color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+			font: 600 0.57rem tokens.$font-mono, monospace;
+			line-height: 1.25;
+			text-align: center;
+			box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
 
-			span {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.3rem;
-				max-width: 64%;
-				padding: 0.22rem 0.42rem;
-				border: 1px solid color-mix(in srgb, var(--lime) 38%, var(--line));
-				border-radius: 999px;
-				background: color-mix(in srgb, var(--lime) 9%, var(--surface));
-				color: color-mix(in srgb, var(--ink) 88%, var(--lime));
-				font-size: 0.54rem;
-				line-height: 1.25;
-				text-align: center;
-
-				&::before {
-					content: '';
-					width: 5px;
-					height: 5px;
-					flex: 0 0 5px;
-					border-radius: 50%;
-					background: var(--lime);
-					box-shadow: 0 0 7px color-mix(in srgb, var(--lime) 70%, transparent);
-				}
+			&::before {
+				content: '';
+				width: 5px;
+				height: 5px;
+				flex: 0 0 5px;
+				border-radius: 50%;
+				background: var(--preview-accent, var(--cyan));
+				box-shadow: 0 0 8px color-mix(in srgb, var(--preview-accent, var(--cyan)) 62%, transparent);
 			}
 		}
 
@@ -694,8 +696,9 @@ app-hero-monitor {
 			max-width: 58ch;
 			margin: 0;
 			color: color-mix(in srgb, var(--ink) 82%, var(--muted));
-			font-size: 0.73rem;
-			line-height: 1.55;
+			font-size: 0.82rem;
+			line-height: 1.62;
+			overflow-wrap: anywhere;
 		}
 
 		&__preview-stack {
