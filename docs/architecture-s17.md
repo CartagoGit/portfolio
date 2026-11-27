@@ -24,7 +24,18 @@
 
 ## SCSS ownership
 
-The monitor cascade now loads four concern-owned partials:
+- Every component styles one host owner and one nested BEM block: `app-owner { .block { &__element { ... } &--modifier { ... } } }`. A custom-element modifier that binds to the host uses the explicit nested form `&.app-owner--modifier`; the checker recognizes it without permitting unrelated flat classes.
+- Selectors that represent descendants must be nested from the block with `&__`; flat `.block__element` declarations and mixed compounds such as `.block.other__element` are not accepted as new code.
+- State attributes/classes (`.is-active`, `[data-state]`, `[aria-pressed]`) stay inside the element they modify; keyframes and token definitions remain root-owned.
+- Shared interaction, responsive, focus and motion geometry belongs in `src/styles/` or a single concern-owned system partial. Feature partials own a coherent responsibility, not one last-wins layer after another. Page and global shell SCSS may reference only the explicit shell allowlist; new feature classes or `app-*` components fail the gate unless their shell ownership is reviewed.
+
+The BEM regression boundary is executable:
+
+- `bun run check:bem` rejects counts above the versioned debt baseline in `tools/check-bem-boundaries.baseline.json`.
+- Each refactor slice reduces that baseline; the final closure runs `bun run check:bem:strict`, which requires zero flat BEM, mixed BEM, duplicate effective rule or shell-leakage debt.
+- `tools/check-bem-boundaries.script.ts --inventory` is the deterministic review output; package quality gates call the non-regression mode so the project cannot add debt while historical SCSS is migrated.
+
+ The monitor cascade now loads four concern-owned partials:
 
 1. `home-refinement` — visual hierarchy shared across monitor sections.
 2. `console-header-final` — header/platform/console chrome geometry.
