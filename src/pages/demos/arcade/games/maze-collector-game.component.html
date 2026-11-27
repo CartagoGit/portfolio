@@ -1,0 +1,60 @@
+<app-arcade-game-shell
+	[titleKey]="'maze'"
+	[descriptionKey]="'mazeDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="maze-collector-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="('maze' | arcadeText) + '. ' + ('mazeDetail' | arcadeText)"
+		[attr.data-status]="statusKey()"
+		(keydown)="onKeydown($event)"
+		(pointerdown)="onPointerDown($event)"
+		(pointerup)="onPointerUp($event)">
+		<div class="maze-collector-game__vault" aria-hidden="true"><i></i><i></i><i></i></div>
+		<div class="maze-collector-game__counter" aria-live="polite">
+			<span>{{ 'collectibles' | arcadeText }}</span><b>{{ 4 - crystals().length }} / 4</b>
+		</div>
+		<div class="maze-collector-game__grid" aria-hidden="true">
+			@for (cell of cells; track cell.id) {
+				<span
+					class="maze-collector-game__cell"
+					[class.is-wall]="cell.wall"
+					[class.is-path]="!cell.wall">
+					@if (cell.wall) { <i class="maze-collector-game__masonry"><b></b></i> }
+					@if (hasCrystal(cell)) {
+						<i class="maze-collector-game__crystal"><b></b><em></em></i>
+					}
+					@if (isGuardian(cell)) {
+						<b class="maze-collector-game__guardian"><i></i><em></em><small></small></b>
+					}
+					@if (isPlayer(cell)) {
+						<b class="maze-collector-game__player"><i></i><em></em><small></small></b>
+					}
+					@if (effectAt(cell); as effect) {
+						@for (burst of [effect]; track burst.id) {
+							<span class="maze-collector-game__effect" [attr.data-kind]="burst.kind">
+								<i></i><i></i><i></i><i></i><i></i><i></i>
+							</span>
+						}
+					}
+				</span>
+			}
+		</div>
+		<div class="maze-collector-game__guardian-radar" aria-hidden="true"><i></i><span>GUARDIAN SCAN</span></div>
+	</div>
+	<app-arcade-control-pad
+		arcade-actions
+		class="maze-collector-game__control-pad"
+		[disabled]="phase() !== 'running'"
+		[directions]="controlDirections"
+		[keyboardHint]="'WASD / ARROWS'"
+		(directionChange)="onControlDirection($event)" />
+</app-arcade-game-shell>

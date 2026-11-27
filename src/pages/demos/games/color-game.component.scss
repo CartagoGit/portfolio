@@ -1,0 +1,15 @@
+@use '../demos-interaction-system' as interaction;
+
+:host { @include interaction.component-host; }
+.color-game { @include interaction.game-layout; }
+.color-game__copy { @include interaction.game-copy; }
+.color-game__metrics { @include interaction.game-metrics; }
+.color-game__actions { @include interaction.action-cluster; margin-top: 1rem; }
+.color-game__board { @include interaction.game-board; @include interaction.board-surface; }
+.color-game__status { @include interaction.game-status; width: 100%; }
+.color-game__target { display: grid; width: min(210px, 58%); aspect-ratio: 1; place-items: center; border: 1px solid color-mix(in srgb, var(--target-color) 70%, var(--line)); border-radius: 28px; background: var(--target-color); box-shadow: 0 20px 50px color-mix(in srgb, var(--target-color) 36%, transparent); color: var(--canvas); font: 900 clamp(2rem, 6vw, 4rem) monospace; }
+.color-game__options { @include interaction.choice-grid(4); max-width: 270px; }
+.color-game__options button { @include interaction.grid-cell; width: 56px; height: 56px; justify-self: center; border: 3px solid color-mix(in srgb, var(--surface) 78%, transparent); border-radius: 50%; background: var(--choice-color); color: var(--canvas); box-shadow: 0 0 0 1px var(--line); font-weight: 900; }
+.color-game__options button:focus-visible { box-shadow: 0 0 0 4px var(--focus-ring); }
+@media (max-width: 760px) { .color-game { @include interaction.game-layout-mobile; } .color-game__actions { justify-content: center; } }
+@media (prefers-reduced-motion: reduce) { .color-game__options { @include interaction.reduced-motion-controls; } }

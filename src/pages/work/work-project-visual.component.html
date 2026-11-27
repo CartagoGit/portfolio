@@ -1,0 +1,32 @@
+<div class="work-project-visual" aria-hidden="true">
+	@switch (projectId()) {
+		@case ('overview') {
+			<div class="work-project-visual__network">
+				<i></i><i></i><i></i><i></i><i></i>
+			</div>
+		}
+		@case ('workflows') {
+			<div class="work-project-visual__api">
+				<b>GET</b><span>/capabilities</span><i></i><i></i><i></i>
+			</div>
+		}
+		@case ('quality') {
+			<div class="work-project-visual__models">
+				<i></i><i></i><i></i>
+			</div>
+		}
+		@case ('mobile') {
+			<div class="work-project-visual__terminal">
+				<b>•••</b><i></i><i></i><i></i><span></span>
+			</div>
+		}
+		@case ('tooling') {
+			<div class="work-project-visual__paper">
+				<i></i><i></i><i></i>
+			</div>
+		}
+		@case ('delivery') {
+			<div class="work-project-visual__vault"><i></i><b></b><span></span></div>
+		}
+	}
+</div>

@@ -1,0 +1,59 @@
+<div
+	class="command-palette"
+	[class.is-open]="open()"
+	[attr.inert]="open() ? null : ''"
+	[attr.aria-hidden]="open() ? null : 'true'"
+	(click)="requestClose()"
+	(keydown)="onKeydown($event)">
+	<section
+		#dialog
+		class="command-palette__dialog"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="command-title"
+		(click)="$event.stopPropagation()">
+		<div class="command-palette__heading">
+			<p id="command-title">
+				{{ 'chrome.commandPalette.title' | translate }}
+			</p>
+			<button
+				type="button"
+				(click)="requestClose()"
+				[attr.aria-label]="'chrome.commandPalette.close' | translate">
+				×
+			</button>
+		</div>
+		<label class="command-palette__search">
+			{{ 'chrome.commandPalette.searchLabel' | translate }}
+			<input
+				#search
+				type="search"
+				[value]="query()"
+				(input)="updateQuery($event)"
+				[attr.placeholder]="
+					'chrome.commandPalette.searchPlaceholder' | translate
+				" />
+		</label>
+		<nav
+			class="command-palette__commands"
+			[attr.aria-label]="'chrome.commandPalette.searchResults' | translate">
+			@for (result of visibleCommands(); track result.id) {
+				<a
+					[routerLink]="routeFor(result.page)"
+					(click)="select(result)">
+					<span class="command-palette__kind" aria-hidden="true">{{ resultKindIcon(result.kind) }}</span>
+					<div>
+						<b>{{ result.label }}</b>
+						<small>{{ result.detail }}</small>
+						<i>{{ resultKindLabel(result.kind) }}</i>
+					</div>
+					<kbd>Enter</kbd>
+				</a>
+			} @empty {
+				@if (query().trim().length >= 2) {
+					<p class="command-palette__empty">{{ 'chrome.commandPalette.searchEmpty' | translate }}</p>
+				}
+			}
+		</nav>
+	</section>
+</div>

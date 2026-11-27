@@ -1,0 +1,25 @@
+<section class="tap-game" aria-labelledby="tap-game-title" [attr.data-phase]="phase()">
+	<div class="tap-game__copy">
+		<p>{{ 'pages.demos.tapEyebrow' | translate }}</p>
+		<h3 id="tap-game-title">{{ 'pages.demos.tapTitle' | translate }}</h3>
+		<p>{{ 'pages.demos.tapDetail' | translate }}</p>
+		<dl class="tap-game__metrics">
+			<div><dt>{{ 'pages.demos.tapGoal' | translate }}</dt><dd>{{ taps() }} / {{ goal() }}</dd></div>
+			<div><dt>{{ 'pages.demos.arcade.round' | translate }}</dt><dd>{{ round() }}</dd></div>
+			<div><dt>{{ 'pages.demos.reactionBest' | translate }}</dt><dd>{{ best() === null ? '—' : best() + ' ms' }}</dd></div>
+		</dl>
+		<div class="tap-game__actions">
+			<button type="button" [disabled]="phase() === 'running'" (click)="start()">{{ 'pages.demos.reactionStart' | translate }}</button>
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
+	</div>
+	<div class="tap-game__board">
+		<p class="tap-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ elapsed() === null ? progress() + '%' : elapsed() + ' ms' }}
+		</p>
+		<button type="button" [attr.data-phase]="phase()" [disabled]="phase() === 'result'" (click)="tap()" [attr.aria-label]="phase() === 'ready' ? ('pages.demos.reactionStart' | translate) : ('pages.demos.tapButton' | translate)">
+			<span>{{ phase() === 'ready' ? ('pages.demos.reactionStart' | translate) : phase() === 'result' ? ('pages.demos.tapDone' | translate) : ('pages.demos.tapButton' | translate) }}</span>
+			<i [style.--tap-progress]="progress()" aria-hidden="true"></i>
+		</button>
+	</div>
+</section>

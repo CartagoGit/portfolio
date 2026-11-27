@@ -1,0 +1,60 @@
+<article class="workflow-playground" aria-labelledby="workflow-playground-title">
+	<div class="workflow-playground__heading">
+		<p>{{ 'pages.lab.workflowEyebrow' | translate }}</p>
+		<h3 id="workflow-playground-title">{{ 'pages.lab.playgroundHeading' | translate }}</h3>
+		<p>{{ 'pages.lab.playgroundDescription' | translate }}</p>
+	</div>
+	<div class="workflow-playground__board" [class.is-complete]="complete()">
+		<p aria-live="polite">
+			<span aria-hidden="true"></span>
+			{{ complete() ? ('pages.lab.playgroundCompleteMessage' | translate) : ('pages.lab.playgroundIncompleteMessage' | translate) }}
+		</p>
+		<div class="workflow-playground__steps">
+			@for (step of order(); track step; let index = $index) {
+				<div
+					class="workflow-playground__step"
+					[class.is-dragging]="dragged() === step"
+					draggable="true"
+					(dragstart)="startDrag(step)"
+					(dragend)="dragged.set(null)"
+					(dragover)="$event.preventDefault()"
+					(drop)="dropOn(step)">
+					<button
+						type="button"
+						class="workflow-playground__handle"
+						[attr.aria-label]="copy(step).label | translate"
+						[attr.aria-keyshortcuts]="'ArrowLeft ArrowRight ArrowUp ArrowDown'"
+						(keydown)="onKeydown($event, step)">
+						<span>0{{ index + 1 }}</span>
+						<b>{{ copy(step).label | translate }}</b>
+						<small>{{ copy(step).hint | translate }}</small>
+						<i aria-hidden="true">⠿</i>
+					</button>
+					<div class="workflow-playground__move-controls">
+						<button
+							type="button"
+							[disabled]="index === 0"
+							(click)="move(step, -1)"
+							[attr.aria-label]="'pages.lab.moveEarlier' | translate">
+							←
+						</button>
+						<button
+							type="button"
+							[disabled]="index === order().length - 1"
+							(click)="move(step, 1)"
+							[attr.aria-label]="'pages.lab.moveLater' | translate">
+							→
+						</button>
+					</div>
+				</div>
+			}
+		</div>
+		<footer>
+			<span>{{ completedLabel() }}</span>
+			<button type="button" (click)="reset()">
+				{{ 'pages.lab.resetButton' | translate }} · {{ 'pages.lab.playgroundReset' | translate }}
+			</button>
+		</footer>
+	</div>
+	<app-lab-fullscreen-evidence kind="workflow" />
+</article>

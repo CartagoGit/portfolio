@@ -1,0 +1,17 @@
+@use '../demos-interaction-system' as interaction;
+
+:host { @include interaction.component-host; }
+.tap-game { @include interaction.game-layout; }
+.tap-game__copy { @include interaction.game-copy; }
+.tap-game__metrics { @include interaction.game-metrics; }
+.tap-game__actions { @include interaction.action-cluster; margin-top: 1rem; }
+.tap-game__board { @include interaction.game-board; @include interaction.board-surface; }
+.tap-game__status { @include interaction.game-status; width: 100%; }
+.tap-game__board > button { position: relative; display: grid; width: min(260px, 80%); aspect-ratio: 1; place-items: center; overflow: hidden; border: var(--border-thin) solid var(--cyan); border-radius: 50%; background: var(--surface-2); color: var(--ink); font-size: 1rem; font-weight: 900; touch-action: manipulation; }
+.tap-game__board > button[data-phase='ready'] { border-style: dashed; }
+.tap-game__board > button[data-phase='result'] { border-color: var(--lime); background: color-mix(in srgb, var(--lime) 10%, var(--surface)); }
+.tap-game__board > button i { position: absolute; inset: auto 0 0; height: calc(var(--tap-progress) * 1%); background: color-mix(in srgb, var(--cyan) 38%, transparent); transition: height 0.16s ease; }
+.tap-game__board > button span { position: relative; z-index: 1; }
+.tap-game__board > button:active { transform: scale(0.97); }
+@media (max-width: 760px) { .tap-game { @include interaction.game-layout-mobile; } .tap-game__actions { justify-content: center; } }
+@media (prefers-reduced-motion: reduce) { .tap-game__board > button { transform: none !important; } .tap-game__board > button i { transition-duration: 0.01ms; } }

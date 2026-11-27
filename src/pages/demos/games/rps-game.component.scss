@@ -1,0 +1,18 @@
+@use '../demos-interaction-system' as interaction;
+
+:host { @include interaction.component-host; }
+.rps-game { @include interaction.game-layout; }
+.rps-game__copy { @include interaction.game-copy; }
+.rps-game__metrics { @include interaction.game-metrics; }
+.rps-game__actions { @include interaction.action-cluster; margin-top: 1rem; }
+.rps-game__board { @include interaction.game-board; @include interaction.board-surface; }
+.rps-game__duel { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0.8rem; width: min(100%, 320px); }
+.rps-game__duel span { display: grid; aspect-ratio: 1; place-items: center; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--cyan); font-size: clamp(2.5rem, 7vw, 4.5rem); }
+.rps-game__duel b { color: var(--muted); font-size: 0.72rem; }
+.rps-game__choices { @include interaction.choice-grid(3); }
+.rps-game__choices button { @include interaction.grid-cell; min-height: 96px; gap: 0.35rem; border-radius: 14px; font-size: 0.75rem; font-weight: 800; }
+.rps-game__choices button.is-selected { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 12%, var(--surface)); }
+.rps-game__choices i { color: var(--cyan); font-size: 2rem; font-style: normal; }
+.rps-game__status { @include interaction.game-status; width: 100%; }
+@media (max-width: 760px) { .rps-game { @include interaction.game-layout-mobile; } .rps-game__actions { justify-content: center; } .rps-game__choices button { min-height: 88px; } }
+@media (prefers-reduced-motion: reduce) { .rps-game__choices { @include interaction.reduced-motion-controls; } }

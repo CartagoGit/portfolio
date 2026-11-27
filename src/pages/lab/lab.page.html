@@ -1,0 +1,96 @@
+<section
+	class="lab-page"
+	aria-labelledby="lab-title">
+	<header class="lab-page__heading">
+		<div>
+			<p>{{ 'pages.lab.eyebrow' | translate }}</p>
+			<h2 id="lab-title">
+				{{ 'pages.lab.titleLead' | translate }}
+				<em>{{ 'pages.lab.titleEmphasis' | translate }}</em>
+				{{ 'pages.lab.titleTail' | translate }}
+			</h2>
+		</div>
+		<p>{{ 'pages.lab.subtitle' | translate }}</p>
+	</header>
+
+	<app-lab-dashboard
+		appFullscreenPanel
+		[fullscreenLabel]="'pages.lab.labFullscreen' | translate"
+		[fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+
+	<section
+		class="lab-page__signal-gallery"
+		[attr.aria-label]="'pages.lab.experimentsDetail' | translate">
+		<header>
+			<div><p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p><h3>{{ 'pages.lab.experimentsTitle' | translate }}</h3></div>
+		</header>
+		<div class="lab-page__signal-grid">
+			<article class="lab-page__signal-card lab-page__signal-card--tune" data-experiment="tune" [class.is-fullscreen]="fullscreenCard() === 'tune'">
+				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'tune' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
+				<p>{{ 'pages.lab.motionEyebrow' | translate }}</p><h3>{{ 'pages.lab.motionTitle' | translate }}</h3>
+				<div class="lab-page__signal-meter" [style.--signal-strength]="signalStrength() + '%'" aria-hidden="true"><i></i></div>
+				<output>{{ signalStrength() }}%</output>
+				<button type="button" (click)="tuneSignal()">{{ 'pages.lab.randomizeData' | translate }}</button>
+				@if (fullscreenCard() === 'tune') {
+					<div class="lab-page__fullscreen-evidence" aria-label="P50 · P90 · P99">
+						@for (sample of [24, 58, 92]; track sample) {
+							<div><span>P{{ $index === 0 ? 50 : $index === 1 ? 90 : 99 }}</span><i [style.--sample-strength]="sample + '%'">{{ sample }}%</i></div>
+						}
+					</div>
+				}
+				</div>
+			</article>
+			<article class="lab-page__signal-card lab-page__signal-card--route" data-experiment="route" [class.is-fullscreen]="fullscreenCard() === 'route'" [attr.data-path]="packetPath()">
+				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'route' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
+				<p>{{ 'pages.lab.stateEyebrow' | translate }}</p><h3>{{ 'pages.lab.stateTitle' | translate }}</h3>
+				<div class="lab-page__packet-route" aria-hidden="true"><i>A</i><span></span><i>B</i><span></span><i>C</i><b></b></div>
+				<button type="button" (click)="routePacket()">{{ 'pages.lab.stateRun' | translate }}</button>
+				@if (fullscreenCard() === 'route') {
+					<div class="lab-page__fullscreen-evidence lab-page__fullscreen-evidence--routes">
+						@for (sample of [0, 1, 2]; track sample) {
+							<div [class.is-active]="packetPath() === sample"><span>A</span><i></i><span>B</span><i></i><span>C</span></div>
+						}
+					</div>
+				}
+				</div>
+			</article>
+			<article class="lab-page__signal-card lab-page__signal-card--queue" data-experiment="queue" [class.is-fullscreen]="fullscreenCard() === 'queue'">
+				<button class="lab-page__fullscreen interactive-fullscreen-control" type="button" [attr.aria-label]="(fullscreenCard() === 'queue' ? 'pages.lab.labExitFullscreen' : 'pages.lab.labFullscreen') | translate" (click)="toggleGalleryFullscreen($event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg></button>
+				<div class="lab-page__fullscreen-frame">
+				<p>{{ 'pages.lab.concurrencyEyebrow' | translate }}</p><h3>{{ 'pages.lab.concurrencyTitle' | translate }}</h3>
+				<ul>@for (item of queue(); track item) { <li>{{ item }}</li> }</ul>
+				<div><button type="button" (click)="enqueue()">{{ 'pages.lab.runConcurrent' | translate }}</button><button type="button" (click)="dequeue()">{{ 'pages.lab.cancelConcurrent' | translate }}</button></div>
+				@if (fullscreenCard() === 'queue') {
+					<div class="lab-page__fullscreen-evidence lab-page__fullscreen-evidence--queue">
+						@for (item of ['A-01', 'B-02', 'C-03', 'D-04', 'E-05', 'F-06']; track item) { <span>{{ item }}</span> }
+					</div>
+				}
+				</div>
+			</article>
+		</div>
+	</section>
+
+	<section class="lab-page__experiments" aria-labelledby="lab-experiments-title">
+		<header>
+			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>
+			<h3 id="lab-experiments-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
+			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
+		</header>
+		<div class="lab-page__experiment-grid">
+			<app-workflow-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-motion-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-accessibility-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-concurrency-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-responsive-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-data-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+			<app-state-machine-playground appFullscreenPanel [fullscreenLabel]="'pages.lab.labFullscreen' | translate" [fullscreenExitLabel]="'pages.lab.labExitFullscreen' | translate" />
+		</div>
+	</section>
+
+	<p class="lab-page__motion-note">
+		<code>{{ 'pages.lab.motionNoteCode' | translate }}</code>
+		{{ 'pages.lab.motionNote' | translate }}
+	</p>
+</section>

@@ -1,0 +1,42 @@
+<section class="knowledge-page" aria-labelledby="knowledge-title">
+	<div class="knowledge-page__heading">
+		<p>{{ 'pages.knowledge.eyebrow' | translate }}</p>
+		<h2 id="knowledge-title">
+			{{ 'pages.knowledge.titleLead' | translate }}
+			<br />
+			<em>{{ 'pages.knowledge.titleEmphasis' | translate }}</em>
+			{{ 'pages.knowledge.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.knowledge.subtitle' | translate }}</p>
+	</div>
+
+	<div class="knowledge-page__grid">
+		@for (area of areas; track area.id; let index = $index) {
+			<article [attr.data-knowledge]="area.id">
+				<header>
+					<svg class="knowledge-page__icon" viewBox="0 0 40 40" aria-hidden="true">
+						<path [attr.d]="area.iconPath" />
+					</svg>
+					<span>0{{ index + 1 }}</span>
+				</header>
+				<span>{{ area.labelKey | translate }}</span>
+				<b>{{ area.stackKey | translate }}</b>
+				<p>{{ area.detailKey | translate }}</p>
+				<p class="knowledge-page__example">{{ area.exampleKey | translate }}</p>
+				<nav [attr.aria-label]="'pages.home.monitorDestinations' | translate">
+					@for (project of area.projects; track project.href) {
+						<a [href]="project.href" target="_blank" rel="noreferrer">
+							@if (project.imageSrc; as image) {
+								<img [src]="image" alt="" />
+							} @else if (project.iconPath; as iconPath) {
+								<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="iconPath" [attr.fill]="project.color ?? 'currentColor'" /></svg>
+							}
+							{{ project.label }}
+							<span aria-hidden="true">↗</span>
+						</a>
+					}
+				</nav>
+			</article>
+		}
+	</div>
+</section>

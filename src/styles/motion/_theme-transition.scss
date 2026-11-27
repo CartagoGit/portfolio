@@ -1,0 +1,38 @@
+// Cross-theme transition layer.
+@use '../tokens/durations' as motion;
+//
+// When the user picks a new theme, the data-theme attribute changes and every
+// semantic palette token recomputes. This layer animates that change only while
+// ShellFacade holds `data-theme-transition="1"` to avoid permanent transitions.
+$theme-transition-duration: motion.$motion-theme;
+$theme-transition-easing: motion.$ease-route;
+
+:root[data-theme-transition='1'],
+:root[data-theme-transition='1'] *,
+:root[data-theme-transition='1'] *::before,
+:root[data-theme-transition='1'] *::after {
+	transition:
+		background-color $theme-transition-duration $theme-transition-easing,
+		background $theme-transition-duration $theme-transition-easing,
+		color $theme-transition-duration $theme-transition-easing,
+		border-color $theme-transition-duration $theme-transition-easing,
+		border-top-color $theme-transition-duration $theme-transition-easing,
+		border-right-color $theme-transition-duration $theme-transition-easing,
+		border-bottom-color $theme-transition-duration $theme-transition-easing,
+		border-left-color $theme-transition-duration $theme-transition-easing,
+		box-shadow $theme-transition-duration $theme-transition-easing,
+		text-shadow $theme-transition-duration $theme-transition-easing,
+		fill $theme-transition-duration $theme-transition-easing,
+		stroke $theme-transition-duration $theme-transition-easing,
+		outline-color $theme-transition-duration $theme-transition-easing,
+		caret-color $theme-transition-duration $theme-transition-easing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root[data-theme-transition='1'],
+	:root[data-theme-transition='1'] *,
+	:root[data-theme-transition='1'] *::before,
+	:root[data-theme-transition='1'] *::after {
+		transition: none;
+	}
+}

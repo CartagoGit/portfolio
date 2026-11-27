@@ -1,0 +1,389 @@
+import type { IEarthTextureStyle } from '../../domain/types.interface';
+import { EARTH_GLOBE_SHADERS } from './shaders/shaders.barrel';
+
+/** GPU renderer for the interactive Earth; CPU work is deliberately avoided. */
+export interface IEarthFrame {
+	angle: number;
+	axisX: number;
+	axisY: number;
+	axisZ: number;
+	rotation?: readonly [x: number, y: number, z: number, w: number];
+	textureStyle?: IEarthTextureStyle;
+	foreground: boolean;
+}
+
+interface IGlobeProgram {
+	context: WebGLRenderingContext;
+	program: WebGLProgram;
+	texture: WebGLTexture;
+	buffer: WebGLBuffer;
+	vertex: WebGLShader;
+	fragment: WebGLShader;
+	image: HTMLCanvasElement;
+	position: number;
+	rotation: WebGLUniformLocation;
+	textureEffect: WebGLUniformLocation;
+}
+
+interface IGpuProgramResources {
+	readonly program?: WebGLProgram | null;
+	readonly texture?: WebGLTexture | null;
+	readonly buffer?: WebGLBuffer | null;
+	readonly vertex?: WebGLShader | null;
+	readonly fragment?: WebGLShader | null;
+}
+
+function releaseGpuProgramResources(
+	context: WebGLRenderingContext,
+	resources: IGpuProgramResources,
+): void {
+	if (resources.texture) context.deleteTexture(resources.texture);
+	if (resources.buffer) context.deleteBuffer(resources.buffer);
+	if (resources.program) context.deleteProgram(resources.program);
+	if (resources.vertex) context.deleteShader(resources.vertex);
+	if (resources.fragment) context.deleteShader(resources.fragment);
+}
+
+const renderers = new WeakMap<HTMLCanvasElement, EarthRenderer>();
+
+/** Draws a frame through a reusable renderer owned by the canvas. */
+export function renderEarthFrame(args: {
+	canvas: HTMLCanvasElement;
+	image: HTMLCanvasElement;
+	frame: IEarthFrame;
+}): boolean {
+	let renderer = renderers.get(args.canvas);
+	if (!renderer) {
+		renderer = new EarthRenderer(args.canvas);
+		renderers.set(args.canvas, renderer);
+	}
+	return renderer.render(args.image, args.frame);
+}
+
+/** Releases all WebGL resources and context listeners owned by a canvas. */
+export function destroyEarthRenderer(canvas: HTMLCanvasElement): void {
+	const renderer = renderers.get(canvas);
+	if (!renderer) return;
+	renderer.destroy();
+	renderers.delete(canvas);
+}
+
+/** WebGL renderer for the interactive globe; CPU work is deliberately avoided. */
+export class EarthRenderer {
+	private _globeProgram: IGlobeProgram | null = null;
+	private _contextLost = false;
+	private _destroyed = false;
+
+	constructor(private readonly canvas: HTMLCanvasElement) {
+		canvas.addEventListener('webglcontextlost', this.onContextLost);
+		canvas.addEventListener('webglcontextrestored', this.onContextRestored);
+	}
+
+	private readonly onContextLost = (event: Event): void => {
+		event.preventDefault();
+		this._contextLost = true;
+		this._globeProgram = null;
+	};
+
+	private readonly onContextRestored = (): void => {
+		this._contextLost = false;
+		this._globeProgram = null;
+	};
+
+	/** Updates the rendering surface and draws the current frame. */
+	public render(image: HTMLCanvasElement, frame: IEarthFrame): boolean {
+		if (this._destroyed || this._contextLost) return false;
+		const { canvas } = this;
+		const deviceScale = Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.8);
+		const rect = canvas.getBoundingClientRect();
+		const cssSize = Math.max(
+			64,
+			Math.round(canvas.clientWidth || canvas.offsetWidth || rect.width || 300)
+		);
+		const size = Math.min(2048, Math.max(512, Math.round(cssSize * deviceScale)));
+		if (canvas.width !== size || canvas.height !== size) {
+			canvas.width = size;
+			canvas.height = size;
+			this.releaseProgram();
+		}
+
+		const globeProgram = this.getProgram(image);
+		if (!globeProgram) return false;
+
+		const { context } = globeProgram;
+		if (context.isContextLost?.()) return false;
+
+		const rotation = normalizedFrameRotation(frame);
+		context.viewport(0, 0, size, size);
+		context.clearColor(0, 0, 0, 0);
+		context.clear(context.COLOR_BUFFER_BIT);
+		context.disable(context.DEPTH_TEST);
+		context.disable(context.CULL_FACE);
+		context.disable(context.BLEND);
+		context.useProgram(globeProgram.program);
+		context.bindBuffer(context.ARRAY_BUFFER, globeProgram.buffer);
+		context.enableVertexAttribArray(globeProgram.position);
+		context.vertexAttribPointer(
+			globeProgram.position,
+			2,
+			context.FLOAT,
+			false,
+			0,
+			0,
+		);
+		context.activeTexture(context.TEXTURE0);
+		context.bindTexture(context.TEXTURE_2D, globeProgram.texture);
+		context.uniform4f(
+			globeProgram.rotation,
+			rotation[0],
+			rotation[1],
+			rotation[2],
+			rotation[3]
+		);
+		context.uniform1i(
+			globeProgram.textureEffect,
+			textureEffectIndex(frame.textureStyle)
+		);
+		context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
+		return true;
+	}
+
+	private getProgram(image: HTMLCanvasElement): IGlobeProgram | null {
+		const cached = this._globeProgram;
+		if (cached) {
+			if (cached.image !== image) {
+				uploadTexture({ context: cached.context, texture: cached.texture, image });
+				cached.image = image;
+			}
+			return cached;
+		}
+
+		const context = this.canvas.getContext('webgl', {
+			alpha: true,
+			antialias: true,
+			premultipliedAlpha: false,
+		});
+		if (!context) return null;
+
+		const vertex = compileShader({
+			context,
+			type: context.VERTEX_SHADER,
+			source: EARTH_GLOBE_SHADERS.vertex,
+		});
+		const fragment = compileShader({
+			context,
+			type: context.FRAGMENT_SHADER,
+			source: EARTH_GLOBE_SHADERS.fragment,
+		});
+		if (!vertex || !fragment) {
+			releaseGpuProgramResources(context, { vertex, fragment });
+			return null;
+		}
+
+		const program = context.createProgram();
+		const texture = context.createTexture();
+		const buffer = context.createBuffer();
+		if (!program || !texture || !buffer) {
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
+			return null;
+		}
+
+		context.attachShader(program, vertex);
+		context.attachShader(program, fragment);
+		context.linkProgram(program);
+		if (!context.getProgramParameter(program, context.LINK_STATUS)) {
+			console.error('WebGL program link failed:', context.getProgramInfoLog(program));
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
+			return null;
+		}
+
+		const position = context.getAttribLocation(program, 'position');
+		const rotation = context.getUniformLocation(program, 'rotation');
+		const textureEffect = context.getUniformLocation(program, 'textureEffect');
+		if (position < 0 || !rotation || !textureEffect) {
+			releaseGpuProgramResources(context, { program, texture, buffer, vertex, fragment });
+			return null;
+		}
+
+		context.bindBuffer(context.ARRAY_BUFFER, buffer);
+		context.bufferData(
+			context.ARRAY_BUFFER,
+			new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+			context.STATIC_DRAW
+		);
+		context.useProgram(program);
+		context.enableVertexAttribArray(position);
+		context.vertexAttribPointer(position, 2, context.FLOAT, false, 0, 0);
+		context.activeTexture(context.TEXTURE0);
+		context.bindTexture(context.TEXTURE_2D, texture);
+		context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
+		context.texParameteri(
+			context.TEXTURE_2D,
+			context.TEXTURE_MIN_FILTER,
+			context.LINEAR_MIPMAP_LINEAR
+		);
+		context.texParameteri(
+			context.TEXTURE_2D,
+			context.TEXTURE_MAG_FILTER,
+			context.LINEAR
+		);
+		context.texParameteri(
+			context.TEXTURE_2D,
+			context.TEXTURE_WRAP_S,
+			context.REPEAT
+		);
+		context.texParameteri(
+			context.TEXTURE_2D,
+			context.TEXTURE_WRAP_T,
+			context.CLAMP_TO_EDGE
+		);
+		context.texImage2D(
+			context.TEXTURE_2D,
+			0,
+			context.RGBA,
+			context.RGBA,
+			context.UNSIGNED_BYTE,
+			image
+		);
+		context.generateMipmap(context.TEXTURE_2D);
+		applyAnisotropicFilter(context, texture);
+		context.uniform1i(context.getUniformLocation(program, 'earthTexture'), 0);
+
+		this._globeProgram = {
+			context,
+			program,
+			texture,
+			buffer,
+			vertex,
+			fragment,
+			image,
+			position,
+			rotation,
+			textureEffect,
+		};
+		return this._globeProgram;
+	}
+
+	/** Idempotent release for shaders, buffers, textures and listeners. */
+	destroy(): void {
+		if (this._destroyed) return;
+		this._destroyed = true;
+		this.releaseProgram();
+		this._contextLost = true;
+		this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
+		this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
+	}
+
+	private releaseProgram(): void {
+		const globeProgram = this._globeProgram;
+		if (globeProgram) {
+			releaseGpuProgramResources(globeProgram.context, globeProgram);
+		}
+		this._globeProgram = null;
+	}
+}
+
+function applyAnisotropicFilter(
+	context: WebGLRenderingContext,
+	texture: WebGLTexture
+): void {
+	const anisotropy = context.getExtension('EXT_texture_filter_anisotropic');
+	if (!anisotropy) return;
+	context.bindTexture(context.TEXTURE_2D, texture);
+	context.texParameterf(
+		context.TEXTURE_2D,
+		anisotropy.TEXTURE_MAX_ANISOTROPY_EXT,
+		context.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+	);
+}
+
+function uploadTexture(args: {
+	context: WebGLRenderingContext;
+	texture: WebGLTexture;
+	image: HTMLCanvasElement;
+}): void {
+	const { context, texture, image } = args;
+	context.activeTexture(context.TEXTURE0);
+	context.bindTexture(context.TEXTURE_2D, texture);
+	context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
+	context.texImage2D(
+		context.TEXTURE_2D,
+		0,
+		context.RGBA,
+		context.RGBA,
+		context.UNSIGNED_BYTE,
+		image
+	);
+	context.generateMipmap(context.TEXTURE_2D);
+	applyAnisotropicFilter(context, texture);
+}
+
+function normalizedFrameRotation(
+	frame: IEarthFrame
+): readonly [number, number, number, number] {
+	if (frame.rotation) {
+		const length = Math.hypot(...frame.rotation) || 1;
+		return [
+			frame.rotation[0] / length,
+			frame.rotation[1] / length,
+			frame.rotation[2] / length,
+			frame.rotation[3] / length,
+		];
+	}
+	const axisLength = Math.hypot(frame.axisX, frame.axisY, frame.axisZ) || 1;
+	const half = frame.angle / 2;
+	const sine = Math.sin(half);
+	return [
+		(frame.axisX / axisLength) * sine,
+		(frame.axisY / axisLength) * sine,
+		(frame.axisZ / axisLength) * sine,
+		Math.cos(half),
+	];
+}
+
+function textureEffectIndex(style: IEarthTextureStyle | undefined): number {
+	switch (style) {
+		case 'terrain':
+			return 2;
+		case 'infrared':
+			return 3;
+		case 'sun':
+			return 4;
+		case 'saturn':
+			return 5;
+		case 'rugby':
+			return 6;
+		case 'pluto':
+			return 7;
+		case 'cartago-mark':
+		case 'cartago-banner':
+		case 'portrait':
+			return 8;
+		case 'soccer':
+			return 9;
+		case 'basketball':
+			return 10;
+		case 'tennis':
+			return 11;
+		case 'golf':
+			return 12;
+		default:
+			return 0;
+	}
+}
+
+function compileShader(args: {
+	context: WebGLRenderingContext;
+	type: number;
+	source: string;
+}): WebGLShader | null {
+	const { context, type, source } = args;
+	const shader = context.createShader(type);
+	if (!shader) return null;
+	context.shaderSource(shader, source);
+	context.compileShader(shader);
+	if (context.getShaderParameter(shader, context.COMPILE_STATUS)) return shader;
+	console.error('WebGL shader compilation failed:', context.getShaderInfoLog(shader));
+	context.deleteShader(shader);
+	return null;
+}

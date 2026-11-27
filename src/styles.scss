@@ -1,0 +1,244 @@
+// Global stylesheet. Design tokens and route motion are owned in partials;
+// this file only defines runtime scales, reset, scrollbars and accessibility.
+@use './styles/tokens/index' as tokens;
+@use './styles/keyframes/index';
+@use './styles/motion/theme-transition';
+@use './styles/motion/view-transitions';
+@use './styles/motion/index' as motion;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+	color-scheme: dark;
+	font-family: 'Manrope', Arial, sans-serif;
+	background: var(--canvas);
+	color: var(--ink);
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 0.75rem;
+	--space-4: 1rem;
+	--space-5: 1.25rem;
+	--space-6: 1.5rem;
+	--space-8: 2rem;
+	--space-10: 2.5rem;
+	--space-12: 3rem;
+	--space-2xs: 0.1rem;
+	--space-xs: 0.2rem;
+	--space-sm: 0.3rem;
+	--space-md: 0.35rem;
+	--space-lg: 0.4rem;
+	--space-xl: 0.45rem;
+	--radius-sm: 5px;
+	--radius-md: 7px;
+	--radius-lg: 8px;
+	--radius-xl: 10px;
+	--radius-2xl: 12px;
+	--radius-pill: 999px;
+	--border-thin: 1px;
+	--label-xs: 0.46rem;
+	--label-sm: 0.55rem;
+	--label-md: 0.62rem;
+	--label-lg: 0.65rem;
+	--label-xl: 0.72rem;
+	--letter-mono: 0.1em;
+	--letter-tight: 0.08em;
+	--letter-open: 0.04em;
+	--line-tight: 1;
+	--line-snug: 1.45;
+	--line-normal: 1.55;
+	--line-relaxed: 1.6;
+	--line-loose: 1.7;
+	--motion-instant: #{tokens.$motion-instant};
+	--motion-fast: #{tokens.$motion-fast};
+	--motion-base: #{tokens.$motion-base};
+	--motion-slow: #{tokens.$motion-slow};
+	--motion-route: #{tokens.$motion-route};
+	--motion-theme: #{tokens.$motion-theme};
+	--ease-standard: #{tokens.$ease-standard};
+	--ease-emphasized: #{tokens.$ease-emphasized};
+	--ease-route: #{tokens.$ease-route};
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	overflow-x: clip;
+	overflow-y: scroll;
+	scrollbar-gutter: stable;
+}
+
+body {
+	min-width: 320px;
+	margin: 0;
+	overflow-x: clip;
+	background: var(--canvas);
+	color: var(--ink);
+	transition:
+		background-color var(--motion-base) ease,
+		color var(--motion-base) ease;
+}
+
+:root[data-theme='dark'],
+:root[data-theme='midnight'],
+:root[data-theme='ocean'],
+:root[data-theme='forest'],
+:root[data-theme='sunset'] {
+	color-scheme: dark;
+}
+
+:root[data-theme='light'],
+:root[data-theme='solar'],
+:root[data-theme='mono'] {
+	color-scheme: light;
+}
+
+:root {
+	--scrollbar-track: color-mix(in srgb, var(--canvas) 82%, var(--surface-2));
+	--scrollbar-thumb: color-mix(in srgb, var(--cyan) 52%, var(--line));
+	--scrollbar-thumb-hover: color-mix(in srgb, var(--cyan) 82%, var(--ink));
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	border-radius: var(--radius-pill);
+	background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+	border: 2px solid var(--scrollbar-track);
+	border-radius: var(--radius-pill);
+	background: linear-gradient(
+		180deg,
+		var(--scrollbar-thumb),
+		color-mix(in srgb, var(--scrollbar-thumb) 68%, var(--surface-2))
+	);
+	background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+	background: var(--scrollbar-track);
+}
+
+button,
+a,
+input,
+textarea,
+select {
+	font: inherit;
+	touch-action: manipulation;
+}
+
+button {
+	cursor: pointer;
+}
+
+a {
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 3px solid var(--focus-ring);
+	outline-offset: 4px;
+}
+
+img,
+svg,
+picture,
+video {
+	max-width: 100%;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.interactive-fullscreen-control {
+	@include motion.fullscreen-control;
+}
+
+.interactive-fullscreen-host {
+	position: relative;
+}
+
+.interactive-fullscreen-host:fullscreen,
+.interactive-fullscreen-host.is-fallback-fullscreen {
+	position: fixed !important;
+	z-index: 9999 !important;
+	inset: 0 !important;
+	width: min(96vw, 153.6dvh) !important;
+	height: auto !important;
+	min-height: 0 !important;
+	max-height: 96dvh !important;
+	aspect-ratio: 8 / 5;
+	margin: auto !important;
+	overflow-y: auto !important;
+	padding: clamp(1rem, 3vw, 2.5rem) !important;
+	border-radius: 0 !important;
+	background: var(--canvas) !important;
+}
+
+:root.portfolio-fullscreen-mode,
+:root.portfolio-fullscreen-mode body {
+	overflow: hidden !important;
+}
+
+:root.portfolio-fullscreen-mode [data-fullscreen-inert] {
+	visibility: hidden !important;
+	pointer-events: none !important;
+	user-select: none !important;
+	opacity: 0 !important;
+}
+
+:root.portfolio-fullscreen-mode app-shell-header,
+:root.portfolio-fullscreen-mode app-shell-footer,
+:root.portfolio-fullscreen-mode .skip-link,
+:root.portfolio-fullscreen-mode app-command-palette {
+	visibility: hidden !important;
+	pointer-events: none !important;
+	opacity: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

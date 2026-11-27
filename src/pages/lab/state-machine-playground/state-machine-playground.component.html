@@ -1,0 +1,21 @@
+<article class="state-machine-playground" [attr.data-state]="state()">
+	<header>
+		<p>{{ 'pages.lab.stateEyebrow' | translate }}</p>
+		<h3>{{ 'pages.lab.stateTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.stateDetail' | translate }}</p>
+	</header>
+	<div class="state-machine-playground__rail" aria-live="polite">
+		@for (item of states; track item) {
+			<span [class.is-active]="state() === item">{{ ('pages.lab.state' + item[0]!.toUpperCase() + item.slice(1)) | translate }}</span>
+		}
+	</div>
+	<div class="state-machine-playground__actions">
+		<button type="button" (click)="run()">{{ 'pages.lab.stateRun' | translate }}</button>
+		<button type="button" (click)="run(true)">{{ 'pages.lab.stateFail' | translate }}</button>
+		<button type="button" (click)="reset()">{{ 'pages.lab.resetButton' | translate }}</button>
+	</div>
+	<p class="state-machine-playground__status">
+		{{ (state() === 'success' ? 'pages.lab.stateSuccessMessage' : state() === 'error' ? 'pages.lab.stateErrorMessage' : state() === 'running' ? 'pages.lab.stateRunningMessage' : 'pages.lab.stateIdleMessage') | translate }}
+	</p>
+	<app-lab-fullscreen-evidence kind="state-machine" />
+</article>

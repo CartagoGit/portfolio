@@ -1,0 +1,52 @@
+<section class="demos-page" aria-labelledby="demos-title">
+	<div class="demos-page__heading">
+		<p>{{ 'pages.demos.eyebrow' | translate }}</p>
+		<h2 id="demos-title">
+			{{ 'pages.demos.titleLead' | translate }}
+			<br />
+			<em>{{ 'pages.demos.titleEmphasis' | translate }}</em>
+			{{ 'pages.demos.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.demos.subtitle' | translate }}</p>
+	</div>
+
+	@defer (on immediate) {
+		<app-arcade-games />
+	} @placeholder {
+		<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+	}
+
+	<section class="demos-page__laboratory" aria-labelledby="demos-laboratory-title">
+		<header class="demos-page__laboratory-heading">
+			<p>{{ 'pages.lab.experimentsEyebrow' | translate }}</p>
+			<h3 id="demos-laboratory-title">{{ 'pages.lab.experimentsTitle' | translate }}</h3>
+			<p>{{ 'pages.lab.experimentsDetail' | translate }}</p>
+		</header>
+		@defer (on immediate) {
+			<app-demos-showcase />
+		} @placeholder {
+			<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+		}
+		@defer (on immediate) {
+			<app-demo-games />
+		} @placeholder {
+			<div class="demos-page__deferred-placeholder" aria-hidden="true"></div>
+		}
+	</section>
+
+	<section
+		class="demos-page__links"
+		[attr.aria-label]="'pages.demos.externalLinksAria' | translate">
+		@for (demo of demos; track demo.title) {
+			<app-evidence-card
+				[href]="demo.url"
+				[title]="demo.title"
+				[number]="demo.number"
+				[summary]="demo.summaryKey | translate"
+				[openLabel]="'pages.demos.openDemo' | translate"
+				[imageSrc]="demo.imageSrc"
+				[iconPath]="demo.iconPath"
+				[visualIdentity]="demo.title" />
+		}
+	</section>
+</section>

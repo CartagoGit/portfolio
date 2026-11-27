@@ -1,0 +1,481 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+}
+
+.docker-page {
+	width: min(1180px, calc(100% - 3rem));
+	margin: 0 auto;
+	padding: clamp(3rem, 5vw, 5.5rem) 0;
+
+	&__heading {
+		display: grid;
+		grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+		gap: clamp(1.5rem, 6vw, 6rem);
+		align-items: center;
+		margin-bottom: clamp(2.5rem, 6vw, 5rem);
+	}
+
+	&__heading > div > p:first-child {
+		margin: 0;
+		color: var(--cyan);
+		@include tokens.mono(.75rem);
+		letter-spacing: var(--letter-open);
+	}
+
+	&__heading h2 {
+		margin: .65rem 0 1rem;
+		color: var(--ink);
+		font-size: clamp(2.7rem, 5.8vw, 5.8rem);
+		line-height: .9;
+		letter-spacing: -.065em;
+	}
+
+	&__heading h2 em {
+		color: var(--cyan);
+		font-style: normal;
+	}
+
+	&__heading > div > p:last-child {
+		max-width: 44ch;
+		margin: 0;
+		color: var(--muted);
+		font-size: .92rem;
+		line-height: 1.7;
+	}
+
+	&__terminal {
+		display: grid;
+		gap: 1rem;
+		padding: clamp(1.2rem, 3vw, 2rem);
+		border: var(--border-thin) solid var(--line);
+		border-radius: 18px;
+		background:
+			radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--cyan) 16%, transparent), transparent 32%),
+			var(--surface-2);
+		box-shadow: 0 30px 80px #0005, inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+	}
+
+	&__terminal > span {
+		color: var(--cyan);
+		font: 800 .75rem tokens.$font-mono, monospace;
+		letter-spacing: .08em;
+		text-transform: uppercase;
+	}
+
+	&__terminal code {
+		display: block;
+		overflow-x: auto;
+		padding: 1rem;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		background: color-mix(in srgb, var(--canvas) 82%, var(--surface));
+		color: var(--ink);
+		font: 600 .82rem/2 tokens.$font-mono, monospace;
+		white-space: nowrap;
+
+		b { color: var(--lime); }
+	}
+
+	&__terminal > div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: .42rem;
+	}
+
+	&__terminal em {
+		padding: .32rem .48rem;
+		border: var(--border-thin) solid var(--line);
+		border-radius: 7px;
+		background: var(--surface);
+		color: var(--muted);
+		font: 700 .75rem tokens.$font-mono, monospace;
+		font-style: normal;
+	}
+
+	&__terminal > a {
+		justify-self: start;
+		padding: .58rem .75rem;
+		border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 52%, var(--line));
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--cyan) 9%, var(--surface));
+		color: var(--ink);
+		font-size: .78rem;
+		font-weight: 800;
+		text-decoration: none;
+	}
+
+	&__terminal > a:hover,
+	&__terminal > a:focus-visible {
+		border-color: var(--cyan);
+		color: var(--cyan);
+	}
+
+	&__catalogue {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	&__image {
+		position: relative;
+		display: grid;
+		grid-template-rows: auto auto 1fr auto auto;
+		gap: 1rem;
+		min-width: 0;
+		min-height: 390px;
+		overflow: hidden;
+		padding: clamp(1.1rem, 2.4vw, 1.5rem);
+		border: var(--border-thin) solid var(--line);
+		border-radius: 16px;
+		background: linear-gradient(145deg, color-mix(in srgb, var(--cyan) 5%, var(--surface)), var(--surface-2));
+		box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+		transition:
+			transform .3s tokens.$ease-standard,
+			border-color .25s ease,
+			box-shadow .3s ease;
+
+		&:hover,
+		&:focus-within {
+			border-color: var(--cyan);
+			box-shadow: 0 20px 55px #0005;
+			transform: translateY(-4px);
+		}
+
+		&::before,
+		&::after {
+			position: absolute;
+			z-index: -1;
+			content: '';
+			pointer-events: none;
+		}
+
+		&::before {
+			inset: 0;
+			opacity: .17;
+			transition: opacity .4s ease, transform .6s tokens.$ease-standard;
+		}
+
+		&::after {
+			right: 1.2rem;
+			bottom: 1rem;
+			width: 86px;
+			height: 86px;
+			opacity: .18;
+			transition: opacity .35s ease, transform .55s tokens.$ease-standard;
+		}
+
+		&:hover::before,
+		&:focus-within::before {
+			opacity: .38;
+		}
+
+		&:hover::after,
+		&:focus-within::after {
+			opacity: .36;
+		}
+
+		&[data-image='nodebun']::before {
+			background: repeating-linear-gradient(90deg, transparent 0 12%, color-mix(in srgb, var(--cyan) 24%, transparent) 12.2% 12.8%, transparent 13% 25%);
+			animation: docker-container-grid 8s linear infinite;
+		}
+
+		&[data-image='nodebun']::after {
+			border: 2px solid var(--cyan);
+			border-radius: 12px;
+			box-shadow: 15px 15px 0 -4px var(--surface), 15px 15px 0 -2px color-mix(in srgb, var(--cyan) 70%, transparent);
+		}
+
+		&[data-image='zsh']::before {
+			inset: 8% 0 58%;
+			background: linear-gradient(105deg, transparent 0 34%, color-mix(in srgb, var(--lime) 26%, transparent) 42%, transparent 50%);
+			animation: docker-shell-scan 4.2s ease-in-out infinite;
+		}
+
+		&[data-image='zsh']::after {
+			width: 16px;
+			height: 42px;
+			border-radius: 2px;
+			background: var(--lime);
+			box-shadow: -12px 0 0 -4px var(--surface), -12px 0 0 -2px color-mix(in srgb, var(--lime) 75%, transparent);
+			animation: docker-shell-cursor 1.2s steps(1) infinite;
+		}
+
+		&[data-image='ionic-cover']::before {
+			background: radial-gradient(circle at 78% 18%, #3880ff33, transparent 24%), radial-gradient(circle at 18% 86%, #5dbbff28, transparent 28%);
+		}
+
+		&[data-image='ionic-cover']::after {
+			width: 52px;
+			height: 92px;
+			border: 2px solid #5b9fff;
+			border-radius: 14px;
+			box-shadow: inset 0 -10px 0 color-mix(in srgb, #5b9fff 18%, transparent);
+			transform: rotate(8deg);
+		}
+
+		&[data-image='angular']::before {
+			background: conic-gradient(from -45deg at 75% 24%, transparent 0 18%, #dd003144 19% 27%, transparent 28% 100%);
+		}
+
+		&[data-image='angular']::after {
+			background: linear-gradient(145deg, #dd0031 0 45%, #c3002f 46% 72%, transparent 73%);
+			clip-path: polygon(50% 0, 96% 16%, 86% 78%, 50% 100%, 14% 78%, 4% 16%);
+			animation: docker-angular-turn 6s ease-in-out infinite;
+		}
+
+		&[data-image='nestjs-cover']::before {
+			background: radial-gradient(circle at 16% 32%, #e0234e44 0 2px, transparent 3px), radial-gradient(circle at 84% 28%, #e0234e44 0 2px, transparent 3px), radial-gradient(circle at 76% 76%, #e0234e44 0 2px, transparent 3px);
+			background-size: 44px 44px, 62px 62px, 52px 52px;
+		}
+
+		&[data-image='nestjs-cover']::after {
+			border: 2px solid #e0234e;
+			transform: rotate(45deg);
+			box-shadow: 22px 0 0 -6px var(--surface), 0 22px 0 -6px var(--surface);
+			animation: docker-nest-network 4s ease-in-out infinite;
+		}
+
+		&[data-image='docker-graphql']::before {
+			background: repeating-linear-gradient(60deg, transparent 0 34px, color-mix(in srgb, #e535ab 22%, transparent) 35px 36px), repeating-linear-gradient(-60deg, transparent 0 34px, color-mix(in srgb, #7de8ff 18%, transparent) 35px 36px);
+		}
+
+		&[data-image='docker-graphql']::after {
+			border: 2px solid #e535ab;
+			border-radius: 50%;
+			box-shadow: 28px 0 0 -8px var(--surface), 28px 0 0 -6px #e535ab, -14px 24px 0 -8px var(--surface), -14px 24px 0 -6px #e535ab;
+			animation: docker-graphql-orbit 8s linear infinite;
+		}
+	}
+
+	&__image > header {
+		display: grid;
+		grid-template-columns: 42px minmax(0, 1fr) auto;
+		align-items: center;
+		gap: .65rem;
+		min-width: 0;
+
+		> img {
+			display: block;
+			width: 38px;
+			height: 38px;
+			max-width: 38px;
+			object-fit: contain;
+		}
+
+		> span {
+			color: var(--muted);
+			font: 700 .75rem tokens.$font-mono, monospace;
+		}
+	}
+
+	&__image-title > span {
+		color: var(--cyan);
+		font: 800 .75rem tokens.$font-mono, monospace;
+		letter-spacing: .08em;
+		text-transform: uppercase;
+	}
+
+	&__image-title h3 {
+		margin: .25rem 0 0;
+		color: var(--ink);
+		font-size: clamp(1.8rem, 3vw, 2.5rem);
+		line-height: 1;
+		letter-spacing: -.055em;
+		overflow-wrap: anywhere;
+	}
+
+	&__image > p {
+		max-width: 60ch;
+		margin: 0;
+		color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+		font-size: .86rem;
+		line-height: 1.62;
+	}
+
+	&__stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: .4rem;
+	}
+
+	&__stack span {
+		padding: .32rem .48rem;
+		border: var(--border-thin) solid var(--line);
+		border-radius: 7px;
+		background: var(--surface-2);
+		color: var(--ink);
+		font: 700 .75rem tokens.$font-mono, monospace;
+	}
+
+	&__image > code {
+		display: block;
+		overflow-x: auto;
+		padding: .75rem .85rem;
+		border: var(--border-thin) solid var(--line);
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--canvas) 84%, var(--surface));
+		color: var(--ink);
+		font: 600 .75rem/1.5 tokens.$font-mono, monospace;
+		white-space: nowrap;
+	}
+
+	&__image nav {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: .45rem;
+	}
+
+	&__image nav a {
+		padding: .55rem .65rem;
+		border: var(--border-thin) solid var(--line);
+		border-radius: 9px;
+		background: var(--surface-2);
+		color: var(--ink);
+		font-size: .75rem;
+		font-weight: 800;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	&__image nav a:hover,
+	&__image nav a:focus-visible {
+		border-color: var(--cyan);
+		background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+		color: var(--cyan);
+	}
+
+	&__status-badges {
+		display: flex;
+		max-width: min(270px, 62%);
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: .3rem;
+
+		b {
+			padding: .28rem .48rem;
+			border: 1px solid color-mix(in srgb, var(--cyan) 38%, var(--line));
+			border-radius: 999px;
+			background: color-mix(in srgb, var(--cyan) 9%, var(--surface));
+			color: var(--ink);
+			font: 700 .72rem/1.2 tokens.$font-mono, monospace;
+			white-space: nowrap;
+		}
+
+		b:first-child {
+			border-color: color-mix(in srgb, var(--lime) 48%, var(--line));
+			background: color-mix(in srgb, var(--lime) 10%, var(--surface));
+		}
+	}
+
+	&__image:hover .docker-page__status-badges b:first-child,
+	&__image:focus-within .docker-page__status-badges b:first-child {
+		animation: docker-status-maintained .9s ease;
+	}
+
+	&__image:hover .docker-page__status-badges b:nth-child(2),
+	&__image:focus-within .docker-page__status-badges b:nth-child(2) {
+		animation: docker-status-updated .9s ease .08s;
+	}
+
+	@keyframes docker-status-maintained {
+		50% {
+			transform: translateY(-3px);
+			box-shadow: 0 5px 18px color-mix(in srgb, var(--lime) 18%, transparent);
+		}
+	}
+
+	@keyframes docker-status-updated {
+		50% {
+			transform: translateX(3px);
+			box-shadow: 0 5px 18px color-mix(in srgb, var(--cyan) 18%, transparent);
+		}
+	}
+
+	@keyframes docker-container-grid {
+		to { background-position: 64px 0; }
+	}
+
+	@keyframes docker-shell-scan {
+		50% { transform: translateX(12%); opacity: .7; }
+	}
+
+	@keyframes docker-shell-cursor {
+		50% { opacity: .12; }
+	}
+
+	@keyframes docker-angular-turn {
+		50% { transform: rotate(9deg) scale(1.06); }
+	}
+
+	@keyframes docker-nest-network {
+		50% { transform: rotate(45deg) translate(5px, -5px) scale(1.06); }
+	}
+
+	@keyframes docker-graphql-orbit {
+		to { transform: rotate(1turn); }
+	}
+}
+
+@media (max-width: 860px) {
+	.docker-page {
+		width: min(100% - 1.7rem, 680px);
+
+		&__heading {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		&__catalogue {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+}
+
+@media (max-width: 540px) {
+	.docker-page {
+		&__heading h2 {
+			font-size: clamp(2.4rem, 12vw, 3.4rem);
+		}
+
+		&__image {
+			min-height: 0;
+			padding: 1rem;
+		}
+
+		&__image > header {
+			grid-template-columns: 38px minmax(0, 1fr);
+		}
+
+		&__image > header > b {
+			grid-column: 1 / -1;
+			max-width: none;
+			text-align: left;
+		}
+
+		&__image > header > .docker-page__status-badges {
+			grid-column: 1 / -1;
+			max-width: none;
+			justify-content: flex-start;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.docker-page__image {
+		transition-duration: .01ms;
+	}
+	.docker-page__image:hover,
+	.docker-page__image:focus-within {
+		transform: none;
+	}
+
+	.docker-page__status-badges b {
+		animation: none !important;
+	}
+
+	.docker-page__image::before,
+	.docker-page__image::after {
+		animation: none !important;
+	}
+}

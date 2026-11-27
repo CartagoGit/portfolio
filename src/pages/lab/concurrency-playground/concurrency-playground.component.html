@@ -1,0 +1,28 @@
+<article class="concurrency-playground" aria-labelledby="concurrency-playground-title">
+	<div class="concurrency-playground__heading">
+		<p>{{ 'pages.lab.concurrencyEyebrow' | translate }}</p>
+		<h3 id="concurrency-playground-title">{{ 'pages.lab.concurrencyTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.concurrencyDetail' | translate }}</p>
+	</div>
+	<div class="concurrency-playground__tasks">
+		@for (task of tasks; track task.id) {
+			<div [attr.data-status]="statuses()[task.id]">
+				<span>{{ task.labelKey | translate }}</span>
+				<strong>{{ statuses()[task.id] === 'idle' ? ('pages.lab.taskIdle' | translate) : statuses()[task.id] === 'running' ? ('pages.lab.taskRunning' | translate) : ('pages.lab.taskDone' | translate) }}</strong>
+				<i aria-hidden="true"></i>
+			</div>
+		}
+	</div>
+	<footer>
+		<button type="button" [disabled]="running()" (click)="run()">
+			{{ 'pages.lab.runConcurrent' | translate }}
+		</button>
+		<button type="button" [disabled]="!running()" (click)="cancel()">
+			{{ 'pages.lab.cancelConcurrent' | translate }}
+		</button>
+		<p aria-live="polite">
+			{{ complete() ? ('pages.lab.concurrentComplete' | translate) : running() ? ('pages.lab.concurrentRunning' | translate) : ('pages.lab.concurrentReady' | translate) }}
+		</p>
+	</footer>
+	<app-lab-fullscreen-evidence kind="concurrency" />
+</article>

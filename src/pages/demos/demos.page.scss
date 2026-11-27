@@ -1,0 +1,266 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+}
+
+.demos-page {
+	width: min(1180px, calc(100% - 3rem));
+	margin: 0 auto;
+	padding: clamp(3rem, 5vw, 5.5rem) 0;
+}
+
+.demos-page__heading > p:first-child {
+	margin: 0;
+	color: var(--cyan);
+	@include tokens.mono(0.75rem);
+	letter-spacing: var(--letter-open);
+}
+
+.demos-page__heading h2 {
+	margin: 0.65rem 0 1rem;
+	color: var(--ink);
+	font-size: clamp(2.7rem, 5.8vw, 5.8rem);
+	line-height: 0.9;
+	letter-spacing: -0.065em;
+}
+
+.demos-page__heading h2 em {
+	color: var(--cyan);
+	font-family: tokens.$font-accent;
+	font-style: italic;
+	font-weight: 600;
+}
+
+.demos-page__heading > p:last-child {
+	max-width: 58ch;
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.92rem;
+	line-height: 1.7;
+}
+
+.demos-page__links {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+	margin-top: clamp(2.5rem, 6vw, 5rem);
+}
+
+.demos-page__links > a {
+	display: grid;
+	grid-template-columns: 58px minmax(0, 1fr) auto;
+	grid-template-rows: auto auto 1fr auto;
+	gap: 0.3rem 0.8rem;
+	min-width: 0;
+	min-height: 190px;
+	padding: 1.2rem;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 14px;
+	background: var(--surface);
+	color: var(--ink);
+	text-decoration: none;
+	transition:
+		transform 0.28s tokens.$ease-standard,
+		border-color 0.25s ease,
+		box-shadow 0.28s ease;
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+}
+
+.demos-page__links > a::before {
+	position: absolute;
+	z-index: -1;
+	inset: -50%;
+	content: '';
+	background: conic-gradient(from 90deg, transparent, color-mix(in srgb, var(--cyan) 18%, transparent), transparent 32%);
+	animation: demo-card-orbit 12s linear infinite;
+	transition: opacity .3s ease;
+	opacity: .45;
+}
+
+.demos-page__links > a[data-demo='DeathBlitz']::before {
+	background: radial-gradient(circle at 20% 40%, #ff5a5a30, transparent 30%), repeating-linear-gradient(125deg, transparent 0 30px, #ff5a5a18 31px 33px);
+	animation: demo-card-alert 4s ease-in-out infinite;
+}
+
+.demos-page__links > a[data-demo='Tetris']::before {
+	background: linear-gradient(135deg, transparent 0 44%, #42d9ff1f 45% 51%, transparent 52%), linear-gradient(45deg, transparent 0 44%, #b56cff1f 45% 51%, transparent 52%);
+	background-size: 38px 38px;
+	animation: demo-card-grid 7s linear infinite;
+}
+
+.demos-page__links > a[data-demo='Snake']::before {
+	background: radial-gradient(circle at 24% 24%, #8cff5536 0 2%, transparent 2.5%), radial-gradient(circle at 70% 72%, #31d8872b 0 3%, transparent 3.5%);
+	background-size: 64px 64px;
+	animation: demo-card-snake 5s linear infinite;
+}
+
+.demos-page__links > a[data-demo='Minesweeper']::before {
+	background: repeating-linear-gradient(0deg, #ffffff08 0 1px, transparent 1px 22px), repeating-linear-gradient(90deg, #ffffff08 0 1px, transparent 1px 22px);
+	animation: demo-card-scan 4s ease-in-out infinite;
+}
+
+.demos-page__links > a[data-demo='Print CV']::before {
+	background: linear-gradient(90deg, transparent, #ffffff14 49.5%, transparent 50%);
+	background-size: 28px 100%;
+	animation: demo-card-paper 8s linear infinite;
+}
+
+.demos-page__link-logo {
+	grid-column: 1;
+	grid-row: 1 / 4;
+	display: grid;
+	width: 58px;
+	height: 58px;
+	place-items: center;
+	border: 1px solid color-mix(in srgb, var(--cyan) 28%, var(--line));
+	border-radius: 14px;
+	background: color-mix(in srgb, var(--cyan) 8%, var(--surface-2));
+	color: var(--cyan);
+}
+
+.demos-page__link-logo img,
+.demos-page__link-logo svg {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+}
+
+.demos-page__link-logo img {
+	width: 100%;
+	height: 100%;
+	padding: 6px;
+	object-fit: contain;
+	filter: drop-shadow(0 7px 14px #0005);
+}
+
+@keyframes demo-card-orbit {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+@keyframes demo-card-alert {
+	50% {
+		opacity: .9;
+		transform: translate(2%, -2%) scale(1.03);
+	}
+}
+
+@keyframes demo-card-grid {
+	to {
+		background-position: 76px 38px, -38px 76px;
+	}
+}
+
+@keyframes demo-card-snake {
+	to {
+		background-position: 64px 0, -64px 64px;
+	}
+}
+
+@keyframes demo-card-scan {
+	50% {
+		transform: translateY(4%);
+		opacity: .8;
+	}
+}
+
+@keyframes demo-card-paper {
+	to {
+		background-position: 112px 0;
+	}
+}
+
+@media (max-width: 760px) {
+	.demos-page {
+		width: min(100% - 1.7rem, 600px);
+		padding-top: 2.5rem;
+	}
+
+	.demos-page__links {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.demos-page__laboratory {
+	display: grid;
+	gap: 1.25rem;
+	margin-top: clamp(3.5rem, 8vw, 7rem);
+	padding-top: clamp(2rem, 5vw, 4rem);
+	border-top: var(--border-thin) solid var(--line);
+
+	& > .demos-page__laboratory-heading {
+		display: grid;
+		grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+		gap: .8rem 2rem;
+		max-width: 900px;
+	}
+
+	&-heading > p:first-child {
+		grid-column: 1 / -1;
+		margin: 0;
+		color: var(--cyan);
+		@include tokens.mono(.75rem);
+		letter-spacing: var(--letter-open);
+	}
+
+	&-heading h3 {
+		margin: 0;
+		color: var(--ink);
+		font-size: clamp(2rem, 4.5vw, 4rem);
+		line-height: .95;
+		letter-spacing: -.055em;
+	}
+
+	&-heading > p:last-child {
+		margin: 0;
+		color: var(--muted);
+		font-size: .88rem;
+		line-height: 1.65;
+	}
+}
+
+@media (max-width: 760px) {
+	.demos-page__laboratory > .demos-page__laboratory-heading {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.demos-page__deferred-placeholder {
+	min-height: 22rem;
+	border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 20%, var(--line));
+	border-radius: 20px;
+	background:
+		linear-gradient(110deg, transparent 0 32%, color-mix(in srgb, var(--cyan) 8%, transparent) 48%, transparent 64%),
+		var(--surface-2);
+	background-size: 220% 100%;
+	animation: demos-deferred-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes demos-deferred-shimmer {
+	to {
+		background-position: -120% 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.demos-page__links > a {
+		transition-duration: 0.01ms;
+	}
+
+	.demos-page__links > a:hover,
+	.demos-page__links > a:focus-visible {
+		transform: none;
+	}
+
+	.demos-page__links > a::before {
+		animation: none;
+	}
+
+	.demos-page__deferred-placeholder {
+		animation: none;
+	}
+}

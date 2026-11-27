@@ -1,0 +1,18 @@
+@use 'tokens/index' as tokens;
+@use '../demos-interaction-system' as interaction;
+
+:host { @include interaction.component-host; }
+.guess-game { @include interaction.game-layout; }
+.guess-game__copy { @include interaction.game-copy; }
+.guess-game__metrics { @include interaction.game-metrics; }
+.guess-game__actions { @include interaction.action-cluster; margin-top: 1rem; }
+.guess-game__form { @include interaction.game-board; @include interaction.board-surface; gap: 0.75rem; }
+.guess-game__status { @include interaction.game-status; width: 100%; }
+.guess-game__form label { display: grid; width: 100%; gap: 0.45rem; color: var(--muted); font-size: 0.75rem; font-weight: 800; }
+.guess-game__form input { width: 100%; min-height: 48px; padding: 0.6rem; border: var(--border-thin) solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); font: 800 1.4rem tokens.$font-mono, monospace; text-align: center; }
+.guess-game__form-actions { @include interaction.action-cluster; }
+.guess-game__feedback { min-height: 44px; display: grid; place-items: center; margin: 0; color: var(--muted); text-align: center; font-weight: 700; }
+.guess-game__feedback[data-state='correct'] { color: var(--lime); }
+.guess-game__feedback[data-state='high'], .guess-game__feedback[data-state='low'], .guess-game__feedback[data-state='invalid'] { color: var(--cyan); }
+.guess-game__feedback[data-state='exhausted'] { color: var(--danger); }
+@media (max-width: 760px) { .guess-game { @include interaction.game-layout-mobile; } .guess-game__actions { justify-content: center; } }

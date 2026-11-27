@@ -1,0 +1,318 @@
+@use 'tokens/index' as tokens;
+
+:host {
+	display: block;
+	min-width: 0;
+}
+
+.arcade-games {
+	position: relative;
+	isolation: isolate;
+	margin-top: clamp(2.5rem, 5vw, 4.5rem);
+	padding: clamp(.75rem, 2vw, 1.25rem);
+	overflow: hidden;
+	border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 34%, var(--line));
+	border-radius: 24px;
+	background:
+		radial-gradient(circle at 84% 0, color-mix(in srgb, var(--cyan) 17%, transparent), transparent 27%),
+		radial-gradient(circle at 4% 100%, color-mix(in srgb, var(--blue) 16%, transparent), transparent 32%),
+		linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 96%, var(--surface)), var(--canvas));
+	box-shadow: 0 28px 90px color-mix(in srgb, var(--shadow-strong) 64%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ink) 9%, transparent);
+
+	&::before {
+		position: absolute;
+		z-index: -1;
+		inset: 0;
+		background-image:
+			linear-gradient(90deg, color-mix(in srgb, var(--ink) 2%, transparent) 1px, transparent 1px),
+			linear-gradient(color-mix(in srgb, var(--ink) 2%, transparent) 1px, transparent 1px);
+		background-size: 24px 24px;
+		content: '';
+		mask-image: linear-gradient(black, transparent 78%);
+		pointer-events: none;
+	}
+
+	&::after {
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		left: 5%;
+		width: 38%;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+		box-shadow: 0 0 18px var(--cyan);
+		content: '';
+		opacity: .58;
+	}
+
+	&__screen {
+		display: grid;
+		grid-template-rows: auto auto minmax(0, 1fr);
+		gap: .65rem;
+		min-width: 0;
+		min-height: 42rem;
+	}
+
+	&__heading {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: .7rem 1rem;
+		align-items: end;
+		padding: clamp(.35rem, 1vw, .65rem);
+
+		> p {
+			grid-column: 1 / -1;
+			margin: 0;
+			color: var(--cyan);
+			font: 800 .68rem tokens.$font-mono, monospace;
+			letter-spacing: .11em;
+			text-transform: uppercase;
+		}
+
+		> div:first-of-type {
+			display: flex;
+			align-items: end;
+			gap: 1.25rem;
+			min-width: 0;
+		}
+
+		h2 {
+			margin: 0;
+			color: var(--ink);
+			font-size: clamp(2.1rem, 5vw, 4.8rem);
+			line-height: .92;
+			letter-spacing: -.06em;
+			text-shadow: 0 0 30px color-mix(in srgb, var(--cyan) 8%, transparent);
+		}
+
+		> div:first-of-type > p {
+			max-width: 46ch;
+			margin: 0 0 .15rem;
+			color: var(--muted);
+			font-size: .8rem;
+			line-height: 1.55;
+		}
+	}
+
+	&__utilities {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		justify-content: flex-end;
+		gap: .35rem;
+		min-width: 0;
+	}
+
+	&__utility {
+		display: inline-flex;
+		min-width: 112px;
+		min-height: 44px;
+		align-items: center;
+		gap: .45rem;
+		padding: .36rem .52rem;
+		border: var(--border-thin) solid color-mix(in srgb, var(--line) 82%, transparent);
+		border-radius: 10px;
+		background:
+			linear-gradient(145deg, color-mix(in srgb, var(--cyan) 5%, var(--surface-2)), color-mix(in srgb, var(--canvas) 82%, transparent));
+		color: var(--muted);
+		box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
+
+		svg {
+			flex: 0 0 20px;
+			width: 20px;
+			height: 20px;
+			fill: none;
+			stroke: var(--cyan);
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 1.55;
+		}
+
+		> span {
+			display: grid;
+			gap: .08rem;
+			line-height: 1;
+		}
+
+		b,
+		small {
+			font-family: tokens.$font-mono, monospace;
+			letter-spacing: .05em;
+			white-space: nowrap;
+		}
+
+		b { color: var(--ink); font-size: .54rem; }
+		small { color: var(--muted); font-size: .42rem; }
+	}
+
+	&__fullscreen {
+		position: relative;
+		top: auto;
+		right: auto;
+		width: auto;
+		min-width: 128px;
+		height: auto;
+		min-height: 44px;
+		padding: .36rem .52rem;
+		color: var(--ink);
+		cursor: pointer;
+
+		&:hover,
+		&:focus-visible,
+		&[aria-pressed='true'] {
+			border-color: var(--cyan);
+			background: color-mix(in srgb, var(--cyan) 13%, var(--surface-2));
+			box-shadow: 0 0 20px color-mix(in srgb, var(--cyan) 14%, transparent);
+			transform: translateY(-1px);
+		}
+	}
+
+	&__tabs {
+		display: flex;
+		min-width: 0;
+		gap: .4rem;
+		padding: .48rem;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scrollbar-width: thin;
+		border: var(--border-thin) solid color-mix(in srgb, var(--cyan) 18%, var(--line));
+		border-radius: 14px;
+		background:
+			repeating-linear-gradient(90deg, transparent 0 22px, color-mix(in srgb, var(--ink) 2%, transparent) 22px 23px),
+			color-mix(in srgb, var(--canvas) 86%, transparent);
+		box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 5%, transparent);
+
+		button {
+			display: flex;
+			flex: 1 0 max-content;
+			min-width: 116px;
+			min-height: 44px;
+			align-items: center;
+			justify-content: center;
+			gap: .45rem;
+			padding: .62rem .78rem;
+			border: var(--border-thin) solid transparent;
+			border-radius: 10px;
+			background: transparent;
+			color: var(--muted);
+			font: 800 .7rem/1.15 tokens.$font-mono, monospace;
+			cursor: pointer;
+			transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+		}
+
+		button span {
+			color: color-mix(in srgb, var(--cyan) 70%, var(--muted));
+			font-size: .58rem;
+		}
+
+		button:hover,
+		button:focus-visible,
+		button.is-active {
+			border-color: color-mix(in srgb, var(--cyan) 68%, var(--line));
+			background: linear-gradient(180deg, color-mix(in srgb, var(--cyan) 15%, var(--surface)), color-mix(in srgb, var(--cyan) 7%, var(--surface-2)));
+			color: var(--ink);
+			box-shadow: inset 0 -2px 0 var(--cyan), 0 5px 18px color-mix(in srgb, var(--cyan) 7%, transparent);
+		}
+
+		button:active { transform: translateY(2px); }
+	}
+
+	&__stage {
+		min-width: 0;
+		min-height: 0;
+	}
+
+	&.is-fallback-fullscreen {
+		position: fixed;
+		z-index: 9999;
+		inset: 0;
+		display: grid;
+		width: 100vw;
+		height: 100dvh;
+		min-height: 0;
+		margin: 0;
+		padding: clamp(.55rem, 2vw, 1.4rem);
+		place-items: center;
+		overflow: auto;
+		border-radius: 0;
+		background: color-mix(in srgb, var(--canvas) 98%, transparent);
+
+		.arcade-games__screen {
+			width: min(96vw, 153.6dvh);
+			height: auto;
+			min-height: 0;
+			max-height: 96dvh;
+			aspect-ratio: 8 / 5;
+			overflow-y: auto;
+		}
+
+		.arcade-games__heading { padding: 0; }
+		.arcade-games__heading h2 { font-size: clamp(1.35rem, 3.2vw, 2.6rem); }
+		.arcade-games__stage { overflow: auto; }
+	}
+}
+
+@media (max-width: 880px) {
+	.arcade-games {
+		&__heading {
+			grid-template-columns: minmax(0, 1fr);
+
+			> div:first-of-type { align-items: end; }
+		}
+
+		&__utilities {
+			grid-column: 1;
+			justify-content: stretch;
+		}
+
+		&__utility { flex: 1 1 30%; justify-content: center; }
+	}
+}
+
+@media (max-width: 720px) {
+	.arcade-games {
+		margin-top: 2.5rem;
+		padding: .55rem;
+		border-radius: 18px;
+
+		&__screen { min-height: 48rem; }
+		&__heading > div:first-of-type { display: grid; gap: .3rem; }
+		&__heading > div:first-of-type > p { font-size: .74rem; }
+		&__tabs button { min-width: 128px; }
+		&__utility { min-width: 0; padding-inline: .4rem; }
+		&__utility small { display: none; }
+		&.is-fallback-fullscreen .arcade-games__screen {
+			width: 96vw;
+			height: 96dvh;
+			max-height: 96dvh;
+			aspect-ratio: auto;
+		}
+	}
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+	.arcade-games.is-fallback-fullscreen {
+		padding: .45rem;
+
+		.arcade-games__screen {
+			width: min(96vw, 153.6dvh);
+			height: auto;
+			min-height: 0;
+			max-height: 96dvh;
+			aspect-ratio: 8 / 5;
+			gap: .35rem;
+		}
+
+		.arcade-games__heading > p,
+		.arcade-games__heading > div:first-of-type > p { display: none; }
+		.arcade-games__utility:not(.arcade-games__utility--fullscreen) small { display: none; }
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arcade-games {
+		button { transition: none; }
+		&__fullscreen:hover,
+		&__fullscreen:focus-visible { transform: none; }
+	}
+}

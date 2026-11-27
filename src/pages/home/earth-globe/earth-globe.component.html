@@ -1,0 +1,21 @@
+<div class="earth-globe__layer">
+	<canvas
+		#canvas
+		class="earth-globe__canvas"
+		[class.is-active]="active()"
+		(webglcontextlost)="onContextLost($event)"
+		(webglcontextrestored)="onContextRestored()"
+		aria-hidden="true"></canvas>
+		@if (renderState() === 'loading' || renderState() === 'error') {
+			<div class="earth-globe__status" [class.is-error]="renderState() === 'error'" role="status">
+				@if (renderState() === 'loading') {
+					<span class="earth-globe__status-loader" aria-hidden="true"></span>
+				} @else {
+					<svg class="earth-globe__status-fallback" viewBox="0 0 64 64" aria-hidden="true">
+						<path d="M32 7 55 20v26L32 59 9 46V20L32 7Z M9 20l23 13 23-13M32 33v26" />
+					</svg>
+				}
+				<p>{{ (renderState() === 'loading' ? 'pages.home.earthModelLoading' : 'pages.home.earthModelError') | translate }}</p>
+			</div>
+		}
+</div>

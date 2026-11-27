@@ -1,0 +1,41 @@
+<section class="memory-game" aria-labelledby="memory-game-title" [attr.data-phase]="phase()">
+	<div class="memory-game__copy">
+		<p>{{ 'pages.demos.memoryEyebrow' | translate }}</p>
+		<h3 id="memory-game-title">{{ 'pages.demos.memoryHeading' | translate }}</h3>
+		<p>{{ 'pages.demos.memoryDetail' | translate }}</p>
+		<dl class="memory-game__metrics">
+			<div><dt>{{ 'pages.demos.memoryMoves' | translate }}</dt><dd>{{ moves() }}</dd></div>
+			<div><dt>{{ 'pages.demos.colorScore' | translate }}</dt><dd>{{ matched().length / 2 }} / 6</dd></div>
+			<div><dt>{{ 'pages.demos.reactionBest' | translate }}</dt><dd>{{ best() === null ? '—' : best() }}</dd></div>
+		</dl>
+		<div class="memory-game__actions">
+			<button type="button" (click)="reset()">{{ 'pages.demos.memoryReset' | translate }}</button>
+		</div>
+	</div>
+	<div class="memory-game__board">
+		<p class="memory-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ feedbackKey() | translate }}
+		</p>
+		<div
+			class="memory-game__grid"
+			data-roving-grid
+			role="group"
+			[attr.aria-label]="'pages.demos.memoryGridAria' | translate">
+			@for (value of values(); track $index) {
+				<button
+					type="button"
+					[class.is-open]="open().includes($index)"
+					[class.is-matched]="matched().includes($index)"
+					[disabled]="matched().includes($index)"
+					[attr.aria-disabled]="open().length === 2 || phase() === 'result'"
+					[attr.tabindex]="focusedCard() === $index ? 0 : -1"
+					[attr.aria-label]="label($index, value)"
+					(click)="openCard($index)"
+					(focus)="focusedCard.set($index)"
+					(keydown)="onGridKeydown($event, $index)">
+					<span>@if (open().includes($index) || matched().includes($index)) { {{ value + 1 }} }</span>
+				</button>
+			}
+		</div>
+	</div>
+</section>

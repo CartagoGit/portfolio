@@ -1,0 +1,71 @@
+<app-arcade-game-shell
+	[titleKey]="'lanes'"
+	[descriptionKey]="'lanesDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="lane-rush-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="'lanes' | arcadeText"
+		[attr.data-status]="statusKey()"
+		(keydown)="onKeydown($event)"
+		(pointerdown)="onPointerDown($event)">
+		<div class="lane-rush-game__horizon" aria-hidden="true">
+			<span class="lane-rush-game__sun"></span>
+			<div class="lane-rush-game__city"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+			<div class="lane-rush-game__lights lane-rush-game__lights--left"><i></i><i></i><i></i></div>
+			<div class="lane-rush-game__lights lane-rush-game__lights--right"><i></i><i></i><i></i></div>
+		</div>
+		<div class="lane-rush-game__road" aria-hidden="true">
+			<span class="lane-rush-game__shoulder lane-rush-game__shoulder--left"></span>
+			<span class="lane-rush-game__shoulder lane-rush-game__shoulder--right"></span>
+			@for (laneId of lanes; track laneId) {
+				<span class="lane-rush-game__marker" [style.left.%]="lanePosition(laneId)"></span>
+			}
+			<div class="lane-rush-game__dash-field"><i></i><i></i><i></i><i></i></div>
+			@for (entity of entities(); track entity.id) {
+				<span
+					class="lane-rush-game__entity"
+					[attr.data-kind]="entity.kind"
+					[style.left.%]="lanePosition(entity.lane)"
+					[style.top.%]="entity.y">
+					@if (entity.kind === 'traffic') {
+						<span class="lane-rush-game__car"><i></i><b></b><em></em><small></small></span>
+					} @else {
+						<span class="lane-rush-game__crystal"><i></i><b></b></span>
+					}
+				</span>
+			}
+			<span class="lane-rush-game__player" [style.left.%]="lanePosition(lane())">
+				<span class="lane-rush-game__player-car"><i></i><b></b><em></em><small></small></span>
+			</span>
+			@for (burst of bursts(); track burst.id) {
+				<span
+					class="lane-rush-game__burst"
+					[attr.data-kind]="burst.kind"
+					[style.left.%]="lanePosition(burst.lane)">
+					<b></b><i></i><i></i><i></i><i></i><i></i><i></i>
+				</span>
+			}
+		</div>
+		<div class="lane-rush-game__progress" aria-hidden="true">
+			<span>{{ 'collectibles' | arcadeText }}</span><i></i><b>{{ score() }}</b>
+		</div>
+		<div class="lane-rush-game__speed" aria-hidden="true"><span></span><span></span><span></span></div>
+	</div>
+	<app-arcade-control-pad
+		arcade-actions
+		class="lane-rush-game__control-pad"
+		[disabled]="phase() !== 'running'"
+		[directions]="controlDirections"
+		[padClass]="'lane-rush-game__controls'"
+		[keyboardHint]="'A / D · ← / →'"
+		(directionChange)="onControlDirection($event)" />
+</app-arcade-game-shell>

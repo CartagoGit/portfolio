@@ -1,0 +1,187 @@
+@use 'motion' as motion;
+@use 'tokens/index' as tokens;
+@use '../demos-interaction-system' as interaction;
+
+:host {
+	@include interaction.component-host;
+}
+
+.demo-games {
+	position: relative;
+	margin-top: clamp(2.5rem, 5vw, 4rem);
+	overflow: hidden;
+	border: var(--border-thin) solid var(--line);
+	border-radius: 18px;
+	background: var(--surface);
+	box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+}
+
+.demo-games__tabs {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0.4rem;
+	padding: 0.65rem;
+	border-bottom: var(--border-thin) solid var(--line);
+	background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+}
+
+.demo-games__tabs button {
+	min-width: 0;
+	min-height: 44px;
+	padding: 0.65rem 0.6rem;
+	border: var(--border-thin) solid transparent;
+	border-radius: 9px;
+	background: transparent;
+	color: var(--muted);
+	font: 700 0.72rem/1.2 tokens.$font-mono, monospace;
+	cursor: pointer;
+}
+
+.demo-games__tabs button:hover,
+.demo-games__tabs button:focus-visible,
+.demo-games__tabs button.is-active {
+	border-color: var(--cyan);
+	background: color-mix(in srgb, var(--cyan) 10%, transparent);
+	color: var(--ink);
+}
+
+.demo-games__stage {
+	position: relative;
+	display: grid;
+	min-width: 0;
+	min-height: 460px;
+	grid-template-rows: auto minmax(0, 1fr);
+	gap: 1rem;
+	align-items: center;
+	padding: clamp(1.25rem, 4vw, 3rem);
+	animation: demo-stage-in-a 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.demo-games__stage.is-alternate {
+	animation-name: demo-stage-in-b;
+}
+
+.demo-games__control-cluster {
+	@include interaction.action-cluster;
+	position: relative;
+	z-index: 4;
+}
+
+.demo-games__control-cluster .demo-games__fullscreen {
+	position: relative;
+	top: auto;
+	right: auto;
+	width: 44px;
+	min-width: 44px;
+	height: 44px;
+	min-height: 44px;
+	padding: 0;
+	border-radius: 10px;
+	box-shadow: 0 8px 22px color-mix(in srgb, var(--shadow-strong) 34%, transparent);
+	backdrop-filter: none;
+}
+
+.demo-games__fullscreen svg {
+	width: 19px;
+	height: 19px;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+}
+
+.demo-games__fullscreen-frame {
+	min-width: 0;
+	width: 100%;
+}
+
+.demo-games__panel {
+	min-width: 0;
+}
+
+.demo-games__panel[hidden] {
+	display: none;
+}
+
+.demo-games__stage:fullscreen,
+.demo-games__stage.is-fallback-fullscreen {
+	position: fixed;
+	z-index: 9999;
+	inset: 0;
+	display: grid;
+	width: 100vw !important;
+	height: 100dvh !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	aspect-ratio: auto !important;
+	margin: 0;
+	padding: clamp(0.75rem, 2.5vw, 1.5rem);
+	place-items: start center;
+	overflow-y: auto;
+	border-radius: 0;
+	background: var(--canvas);
+}
+
+.demo-games__stage:fullscreen > .demo-games__fullscreen-frame,
+.demo-games__stage.is-fallback-fullscreen > .demo-games__fullscreen-frame {
+	display: grid;
+	width: min(1180px, 100%, calc((100dvh - 8rem) * 8 / 5));
+	min-height: 0;
+	max-height: calc(100dvh - 8rem);
+	aspect-ratio: 8 / 5;
+	align-items: center;
+	overflow: auto;
+}
+
+@keyframes demo-stage-in-a {
+	from {
+		opacity: 0;
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 24px)) scale(0.99);
+		filter: blur(3px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+		filter: blur(0);
+	}
+}
+
+@keyframes demo-stage-in-b {
+	from {
+		opacity: 0;
+		transform: translateX(calc(var(--demo-entry-direction, 1) * 24px)) scale(0.99);
+		filter: blur(3px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+		filter: blur(0);
+	}
+}
+
+@media (max-width: 760px) {
+	.demo-games__tabs {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.demo-games__stage {
+		min-height: 0;
+		padding: 1.1rem;
+	}
+
+	.demo-games__stage:fullscreen > .demo-games__fullscreen-frame,
+	.demo-games__stage.is-fallback-fullscreen > .demo-games__fullscreen-frame {
+		min-height: calc(100dvh - 7.5rem);
+		max-height: none;
+		aspect-ratio: auto;
+		align-items: start;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.demo-games__stage,
+	.demo-games__stage.is-alternate {
+		animation: none;
+	}
+}

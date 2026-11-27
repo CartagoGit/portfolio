@@ -1,0 +1,74 @@
+<app-arcade-game-shell
+	[titleKey]="'shooter'"
+	[descriptionKey]="'shooterDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="shooter-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="'shooter' | arcadeText"
+		[attr.data-status]="statusKey()"
+		(keydown)="onKeydown($event)"
+		(pointerdown)="onPointerDown($event)">
+		<div class="shooter-game__space" aria-hidden="true">
+			<span class="shooter-game__beacon"></span>
+			<div class="shooter-game__silhouette"><i></i><i></i><i></i><i></i><i></i></div>
+			<div class="shooter-game__depth"><i></i><i></i><i></i><i></i></div>
+			<span class="shooter-game__scan-light"></span>
+		</div>
+		<div class="shooter-game__readout" aria-live="polite">
+			<span>{{ 'shots' | arcadeText }} {{ shots() }}</span>
+			<i></i>
+			<b>{{ hits() }} / 10</b>
+		</div>
+		<span
+			class="shooter-game__target"
+			[style.left.%]="target().x"
+			[style.top.%]="target().y"
+			[attr.data-target]="target().id"
+			aria-hidden="true">
+			<span class="shooter-game__target-brackets"><i></i><i></i><i></i><i></i></span>
+			<b></b>
+			<i class="shooter-game__target-life" [style.--target-life.%]="(target().remainingMs / 1450) * 100"></i>
+		</span>
+		<span
+			class="shooter-game__aim"
+			[style.left.%]="aim().x"
+			[style.top.%]="aim().y"
+			aria-hidden="true"><i></i><b></b></span>
+		@for (impact of impacts(); track impact.id) {
+			<span
+				class="shooter-game__impact"
+				[class.is-hit]="impact.hit"
+				[class.is-miss]="!impact.hit"
+				[style.left.%]="impact.x"
+				[style.top.%]="impact.y"
+				aria-hidden="true">
+				<b></b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+			</span>
+		}
+		<div class="shooter-game__telemetry" aria-hidden="true">
+			<span>LOCK // LIVE</span>
+			<i></i><i></i><i></i>
+		</div>
+	</div>
+	<app-arcade-control-pad
+		arcade-actions
+		class="shooter-game__control-pad"
+		[disabled]="phase() !== 'running'"
+		[directions]="controlDirections"
+		[actionLabelKey]="'fire'"
+		[actionHint]="'SPACE'"
+		[actionTone]="'danger'"
+		[actionClass]="'shooter-game__controls'"
+		[keyboardHint]="'WASD / ARROWS'"
+		(directionChange)="onControlDirection($event)"
+		(action)="fire()" />
+</app-arcade-game-shell>

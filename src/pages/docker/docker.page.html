@@ -1,0 +1,69 @@
+<section class="docker-page" aria-labelledby="docker-title">
+	<div class="docker-page__heading">
+		<div>
+			<p>{{ 'pages.docker.eyebrow' | translate }}</p>
+			<h2 id="docker-title">
+				{{ 'pages.docker.titleLead' | translate }}
+				<br />
+				<em>{{ 'pages.docker.titleEmphasis' | translate }}</em>
+				{{ 'pages.docker.titleTail' | translate }}
+			</h2>
+			<p>{{ 'pages.docker.subtitle' | translate }}</p>
+		</div>
+		<aside class="docker-page__terminal" [attr.aria-label]="'pages.docker.profileAria' | translate">
+			<span>{{ 'pages.docker.terminalHeading' | translate }}</span>
+			<code>
+				$ docker pull cartagodocker/nodebun:latest
+				<br />
+				<b>●</b>
+				{{ 'pages.docker.terminalStatus' | translate }}
+			</code>
+			<div>
+				<em>{{ 'pages.docker.terminalAngular' | translate }}</em>
+				<em>{{ 'pages.docker.terminalNode' | translate }}</em>
+				<em>{{ 'pages.docker.terminalDelivery' | translate }}</em>
+			</div>
+			<a
+				href="https://hub.docker.com/u/cartagodocker"
+				target="_blank"
+				rel="noreferrer">
+				{{ 'pages.docker.terminalOpen' | translate }}
+			</a>
+		</aside>
+	</div>
+
+	<div class="docker-page__catalogue" [attr.aria-label]="'pages.docker.catalogueAria' | translate">
+		@for (image of images; track image.name; let index = $index) {
+			<article class="docker-page__image" [attr.data-image]="image.name">
+				<header>
+					<img [src]="dockerVisualSrc" [attr.alt]="'pages.docker.dockerAlt' | translate" />
+					<span>0{{ index + 1 }} / {{ images.length }}</span>
+				</header>
+				<div class="docker-page__image-title">
+					<span>cartagodocker</span>
+					<h3>{{ image.name }}</h3>
+				</div>
+				<p>{{ imagePurpose(image) }}</p>
+				<div class="docker-page__stack">
+					@for (technology of image.technologies; track $index) {
+						<span>{{ technology }}</span>
+					}
+				</div>
+				<code>{{ image.command }}</code>
+				<div class="docker-page__status-badges" [attr.aria-label]="imageStatus(image)">
+					@for (part of imageStatusParts(image); track part) {
+						<b>{{ part }}</b>
+					}
+				</div>
+				<nav [attr.aria-label]="'pages.docker.destinationsAria' | translate">
+					<a [href]="image.hubHref" target="_blank" rel="noreferrer">
+						{{ 'pages.docker.hubLink' | translate }} ↗
+					</a>
+					<a [href]="image.sourceHref" target="_blank" rel="noreferrer">
+						{{ 'pages.docker.sourceLink' | translate }} ↗
+					</a>
+				</nav>
+			</article>
+		}
+	</div>
+</section>

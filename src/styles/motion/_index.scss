@@ -1,0 +1,90 @@
+// The motion module: animation helpers + shared transitions.
+//
+// Components import via `@use 'motion' as motion;`.
+// The `_durations` partial is `@forward`ed so consumers can reach the
+// shared easing curves (`tokens.$ease-standard` / `tokens.$ease-emphasized`)
+// without having to add a second `@use` for them.
+@forward '../tokens/durations';
+@forward './theme-transition';
+@use '../tokens/durations' as tokens;
+
+$entrance-ease: tokens.$ease-emphasized;
+
+/// Marks elements animated with opacity/transform as composited layers.
+/// Keep this narrow: persistent will-change on large layout containers is costly.
+@mixin composited($properties...) {
+	will-change: $properties;
+	backface-visibility: hidden;
+}
+
+/// Shared transition for elements that leave without layout work.
+@mixin opacity-transform-transition($duration: tokens.$motion-base) {
+	transition:
+		opacity $duration ease,
+		transform $duration $entrance-ease;
+}
+
+/// The cyan glow used by interactive cards, panels and tabs.
+@mixin neon-glow {
+	box-shadow: var(--neon);
+}
+
+/// Tighter cyan glow for icon-sized elements (kbd chips, status dots).
+@mixin cyan-glow($radius: 18px) {
+	box-shadow: 0 0 $radius var(--cyan);
+}
+
+/// Base box for the hero orb: a fixed 320×320 layer positioned so the
+/// WebGL canvas keeps a stable resolution while `transform: scale()` (and
+/// `top` / `right`) animate the perceived size. The original physical
+/// dimensions stay constant so `getBoundingClientRect()` keeps feeding
+/// the renderer the right box for the sphere.
+@mixin orb-base {
+	width: 320px;
+	height: 320px;
+	top: -1.6rem;
+	right: -1rem;
+	transition:
+		transform 0.55s $entrance-ease,
+		top 0.55s $entrance-ease,
+		right 0.55s $entrance-ease;
+}
+
+@mixin fullscreen-control {
+	position: absolute;
+	z-index: 30;
+	top: .7rem;
+	right: .7rem;
+	display: grid;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	min-height: 40px;
+	padding: 0;
+	place-items: center;
+	border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--line));
+	border-radius: 10px;
+	background: color-mix(in srgb, var(--surface) 92%, transparent);
+	color: var(--ink);
+	box-shadow: 0 8px 22px color-mix(in srgb, var(--shadow-strong) 34%, transparent);
+	backdrop-filter: blur(10px);
+	transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+
+	svg {
+		width: 19px;
+		height: 19px;
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 1.8;
+	}
+
+	&:hover,
+	&:focus-visible {
+		border-color: var(--cyan);
+		background: color-mix(in srgb, var(--cyan) 16%, var(--surface));
+		color: var(--cyan);
+		transform: translateY(-2px);
+	}
+}

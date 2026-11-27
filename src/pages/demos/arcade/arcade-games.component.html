@@ -1,0 +1,67 @@
+<section
+	class="arcade-games"
+	[class.is-fallback-fullscreen]="fullscreen()"
+	[attr.aria-labelledby]="'arcade-title'">
+	<div class="arcade-games__screen">
+		<header class="arcade-games__heading">
+			<p>{{ 'eyebrow' | arcadeText }}</p>
+			<div>
+				<h2 id="arcade-title">{{ 'title' | arcadeText }}</h2>
+				<p>{{ 'detail' | arcadeText }}</p>
+			</div>
+			<div class="arcade-games__utilities" role="group" [attr.aria-label]="'controls' | arcadeText">
+				<span class="arcade-games__utility">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h8a5 5 0 0 1 5 5v3a3 3 0 0 1-5 2l-2-2h-4l-2 2a3 3 0 0 1-5-2v-3a5 5 0 0 1 5-5Z" /><path d="M8 12v4m-2-2h4m7-1h.01m2 2h.01M9 8l1-3h4l1 3" /></svg>
+					<span><b>{{ 'controls' | arcadeText }}</b><small>{{ 'dpadAction' | arcadeText }}</small></span>
+				</span>
+				<span class="arcade-games__utility">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="3" /><path d="M7 10h2m2 0h2m2 0h2M7 14h2m2 0h6" /></svg>
+					<span><b>{{ 'input' | arcadeText }}</b><small>{{ 'keysTouch' | arcadeText }}</small></span>
+				</span>
+				<button
+					class="arcade-games__fullscreen arcade-games__utility arcade-games__utility--fullscreen interactive-fullscreen-control"
+					type="button"
+					[attr.aria-label]="(fullscreen() ? 'pages.demos.gamesExitFullscreen' : 'pages.demos.gamesFullscreen') | translate"
+					[attr.aria-pressed]="fullscreen()"
+					(click)="toggleFullscreen($event)">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+					<span><b>{{ 'fullscreen' | arcadeText }}</b><small>{{ (fullscreen() ? 'exitView' : 'expandView') | arcadeText }}</small></span>
+				</button>
+			</div>
+		</header>
+
+		<div class="arcade-games__tabs" role="tablist" [attr.aria-label]="'tabsAria' | arcadeText">
+			@for (tab of tabs; track tab.id; let index = $index) {
+				<button
+					type="button"
+					role="tab"
+					[id]="'arcade-tab-' + tab.id"
+					[attr.aria-controls]="'arcade-panel-' + tab.id"
+					[attr.aria-selected]="activeGame() === tab.id"
+					[attr.tabindex]="activeGame() === tab.id ? 0 : -1"
+					[class.is-active]="activeGame() === tab.id"
+					(click)="select(tab.id)"
+					(keydown)="onTabKeydown($event, index)">
+					<span>0{{ index + 1 }}</span>
+					{{ tab.labelKey | arcadeText }}
+				</button>
+			}
+		</div>
+
+		<div
+			class="arcade-games__stage"
+			role="tabpanel"
+			[id]="'arcade-panel-' + activeGame()"
+			[attr.aria-labelledby]="'arcade-tab-' + activeGame()"
+			[attr.data-arcade-game]="activeGame()">
+			@switch (activeGame()) {
+				@case ('runner') { @defer (on immediate) { <app-runner-game /> } }
+				@case ('shooter') { @defer (on immediate) { <app-shooter-game /> } }
+				@case ('lanes') { @defer (on immediate) { <app-lane-rush-game /> } }
+				@case ('penalty') { @defer (on immediate) { <app-penalty-game /> } }
+				@case ('rpg') { @defer (on immediate) { <app-rpg-battle-game /> } }
+				@case ('maze') { @defer (on immediate) { <app-maze-collector-game /> } }
+			}
+		</div>
+	</div>
+</section>

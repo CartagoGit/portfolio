@@ -1,0 +1,45 @@
+<article class="accessibility-playground" aria-labelledby="accessibility-playground-title">
+	<div class="accessibility-playground__heading">
+		<p>{{ 'pages.lab.a11yEyebrow' | translate }}</p>
+		<h3 id="accessibility-playground-title">{{ 'pages.lab.a11yTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.a11yDetail' | translate }}</p>
+	</div>
+	<div class="accessibility-playground__controls">
+		<button
+			type="button"
+			[attr.aria-pressed]="highContrast()"
+			(click)="toggleContrast()">
+			{{ 'pages.lab.highContrast' | translate }}
+		</button>
+		<button
+			type="button"
+			[attr.aria-pressed]="focusVisible()"
+			(click)="toggleFocus()">
+			{{ 'pages.lab.showFocus' | translate }}
+		</button>
+		<strong>{{ ratio() }}:1</strong>
+	</div>
+	<div
+		class="accessibility-playground__preview"
+		[class.is-high-contrast]="highContrast()"
+		[class.show-focus]="focusVisible()">
+		<label for="lab-access-email">
+			{{ 'pages.lab.formPreviewLabel' | translate }}
+			<input
+				id="lab-access-email"
+				type="email"
+				[formControl]="email"
+				[attr.aria-invalid]="emailInvalid()"
+				[attr.aria-describedby]="emailInvalid() ? 'lab-access-error' : null"
+				[attr.placeholder]="'pages.contact.formEmailPlaceholder' | translate" />
+		</label>
+		@if (emailInvalid()) {
+			<small id="lab-access-error" role="alert">{{ 'pages.lab.formPreviewError' | translate }}</small>
+		}
+		<button type="button" (click)="testForm()">{{ 'pages.lab.formPreviewTest' | translate }}</button>
+		@if (submitted()) {
+			<p role="status">{{ 'pages.lab.formPreviewSuccess' | translate }}</p>
+		}
+	</div>
+	<app-lab-fullscreen-evidence kind="accessibility" />
+</article>

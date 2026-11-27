@@ -1,0 +1,14 @@
+{
+	"servers": {
+		"delendai": {
+			"type": "stdio",
+			"command": "delendai",
+			"args": [
+				"__serve",
+				"--workspace=${workspaceFolder}",
+				"--config=${workspaceFolder}/delendai.config.json",
+				"--preset=swarm"
+			]
+		}
+	}
+}

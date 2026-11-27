@@ -1,0 +1,35 @@
+<section
+	class="contact-page"
+	aria-labelledby="contact-title">
+	<app-contact-portrait />
+	<div class="contact-page__content">
+		<p class="contact-page__eyebrow">
+			{{ 'pages.contact.eyebrow' | translate }}
+		</p>
+		<h2 id="contact-title">
+			{{ 'pages.contact.titleLead' | translate }}
+			<em>{{ 'pages.contact.titleEmphasis' | translate }}</em>
+			{{ 'pages.contact.titleTail' | translate }}
+		</h2>
+		<p>{{ 'pages.contact.subtitle' | translate }}</p>
+		<nav
+			class="contact-page__links"
+			[attr.aria-label]="'pages.contact.channelsAria' | translate">
+			@for (channel of channels; track channel.href) {
+				<a
+					[href]="channel.href"
+					[attr.target]="channel.external ? '_blank' : null"
+					[attr.rel]="channel.external ? 'noreferrer' : null">
+					@if (channel.imageSrc; as image) {
+						<img [src]="image" alt="" />
+					} @else if (channel.iconPath; as iconPath) {
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="iconPath" [attr.fill]="channel.color ?? 'currentColor'" /></svg>
+					}
+					{{ channel.labelKey | translate }}
+					<span aria-hidden="true">↗</span>
+				</a>
+			}
+		</nav>
+		<app-contact-form />
+	</div>
+</section>

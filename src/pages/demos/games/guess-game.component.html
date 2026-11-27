@@ -1,0 +1,40 @@
+<section class="guess-game" aria-labelledby="guess-game-title" [attr.data-phase]="phase()">
+	<div class="guess-game__copy">
+		<p>{{ 'pages.demos.guessEyebrow' | translate }}</p>
+		<h3 id="guess-game-title">{{ 'pages.demos.guessTitle' | translate }}</h3>
+		<p>{{ 'pages.demos.guessDetail' | translate }}</p>
+		<dl class="guess-game__metrics">
+			<div><dt>{{ 'pages.demos.guessAttempts' | translate }}</dt><dd>{{ attempts() }} / {{ maxAttempts }}</dd></div>
+			<div><dt>RANGE</dt><dd>{{ lowerBound() }}—{{ upperBound() }}</dd></div>
+		</dl>
+		<div class="guess-game__actions">
+			<button type="button" (click)="reset()">{{ 'pages.demos.resetButton' | translate }}</button>
+		</div>
+	</div>
+	<form class="guess-game__form" (submit)="$event.preventDefault(); submit()">
+		<p class="guess-game__status" [attr.data-phase]="phase()" aria-live="polite">
+			<strong>{{ phaseLabelKey() | translate }}</strong> · {{ feedbackKey() | translate }}
+		</p>
+		<label for="guess-game-value">
+			{{ 'pages.demos.guessLabel' | translate }}
+			<input
+				id="guess-game-value"
+				type="number"
+				min="1"
+				max="50"
+				step="1"
+				inputmode="numeric"
+				autocomplete="off"
+				[value]="guessValue() ?? ''"
+				[disabled]="phase() === 'result'"
+				[attr.aria-describedby]="'guess-game-feedback'"
+				(input)="setGuess($event)" />
+		</label>
+		<div class="guess-game__form-actions">
+			<button type="submit" [disabled]="phase() === 'result'">{{ 'pages.demos.guessTry' | translate }}</button>
+		</div>
+		<p id="guess-game-feedback" class="guess-game__feedback" aria-live="polite" [attr.data-state]="state()">
+			{{ feedbackKey() | translate }} · {{ remaining() }} / {{ maxAttempts }}
+		</p>
+	</form>
+</section>

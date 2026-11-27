@@ -1,0 +1,20 @@
+<a
+	class="evidence-card"
+	[href]="href()"
+	target="_blank"
+	rel="noreferrer"
+	[attr.data-demo]="visualIdentity()"
+	[attr.aria-label]="title() + ' — ' + openLabel()">
+	<div class="evidence-card__art" aria-hidden="true"></div>
+	<div class="evidence-card__logo" aria-hidden="true">
+		@if (imageSrc(); as image) {
+			<img [src]="image" alt="" width="64" height="64" />
+		} @else if (iconPath(); as path) {
+			<svg viewBox="0 0 24 24"><path [attr.d]="path" fill="currentColor" /></svg>
+		}
+	</div>
+	<span>{{ number() }}</span>
+	<h3>{{ title() }}</h3>
+	<p>{{ summary() }}</p>
+	<i>{{ openLabel() }} <b aria-hidden="true">↗</b></i>
+</a>

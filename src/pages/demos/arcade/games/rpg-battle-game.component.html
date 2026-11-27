@@ -1,0 +1,99 @@
+<app-arcade-game-shell
+	[titleKey]="'rpg'"
+	[descriptionKey]="'rpgDetail'"
+	[score]="score()"
+	[lives]="lives()"
+	[time]="time()"
+	[phase]="phase()"
+	[statusKey]="statusKey()"
+	(startGame)="start()"
+	(resetGame)="reset()">
+	<div
+		arcade-stage
+		class="rpg-battle-game__stage"
+		role="group"
+		tabindex="0"
+		[attr.aria-label]="'rpg' | arcadeText"
+		[attr.data-wave]="wave()"
+		[attr.data-effect]="battleEffects()[0]?.action ?? null"
+		(keydown)="onKeydown($event)">
+		<div class="rpg-battle-game__world" aria-hidden="true">
+			<span class="rpg-battle-game__moon"></span>
+			<div class="rpg-battle-game__ruins"><i></i><i></i><i></i><i></i></div>
+			<span class="rpg-battle-game__mist rpg-battle-game__mist--one"></span>
+			<span class="rpg-battle-game__mist rpg-battle-game__mist--two"></span>
+		</div>
+		<div class="rpg-battle-game__round">
+			@for (round of [1, 2, 3]; track round) {
+				<span [class.is-complete]="round < wave() || phase() === 'won'" [class.is-active]="round === wave() && phase() !== 'won'">
+					{{ round }}
+				</span>
+			}
+			<b>{{ 'round' | arcadeText }} {{ wave() }} / 3</b>
+		</div>
+
+		<div class="rpg-battle-game__arena">
+			<section class="rpg-battle-game__fighter rpg-battle-game__fighter--hero">
+				<span class="rpg-battle-game__fighter-label">CIPHER // 01</span>
+				<span class="rpg-battle-game__avatar" aria-hidden="true">
+					<i class="rpg-battle-game__sprite-head"></i>
+					<i class="rpg-battle-game__sprite-cape"></i>
+					<i class="rpg-battle-game__sprite-body"></i>
+					<i class="rpg-battle-game__sprite-arm rpg-battle-game__sprite-arm--weapon"></i>
+					<i class="rpg-battle-game__sprite-legs"></i>
+				</span>
+				<div class="rpg-battle-game__bar">
+					<small>HP {{ lives() }} / 100</small><i [style.width.%]="lives()"></i>
+				</div>
+				<div class="rpg-battle-game__resources">
+					<span>MP {{ mana() }}</span><span>+ {{ healCharges() }}</span>
+				</div>
+			</section>
+
+			@for (effect of battleEffects(); track effect.id) {
+				<span class="rpg-battle-game__battle-effect" [attr.data-action]="effect.action" aria-hidden="true">
+					<b></b><i></i><i></i><i></i><i></i><i></i><i></i>
+				</span>
+			}
+
+			<section class="rpg-battle-game__fighter rpg-battle-game__fighter--enemy">
+				<span class="rpg-battle-game__fighter-label">WARDEN // {{ wave() }}</span>
+				<span class="rpg-battle-game__avatar" aria-hidden="true">
+					<i class="rpg-battle-game__sprite-head"></i>
+					<i class="rpg-battle-game__sprite-cape"></i>
+					<i class="rpg-battle-game__sprite-body"></i>
+					<i class="rpg-battle-game__sprite-arm rpg-battle-game__sprite-arm--weapon"></i>
+					<i class="rpg-battle-game__sprite-legs"></i>
+				</span>
+				<div class="rpg-battle-game__bar">
+					<small>HP {{ enemyHp() }} / {{ enemyMaxHp() }}</small>
+					<i [style.width.%]="(enemyHp() / enemyMaxHp()) * 100"></i>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div
+		arcade-actions
+		class="rpg-battle-game__controls"
+		role="group"
+		aria-label="Battle command tray"
+		(keydown)="onKeydown($event)">
+		@for (action of actions; track action) {
+			<button
+				type="button"
+				class="rpg-battle-game__command"
+				[attr.data-action]="action"
+				[disabled]="isActionDisabled(action)"
+				(click)="act(action)">
+				<span class="rpg-battle-game__command-icon" aria-hidden="true"><i></i></span>
+				<span class="rpg-battle-game__command-copy">
+					<strong>{{ action | arcadeText }}</strong>
+					@if (action === 'spell') { <small>MP {{ mana() }}</small> }
+					@else if (action === 'heal') { <small>+ {{ healCharges() }}</small> }
+					@else { <small>{{ $index + 1 }} / {{ action === 'attack' ? 'A' : 'G' }}</small> }
+				</span>
+				<kbd>{{ $index + 1 }}</kbd>
+			</button>
+		}
+	</div>
+</app-arcade-game-shell>

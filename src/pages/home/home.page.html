@@ -1,0 +1,12 @@
+<section class="hero" aria-labelledby="hero-title">
+	<app-home-intro
+		[locale]="shell.locale()"
+		[technologies]="shell.technologyMarquee"
+		[links]="shell.publicLinks"
+		(preview)="setMonitorPreview($event)"
+		(navigate)="shell.setTransition($event)" />
+	<app-hero-monitor
+		[locale]="shell.locale()"
+		[technologies]="shell.technologyMarquee"
+		[preview]="monitorPreview()" />
+</section>

@@ -1,0 +1,74 @@
+<div class="profile-links">
+	<section class="profile-links__section profile-links__section--platforms">
+		<p class="profile-links__label">{{ 'pages.home.profilePlatformsLabel' | translate }}</p>
+		<nav
+			class="profile-links__list"
+			[attr.aria-label]="'pages.home.profilePlatformsAria' | translate">
+			@for (link of platformLinks(); track link.href) {
+				<a
+					class="profile-links__badge"
+					[href]="link.href"
+					(mouseenter)="showPreview(link)"
+					(mouseleave)="clearPreview()"
+					(focusin)="showPreview(link)"
+					(focusout)="clearPreview()"
+					target="_blank"
+					rel="noreferrer">
+					@if (link.imageSrc) {
+						<img
+							class="profile-links__icon"
+							[src]="link.imageSrc"
+							alt="" />
+					} @else {
+						<svg
+							class="profile-links__icon"
+							viewBox="0 0 24 24"
+							aria-hidden="true">
+							<path
+								[attr.d]="link.iconPath"
+								[attr.fill]="link.color ?? 'currentColor'" />
+						</svg>
+					}
+					<span>{{ link.label }}</span>
+				</a>
+			}
+		</nav>
+	</section>
+	@if (projectLinks().length) {
+		<section class="profile-links__section profile-links__section--projects">
+			<p class="profile-links__label">{{ 'pages.home.profileProjectsLabel' | translate }}</p>
+			<nav
+				class="profile-links__list"
+				[attr.aria-label]="'pages.home.profileProjectsAria' | translate">
+				@for (link of projectLinks(); track link.href) {
+					<a
+						class="profile-links__badge"
+						[href]="link.href"
+						(mouseenter)="showPreview(link)"
+						(mouseleave)="clearPreview()"
+						(focusin)="showPreview(link)"
+						(focusout)="clearPreview()"
+						target="_blank"
+						rel="noreferrer">
+						@if (link.imageSrc) {
+							<img
+								class="profile-links__icon"
+								[src]="link.imageSrc"
+								alt="" />
+						} @else {
+							<svg
+								class="profile-links__icon"
+								viewBox="0 0 24 24"
+								aria-hidden="true">
+								<path
+									[attr.d]="link.iconPath"
+									[attr.fill]="link.color ?? 'currentColor'" />
+							</svg>
+						}
+						<span>{{ link.label }}</span>
+					</a>
+				}
+			</nav>
+		</section>
+	}
+</div>

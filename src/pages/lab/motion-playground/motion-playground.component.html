@@ -1,0 +1,37 @@
+<article class="motion-playground" aria-labelledby="motion-playground-title">
+	<div class="motion-playground__heading">
+		<p>{{ 'pages.lab.motionEyebrow' | translate }}</p>
+		<h3 id="motion-playground-title">{{ 'pages.lab.motionTitle' | translate }}</h3>
+		<p>{{ 'pages.lab.motionDetail' | translate }}</p>
+	</div>
+	<div class="motion-playground__controls">
+		<label>
+			<span>{{ 'pages.lab.durationLabel' | translate }} · {{ duration() }} ms</span>
+			<input
+				type="range"
+				min="200"
+				max="1400"
+				step="50"
+				[ngModel]="duration()"
+				(ngModelChange)="duration.set($event)" />
+		</label>
+		<label>
+			<span>{{ 'pages.lab.easingLabel' | translate }}</span>
+			<select [ngModel]="easing()" (ngModelChange)="easing.set($event)">
+				@for (option of easingOptions; track option.id) {
+					<option [value]="option.id">{{ option.key | translate }}</option>
+				}
+			</select>
+		</label>
+		<button type="button" (click)="play()">{{ 'pages.lab.playMotion' | translate }}</button>
+	</div>
+	<div
+		class="motion-playground__track"
+		[class.is-running]="running()"
+		[style.--motion-duration]="duration() + 'ms'"
+		[style.--motion-easing]="easingValue()">
+		<span aria-hidden="true"></span>
+	</div>
+	<p class="motion-playground__note">{{ 'pages.lab.motionNote' | translate }}</p>
+	<app-lab-fullscreen-evidence kind="motion" />
+</article>

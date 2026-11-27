@@ -1,0 +1,40 @@
+<section
+	class="lab-fullscreen-evidence__panel"
+	[attr.aria-labelledby]="'lab-fullscreen-evidence-title-' + kind()">
+	<header class="lab-fullscreen-evidence__heading">
+		<p>{{ evidence().eyebrowKey | translate }}</p>
+		<h4 [id]="'lab-fullscreen-evidence-title-' + kind()">
+			{{ evidence().titleKey | translate }}
+		</h4>
+	</header>
+	<div class="lab-fullscreen-evidence__matrix" role="list">
+		@for (sample of evidence().samples; track sample.id) {
+			<article
+				class="lab-fullscreen-evidence__sample"
+				role="listitem"
+				[attr.data-evidence-sample]="sample.id">
+				<span class="lab-fullscreen-evidence__index" aria-hidden="true">
+					{{ ($index + 1).toString().padStart(2, '0') }}
+				</span>
+				<div class="lab-fullscreen-evidence__copy">
+					<strong>
+						@if (sample.labelKey) {
+							{{ sample.labelKey | translate }}
+						} @else {
+							{{ sample.label }}
+						}
+					</strong>
+					@if (sample.detailKey) {
+						<small>{{ sample.detailKey | translate }}</small>
+					}
+					<code>{{ sample.value }}</code>
+				</div>
+				<i
+					class="lab-fullscreen-evidence__level"
+					aria-hidden="true"
+					[style.--evidence-level]="sample.level + '%'">
+				</i>
+			</article>
+		}
+	</div>
+</section>

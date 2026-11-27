@@ -1,0 +1,164 @@
+<section class="showcase" aria-labelledby="showcase-title">
+	<header class="showcase__heading">
+		<div>
+			<p>{{ 'pages.demos.showcaseEyebrow' | translate }}</p>
+			<h3 id="showcase-title">
+				{{ 'pages.demos.showcaseTitleLead' | translate }}
+				<em>{{ 'pages.demos.showcaseTitleEmphasis' | translate }}</em>
+				{{ 'pages.demos.showcaseTitleTail' | translate }}
+			</h3>
+		</div>
+		<p>{{ 'pages.demos.showcaseSubtitle' | translate }}</p>
+	</header>
+
+	<div
+		class="showcase__tabs"
+		role="tablist"
+		[attr.aria-label]="'pages.demos.showcaseTabsAria' | translate">
+		@for (tab of tabs; track tab.id; let index = $index) {
+			<button
+				type="button"
+				role="tab"
+				[attr.id]="'showcase-tab-' + tab.id"
+				[attr.aria-controls]="'showcase-panel-' + tab.id"
+				[attr.aria-selected]="activeScene() === tab.id"
+				[attr.tabindex]="activeScene() === tab.id ? 0 : -1"
+				[class.is-active]="activeScene() === tab.id"
+				(click)="selectScene(tab.id)"
+				(keydown)="onTabsKeydown($event, index)">
+				<span>{{ tab.index }}</span>
+				{{ tab.labelKey | translate }}
+			</button>
+		}
+	</div>
+
+	<div
+		class="showcase__stage"
+		[class.is-fallback-fullscreen]="fullscreen()"
+		[attr.data-scene]="activeScene()"
+		[attr.data-revision]="signalRevision()"
+		[style.--showcase-rx]="rotateX()"
+		[style.--showcase-ry]="rotateY()"
+		[style.--showcase-flow]="flowVariant()"
+		[style.--showcase-latency]="latency() + 'ms'"
+		[style.--showcase-orbit-tilt]="orbitTilt() + 'deg'"
+		[style.--showcase-particle-seed]="particleSeed()"
+		role="tabpanel"
+		tabindex="0"
+		[attr.id]="'showcase-panel-' + activeScene()"
+		[attr.aria-labelledby]="'showcase-tab-' + activeScene()"
+		aria-describedby="showcase-scene-status showcase-hint"
+		(pointerdown)="beginScene($event)"
+		(pointermove)="moveScene($event)"
+		(pointerup)="endScene($event)"
+		(pointercancel)="endScene($event)"
+		(keydown)="onStageKeydown($event)">
+		<div class="showcase__fullscreen-frame">
+			@if (activeScene() === 'depth') {
+				<div class="showcase__visual showcase__depth" aria-hidden="true">
+					<div class="showcase__orbit showcase__orbit--one"></div>
+					<div class="showcase__orbit showcase__orbit--two"></div>
+					<div class="showcase__cube">
+						<span class="showcase__cube-face showcase__cube-face--front">C</span>
+						<span class="showcase__cube-face showcase__cube-face--back">A</span>
+						<span class="showcase__cube-face showcase__cube-face--left">R</span>
+						<span class="showcase__cube-face showcase__cube-face--right">T</span>
+						<span class="showcase__cube-face showcase__cube-face--top">3D</span>
+						<span class="showcase__cube-face showcase__cube-face--bottom">GO</span>
+					</div>
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseDepthKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseDepthTitle' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseDepthDetail' | translate }}</span>
+				</div>
+			} @else if (activeScene() === 'flow') {
+				<div class="showcase__visual showcase__flow" [attr.data-variant]="flowVariant()" aria-hidden="true">
+					<svg viewBox="0 0 720 320" preserveAspectRatio="none">
+						<path d="M72 185 C145 40 228 255 310 122 S505 245 640 88" />
+						<path d="M72 185 C180 280 245 88 365 188 S545 84 640 88" />
+					</svg>
+					@for (node of [0, 1, 2, 3, 4, 5, 6, 7]; track node) {
+						<span [style.--node-index]="node"></span>
+					}
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseFlowKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseFlowTitle' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseFlowDetail' | translate }}</span>
+				</div>
+			} @else if (activeScene() === 'signal') {
+				<div class="showcase__visual showcase__signal" aria-hidden="true">
+					<div class="showcase__radar"><i></i><i></i><i></i><i></i></div>
+					<div class="showcase__signal-bars">
+						@for (bar of signalBars(); track $index) {
+							<span [style.--signal-value]="bar + '%'" [style.--bar-index]="$index"></span>
+						}
+					</div>
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseSignalKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseSignalTitle' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseSignalDetail' | translate }}</span>
+				</div>
+			} @else if (activeScene() === 'latency') {
+				<div class="showcase__visual showcase__latency" aria-hidden="true">
+					<div class="showcase__latency-scale">
+						<span></span><span></span><span></span><span></span><span></span>
+					</div>
+					<div class="showcase__latency-pulse"><i></i><i></i><i></i></div>
+					<b>{{ latency() }}<small>ms</small></b>
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseFlowKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseTabLatency' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseFlowDetail' | translate }}</span>
+				</div>
+			} @else if (activeScene() === 'particles') {
+				<div class="showcase__visual showcase__particles" aria-hidden="true" [attr.data-seed]="particleSeed()">
+					<b></b>
+					@for (particle of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]; track particle) {
+						<i [style.--particle-index]="particle"></i>
+					}
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseSignalKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseTabParticles' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseSignalDetail' | translate }}</span>
+				</div>
+			} @else {
+				<div class="showcase__visual showcase__orbits" aria-hidden="true">
+					<div class="showcase__orbit-stage"><i></i><i></i><i></i><b>GO</b></div>
+				</div>
+				<div class="showcase__copy">
+					<p>{{ 'pages.demos.showcaseDepthKicker' | translate }}</p>
+					<h4>{{ 'pages.demos.showcaseTabOrbits' | translate }}</h4>
+					<span>{{ 'pages.demos.showcaseDepthDetail' | translate }}</span>
+				</div>
+			}
+
+			<div class="showcase__controls" (pointerdown)="$event.stopPropagation()">
+				<button class="showcase__activate" type="button" (click)="interactScene()">
+					{{ 'pages.demos.showcaseInteract' | translate }}
+				</button>
+				<button type="button" (click)="resetScene()">
+					<span aria-hidden="true">↻</span>
+					{{ 'pages.demos.showcaseReset' | translate }}
+				</button>
+				<button
+					class="showcase__fullscreen"
+					type="button"
+					[attr.aria-label]="(fullscreen() ? 'pages.demos.showcaseExitFullscreen' : 'pages.demos.showcaseFullscreen') | translate"
+					[attr.aria-pressed]="fullscreen()"
+					(click)="toggleFullscreen($event)">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9V5h4M15 5h4v4M19 15v4h-4M9 19H5v-4" /></svg>
+				</button>
+			</div>
+			<p class="showcase__status" id="showcase-scene-status" aria-live="polite">
+				<span>{{ sceneLabelKey() | translate }}</span>
+				<strong>{{ sceneReadout() }}</strong>
+			</p>
+			<p class="showcase__hint" id="showcase-hint">{{ 'pages.demos.showcaseHint' | translate }}</p>
+		</div>
+	</div>
+</section>

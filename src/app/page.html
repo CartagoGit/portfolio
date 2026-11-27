@@ -1,0 +1,40 @@
+<main class="portfolio">
+	<a
+		class="skip-link"
+		href="#main-content">
+		{{ 'chrome.skipToContent' | translate }}
+	</a>
+
+	<app-shell-header
+		[locale]="shell.locale()"
+		[page]="shell.page()"
+		[languages]="shell.languages()"
+		[menuOpen]="shell.menuOpen()"
+		[localeMenuOpen]="shell.localeMenuOpen()"
+		[localeMenuClosing]="shell.localeMenuClosing()"
+		[theme]="shell.theme()"
+		[themes]="shell.themes()"
+		[themeMenuOpen]="shell.themeMenuOpen()"
+		[themeMenuClosing]="shell.themeMenuClosing()"
+		(navigate)="shell.setTransition($event)"
+		(searchOpen)="shell.commandOpen.set(true)"
+		(menuToggle)="shell.toggleMenu()"
+		(localeToggle)="shell.toggleLocaleMenu()"
+		(localeSelect)="shell.selectLocale($event)"
+		(themeToggle)="shell.toggleThemeMenu()"
+		(themeSelect)="shell.setTheme($event)" />
+	<div class="route-stage" id="main-content" tabindex="-1">
+		<router-outlet />
+	</div>
+
+	<app-shell-footer
+		[locale]="shell.locale()"
+		[links]="shell.platformLinks"
+		(backToTop)="shell.scrollToTop()" />
+
+	<app-command-palette
+		[open]="shell.commandOpen()"
+		[locale]="shell.locale()"
+		(close)="shell.commandOpen.set(false)"
+		(navigate)="shell.setTransition($event)" />
+</main>

@@ -1,0 +1,173 @@
+import type { ILocale } from '../domain/types.interface';
+import { en } from './en.translation';
+import { SECONDARY_PRIORITY_OVERLAYS } from './secondary-priority.overlays';
+import { mergeTranslationOverlay } from './secondary-locales.types';
+import type { ITranslationMap } from './types.interface';
+
+type IGlobalLocale = Exclude<ILocale, 'en' | 'es' | 'fr' | 'de'>;
+type IPageCopy = readonly [lead: string, emphasis: string, subtitle: string];
+
+interface IGlobalCopy {
+	readonly nav: readonly [string, string, string, string, string, string, string, string];
+	readonly home: readonly [string, string, string, string, string, string, string, string];
+	readonly pages: Readonly<Record<'work' | 'lab' | 'approach' | 'knowledge' | 'docker' | 'demos' | 'contact', IPageCopy>>;
+	readonly skip: string;
+	readonly send: string;
+	readonly availability: string;
+}
+
+const COPY: Readonly<Record<IGlobalLocale, IGlobalCopy>> = {
+	it: {
+		nav: ['Home', 'Progetti', 'Laboratorio', 'Metodo', 'Competenze', 'Docker', 'Demo', 'Contatto'],
+		home: ['Ingegneria frontend di prodotto', 'Il lavoro parla', 'prima delle parole.', '', 'Niente dimostra meglio il modo di lavorare degli esempi reali.', 'Esplora codice, interazioni e decisioni di consegna: questo portfolio è la prova.', 'Vedi i progetti', 'Parliamone'],
+		pages: { work: ['Progetti', 'concreti.', 'Esempi open source che dimostrano il focus tecnico.'], lab: ['Laboratorio', 'interattivo.', 'Stato, movimento, accessibilità e dati da manipolare.'], approach: ['Metodo', 'operativo.', 'Sei capacità legate a consegne di prodotto reali.'], knowledge: ['Conoscenze', 'utili.', 'Riferimenti pratici organizzati per tecnologia e progetto.'], docker: ['Delivery', 'riproducibile.', 'Ambienti container coerenti tra macchine e team.'], demos: ['Sei giochi giocabili.', 'Un vero arcade.', 'Inizia con sei minigiochi a punteggio, poi esplora il laboratorio delle interazioni e i progetti pubblici.'], contact: ['Iniziamo una', 'conversazione utile.', 'Racconta obiettivo, contesto e vincoli.'] },
+		skip: 'Vai al contenuto', send: 'Invia', availability: 'Disponibile per progetti di prodotto',
+	},
+	'pt-PT': {
+		nav: ['Início', 'Projetos', 'Laboratório', 'Método', 'Conhecimentos', 'Docker', 'Demonstrações', 'Contacto'],
+		home: ['Engenharia frontend de produto', 'O trabalho fala', 'antes das palavras.', '', 'Nada mostra melhor como alguém trabalha do que exemplos reais.', 'Explore código, interações e decisões de entrega: este portefólio é a prova.', 'Ver projetos', 'Falar comigo'],
+		pages: { work: ['Projetos', 'concretos.', 'Exemplos de código aberto que mostram o foco técnico.'], lab: ['Laboratório', 'interativo.', 'Estado, movimento, acessibilidade e dados para experimentar.'], approach: ['Método', 'operacional.', 'Seis capacidades ligadas a entrega de produto real.'], knowledge: ['Conhecimentos', 'aplicados.', 'Referências práticas organizadas por tecnologia e projeto.'], docker: ['Entrega', 'reprodutível.', 'Ambientes container consistentes entre máquinas e equipas.'], demos: ['Seis jogos jogáveis.', 'Um arcade verdadeiro.', 'Comece com seis minijogos por pontos e depois explore o laboratório de interação e os projetos públicos.'], contact: ['Comece uma', 'conversa útil.', 'Partilhe objetivo, contexto e restrições.'] },
+		skip: 'Ir para o conteúdo', send: 'Enviar', availability: 'Disponível para projetos de produto',
+	},
+	'pt-BR': {
+		nav: ['Início', 'Projetos', 'Laboratório', 'Método', 'Conhecimentos', 'Docker', 'Demos', 'Contato'],
+		home: ['Engenharia frontend de produto', 'O trabalho fala', 'antes das palavras.', '', 'Nada mostra melhor como alguém trabalha do que exemplos reais.', 'Explore código, interações e decisões de entrega: este portfólio é a prova.', 'Ver projetos', 'Vamos conversar'],
+		pages: { work: ['Projetos', 'concretos.', 'Exemplos open source que mostram o foco técnico.'], lab: ['Laboratório', 'interativo.', 'Estado, movimento, acessibilidade e dados para experimentar.'], approach: ['Método', 'operacional.', 'Seis capacidades ligadas a entregas reais de produto.'], knowledge: ['Conhecimentos', 'aplicados.', 'Referências práticas organizadas por tecnologia e projeto.'], docker: ['Entrega', 'reproduzível.', 'Ambientes de contêiner consistentes entre máquinas e equipes.'], demos: ['Seis jogos jogáveis.', 'Um arcade de verdade.', 'Comece com seis minijogos por pontuação e depois explore o laboratório de interação e os projetos públicos.'], contact: ['Comece uma', 'conversa útil.', 'Conte objetivo, contexto e restrições.'] },
+		skip: 'Ir para o conteúdo', send: 'Enviar', availability: 'Disponível para projetos de produto',
+	},
+	ru: {
+		nav: ['Главная', 'Проекты', 'Лаборатория', 'Подход', 'Знания', 'Docker', 'Демо', 'Контакт'],
+		home: ['Фронтенд-инженерия продукта', 'Работа говорит', 'раньше слов.', '', 'Лучше всего о работе человека говорят реальные примеры.', 'Изучайте код, взаимодействия и решения по доставке — этот портфель и есть доказательство.', 'Смотреть проекты', 'Обсудить задачу'],
+		pages: { work: ['Реальные', 'проекты.', 'Открытые примеры, показывающие технический фокус.'], lab: ['Интерактивная', 'лаборатория.', 'Состояние, движение, доступность и данные для экспериментов.'], approach: ['Рабочий', 'подход.', 'Шесть компетенций, связанных с реальной продуктовой поставкой.'], knowledge: ['Полезные', 'знания.', 'Практические ссылки, сгруппированные по технологиям и проектам.'], docker: ['Воспроизводимая', 'доставка.', 'Согласованные контейнерные среды на разных машинах.'], demos: ['Шесть мини-игр.', 'Настоящая аркада.', 'Начните с шести мини-игр на очки, затем откройте лабораторию интерактивных сценариев и публичные проекты.'], contact: ['Начнём', 'полезный разговор.', 'Опишите цель, контекст и ограничения.'] },
+		skip: 'Перейти к содержимому', send: 'Отправить', availability: 'Открыт к продуктовым проектам',
+	},
+	uk: {
+		nav: ['Головна', 'Проєкти', 'Лабораторія', 'Підхід', 'Знання', 'Docker', 'Демо', 'Контакт'],
+		home: ['Фронтенд-інженерія продукту', 'Робота говорить', 'раніше слів.', '', 'Найкраще про роботу людини розповідають реальні приклади.', 'Досліджуйте код, взаємодії та рішення доставки — це портфоліо є доказом.', 'Переглянути проєкти', 'Обговорити задачу'],
+		pages: { work: ['Реальні', 'проєкти.', 'Відкриті приклади, що показують технічний фокус.'], lab: ['Інтерактивна', 'лабораторія.', 'Стан, рух, доступність і дані для експериментів.'], approach: ['Робочий', 'підхід.', 'Шість компетенцій, пов’язаних із реальною продуктовою роботою.'], knowledge: ['Практичні', 'знання.', 'Корисні посилання за технологіями та проєктами.'], docker: ['Відтворювана', 'доставка.', 'Узгоджені контейнерні середовища для різних машин.'], demos: ['Шість ігрових мініатюр.', 'Справжня аркада.', 'Почніть із шести мініігор на очки, а потім досліджуйте лабораторію взаємодії та публічні проєкти.'], contact: ['Почнімо', 'корисну розмову.', 'Опишіть мету, контекст і обмеження.'] },
+		skip: 'Перейти до вмісту', send: 'Надіслати', availability: 'Відкритий до продуктових проєктів',
+	},
+	pl: {
+		nav: ['Start', 'Projekty', 'Laboratorium', 'Podejście', 'Wiedza', 'Docker', 'Dema', 'Kontakt'],
+		home: ['Inżynieria frontendu produktu', 'Praca mówi', 'przed słowami.', '', 'Nic lepiej nie pokazuje czyjejś pracy niż prawdziwe przykłady.', 'Poznaj kod, interakcje i decyzje wdrożeniowe — to portfolio jest dowodem.', 'Zobacz projekty', 'Porozmawiajmy'],
+		pages: { work: ['Konkretne', 'projekty.', 'Otwarte przykłady pokazujące kierunek techniczny.'], lab: ['Interaktywne', 'laboratorium.', 'Stan, ruch, dostępność i dane do eksperymentów.'], approach: ['Operacyjne', 'podejście.', 'Sześć umiejętności związanych z realną dostawą produktu.'], knowledge: ['Praktyczna', 'wiedza.', 'Materiały pogrupowane według technologii i projektu.'], docker: ['Powtarzalna', 'dostawa.', 'Spójne środowiska kontenerowe na wielu maszynach.'], demos: ['Sześć gier do grania.', 'Prawdziwa arkada.', 'Zacznij od sześciu punktowanych mini-gier, a potem poznaj laboratorium interakcji i publiczne projekty.'], contact: ['Zacznijmy', 'konkretną rozmowę.', 'Opisz cel, kontekst i ograniczenia.'] },
+		skip: 'Przejdź do treści', send: 'Wyślij', availability: 'Dostępny dla projektów produktowych',
+	},
+	hr: {
+		nav: ['Početna', 'Projekti', 'Laboratorij', 'Pristup', 'Znanje', 'Docker', 'Demoi', 'Kontakt'],
+		home: ['Frontend inženjering proizvoda', 'Rad govori', 'prije riječi.', '', 'Ništa ne pokazuje nečiji način rada bolje od stvarnih primjera.', 'Istražite kod, interakcije i odluke isporuke — ovaj portfolio je dokaz.', 'Pogledaj projekte', 'Razgovarajmo'],
+		pages: { work: ['Stvarni', 'projekti.', 'Otvoreni primjeri koji pokazuju tehnički fokus.'], lab: ['Interaktivni', 'laboratorij.', 'Stanje, pokret, pristupačnost i podaci za eksperimentiranje.'], approach: ['Operativni', 'pristup.', 'Šest vještina povezanih sa stvarnom isporukom proizvoda.'], knowledge: ['Praktično', 'znanje.', 'Reference organizirane po tehnologiji i projektu.'], docker: ['Ponovljiva', 'isporuka.', 'Dosljedna kontejnerska okruženja na različitim uređajima.'], demos: ['Šest igara za igranje.', 'Prava arkada.', 'Započnite sa šest miniigara bodovanja, a zatim istražite laboratorij interakcija i javne projekte.'], contact: ['Započnimo', 'koristan razgovor.', 'Opišite cilj, kontekst i ograničenja.'] },
+		skip: 'Preskoči na sadržaj', send: 'Pošalji', availability: 'Dostupan za produktne projekte',
+	},
+	tr: {
+		nav: ['Ana sayfa', 'Projeler', 'Laboratuvar', 'Yaklaşım', 'Bilgi', 'Docker', 'Demolar', 'İletişim'],
+		home: ['Ürün frontend mühendisliği', 'Çalışma, sözlerden', 'önce konuşur.', '', 'Birinin nasıl çalıştığını gerçek örneklerden daha iyi hiçbir şey göstermez.', 'Kod, etkileşim ve teslim kararlarını inceleyin: bu portfolyo kanıttır.', 'Projeleri gör', 'Konuşalım'],
+		pages: { work: ['Gerçek', 'projeler.', 'Teknik odağı gösteren açık kaynak örnekleri.'], lab: ['Etkileşimli', 'laboratuvar.', 'Durum, hareket, erişilebilirlik ve veriyi deneyin.'], approach: ['Operasyonel', 'yaklaşım.', 'Gerçek ürün teslimine bağlı altı yetkinlik.'], knowledge: ['Uygulanabilir', 'bilgi.', 'Teknoloji ve projeye göre düzenlenmiş pratik referanslar.'], docker: ['Tekrarlanabilir', 'teslimat.', 'Farklı makinelerde tutarlı konteyner ortamları.'], demos: ['Altı oynanabilir oyun.', 'Gerçek bir arcade.', 'Önce puan odaklı altı mini oyunu oynayın; ardından etkileşim laboratuvarını ve herkese açık projeleri keşfedin.'], contact: ['Faydalı bir', 'konuşma başlatalım.', 'Hedefi, bağlamı ve kısıtları paylaşın.'] },
+		skip: 'İçeriğe geç', send: 'Gönder', availability: 'Ürün projeleri için müsait',
+	},
+	ar: {
+		nav: ['الرئيسية', 'المشاريع', 'المختبر', 'المنهج', 'المعرفة', 'دوكر', 'العروض', 'تواصل'],
+		home: ['هندسة واجهات المنتج', 'العمل يتحدث', 'قبل الكلمات.', '', 'لا شيء يوضح طريقة عمل شخص أفضل من أمثلة حقيقية.', 'استكشف الشيفرة والتفاعل وقرارات التسليم: هذه المحفظة هي الدليل.', 'عرض المشاريع', 'لنتحدث'],
+		pages: { work: ['مشاريع', 'حقيقية.', 'أمثلة مفتوحة المصدر توضح التركيز التقني.'], lab: ['مختبر', 'تفاعلي.', 'الحالة والحركة وإتاحة الوصول والبيانات للتجربة.'], approach: ['منهج', 'تشغيلي.', 'ست قدرات مرتبطة بتسليم منتجات حقيقية.'], knowledge: ['معرفة', 'عملية.', 'مراجع منظمة حسب التقنية والمشروع.'], docker: ['تسليم', 'قابل للتكرار.', 'بيئات حاويات متسقة عبر الأجهزة.'], demos: ['ست ألعاب قابلة للعب.', 'أركيد حقيقي.', 'ابدأ بست ألعاب مصغّرة تعتمد على النقاط، ثم استكشف مختبر التفاعل والمشاريع العامة.'], contact: ['لنبدأ', 'محادثة مفيدة.', 'صف الهدف والسياق والقيود.'] },
+		skip: 'الانتقال إلى المحتوى', send: 'إرسال', availability: 'متاح لمشاريع المنتجات',
+	},
+	hi: {
+		nav: ['होम', 'प्रोजेक्ट', 'लैब', 'तरीका', 'ज्ञान', 'Docker', 'डेमो', 'संपर्क'],
+		home: ['प्रोडक्ट फ्रंटएंड इंजीनियरिंग', 'काम बोलता है', 'शब्दों से पहले।', '', 'किसी के काम को वास्तविक उदाहरणों से बेहतर कुछ नहीं दिखाता।', 'कोड, इंटरैक्शन और डिलीवरी निर्णय देखें: यही पोर्टफोलियो प्रमाण है।', 'प्रोजेक्ट देखें', 'बात करें'],
+		pages: { work: ['वास्तविक', 'प्रोजेक्ट।', 'तकनीकी फोकस दिखाते ओपन-सोर्स उदाहरण।'], lab: ['इंटरैक्टिव', 'लैब।', 'स्टेट, मोशन, एक्सेसिबिलिटी और डेटा के प्रयोग।'], approach: ['ऑपरेशनल', 'तरीका।', 'वास्तविक उत्पाद डिलीवरी से जुड़ी छह क्षमताएँ।'], knowledge: ['व्यावहारिक', 'ज्ञान।', 'तकनीक और प्रोजेक्ट के अनुसार उपयोगी संदर्भ।'], docker: ['दोहराने योग्य', 'डिलीवरी।', 'विभिन्न मशीनों पर सुसंगत कंटेनर वातावरण।'], demos: ['छह खेलने योग्य गेम।', 'असली आर्केड।', 'पहले छह स्कोर-आधारित मिनी-गेम खेलें, फिर इंटरैक्शन लैब और सार्वजनिक प्रोजेक्ट देखें।'], contact: ['एक उपयोगी', 'बात शुरू करें।', 'लक्ष्य, संदर्भ और सीमाएँ बताइए।'] },
+		skip: 'सामग्री पर जाएँ', send: 'भेजें', availability: 'प्रोडक्ट प्रोजेक्ट के लिए उपलब्ध',
+	},
+	bn: {
+		nav: ['হোম', 'প্রজেক্ট', 'ল্যাব', 'পদ্ধতি', 'জ্ঞান', 'Docker', 'ডেমো', 'যোগাযোগ'],
+		home: ['প্রোডাক্ট ফ্রন্টএন্ড ইঞ্জিনিয়ারিং', 'কাজ কথা বলে', 'শব্দের আগে।', '', 'বাস্তব উদাহরণের চেয়ে কারও কাজের ধরন ভালোভাবে আর কিছু দেখাতে পারে না।', 'কোড, ইন্টারঅ্যাকশন ও ডেলিভারি সিদ্ধান্ত দেখুন: এই পোর্টফোলিওই প্রমাণ।', 'প্রজেক্ট দেখুন', 'কথা বলি'],
+		pages: { work: ['বাস্তব', 'প্রজেক্ট।', 'প্রযুক্তিগত দিক দেখানো ওপেন সোর্স উদাহরণ।'], lab: ['ইন্টারঅ্যাক্টিভ', 'ল্যাব।', 'স্টেট, মোশন, অ্যাক্সেসিবিলিটি ও ডেটা পরীক্ষা করুন।'], approach: ['কর্মক্ষম', 'পদ্ধতি।', 'বাস্তব প্রোডাক্ট ডেলিভারির সঙ্গে যুক্ত ছয়টি দক্ষতা।'], knowledge: ['ব্যবহারিক', 'জ্ঞান।', 'প্রযুক্তি ও প্রজেক্ট অনুযায়ী সাজানো রেফারেন্স।'], docker: ['পুনরুৎপাদনযোগ্য', 'ডেলিভারি।', 'বিভিন্ন মেশিনে ধারাবাহিক কন্টেইনার পরিবেশ।'], demos: ['ছয়টি খেলযোগ্য গেম।', 'একটা সত্যিকারের আর্কেড।', 'প্রথমে স্কোর-ভিত্তিক ছয়টি মিনিগেম খেলুন, তারপর ইন্টারঅ্যাকশন ল্যাব ও পাবলিক প্রজেক্ট দেখুন।'], contact: ['একটি দরকারি', 'আলাপ শুরু করি।', 'লক্ষ্য, প্রেক্ষাপট ও সীমাবদ্ধতা লিখুন।'] },
+		skip: 'বিষয়বস্তুর দিকে যান', send: 'পাঠান', availability: 'প্রোডাক্ট প্রজেক্টের জন্য উপলব্ধ',
+	},
+	'zh-CN': {
+		nav: ['首页', '项目', '实验室', '方法', '知识', 'Docker', '演示', '联系'],
+		home: ['产品前端工程', '作品先于', '空谈。', '', '没有什么比真实示例更能说明一个人的工作方式。', '探索代码、交互与交付决策：这个作品集就是证据。', '查看项目', '开始交流'],
+		pages: { work: ['真实', '项目。', '展示技术重点的开源案例。'], lab: ['交互', '实验室。', '亲手探索状态、动效、可访问性与数据。'], approach: ['可落地的', '方法。', '与真实产品交付相连的六项能力。'], knowledge: ['实用', '知识。', '按技术与项目整理的参考资料。'], docker: ['可复现的', '交付。', '跨机器保持一致的容器环境。'], demos: ['六款可玩游戏。', '真正的街机体验。', '先从六款得分制小游戏开始，再探索交互实验室与公开项目。'], contact: ['开始一次', '有价值的交流。', '告诉我目标、背景与限制。'] },
+		skip: '跳到内容', send: '发送', availability: '可承接产品项目',
+	},
+	'zh-TW': {
+		nav: ['首頁', '專案', '實驗室', '方法', '知識', 'Docker', '示範', '聯絡'],
+		home: ['產品前端工程', '作品先於', '空談。', '', '沒有什麼比真實範例更能說明一個人的工作方式。', '探索程式碼、互動與交付決策：這份作品集就是證據。', '查看專案', '開始交流'],
+		pages: { work: ['真實', '專案。', '展示技術重點的開源案例。'], lab: ['互動', '實驗室。', '親手探索狀態、動效、無障礙與資料。'], approach: ['可落地的', '方法。', '與真實產品交付相連的六項能力。'], knowledge: ['實用', '知識。', '依技術與專案整理的參考資料。'], docker: ['可重現的', '交付。', '跨機器保持一致的容器環境。'], demos: ['六款可玩遊戲。', '真正的街機體驗。', '先玩六款計分小遊戲，再探索互動實驗室與公開專案。'], contact: ['開始一次', '有價值的交流。', '告訴我目標、背景與限制。'] },
+		skip: '跳至內容', send: '送出', availability: '可承接產品專案',
+	},
+	ja: {
+		nav: ['ホーム', '実績', 'ラボ', '進め方', '知識', 'Docker', 'デモ', '連絡'],
+		home: ['プロダクトのフロントエンド', '仕事は言葉より', '先に語る。', '', '人の仕事ぶりを示すものに、実例ほど確かなものはない。', 'コード、操作感、配信判断を確かめてください。このポートフォリオが証拠です。', '実績を見る', '話しましょう'],
+		pages: { work: ['実際の', 'プロジェクト。', '技術的な焦点を示すオープンソース例。'], lab: ['インタラクティブ', 'ラボ。', '状態、動き、アクセシビリティ、データを試す。'], approach: ['実用的な', '進め方。', '実際の製品提供につながる6つの能力。'], knowledge: ['実践的な', '知識。', '技術とプロジェクト別に整理した参照。'], docker: ['再現可能な', '配信。', '複数のマシンで一貫したコンテナ環境。'], demos: ['遊べるゲーム6本。', '本物のアーケード。', 'まずスコア制のミニゲーム6本で遊び、続いてインタラクションラボと公開プロジェクトを見てください。'], contact: ['役立つ', '会話を始めよう。', '目的、背景、制約を教えてください。'] },
+		skip: '本文へ移動', send: '送信', availability: 'プロダクト案件に対応可能',
+	},
+	ko: {
+		nav: ['홈', '프로젝트', '랩', '접근법', '지식', 'Docker', '데모', '연락'],
+		home: ['제품 프론트엔드 엔지니어링', '말보다 먼저', '작업이 말한다.', '', '누군가의 작업 방식을 보여주는 데 실제 예시만큼 확실한 것은 없습니다.', '코드, 상호작용, 배포 결정을 살펴보세요. 이 포트폴리오가 증거입니다.', '프로젝트 보기', '대화하기'],
+		pages: { work: ['실제', '프로젝트.', '기술 초점을 보여주는 오픈 소스 사례.'], lab: ['인터랙티브', '랩.', '상태, 모션, 접근성, 데이터를 직접 실험합니다.'], approach: ['운영 가능한', '접근법.', '실제 제품 배송과 연결된 여섯 가지 역량.'], knowledge: ['실용적인', '지식.', '기술과 프로젝트별로 정리한 참고자료.'], docker: ['재현 가능한', '배포.', '여러 머신에서 일관된 컨테이너 환경.'], demos: ['플레이 가능한 게임 6개.', '진짜 아케이드.', '먼저 점수 기반 미니 게임 6개를 플레이한 뒤, 인터랙션 랩과 공개 프로젝트를 살펴보세요.'], contact: ['유용한', '대화를 시작하세요.', '목표, 맥락, 제약 조건을 알려주세요.'] },
+		skip: '본문으로 이동', send: '보내기', availability: '제품 프로젝트 진행 가능',
+	},
+	id: {
+		nav: ['Beranda', 'Proyek', 'Lab', 'Pendekatan', 'Pengetahuan', 'Docker', 'Demo', 'Kontak'],
+		home: ['Rekayasa frontend produk', 'Karya berbicara', 'sebelum kata-kata.', '', 'Tidak ada yang menunjukkan cara kerja seseorang lebih baik daripada contoh nyata.', 'Jelajahi kode, interaksi, dan keputusan pengiriman: portofolio ini adalah buktinya.', 'Lihat proyek', 'Mari bicara'],
+		pages: { work: ['Proyek', 'nyata.', 'Contoh sumber terbuka yang menunjukkan fokus teknis.'], lab: ['Lab', 'interaktif.', 'Eksperimen dengan status, gerak, aksesibilitas, dan data.'], approach: ['Pendekatan', 'operasional.', 'Enam kemampuan yang terkait dengan pengiriman produk nyata.'], knowledge: ['Pengetahuan', 'praktis.', 'Referensi berdasarkan teknologi dan proyek.'], docker: ['Pengiriman', 'reproducibel.', 'Lingkungan container yang konsisten di berbagai mesin.'], demos: ['Enam gim yang bisa dimainkan.', 'Arkade sungguhan.', 'Mulai dari enam gim mini berbasis skor, lalu jelajahi laboratorium interaksi dan proyek publik.'], contact: ['Mari mulai', 'percakapan berguna.', 'Ceritakan tujuan, konteks, dan batasan.'] },
+		skip: 'Lompat ke konten', send: 'Kirim', availability: 'Tersedia untuk proyek produk',
+	},
+};
+
+const SEARCH_COPY: Readonly<Record<IGlobalLocale, Partial<ITranslationMap['chrome']['commandPalette']>>> = {
+	it: { title: 'Cerca nel portfolio', close: 'Chiudi ricerca', searchLabel: 'Cerca pagine, progetti, tecnologie e demo', searchPlaceholder: 'Prova “Docker”, “Angular” o “Tetris”', searchResults: 'Risultati del portfolio', searchEmpty: 'Nessun risultato corrisponde.', searchOpen: 'Apri la ricerca', searchKindRoute: 'Pagina', searchKindProject: 'Progetto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demo', searchKindPlatform: 'Piattaforma', searchKindContent: 'Contenuto' },
+	'pt-PT': { title: 'Pesquisar no portefólio', close: 'Fechar pesquisa', searchLabel: 'Pesquisar páginas, projetos, tecnologias e demos', searchPlaceholder: 'Experimente “Docker”, “Angular” ou “Tetris”', searchResults: 'Resultados da pesquisa', searchEmpty: 'Nenhum resultado corresponde.', searchOpen: 'Abrir pesquisa', searchKindRoute: 'Página', searchKindProject: 'Projeto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demonstração', searchKindPlatform: 'Plataforma', searchKindContent: 'Conteúdo' },
+	'pt-BR': { title: 'Pesquisar no portfólio', close: 'Fechar pesquisa', searchLabel: 'Pesquisar páginas, projetos, tecnologias e demos', searchPlaceholder: 'Experimente “Docker”, “Angular” ou “Tetris”', searchResults: 'Resultados da pesquisa', searchEmpty: 'Nenhum resultado corresponde.', searchOpen: 'Abrir pesquisa', searchKindRoute: 'Página', searchKindProject: 'Projeto', searchKindTechnology: 'Tecnologia', searchKindDemo: 'Demo', searchKindPlatform: 'Plataforma', searchKindContent: 'Conteúdo' },
+	ru: { title: 'Поиск по портфолио', close: 'Закрыть поиск', searchLabel: 'Ищите страницы, проекты, технологии и демо', searchPlaceholder: 'Попробуйте «Docker», «Angular» или «Tetris»', searchResults: 'Результаты поиска', searchEmpty: 'Ничего не найдено.', searchOpen: 'Открыть поиск', searchKindRoute: 'Страница', searchKindProject: 'Проект', searchKindTechnology: 'Технология', searchKindDemo: 'Демо', searchKindPlatform: 'Платформа', searchKindContent: 'Контент' },
+	uk: { title: 'Пошук у портфоліо', close: 'Закрити пошук', searchLabel: 'Шукайте сторінки, проєкти, технології та демо', searchPlaceholder: 'Спробуйте «Docker», «Angular» або «Tetris»', searchResults: 'Результати пошуку', searchEmpty: 'Нічого не знайдено.', searchOpen: 'Відкрити пошук', searchKindRoute: 'Сторінка', searchKindProject: 'Проєкт', searchKindTechnology: 'Технологія', searchKindDemo: 'Демо', searchKindPlatform: 'Платформа', searchKindContent: 'Вміст' },
+	pl: { title: 'Szukaj w portfolio', close: 'Zamknij wyszukiwanie', searchLabel: 'Szukaj stron, projektów, technologii i demo', searchPlaceholder: 'Spróbuj „Docker”, „Angular” lub „Tetris”', searchResults: 'Wyniki wyszukiwania', searchEmpty: 'Brak pasujących wyników.', searchOpen: 'Otwórz wyszukiwanie', searchKindRoute: 'Strona', searchKindProject: 'Projekt', searchKindTechnology: 'Technologia', searchKindDemo: 'Demo', searchKindPlatform: 'Platforma', searchKindContent: 'Treść' },
+	hr: { title: 'Pretraži portfolio', close: 'Zatvori pretraživanje', searchLabel: 'Pretražuj stranice, projekte, tehnologije i demoe', searchPlaceholder: 'Pokušaj „Docker”, „Angular” ili „Tetris”', searchResults: 'Rezultati pretraživanja', searchEmpty: 'Nema odgovarajućih rezultata.', searchOpen: 'Otvori pretraživanje', searchKindRoute: 'Stranica', searchKindProject: 'Projekt', searchKindTechnology: 'Tehnologija', searchKindDemo: 'Demo', searchKindPlatform: 'Platforma', searchKindContent: 'Sadržaj' },
+	tr: { title: 'Portfolyoda ara', close: 'Aramayı kapat', searchLabel: 'Sayfa, proje, teknoloji ve demoları ara', searchPlaceholder: '“Docker”, “Angular” veya “Tetris” deneyin', searchResults: 'Arama sonuçları', searchEmpty: 'Eşleşen sonuç yok.', searchOpen: 'Portfolyo aramasını aç', searchKindRoute: 'Sayfa', searchKindProject: 'Proje', searchKindTechnology: 'Teknoloji', searchKindDemo: 'Demo', searchKindPlatform: 'Platform', searchKindContent: 'İçerik' },
+	ar: { title: 'ابحث في المحفظة', close: 'أغلق البحث', searchLabel: 'ابحث عن الصفحات والمشاريع والتقنيات والعروض', searchPlaceholder: 'جرّب “Docker” أو “Angular” أو “Tetris”', searchResults: 'نتائج البحث', searchEmpty: 'لا توجد نتائج مطابقة.', searchOpen: 'افتح البحث', searchKindRoute: 'صفحة', searchKindProject: 'مشروع', searchKindTechnology: 'تقنية', searchKindDemo: 'عرض', searchKindPlatform: 'منصة', searchKindContent: 'محتوى' },
+	hi: { title: 'पोर्टफोलियो में खोजें', close: 'खोज बंद करें', searchLabel: 'पेज, प्रोजेक्ट, तकनीक और डेमो खोजें', searchPlaceholder: '“Docker”, “Angular” या “Tetris” खोजें', searchResults: 'खोज परिणाम', searchEmpty: 'कोई परिणाम नहीं मिला।', searchOpen: 'खोज खोलें', searchKindRoute: 'पेज', searchKindProject: 'प्रोजेक्ट', searchKindTechnology: 'तकनीक', searchKindDemo: 'डेमो', searchKindPlatform: 'प्लेटफ़ॉर्म', searchKindContent: 'सामग्री' },
+	bn: { title: 'পোর্টফোলিওতে খুঁজুন', close: 'অনুসন্ধান বন্ধ করুন', searchLabel: 'পৃষ্ঠা, প্রজেক্ট, প্রযুক্তি ও ডেমো খুঁজুন', searchPlaceholder: '“Docker”, “Angular” বা “Tetris” লিখুন', searchResults: 'অনুসন্ধানের ফলাফল', searchEmpty: 'কোনো ফলাফল মেলেনি।', searchOpen: 'অনুসন্ধান খুলুন', searchKindRoute: 'পৃষ্ঠা', searchKindProject: 'প্রজেক্ট', searchKindTechnology: 'প্রযুক্তি', searchKindDemo: 'ডেমো', searchKindPlatform: 'প্ল্যাটফর্ম', searchKindContent: 'বিষয়বস্তু' },
+	'zh-CN': { title: '搜索作品集', close: '关闭搜索', searchLabel: '搜索页面、项目、技术和演示', searchPlaceholder: '试试“Docker”“Angular”或“Tetris”', searchResults: '搜索结果', searchEmpty: '没有匹配结果。', searchOpen: '打开搜索', searchKindRoute: '页面', searchKindProject: '项目', searchKindTechnology: '技术', searchKindDemo: '演示', searchKindPlatform: '平台', searchKindContent: '内容' },
+	'zh-TW': { title: '搜尋作品集', close: '關閉搜尋', searchLabel: '搜尋頁面、專案、技術與示範', searchPlaceholder: '試試「Docker」「Angular」或「Tetris」', searchResults: '搜尋結果', searchEmpty: '沒有符合的結果。', searchOpen: '開啟搜尋', searchKindRoute: '頁面', searchKindProject: '專案', searchKindTechnology: '技術', searchKindDemo: '示範', searchKindPlatform: '平台', searchKindContent: '內容' },
+	ja: { title: 'ポートフォリオを検索', close: '検索を閉じる', searchLabel: 'ページ、プロジェクト、技術、デモを検索', searchPlaceholder: '「Docker」「Angular」「Tetris」を試す', searchResults: '検索結果', searchEmpty: '一致する結果はありません。', searchOpen: '検索を開く', searchKindRoute: 'ページ', searchKindProject: 'プロジェクト', searchKindTechnology: '技術', searchKindDemo: 'デモ', searchKindPlatform: 'プラットフォーム', searchKindContent: 'コンテンツ' },
+	ko: { title: '포트폴리오 검색', close: '검색 닫기', searchLabel: '페이지, 프로젝트, 기술, 데모 검색', searchPlaceholder: '“Docker”, “Angular”, “Tetris” 검색', searchResults: '검색 결과', searchEmpty: '일치하는 결과가 없습니다.', searchOpen: '검색 열기', searchKindRoute: '페이지', searchKindProject: '프로젝트', searchKindTechnology: '기술', searchKindDemo: '데모', searchKindPlatform: '플랫폼', searchKindContent: '콘텐츠' },
+	id: { title: 'Cari dalam portofolio', close: 'Tutup pencarian', searchLabel: 'Cari halaman, proyek, teknologi, dan demo', searchPlaceholder: 'Coba “Docker”, “Angular”, atau “Tetris”', searchResults: 'Hasil pencarian', searchEmpty: 'Tidak ada hasil yang cocok.', searchOpen: 'Buka pencarian', searchKindRoute: 'Halaman', searchKindProject: 'Proyek', searchKindTechnology: 'Teknologi', searchKindDemo: 'Demo', searchKindPlatform: 'Platform', searchKindContent: 'Konten' },
+};
+
+function buildTranslation(locale: IGlobalLocale, copy: IGlobalCopy): ITranslationMap {
+	const page = (id: keyof IGlobalCopy['pages']): { titleLead: string; titleEmphasis: string; titleTail: string; subtitle: string } => {
+		const [lead, emphasis, subtitle] = copy.pages[id];
+		return { titleLead: lead, titleEmphasis: emphasis, titleTail: '', subtitle };
+	};
+	const [homeEyebrow, homeLead, homeEmphasis, homeTail, homeSubtitle, homeIntro, homeWork, homeContact] = copy.home;
+	const localized: ITranslationMap = {
+		...en,
+		chrome: {
+			...en.chrome,
+			commandPalette: { ...en.chrome.commandPalette, ...SEARCH_COPY[locale] },
+			header: {
+				...en.chrome.header,
+				navHome: copy.nav[0], navWork: copy.nav[1], navLab: copy.nav[2], navAbout: copy.nav[3],
+				navKnowledge: copy.nav[4], navDocker: copy.nav[5], navDemos: copy.nav[6], navContact: copy.nav[7],
+			},
+			footer: { ...en.chrome.footer, availability: copy.availability },
+			skipToContent: copy.skip,
+		},
+		pages: {
+			...en.pages,
+			home: { ...en.pages.home, eyebrow: homeEyebrow, titleLead: homeLead, titleEmphasis: homeEmphasis, titleTail: homeTail, subtitle: homeSubtitle, intro: homeIntro, ctaWork: homeWork, ctaContact: homeContact },
+			work: { ...en.pages.work, ...page('work') },
+			lab: { ...en.pages.lab, ...page('lab') },
+			approach: { ...en.pages.approach, ...page('approach') },
+			knowledge: { ...en.pages.knowledge, ...page('knowledge') },
+			docker: { ...en.pages.docker, ...page('docker') },
+			demos: { ...en.pages.demos, ...page('demos') },
+			contact: { ...en.pages.contact, ...page('contact'), formSubmit: copy.send },
+		},
+	};
+	return mergeTranslationOverlay(localized, SECONDARY_PRIORITY_OVERLAYS[locale]);
+}
+
+export const GLOBAL_TRANSLATIONS = Object.fromEntries(
+	Object.entries(COPY).map(([locale, copy]) => [locale, buildTranslation(locale as IGlobalLocale, copy)]),
+) as Readonly<Record<IGlobalLocale, ITranslationMap>>;
