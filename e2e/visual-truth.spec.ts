@@ -1,13 +1,26 @@
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { expect, type Locator, type Page, test } from '@playwright/test';
+import { EARTH_TEXTURE_CATEGORIES, EARTH_TEXTURE_OPTIONS, earthCategoryLabel, earthTextureLabel } from '../src/pages/home/hero-monitor/earth-texture.catalog';
 
 const ROUTES = ['', 'work', 'lab', 'approach', 'knowledge', 'docker', 'demos', 'contact'] as const;
 const VIEWPORTS = [
 	{ name: 'desktop', width: 1440, height: 900 },
 	{ name: 'laptop', width: 1024, height: 768 },
 	{ name: 'tablet', width: 768, height: 1024 },
+	{ name: 'tablet-landscape', width: 1024, height: 600 },
 	{ name: 'smartphone', width: 390, height: 844 },
+	{ name: 'small-touch', width: 320, height: 568 },
 ] as const;
 const THEMES = ['dark', 'light', 'midnight', 'ocean', 'forest', 'sunset', 'solar', 'mono'] as const;
+const CAPTURE_ROOT = '.cache/visual-audit';
+
+async function captureVisual(page: Page, name: string): Promise<void> {
+	if (process.env['VISUAL_AUDIT_CAPTURE'] !== '1') return;
+	await mkdir(CAPTURE_ROOT, { recursive: true });
+	const safeName = name.replace(/[^a-z0-9-]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+	await page.screenshot({ path: join(CAPTURE_ROOT, `${safeName}.png`), animations: 'disabled' });
+}
 
 async function openRoute(
 	page: Page,
@@ -41,6 +54,7 @@ for (const viewport of VIEWPORTS) {
 		for (const route of ROUTES) {
 			await openRoute(page, { route });
 			await expectContained(page, `${viewport.name}/${route || 'home'}`);
+			await captureVisual(page, `route-${viewport.name}-${route || 'home'}`);
 			const body = (await page.locator('body').innerText()).trim();
 			expect(body, `${viewport.name}/${route || 'home'} has unresolved UI keys`).not.toMatch(/(?:pages|content)\.[a-z]/i);
 			const brokenImages = await page.locator('img').evaluateAll((images) =>
@@ -79,9 +93,36 @@ test('visual truth: all themes keep monitor and globe controls in the active tok
 		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
 		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 		await expectContained(page, `${theme}/globe`);
+		await captureVisual(page, `theme-${theme}-globe`);
 		await page.locator('.hero-monitor__earth-close').click();
 	}
 	expect(themeTokens.size).toBe(THEMES.length);
+});
+
+test('visual truth: all 30 globe presets render in every device class', async ({ page }) => {
+	test.setTimeout(300_000);
+	for (const viewport of VIEWPORTS) {
+		await page.setViewportSize({ width: viewport.width, height: viewport.height });
+		await openRoute(page);
+		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
+		for (const category of EARTH_TEXTURE_CATEGORIES) {
+			await page.getByRole('tab', { name: earthCategoryLabel('es', category), exact: true }).click();
+			for (const option of EARTH_TEXTURE_OPTIONS.filter((entry) => entry.category === category)) {
+				const presetButton = page.getByRole('button', { name: earthTextureLabel('es', option.id), exact: true });
+				await presetButton.focus();
+				await presetButton.press('Enter');
+				await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
+				const canvasBox = await page.locator('app-earth-globe canvas').boundingBox();
+				expect(canvasBox, `${viewport.name}/${option.id} canvas`).not.toBeNull();
+				expect(canvasBox!.width).toBeGreaterThan(0);
+				expect(canvasBox!.height).toBeGreaterThan(0);
+				await captureVisual(page, `preset-${viewport.name}-${option.id}`);
+			}
+		}
+		await page.locator('.hero-monitor__earth-close').click();
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'clouds');
+	}
 });
 
 test('visual truth: interactive product surfaces keep an explicit fullscreen exit path', async ({ page }) => {
@@ -153,7 +194,7 @@ test('visual truth: Approach expands one capability and explains six distinct in
 });
 
 test('visual truth: priority routes stay contained in all twenty deep locales', async ({ page }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(480_000);
 	await page.setViewportSize({ width: 390, height: 844 });
 	const locales = ['en', 'es', 'fr', 'de', 'it', 'pt-PT', 'pt-BR', 'ru', 'uk', 'pl', 'hr', 'tr', 'ar', 'hi', 'bn', 'zh-CN', 'zh-TW', 'ja', 'ko', 'id'] as const;
 	for (const locale of locales) {
@@ -161,6 +202,7 @@ test('visual truth: priority routes stay contained in all twenty deep locales', 
 			await openRoute(page, { locale, route });
 			await expectContained(page, `${locale}/${route}`);
 			await expect(page.locator('.route-stage')).not.toContainText(/pages\.\w+\./);
+			await captureVisual(page, `locale-${locale}-${route}`);
 		}
 	}
 });
@@ -225,6 +267,7 @@ test('visual truth: coarse touch input remains direct at 320px', async ({ browse
 		await penalty.locator('.penalty-game__controls button').tap();
 		await expect(penalty.locator('[data-hud-lives]')).toHaveText('4');
 		await expectContained(page, '320px/coarse-touch/demos');
+		await captureVisual(page, 'coarse-touch-320-demos-penalty');
 	} finally {
 		await context.close();
 	}

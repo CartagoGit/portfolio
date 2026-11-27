@@ -52,6 +52,8 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "The audit names failures with preset, route, theme, viewport and device class instead of relying on screenshots alone."
   - "No visual state is accepted merely because unit tests or build pass."
   - "Documented baselines distinguish real imagery, owned art and procedural/artist-impression visuals."
+  - "The executable matrix covers six viewports (1440×900, 1024×768, 768×1024, 1024×600, 390×844 and 320×568 coarse touch), all eight themes and all 20 locales; named captures include all 30 globe presets and every route."
+  - "Every interactive state is exercised with pointer, keyboard and native touch as applicable, including hover/focus/press, loading/error/success, reset, reduced motion and fullscreen exit."
 
 ### S2 — Make globe textures and 3D objects visually truthful
 - **Status**: pending
@@ -64,6 +66,8 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "Pluto has its recognisable brighter region and asymmetrical silhouette treatment; Saturn rings are coherent, correctly scaled and rotate/share orientation with Saturn."
   - "Logo, banner and portrait presets consume the author's canonical portfolio artwork; the portrait fills and crops the figure correctly instead of appearing as an incidental decal."
   - "A separate random-figure section exposes non-spherical and specialty renderers with the corresponding texture, with honest artist-impression labels where observation data is unavailable."
+  - "The figure catalogue consumes real CC0/non-restrictive 3D models, renders and PBR textures from downloaded sources, optimized locally and attributed with author, licence, source, bytes and use; it is not limited to shader variations of a sphere."
+  - "At least one downloaded model is rendered as its own triangulated object with truthful lighting, bounds, camera fit and pointer/keyboard/touch orientation; a stylised fallback is distinct and labelled."
   - "The control copy and category labels never overlap at laptop, tablet or smartphone sizes."
   - "Closing a figure is labelled 'Cerrar figura'; dismissing the panel always resets the active preset and geometry to Earth while leaving rings and specialty state unmounted."
   - "Sports patterns wrap without seams or impossible panel distortion; logo/banner assets remain readable."
@@ -97,10 +101,12 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "Six visually substantial showcases ship; depth 3D is drag/touch manipulable, data flow can be rerouted/paused, live signal can be tuned, and three additional interactions explore related engineering ideas."
   - "The showcase layer includes a compact explanation of the engineering problem, reset, keyboard/touch alternatives and an animated transition between tabs."
   - "A separate arcade section ships six varied mini-games using the portfolio's product visual language and project-real identities."
+  - "A distinct seventh arcade game is a real rendered 3D experience: imported or original 3D geometry, camera/projection, 3D collision or targeting, score/lives/result, restart, fullscreen and keyboard/touch controls; CSS perspective alone does not qualify."
   - "Every mini-game supports a clear start/restart loop, score and/or lives, tabs, keyboard controls where useful, direct touch controls and a visual result state that invites another round."
   - "Premium showcases and games expose fullscreen/normal-size controls without blocking vertical page scrolling outside the active fullscreen experience."
   - "Project-like game cards use animated backgrounds with the same quality bar as Work while preserving a distinct game identity."
   - "All visible and ARIA copy stays in EN/ES/FR/DE parity; missing copy fails parity checks."
+  - "All visible and ARIA game/showcase copy owns native strings or reviewed locale overlays for all 20 shipped locales; RTL and CJK layout receive explicit visual coverage rather than translation fallbacks."
 
 ### S5 — Create one canonical icon and visual-identity system
 - **Status**: pending
@@ -124,6 +130,7 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "Every interactive panel, showcase, game and dashboard monitor has an explicit fullscreen button and a normal-size/exit button in all device modes."
   - "Fullscreen owns gesture capture only while active; normal mode never traps vertical touch scrolling, and a persistent exit path remains keyboard-, pointer- and touch-accessible."
   - "Named tests cover laptop, tablet portrait, 390px smartphone and a very-small/coarse-touch state without horizontal overflow or inaccessible actions."
+  - "Named tests also cover tablet landscape and 320px coarse touch; button geometry, control overlap, touch hit targets and vertical page scroll are observed in both normal and fullscreen states."
   - "All themes are exercised with the same controls and no contrast/legibility regressions."
 
 ### S7 — Extend intentional, route-specific motion across every portfolio page
@@ -213,3 +220,12 @@ The earlier implementation improved test volume and structure, but human review 
   - "The matrix proves header/footer hidden, unrelated elements inert, focus exit visible and zero deformation for every fullscreen owner."
   - "Named browser evidence checks every Demos/Lab control, search results, locale rows, Approach transitions and Docker hovers."
   - "A green build alone never closes visual slices; named route/theme/device outcomes remain required."
+  - "Final acceptance records all 20 locales, all eight themes, six viewports, all 30 figure presets, the new 3D game and every route-specific animation; only i00002 S2 deployment remains open afterwards."
+
+## exhaustive human brief — 2026-11-27 expansion
+
+- Review every section step by step; every card/control owns hover, focus, press, selected, loading and result motion where those states exist.
+- No permanent accent or dark/light surface is acceptable when it contradicts the active theme; every remaining literal colour must be intentional technical imagery, not generic component paint.
+- The portfolio must show original engineering range through useful sections, downloads/assets, rendered figures and games—not repeated decorative motion.
+- A 3D game and downloaded model/texture/render assets must be lightweight, lazy-loaded, attributed and verified across desktop, laptop, tablet landscape/portrait and smartphone.
+- Proposal closure must leave only deployment jobs/workflow work in `i00002 S2`; product, visual, asset, locale and interaction blockers must be done or intentionally retired by an explicit replacement proposal.
