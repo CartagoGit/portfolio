@@ -52,6 +52,14 @@ No build, unit count, screenshot or automation result closes these checks on its
 - Error paths show a labelled, localized wireframe fallback instead of a blank canvas; reset returns the renderer and category state to Earth.
 - Visual inspection is complete at the agent/browser level. The human review gate and the remaining 320 px rail hit-geometry/theme-colour blockers owned by S3 remain open.
 
+## S3 monitor correction — 2026-11-27
+
+- The executable audit now passes **15/15 visual tests** and writes **375 named PNG captures**. Its manifest covers 48 route/viewport captures, 40 theme/model captures, 204 preset/viewport captures, 80 locale/route captures and three named interaction states.
+- The monitor banner keeps its native `1023:300` ratio at full height. The globe control owns only its grid column, the action rail receives only the remaining width and the 390/320 px variants place the controls on a separate row without horizontal container overflow.
+- Platform and technology previews now combine the locale-specific purpose with portfolio usage context. Kind remains small metadata; the status badge is a compact token-derived element, while the useful description owns the visual hierarchy.
+- The globe opens on `pointerdown` for stable mouse/touch behavior and keeps `click` for keyboard activation. `EarthDepthFacade` makes the opening idempotent so a trailing click cannot restart the 560 ms choreography. The complete 34-preset × six-device capture run passes after this race fix.
+- This is technical/browser evidence. Visible human acceptance remains pending and must be recorded separately.
+
 ## Asset truth baseline
 
 - Current raster globe display assets remain the local 4096×2048 set documented in `public/images/ATTRIBUTION.md`.

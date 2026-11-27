@@ -13,7 +13,7 @@ export class EarthDepthFacade {
 	private _paintFallback?: number;
 
 	showInFront(): void {
-		if (this.state() === 'front') return;
+		if (this.state() !== 'behind') return;
 		const generation = this._restartTransition();
 		this.state.set('out-behind');
 		this._transitionTimer = window.setTimeout(() => {

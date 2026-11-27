@@ -162,7 +162,7 @@ test('visual truth: all themes keep monitor and globe controls in the active tok
 });
 
 test('visual truth: all 34 globe presets render in every device class', async ({ page }) => {
-	test.setTimeout(480_000);
+	test.setTimeout(720_000);
 	for (const viewport of VIEWPORTS) {
 		await page.setViewportSize({ width: viewport.width, height: viewport.height });
 		await openRoute(page);

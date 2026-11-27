@@ -70,6 +70,7 @@
 				class="hero-monitor__motion-control"
 				type="button"
 				[attr.aria-pressed]="earthDepth() === 'front'"
+				(pointerdown)="showEarthInFront($event)"
 				(click)="earth.changeMotion(); showEarthInFront($event)"
 				[attr.aria-label]="'pages.home.earthOpen' | translate"></button>
 			<a

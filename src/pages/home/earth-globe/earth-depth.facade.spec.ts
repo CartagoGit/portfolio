@@ -29,6 +29,17 @@ describe('EarthDepthFacade', () => {
 		expect(facade.state()).toBe('front');
 	});
 
+	it('does not restart a forward transition on pointerdown and click', () => {
+		const facade = new EarthDepthFacade();
+		facade.showInFront();
+		vi.advanceTimersByTime(200);
+		facade.showInFront();
+		vi.advanceTimersByTime(360);
+		expect(facade.state()).toBe('front-ready');
+		vi.advanceTimersByTime(50);
+		expect(facade.state()).toBe('front');
+	});
+
 	it('can return from a transition that is still on its way forward', () => {
 		const facade = new EarthDepthFacade();
 		facade.showInFront();
