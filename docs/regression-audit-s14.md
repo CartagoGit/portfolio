@@ -1,8 +1,8 @@
 # S14 regression and responsive evidence
 
-Date: 2026-11-26
+Date: 2026-11-27
 
-S14 is backed by named assertions rather than screenshot-only evidence. The full Playwright matrix ran with one worker and finished with **27/27 tests passing** in 7.1 minutes.
+S14 is backed by named assertions rather than screenshot-only evidence. The full Playwright matrix ran with two workers and finished with **28/28 tests passing** in 5.9 minutes.
 
 ## Named product coverage
 
@@ -38,7 +38,7 @@ The same run also covered:
 
 The current integrated evidence is:
 
-- app suite: **377/377 tests** across 65 files;
+- app suite: **379/379 tests** across 66 files;
 - portfolio-content plugin: **51/51 tests** across 15 files;
 - production build: **160 static routes prerendered**;
 - bundle budget: **29 JS chunks**, initial ≤ 360000 bytes, product lazy ≤ 260000 bytes and the shared 20-locale corpus ≤ 760000 bytes;
