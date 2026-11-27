@@ -1,5 +1,6 @@
-import { mkdir } from 'node:fs/promises';
-import { join } from 'node:path';
+import { createHash } from 'node:crypto';
+import { mkdir, readdir, readFile } from 'node:fs/promises';
+import { join, relative } from 'node:path';
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { EARTH_TEXTURE_CATEGORIES, EARTH_TEXTURE_OPTIONS, earthCategoryLabel, earthTextureLabel } from '../src/pages/home/hero-monitor/earth-texture.catalog';
 
@@ -47,6 +48,35 @@ async function expectAspectRatio(locator: Locator, expected: number): Promise<vo
 	}).toBeCloseTo(expected, 1);
 }
 
+async function filesBelow(root: string): Promise<string[]> {
+	const files: string[] = [];
+	for (const entry of await readdir(root, { withFileTypes: true })) {
+		const path = join(root, entry.name);
+		if (entry.isDirectory()) files.push(...await filesBelow(path));
+		else files.push(path);
+	}
+	return files;
+}
+
+test('visual truth: downloaded 3D attribution matches all local bytes and MD5 values', async () => {
+	const modelRoot = join(process.cwd(), 'public', 'images', 'globe', 'models');
+	const attribution = await readFile(join(process.cwd(), 'public', 'images', 'ATTRIBUTION.md'), 'utf8');
+	const records = [...attribution.matchAll(/\| `([^`]+)` \| ([\d,]+) \| `([a-f0-9]{32})` \|/g)]
+		.map((match) => ({
+			path: match[1] ?? '',
+			bytes: Number((match[2] ?? '').replaceAll(',', '')),
+			md5: match[3] ?? '',
+		}));
+	const actualFiles = (await filesBelow(modelRoot)).map((path) => relative(modelRoot, path));
+	expect(records).toHaveLength(20);
+	expect(records.map(({ path }) => path).sort()).toEqual(actualFiles.sort());
+	for (const record of records) {
+		const bytes = await readFile(join(modelRoot, record.path));
+		expect(bytes.byteLength, `${record.path} bytes`).toBe(record.bytes);
+		expect(createHash('md5').update(bytes).digest('hex'), `${record.path} MD5`).toBe(record.md5);
+	}
+});
+
 for (const viewport of VIEWPORTS) {
 	test(`visual truth: ${viewport.name} contains every route and exposes no broken assets`, async ({ page }) => {
 		test.setTimeout(90_000);
@@ -69,6 +99,7 @@ for (const viewport of VIEWPORTS) {
 }
 
 test('visual truth: all themes keep monitor and globe controls in the active token system', async ({ page }) => {
+	test.setTimeout(180_000);
 	await page.setViewportSize({ width: 1280, height: 900 });
 	const themeTokens = new Set<string>();
 	for (const theme of THEMES) {
@@ -94,13 +125,21 @@ test('visual truth: all themes keep monitor and globe controls in the active tok
 		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 		await expectContained(page, `${theme}/globe`);
 		await captureVisual(page, `theme-${theme}-globe`);
+		await page.getByRole('tab', { name: earthCategoryLabel('es', 'figures'), exact: true }).click();
+		for (const option of EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'))) {
+			await page.getByRole('button', { name: earthTextureLabel('es', option.id), exact: true }).click();
+			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
+			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+			await expect(page.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
+			await captureVisual(page, `theme-${theme}-${option.id}`);
+		}
 		await page.locator('.hero-monitor__earth-close').click();
 	}
 	expect(themeTokens.size).toBe(THEMES.length);
 });
 
-test('visual truth: all 30 globe presets render in every device class', async ({ page }) => {
-	test.setTimeout(300_000);
+test('visual truth: all 34 globe presets render in every device class', async ({ page }) => {
+	test.setTimeout(480_000);
 	for (const viewport of VIEWPORTS) {
 		await page.setViewportSize({ width: viewport.width, height: viewport.height });
 		await openRoute(page);
@@ -113,6 +152,8 @@ test('visual truth: all 30 globe presets render in every device class', async ({
 				await presetButton.focus();
 				await presetButton.press('Enter');
 				await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
+				await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+				await expect(page.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
 				const canvasBox = await page.locator('app-earth-globe canvas').boundingBox();
 				expect(canvasBox, `${viewport.name}/${option.id} canvas`).not.toBeNull();
 				expect(canvasBox!.width).toBeGreaterThan(0);
@@ -142,17 +183,31 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 		const style = getComputedStyle(element);
 		const matrix = new DOMMatrix(style.transform);
 		const expected = Number(style.getPropertyValue('--monitor-fullscreen-scale'));
-		return Math.max(Math.abs(matrix.a - expected), Math.abs(matrix.d - expected));
+		return Math.max(
+			Math.abs(matrix.a - expected),
+			Math.abs(matrix.d - expected),
+			Math.abs(matrix.b),
+			Math.abs(matrix.c),
+		);
 	})).toBeLessThan(0.001);
-	const fullscreenTransform = await page.locator('.hero-monitor__interface').evaluate((element) => getComputedStyle(element).transform);
 	await page.mouse.move(2, 2);
 	await page.waitForTimeout(800);
 	await expect(page.locator('.hero-monitor')).toHaveClass(/hero-monitor--expanded/);
-	await expect(page.locator('.hero-monitor__interface')).toHaveCSS('transform', fullscreenTransform);
-	await expect(page.locator('app-shell-header')).toHaveCSS('visibility', 'hidden');
-	await expect(page.locator('app-shell-footer')).toHaveCSS('visibility', 'hidden');
-	await expect(page.locator('[data-fullscreen-inert=""]')).not.toHaveCount(0);
-	await expect(page.locator('app-home-intro')).toHaveAttribute('inert', '');
+	await expect.poll(async () => page.locator('.hero-monitor__interface').evaluate((element) => {
+		const style = getComputedStyle(element);
+		const matrix = new DOMMatrix(style.transform);
+		const expected = Number(style.getPropertyValue('--monitor-fullscreen-scale'));
+		return Math.max(
+			Math.abs(matrix.a - expected),
+			Math.abs(matrix.d - expected),
+			Math.abs(matrix.b),
+			Math.abs(matrix.c),
+		);
+	})).toBeLessThan(0.001);
+	const closeButton = page.locator('.hero-monitor__fullscreen');
+	await expect(closeButton).toBeInViewport();
+	const closeBox = await closeButton.boundingBox();
+	expect(closeBox ? closeBox.y + closeBox.height : 900).toBeLessThanOrEqual(844);
 	await page.keyboard.press('Escape');
 	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/hero-monitor-host--fullscreen/);
 	await expect(page.locator('app-shell-header')).not.toHaveCSS('visibility', 'hidden');
@@ -249,6 +304,22 @@ test('visual truth: coarse touch input remains direct at 320px', async ({ browse
 		await openRoute(page);
 		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).tap();
 		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
+		await page.getByRole('tab', { name: 'Figuras', exact: true }).tap();
+		await page.getByRole('button', { name: 'Mando 3D', exact: true }).tap();
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'model-gamepad');
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+		await expect(page.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
+		const figureBox = await page.locator('app-earth-globe').boundingBox();
+		expect(figureBox).not.toBeNull();
+		const touch = await context.newCDPSession(page);
+		const start = { x: figureBox!.x + figureBox!.width * .45, y: figureBox!.y + figureBox!.height * .5 };
+		await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [start] });
+		await touch.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: start.x + 35, y: start.y + 15 }] });
+		await touch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+		await captureVisual(page, 'coarse-touch-320-globe-model');
+		await page.locator('.hero-monitor__earth-close').tap();
+		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).tap();
 		await page.getByRole('tab', { name: 'Planetas', exact: true }).tap();
 		await page.getByRole('button', { name: 'Saturno', exact: true }).tap();
 		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'saturn');

@@ -55,7 +55,7 @@ test('S14-02 globe catalogue, token theme, stacking and return are stable', asyn
 	await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 
 	await expect(page.getByRole('tab')).toHaveCount(6);
-	const expectedCounts = [6, 10, 3, 5, 3, 3];
+	const expectedCounts = [6, 10, 3, 5, 7, 3];
 	let total = 0;
 	for (let category = 0; category < expectedCounts.length; category += 1) {
 		await page.locator('.hero-monitor__earth-categories button').nth(category).click();
@@ -63,7 +63,7 @@ test('S14-02 globe catalogue, token theme, stacking and return are stable', asyn
 		await expect(buttons).toHaveCount(expectedCounts[category] ?? 0);
 		total += await buttons.count();
 	}
-	expect(total, 'complete globe preset catalogue').toBe(30);
+	expect(total, 'complete globe preset catalogue').toBe(34);
 
 	const themeMatch = await page.evaluate(() => {
 		const root = getComputedStyle(document.documentElement);
@@ -196,4 +196,57 @@ test('S14-07 Contact stays viewport-sized with honest delivery and layered portr
 	await page.locator('.contact-portrait__frame').hover();
 	await expect(page.locator('.contact-portrait img')).toHaveCSS('transform', 'matrix(1.015, 0, 0, 1.015, 0, 0)');
 	await expect(page.locator('.contact-portrait__inner-aura')).not.toHaveCSS('opacity', '0');
+});
+
+test('S2-01 downloaded meshes render, rotate, restore and remain recognisable', async ({ page }) => {
+	const failures: string[] = [];
+	page.on('requestfailed', (request) => failures.push(request.url()));
+	await openSpanishRoute(page);
+	await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+	await page.getByRole('tab', { name: 'Figuras', exact: true }).click();
+	const models = [
+		['Mando 3D', 'model-gamepad'],
+		['Balón americano 3D', 'model-football'],
+		['Elefante tallado 3D', 'model-elephant'],
+		['Roca lunar 3D', 'model-moon-rock'],
+	] as const;
+	for (const [label, style] of models) {
+		await page.getByRole('button', { name: label, exact: true }).click();
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', style);
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+		await expect(page.locator('app-earth-globe canvas')).toHaveClass(/is-active/);
+		await expect(page.locator('.hero-monitor__earth-origin')).toContainText('Poly Haven CC0');
+	}
+	const figure = page.locator('app-earth-globe');
+	await figure.focus();
+	await page.keyboard.press('ArrowRight');
+	await page.keyboard.press('ArrowUp');
+	const box = await figure.boundingBox();
+	expect(box).not.toBeNull();
+	await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+	await page.mouse.down();
+	await page.mouse.move(box!.x + box!.width * .7, box!.y + box!.height * .62, { steps: 4 });
+	await page.mouse.up();
+	await expect(figure).toHaveAttribute('data-render-state', 'ready');
+	await page.locator('.hero-monitor__earth-close').click();
+	await expect(figure).toHaveAttribute('data-texture-style', 'clouds');
+	await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+	await page.getByRole('tab', { name: 'Figuras', exact: true }).click();
+	await page.getByRole('button', { name: 'Mando 3D', exact: true }).click();
+	await expect(figure).toHaveAttribute('data-render-state', 'ready');
+	expect(failures).toEqual([]);
+});
+
+test('S2-02 a failed 3D asset exposes a labelled fallback instead of a blank canvas', async ({ page }) => {
+	await page.route('**/images/globe/models/gamepad/**', (route) => route.abort());
+	await openSpanishRoute(page);
+	await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+	await page.getByRole('tab', { name: 'Figuras', exact: true }).click();
+	await page.getByRole('button', { name: 'Mando 3D', exact: true }).click();
+	await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'model-gamepad');
+	await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'error');
+	await expect(page.locator('.earth-globe__status')).toContainText('No se pudo renderizar la figura 3D');
+	await expect(page.locator('.earth-globe__status-fallback')).toHaveCount(1);
+	await page.getByRole('button', { name: 'Balón americano 3D', exact: true }).click();
+	await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
 });

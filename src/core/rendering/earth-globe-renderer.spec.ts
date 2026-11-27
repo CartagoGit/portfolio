@@ -87,6 +87,9 @@ describe('renderEarthFrame', () => {
 			UNSIGNED_BYTE: 20,
 			COLOR_BUFFER_BIT: 21,
 			TRIANGLE_STRIP: 22,
+			DEPTH_TEST: 23,
+			CULL_FACE: 24,
+			BLEND: 25,
 			createShader: vi.fn(() => shader),
 			shaderSource: vi.fn(),
 			compileShader: vi.fn(),
@@ -115,6 +118,7 @@ describe('renderEarthFrame', () => {
 			viewport: vi.fn(),
 			clearColor: vi.fn(),
 			clear: vi.fn(),
+			disable: vi.fn(),
 			uniform4f: vi.fn(),
 			drawArrays: vi.fn(),
 			isContextLost: vi.fn(() => false),
@@ -130,6 +134,12 @@ describe('renderEarthFrame', () => {
 			image: texture,
 			frame: { angle: 0, axisX: 0, axisY: 1, axisZ: 0, rotation: [0, 0, 0, 1], foreground: true },
 		});
+		expect(context.disable).toHaveBeenCalledWith(context.DEPTH_TEST);
+		expect(context.disable).toHaveBeenCalledWith(context.CULL_FACE);
+		expect(context.disable).toHaveBeenCalledWith(context.BLEND);
+		expect(context.bindBuffer).toHaveBeenLastCalledWith(context.ARRAY_BUFFER, buffer);
+		expect(context.bindTexture).toHaveBeenLastCalledWith(context.TEXTURE_2D, textureHandle);
+		expect(context.vertexAttribPointer).toHaveBeenLastCalledWith(0, 2, context.FLOAT, false, 0, 0);
 		destroyEarthRenderer(canvas);
 		destroyEarthRenderer(canvas);
 
@@ -200,5 +210,172 @@ describe('renderEarthFrame', () => {
 			consoleError.mockRestore();
 			removeListener.mockRestore();
 		}
+	});
+
+	it('should return false on render failure', () => {
+		const canvas = document.createElement('canvas');
+		Object.defineProperty(canvas, 'clientWidth', { value: 320 });
+		const texture = document.createElement('canvas');
+		const shader = {} as WebGLShader;
+		const program = {} as WebGLProgram;
+		const textureHandle = {} as WebGLTexture;
+		const buffer = {} as WebGLBuffer;
+		const deletes = {
+			shader: vi.fn(),
+			program: vi.fn(),
+			texture: vi.fn(),
+			buffer: vi.fn(),
+		};
+		const context = {
+			VERTEX_SHADER: 1,
+			FRAGMENT_SHADER: 2,
+			COMPILE_STATUS: 3,
+			LINK_STATUS: 4,
+			ARRAY_BUFFER: 5,
+			STATIC_DRAW: 6,
+			FLOAT: 7,
+			TEXTURE0: 8,
+			TEXTURE_2D: 9,
+			TEXTURE_MIN_FILTER: 10,
+			TEXTURE_MAG_FILTER: 11,
+			LINEAR_MIPMAP_LINEAR: 12,
+			LINEAR: 13,
+			TEXTURE_WRAP_S: 14,
+			TEXTURE_WRAP_T: 15,
+			REPEAT: 16,
+			CLAMP_TO_EDGE: 17,
+			UNPACK_FLIP_Y_WEBGL: 18,
+			RGBA: 19,
+			UNSIGNED_BYTE: 20,
+			COLOR_BUFFER_BIT: 21,
+			TRIANGLE_STRIP: 22,
+			DEPTH_TEST: 23,
+			CULL_FACE: 24,
+			BLEND: 25,
+			createShader: vi.fn(() => shader),
+			shaderSource: vi.fn(),
+			compileShader: vi.fn(),
+			getShaderParameter: vi.fn(() => true),
+			createProgram: vi.fn(() => program),
+			createTexture: vi.fn(() => textureHandle),
+			createBuffer: vi.fn(() => buffer),
+			attachShader: vi.fn(),
+			linkProgram: vi.fn(),
+			getProgramParameter: vi.fn(() => false),
+			getProgramInfoLog: vi.fn(() => 'link failed'),
+			deleteShader: deletes.shader,
+			deleteProgram: deletes.program,
+			deleteTexture: deletes.texture,
+			deleteBuffer: deletes.buffer,
+		} as unknown as WebGLRenderingContext;
+		canvas.getContext = vi.fn(() => context) as unknown as typeof canvas.getContext;
+
+		expect(
+			renderEarthFrame({
+				canvas,
+				image: texture,
+				frame: {
+					angle: 0,
+					axisX: 0,
+					axisY: 1,
+					axisZ: 0,
+					foreground: true,
+				},
+			}),
+		).toBe(false);
+	});
+
+	it('should return true on successful render', () => {
+		const canvas = document.createElement('canvas');
+		Object.defineProperty(canvas, 'clientWidth', { value: 320 });
+		const texture = document.createElement('canvas');
+		const shader = {} as WebGLShader;
+		const program = {} as WebGLProgram;
+		const textureHandle = {} as WebGLTexture;
+		const buffer = {} as WebGLBuffer;
+		const deletes = {
+			shader: vi.fn(),
+			program: vi.fn(),
+			texture: vi.fn(),
+			buffer: vi.fn(),
+		};
+		const context = {
+			VERTEX_SHADER: 1,
+			FRAGMENT_SHADER: 2,
+			COMPILE_STATUS: 3,
+			LINK_STATUS: 4,
+			ARRAY_BUFFER: 5,
+			STATIC_DRAW: 6,
+			FLOAT: 7,
+			TEXTURE0: 8,
+			TEXTURE_2D: 9,
+			TEXTURE_MIN_FILTER: 10,
+			TEXTURE_MAG_FILTER: 11,
+			LINEAR_MIPMAP_LINEAR: 12,
+			LINEAR: 13,
+			TEXTURE_WRAP_S: 14,
+			TEXTURE_WRAP_T: 15,
+			REPEAT: 16,
+			CLAMP_TO_EDGE: 17,
+			UNPACK_FLIP_Y_WEBGL: 18,
+			RGBA: 19,
+			UNSIGNED_BYTE: 20,
+			COLOR_BUFFER_BIT: 21,
+			TRIANGLE_STRIP: 22,
+			DEPTH_TEST: 23,
+			CULL_FACE: 24,
+			BLEND: 25,
+			createShader: vi.fn(() => shader),
+			shaderSource: vi.fn(),
+			compileShader: vi.fn(),
+			getShaderParameter: vi.fn(() => true),
+			createProgram: vi.fn(() => program),
+			createTexture: vi.fn(() => textureHandle),
+			createBuffer: vi.fn(() => buffer),
+			attachShader: vi.fn(),
+			linkProgram: vi.fn(),
+			getProgramParameter: vi.fn(() => true),
+			getAttribLocation: vi.fn(() => 0),
+			getUniformLocation: vi.fn(() => ({})),
+			bindBuffer: vi.fn(),
+			bufferData: vi.fn(),
+			useProgram: vi.fn(),
+			enableVertexAttribArray: vi.fn(),
+			vertexAttribPointer: vi.fn(),
+			activeTexture: vi.fn(),
+			bindTexture: vi.fn(),
+			pixelStorei: vi.fn(),
+			texParameteri: vi.fn(),
+			texImage2D: vi.fn(),
+			generateMipmap: vi.fn(),
+			getExtension: vi.fn(() => null),
+			uniform1i: vi.fn(),
+			viewport: vi.fn(),
+			clearColor: vi.fn(),
+			clear: vi.fn(),
+			disable: vi.fn(),
+			uniform4f: vi.fn(),
+			drawArrays: vi.fn(),
+			isContextLost: vi.fn(() => false),
+			deleteShader: deletes.shader,
+			deleteProgram: deletes.program,
+			deleteTexture: deletes.texture,
+			deleteBuffer: deletes.buffer,
+		} as unknown as WebGLRenderingContext;
+		canvas.getContext = vi.fn(() => context) as unknown as typeof canvas.getContext;
+
+		expect(
+			renderEarthFrame({
+				canvas,
+				image: texture,
+				frame: {
+					angle: 0,
+					axisX: 0,
+					axisY: 1,
+					axisZ: 0,
+					foreground: true,
+				},
+			}),
+		).toBe(true);
 	});
 });

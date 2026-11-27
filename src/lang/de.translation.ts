@@ -121,6 +121,8 @@ export const de: ITranslationMap = {
 			earthTextureTerrain: 'Relief',
 			earthTextureInfrared: 'Infrarot',
 			earthDragHint: 'Ziehen und loslassen, damit sich der Globus weiterdreht.',
+			earthModelLoading: '3D-Figur wird geladen…',
+			earthModelError: 'Die 3D-Figur konnte nicht dargestellt werden. Wähle eine andere Figur.',
 			monitorChoose: 'Wähle ein Projekt für verifizierten Umfang und Status. Nutze die Steuerelemente für die visuelle Demo.',
 			monitorOpen: 'Ziel öffnen ↗',
 			monitorProjectStatus: 'Öffentliches Open-Source-Projekt',

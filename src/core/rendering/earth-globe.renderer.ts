@@ -20,6 +20,7 @@ interface IGlobeProgram {
 	vertex: WebGLShader;
 	fragment: WebGLShader;
 	image: HTMLCanvasElement;
+	position: number;
 	rotation: WebGLUniformLocation;
 	textureEffect: WebGLUniformLocation;
 }
@@ -50,13 +51,13 @@ export function renderEarthFrame(args: {
 	canvas: HTMLCanvasElement;
 	image: HTMLCanvasElement;
 	frame: IEarthFrame;
-}): void {
+}): boolean {
 	let renderer = renderers.get(args.canvas);
 	if (!renderer) {
 		renderer = new EarthRenderer(args.canvas);
 		renderers.set(args.canvas, renderer);
 	}
-	renderer.render(args.image, args.frame);
+	return renderer.render(args.image, args.frame);
 }
 
 /** Releases all WebGL resources and context listeners owned by a canvas. */
@@ -90,8 +91,8 @@ export class EarthRenderer {
 	};
 
 	/** Updates the rendering surface and draws the current frame. */
-	public render(image: HTMLCanvasElement, frame: IEarthFrame): void {
-		if (this._destroyed || this._contextLost) return;
+	public render(image: HTMLCanvasElement, frame: IEarthFrame): boolean {
+		if (this._destroyed || this._contextLost) return false;
 		const { canvas } = this;
 		const deviceScale = Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2.8);
 		const rect = canvas.getBoundingClientRect();
@@ -107,16 +108,31 @@ export class EarthRenderer {
 		}
 
 		const globeProgram = this.getProgram(image);
-		if (!globeProgram) return;
+		if (!globeProgram) return false;
 
 		const { context } = globeProgram;
-		if (context.isContextLost?.()) return;
+		if (context.isContextLost?.()) return false;
 
 		const rotation = normalizedFrameRotation(frame);
 		context.viewport(0, 0, size, size);
 		context.clearColor(0, 0, 0, 0);
 		context.clear(context.COLOR_BUFFER_BIT);
+		context.disable(context.DEPTH_TEST);
+		context.disable(context.CULL_FACE);
+		context.disable(context.BLEND);
 		context.useProgram(globeProgram.program);
+		context.bindBuffer(context.ARRAY_BUFFER, globeProgram.buffer);
+		context.enableVertexAttribArray(globeProgram.position);
+		context.vertexAttribPointer(
+			globeProgram.position,
+			2,
+			context.FLOAT,
+			false,
+			0,
+			0,
+		);
+		context.activeTexture(context.TEXTURE0);
+		context.bindTexture(context.TEXTURE_2D, globeProgram.texture);
 		context.uniform4f(
 			globeProgram.rotation,
 			rotation[0],
@@ -129,6 +145,7 @@ export class EarthRenderer {
 			textureEffectIndex(frame.textureStyle)
 		);
 		context.drawArrays(context.TRIANGLE_STRIP, 0, 4);
+		return true;
 	}
 
 	private getProgram(image: HTMLCanvasElement): IGlobeProgram | null {
@@ -240,6 +257,7 @@ export class EarthRenderer {
 			vertex,
 			fragment,
 			image,
+			position,
 			rotation,
 			textureEffect,
 		};

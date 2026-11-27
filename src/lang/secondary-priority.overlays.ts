@@ -1,4 +1,4 @@
-import type { IChartType, IEarthTextureStyle } from '../domain/types.interface';
+import type { IChartType, IEarthTextureOrigin, IEarthTextureStyle } from '../domain/types.interface';
 import type { ISecondaryChartLabels, ISecondaryLocale, ISecondaryLocalePack, ITranslationOverlay } from './secondary-locales.types';
 import { ar } from './secondary-locales/ar.translation';
 import { bn } from './secondary-locales/bn.translation';
@@ -74,7 +74,7 @@ const DEEP_COMPLETIONS: Readonly<Partial<Record<ISecondaryLocale, ITranslationOv
 		pages: {
 			home: { panelOverviewDetail: 'MCP poslužitelj neovisan o projektu s jasnim mogućnostima i tijekovima dodataka za agente.', panelWorkflowsDetail: 'Statička analiza API izvora s izvozom za Postman, Bruno, Insomnia, HAR, OpenAPI i cURL.', panelQualityDetail: 'TypeScript knjižnica modeliranja, pretvorbe i provjere s iscrpnom Vitest površinom.', panelMobileDetail: 'Objavljeni TypeScript CLI i paket za šifriranje ključeva i datoteka okruženja.', panelToolingDetail: 'Dvojezični Vue CV potvrđen Zodom i podešen za stvarni papirni ispis.', panelDeliveryDetail: 'Lokalni Tauri i SQLite desktop upravitelj bez računa u oblaku ili telemetrije.', monitorChartSignal: 'signal proizvoda / 2026' },
 			lab: { metricProductLabel: 'Signal proizvoda', metricProductTitle: 'Nadzorna ploča treba otkriti odluku.', metricProductValueLabel: 'jasnoća tijeka', metricProductNote: 'Signali se grupiraju po tijeku, a ne po metričkoj vrijednosti za dojam.', metricQualityLabel: 'Signal kvalitete', metricQualityTitle: 'Kvaliteta je vidljiva operativna metrika.', metricQualityValueLabel: 'pokrivenost kritičnih tijekova', metricQualityNote: 'Testiranje, semantika i izvedba pripadaju istoj razgovoru o isporuci.', metricDeliveryLabel: 'Signal isporuke', metricDeliveryTitle: 'Jedno sučelje, više površina.', metricDeliveryValueLabel: 'web + Android isporuka', metricDeliveryNote: 'Prilagodljiv proizvod razmatra sljedeći uređaj prije prepisivanja.', weekStart: 'Tjedan 01', weekEnd: 'Tjedan 08', motionNote: 'Pokret nije obavezan. Laboratorij ostaje upotrebljiv kad se nebitna animacija isključi.', kpiProductFlows: 'kritični tijekovi', kpiProductStates: 'testirana UI stanja', kpiProductBudget: 'budžet interakcije', kpiQualityIssues: 'blokirajući problemi pristupačnosti', kpiQualityStates: 'provjerena stanja', kpiQualityBudget: 'budžet interakcije', kpiDeliveryChecks: 'kontrolne točke izdanja', kpiDeliveryPaths: 'putovi objave', kpiDeliveryUptime: 'dostupnost tijeka', experimentsEyebrow: 'Sustavi interakcije', motionEyebrow: 'Vrijeme gibanja', a11yEyebrow: 'Pristupačnost + obrasci', concurrencyEyebrow: 'Istodobno stanje', layoutEyebrow: 'Prilagodljiv laboratorij', dataEyebrow: 'Podatkovna površina', dataPlaceholder: 'Pokušajte A-02 ili C-01', stateEyebrow: 'Automat stanja' },
-			demos: { showcaseEyebrow: '07 / Interaktivna vitrina', gamesFullscreen: 'Otvori igraonicu preko cijelog zaslona', gamesExitFullscreen: 'Vrati veličinu igraonice', showcaseDepthKicker: 'CSS prostorni sustav', showcaseFlowKicker: 'Generativna koreografija', showcaseSignalKicker: 'Prilagodljiva simulacija', deprecatedNotice: 'Neki su demoi ispod starije Netlify gradnje; poveznice ostaju dok su izvornici dostupni.', gameEyebrow: 'Laboratorij interakcije', reactionEyebrow: 'Vrijeme reakcije', memoryEyebrow: 'Raspodijeljeno stanje', diceEyebrow: 'Vjerojatnost', diceDetail: 'Šest jednakih ishoda, kratka povijest i bez postavljanja između rundi.', rpsEyebrow: 'Igra odluke', rpsTitle: 'Pročitajte sljedeći potez.', rpsDetail: 'Igrajte kamen, papir ili škare protiv novog izbora računala.', colorEyebrow: 'Percepcija boje', colorDetail: 'Odaberite točan token prije nego što se pojavi sljedeća boja.', colorScore: 'pogotci', tapEyebrow: 'Brza interakcija', tapDetail: 'Dodirujte dok prsten napretka ne dosegne cilj ove runde.', guessEyebrow: 'Pretraživanje broja' },
+			demos: { showcaseEyebrow: '07 / Interaktivna vitrina', gamesFullscreen: 'Otvori igraonicu preko cijelog zaslona', gamesExitFullscreen: 'Vrati veličinu igraonice', showcaseDepthKicker: 'CSS prostorni sustav', showcaseFlowKicker: 'Generativna koreografija', showcaseSignalKicker: 'Prilagodljiva simulacija', deprecatedNotice: 'Neki su demoi ispod starije Netlify gradnje; poveznice ostaju dok su izvornici dostupni.', gameEyebrow: 'Laboratorij interakcije', reactionEyebrow: 'Vrijeme reakcije', memoryEyebrow: 'Raspodijeljeno stanje', diceEyebrow: 'Vjerojatnost', diceDetail: 'Šest jednakih ishoda, kratka povijest i bez postavljanja između rundi.', rpsEyebrow: 'Igra odluke', rpsTitle: 'Pročitajte sljedeći potez.', rpsDetail: 'Igrajte kamen, papir ili škare protiv новог избора računала.', colorEyebrow: 'Percepcija boje', colorDetail: 'Odaberite točan token prije nego što se pojavi sljedeća boja.', colorScore: 'pogotci', tapEyebrow: 'Brza interakcija', tapDetail: 'Dodirujte dok prsten napretka ne dosegne cilj ove runde.', guessEyebrow: 'Pretraživanje broja' },
 			contact: { portraitCaption: 'Frontend proizvoda · Angular · mobilna isporuka · alati' },
 		},
 	},
@@ -139,6 +139,28 @@ function deriveApproachOverlay(translation: ITranslationOverlay): ITranslationOv
 	return { pages: { approach } };
 }
 
+const EARTH_MODEL_STATE_LABELS = {
+	it: { earthModelLoading: 'Caricamento della figura 3D…', earthModelError: 'Impossibile visualizzare la figura 3D. Scegline un’altra.' },
+	'pt-PT': { earthModelLoading: 'A carregar a figura 3D…', earthModelError: 'Não foi possível renderizar a figura 3D. Escolha outra figura.' },
+	'pt-BR': { earthModelLoading: 'Carregando a figura 3D…', earthModelError: 'Não foi possível renderizar a figura 3D. Escolha outra figura.' },
+	ru: { earthModelLoading: 'Загрузка 3D-фигуры…', earthModelError: 'Не удалось отобразить 3D-фигуру. Выберите другую фигуру.' },
+	uk: { earthModelLoading: 'Завантаження 3D-фігури…', earthModelError: 'Не вдалося відобразити 3D-фігуру. Виберіть іншу фігуру.' },
+	pl: { earthModelLoading: 'Wczytywanie figury 3D…', earthModelError: 'Nie udało się wyrenderować figury 3D. Wybierz inną figurę.' },
+	hr: { earthModelLoading: 'Učitavanje 3D figure…', earthModelError: '3D figuru nije moguće prikazati. Odaberite drugu figuru.' },
+	tr: { earthModelLoading: '3B şekil yükleniyor…', earthModelError: '3B şekil işlenemedi. Başka bir şekil seçin.' },
+	ar: { earthModelLoading: 'جارٍ تحميل الشكل ثلاثي الأبعاد…', earthModelError: 'تعذّر عرض الشكل ثلاثي الأبعاد. اختر شكلاً آخر.' },
+	hi: { earthModelLoading: '3D आकृति लोड हो रही है…', earthModelError: '3D आकृति प्रस्तुत नहीं हो सकी। कोई दूसरी आकृति चुनें।' },
+	bn: { earthModelLoading: '3D আকৃতি লোড হচ্ছে…', earthModelError: '3D আকৃতি দেখানো যায়নি। অন্য একটি আকৃতি বেছে নিন।' },
+	'zh-CN': { earthModelLoading: '正在加载 3D 图形…', earthModelError: '无法渲染 3D 图形。请选择其他图形。' },
+	'zh-TW': { earthModelLoading: '正在載入 3D 圖形…', earthModelError: '無法渲染 3D 圖形。請選擇其他圖形。' },
+	ja: { earthModelLoading: '3Dフィギュアを読み込み中…', earthModelError: '3Dフィギュアを描画できませんでした。別のフィギュアを選択してください。' },
+	ko: { earthModelLoading: '3D 도형을 불러오는 중…', earthModelError: '3D 도형을 렌더링할 수 없습니다. 다른 도형을 선택하세요.' },
+	id: { earthModelLoading: 'Memuat figur 3D…', earthModelError: 'Figur 3D tidak dapat dirender. Pilih figur lain.' },
+} satisfies Readonly<Record<ISecondaryLocale, {
+		readonly earthModelLoading: string;
+		readonly earthModelError: string;
+	}>>;
+
 export const SECONDARY_PRIORITY_OVERLAYS = Object.fromEntries(
 	Object.entries(RAW_PACKS).map(([locale, pack]) => {
 		const id = locale as ISecondaryLocale;
@@ -146,21 +168,49 @@ export const SECONDARY_PRIORITY_OVERLAYS = Object.fromEntries(
 		const completed = mergeOverlays(selected, DEEP_COMPLETIONS[id] ?? {});
 		const withPageBase = mergeOverlays(completed, PAGE_BASE_OVERRIDES[id]);
 		const withArcade = mergeOverlays(withPageBase, {
-			pages: { demos: { arcade: ARCADE_TRANSLATIONS[id] } },
+			pages: { home: EARTH_MODEL_STATE_LABELS[id], demos: { arcade: ARCADE_TRANSLATIONS[id] } },
 		});
 		return [id, mergeOverlays(withArcade, deriveApproachOverlay(withArcade))];
 	}),
 ) as Readonly<Record<ISecondaryLocale, ITranslationOverlay>>;
 
-const EARTH_STYLES: readonly IEarthTextureStyle[] = ['clouds', 'natural', 'night', 'terrain', 'bathymetry', 'infrared', 'sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'kepler-186f', 'proxima-b', 'trappist-1e', 'soccer', 'basketball', 'tennis', 'golf', 'rugby', 'volleyball', 'beach-ball', 'disco', 'cartago-mark', 'cartago-banner', 'portrait'];
-const EARTH_COMPLETIONS: Readonly<Partial<Record<ISecondaryLocale, ITranslationOverlay | { readonly presets: Readonly<Record<string, string>> }>>> = {
+type IEarthModelStyle = 'model-gamepad' | 'model-football' | 'model-elephant' | 'model-moon-rock';
+const EARTH_MODEL_STYLES: readonly IEarthModelStyle[] = ['model-gamepad', 'model-football', 'model-elephant', 'model-moon-rock'];
+const EARTH_STYLES: readonly IEarthTextureStyle[] = ['clouds', 'natural', 'night', 'terrain', 'bathymetry', 'infrared', 'sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'kepler-186f', 'proxima-b', 'trappist-1e', 'soccer', 'basketball', 'tennis', 'golf', 'rugby', 'volleyball', 'beach-ball', 'disco', 'cartago-mark', 'cartago-banner', 'portrait', ...EARTH_MODEL_STYLES];
+const EARTH_MODEL_LABELS: Readonly<Record<ISecondaryLocale, Readonly<Record<IEarthModelStyle, string>>>> = {
+	it: { 'model-gamepad': 'Controller 3D', 'model-football': 'Pallone da football americano 3D', 'model-elephant': 'Elefante intagliato 3D', 'model-moon-rock': 'Roccia lunare 3D' },
+	'pt-PT': { 'model-gamepad': 'Comando 3D', 'model-football': 'Bola de futebol americano 3D', 'model-elephant': 'Elefante esculpido 3D', 'model-moon-rock': 'Rocha lunar 3D' },
+	'pt-BR': { 'model-gamepad': 'Controle 3D', 'model-football': 'Bola de futebol americano 3D', 'model-elephant': 'Elefante entalhado 3D', 'model-moon-rock': 'Rocha lunar 3D' },
+	ru: { 'model-gamepad': 'Геймпад 3D', 'model-football': 'Мяч для американского футбола 3D', 'model-elephant': 'Резной слон 3D', 'model-moon-rock': 'Лунный камень 3D' },
+	uk: { 'model-gamepad': 'Геймпад 3D', 'model-football': 'М’яч для американського футболу 3D', 'model-elephant': 'Різьблений слон 3D', 'model-moon-rock': 'Місячний камінь 3D' },
+	pl: { 'model-gamepad': 'Pad 3D', 'model-football': 'Piłka do futbolu amerykańskiego 3D', 'model-elephant': 'Rzeźbiony słoń 3D', 'model-moon-rock': 'Księżycowa skała 3D' },
+	hr: { 'model-gamepad': 'Kontroler 3D', 'model-football': 'Lopta za američki nogomet 3D', 'model-elephant': 'Rezbareni slon 3D', 'model-moon-rock': 'Mjesečev kamen 3D' },
+	tr: { 'model-gamepad': '3B oyun kumandası', 'model-football': 'Amerikan futbolu topu 3B', 'model-elephant': 'Oyma fil 3B', 'model-moon-rock': 'Ay taşı 3B' },
+	ar: { 'model-gamepad': 'وحدة تحكم ثلاثية الأبعاد', 'model-football': 'كرة قدم أمريكية ثلاثية الأبعاد', 'model-elephant': 'فيل منحوت ثلاثي الأبعاد', 'model-moon-rock': 'صخرة قمرية ثلاثية الأبعاد' },
+	hi: { 'model-gamepad': '3D गेमपैड', 'model-football': '3D अमेरिकी फ़ुटबॉल', 'model-elephant': '3D नक्काशीदार हाथी', 'model-moon-rock': '3D चंद्र शिला' },
+	bn: { 'model-gamepad': '3D গেমপ্যাড', 'model-football': '3D আমেরিকান ফুটবল', 'model-elephant': '3D খোদাই করা হাতি', 'model-moon-rock': '3D চন্দ্রশিলা' },
+	'zh-CN': { 'model-gamepad': '3D 游戏手柄', 'model-football': '3D 美式橄榄球', 'model-elephant': '3D 雕刻木象', 'model-moon-rock': '3D 月球岩石' },
+	'zh-TW': { 'model-gamepad': '3D 遊戲手把', 'model-football': '3D 美式橄欖球', 'model-elephant': '3D 雕刻木象', 'model-moon-rock': '3D 月球岩石' },
+	ja: { 'model-gamepad': '3D ゲームパッド', 'model-football': '3D アメリカンフットボール', 'model-elephant': '3D 木彫りのゾウ', 'model-moon-rock': '3D 月の岩' },
+	ko: { 'model-gamepad': '3D 게임패드', 'model-football': '3D 미식축구공', 'model-elephant': '3D 목조 코끼리', 'model-moon-rock': '3D 달 암석' },
+	id: { 'model-gamepad': 'Gamepad 3D', 'model-football': 'Bola sepak Amerika 3D', 'model-elephant': 'Gajah ukir 3D', 'model-moon-rock': 'Batu bulan 3D' },
+};
+const LICENSED_ORIGIN_LABELS: Readonly<Record<ISecondaryLocale, string>> = {
+	it: 'Modello 3D scaricato · Poly Haven CC0', 'pt-PT': 'Modelo 3D descarregado · Poly Haven CC0', 'pt-BR': 'Modelo 3D baixado · Poly Haven CC0',
+	ru: 'Загруженная 3D-модель · Poly Haven CC0', uk: 'Завантажена 3D-модель · Poly Haven CC0', pl: 'Pobrany model 3D · Poly Haven CC0',
+	hr: 'Preuzeti 3D model · Poly Haven CC0', tr: 'İndirilmiş 3B model · Poly Haven CC0', ar: 'نموذج ثلاثي الأبعاد منزل · Poly Haven CC0',
+	hi: 'डाउनलोड किया गया 3D मॉडल · Poly Haven CC0', bn: 'ডাউনলোড করা 3D মডেল · Poly Haven CC0', 'zh-CN': '下载的 3D 模型 · Poly Haven CC0',
+	'zh-TW': '下載的 3D 模型 · Poly Haven CC0', ja: 'ダウンロードした3Dモデル · Poly Haven CC0', ko: '다운로드한 3D 모델 · Poly Haven CC0', id: 'Model 3D yang diunduh · Poly Haven CC0',
+};
+
+const EARTH_COMPLETIONS: Readonly<Partial<Record<ISecondaryLocale, { readonly presets: Readonly<Record<string, string>> }>>> = {
 	hr: { presets: { rugby: 'Ragbi', 'cartago-mark': 'Znak Cartago', 'cartago-banner': 'Pojas Cartago', portrait: 'Portret Cartago' } },
-} satisfies Readonly<Partial<Record<ISecondaryLocale, ITranslationOverlay | { readonly presets: Readonly<Record<string, string>> }>>>;
+};
 
 export interface ICompleteEarthLocalLabels {
 	readonly categories: ISecondaryLocalePack['earth']['categories'];
 	readonly presets: Readonly<Record<IEarthTextureStyle, string>>;
-	readonly origins: ISecondaryLocalePack['earth']['origins'];
+	readonly origins: Readonly<Record<IEarthTextureOrigin, string>>;
 	readonly closeSphere: string;
 }
 
@@ -168,11 +218,12 @@ export const SECONDARY_EARTH_LABELS = Object.fromEntries(
 	Object.entries(RAW_PACKS).map(([locale, pack]) => {
 		const id = locale as ISecondaryLocale;
 		const completion = EARTH_COMPLETIONS[id] as { readonly presets?: Readonly<Record<string, string>> } | undefined;
-		const presets = { ...pack.earth.presets, ...completion?.presets };
+		const presets = { ...pack.earth.presets, ...completion?.presets, ...EARTH_MODEL_LABELS[id] };
+		const origins = { ...pack.earth.origins, licensed: LICENSED_ORIGIN_LABELS[id] };
 		for (const style of EARTH_STYLES) {
 			if (!presets[style]) throw new Error(`Missing ${id} Earth texture label: ${style}`);
 		}
-		return [id, { ...pack.earth, presets } as ICompleteEarthLocalLabels];
+		return [id, { ...pack.earth, presets, origins } as ICompleteEarthLocalLabels];
 	}),
 ) as Readonly<Record<ISecondaryLocale, ICompleteEarthLocalLabels>>;
 

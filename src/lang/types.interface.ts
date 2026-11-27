@@ -142,6 +142,8 @@ export interface ITranslationMap {
 			earthTextureTerrain: string;
 			earthTextureInfrared: string;
 			earthDragHint: string;
+			earthModelLoading: string;
+			earthModelError: string;
 			monitorChoose: string;
 			monitorOpen: string;
 			monitorProjectStatus: string;

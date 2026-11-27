@@ -27,13 +27,14 @@
 		(focusin)="enterOrb()"
 		(focusout)="leaveOrb()"
 		(click)="handleOrbClick($event)"
-		aria-hidden="true">
+		[attr.aria-hidden]="earthDepth() === 'front' ? null : 'true'">
 		<app-earth-globe
 			#earth
 			[attr.data-texture-style]="earthTexture()"
 			[depth]="earthDepth()"
 			[preview]="earthPreview()"
-			[textureStyle]="earthTexture()" />
+			[textureStyle]="earthTexture()"
+			[interactionLabel]="'pages.home.earthDragHint' | translate" />
 	</div>
 	<app-earth-globe-controls
 		[active]="earthControlsVisible()"

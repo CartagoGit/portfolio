@@ -71,7 +71,7 @@ void main() {
     vec3 color = sampled;
 
     if (textureEffect == 8) {
-      vec2 frontUv = vec2(0.5 + point.x * 0.5, 0.5 - point.y * 0.5);
+      vec2 frontUv = vec2(0.5 + point.x * 0.5, 0.5 + point.y * 0.5);
       color = texture2D(earthTexture, clamp(frontUv, 0.001, 0.999)).rgb;
     } else if (textureEffect == 7) {
       vec2 heartPoint = (spherical - vec2(0.51, 0.46)) * vec2(2.8, 4.4);

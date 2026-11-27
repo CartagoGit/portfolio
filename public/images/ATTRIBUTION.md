@@ -61,6 +61,46 @@ Assets are owned by domain under `brand/`, `games/`, `globe/` and `profile/`. UI
 - Sources: the favicons/icon assets published by the corresponding Cartago demos at `https://deathblitz.netlify.app/favicon.png`, `https://cartago-tetris.netlify.app/favicon.ico`, `https://cartago-snake.netlify.app/icon.png` and `https://cartago-minesweeper.netlify.app/icon.png`.
 - Ownership: these marks represent the portfolio author's canonical game projects and are reused by the shared Demos/Work visual registry.
 
+## Downloaded CC0 glTF objects
+
+The interactive figure catalogue also contains these Poly Haven model packages. Only the raw glTF, binary and texture files below are redistributed. Promotional renders, clay previews and site example images are not copied into this project; portfolio screenshots and display renders are generated locally by the WebGL renderer.
+
+| Asset | Creator(s) | Source | License | Local package | Delivered use |
+|---|---|---|---|---|---|
+| Gamepad | Josh Dean | https://polyhaven.com/a/gamepad | [CC0](https://polyhaven.com/license) | `globe/models/gamepad/` | Interactive 3D figure `model-gamepad`; locally camera-fitted, rotated and lit from the original triangulated mesh. |
+| American Football | Riley Queen | https://polyhaven.com/a/american_football | [CC0](https://polyhaven.com/license) | `globe/models/american-football/` | Interactive 3D figure `model-football`; the photographed leather/PBR package is preserved. |
+| Carved Wooden Elephant | Greg Zaal | https://polyhaven.com/a/carved_wooden_elephant | [CC0](https://polyhaven.com/license) | `globe/models/carved-elephant/` | Interactive 3D figure `model-elephant`; the sculpture remains a mesh, not a spherical texture. |
+| Moon Rock 02 | Greg Zaal, Rico Cilliers and Jenelle van Heerden | https://polyhaven.com/a/moon_rock_02 | [CC0](https://polyhaven.com/license) | `globe/models/moon-rock/` | Interactive 3D figure `model-moon-rock`; the LOD0 rock mesh and its native diffuse, normal and ARM maps are preserved. |
+
+### Local 3D file inventory
+
+MD5 values identify the exact downloaded bytes currently distributed under `public/images/globe/models/`.
+
+| File | Bytes | MD5 |
+|---|---:|---|
+| `american-football/american_football.bin` | 140,192 | `c7ddf25fe8b26f86b8cf239ec258416c` |
+| `american-football/american_football_1k.gltf` | 2,816 | `891aa7cf6970c39e49857248fa4f58e5` |
+| `american-football/textures/american_football_arm_1k.jpg` | 620,658 | `9ef5beb8d8832c97cf94507cdf167360` |
+| `american-football/textures/american_football_diff_1k.jpg` | 642,831 | `b4346ba2f947cb089fc5fc715db1f969` |
+| `american-football/textures/american_football_nor_gl_1k.jpg` | 1,263,758 | `fdeca2e1e2b19e817088f97f30dc2cd0` |
+| `carved-elephant/carved_wooden_elephant.bin` | 69,760 | `5cd91fb8045cc4bbfa0248b8d2f96b5d` |
+| `carved-elephant/carved_wooden_elephant_1k.gltf` | 2,791 | `7111471b835ce5ca81e7e54cfb4599d5` |
+| `carved-elephant/textures/carved_wooden_elephant_diff_1k.jpg` | 578,022 | `40a5db4e497b0bd9df48800c5ff89376` |
+| `carved-elephant/textures/carved_wooden_elephant_nor_gl_1k.jpg` | 564,625 | `5e512920c44490d06f5f0116b9dcaa6d` |
+| `carved-elephant/textures/carved_wooden_elephant_rough_1k.jpg` | 648,726 | `711a67787c1e0a1bd6fde82ac8c71aa6` |
+| `gamepad/gamepad.bin` | 256,796 | `06f345d9e959c3d265ff6f599b1640db` |
+| `gamepad/gamepad_1k.gltf` | 2,728 | `86e6f546e948429591f8de7c3c9cc981` |
+| `gamepad/textures/gamepad_arm_1k.jpg` | 510,273 | `67c3c5c000441d0d79a9e14df40d93a3` |
+| `gamepad/textures/gamepad_diff_1k.jpg` | 309,469 | `481e2ef26e548cec00140a32dce30ddd` |
+| `gamepad/textures/gamepad_nor_gl_1k.jpg` | 241,556 | `0ee54f5549614917728ed1293cc63f64` |
+| `moon-rock/moon_rock_02.bin` | 78,928 | `42490de969f582a69518a40e17fe3f53` |
+| `moon-rock/moon_rock_02_1k.gltf` | 2,782 | `2237fe252e6a0f4ae26617f749a5c7b6` |
+| `moon-rock/textures/moon_rock_02_arm_1k.jpg` | 366,382 | `a99f416adc4a059b2db7c3aa72e8fe92` |
+| `moon-rock/textures/moon_rock_02_diff_1k.jpg` | 394,361 | `48a8ec745b864870d38bd69bcf498b8f` |
+| `moon-rock/textures/moon_rock_02_nor_gl_1k.jpg` | 675,121 | `3adf62ed6ca7cd2431f27649dbcb7ad6` |
+
+The four packages total **7,372,575 bytes** before filesystem overhead. The 1K glTF packages are loaded only when their figure is selected; at most two decoded model packages are retained in the CPU cache. No image is upscaled and no Poly Haven render is substituted for the live WebGL scene.
+
 ## Rendering notes
 
 - Terrain and infrared remain colour treatments of the real cloudless Earth map, preserving the geographic silhouette.

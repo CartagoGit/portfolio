@@ -92,7 +92,11 @@ export type IEarthTextureStyle =
 	| 'volleyball'
 	| 'cartago-mark'
 	| 'cartago-banner'
-	| 'portrait';
+	| 'portrait'
+	| 'model-gamepad'
+	| 'model-football'
+	| 'model-elephant'
+	| 'model-moon-rock';
 export type IEarthTextureCategory =
 	| 'earth'
 	| 'planets'
@@ -100,7 +104,7 @@ export type IEarthTextureCategory =
 	| 'balls'
 	| 'figures'
 	| 'playful';
-export type IEarthTextureOrigin = 'observed' | 'artist' | 'canonical' | 'owned';
+export type IEarthTextureOrigin = 'observed' | 'artist' | 'canonical' | 'owned' | 'licensed';
 export type IEarthDepth =
 	| 'behind'
 	| 'out-behind'

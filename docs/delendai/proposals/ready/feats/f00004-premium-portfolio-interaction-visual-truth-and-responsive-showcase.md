@@ -44,7 +44,7 @@ The accepted proposal history and automated evidence did not fully satisfy the h
 - global_gate: e2e
 
 ### S1 — Establish human and automated visual truth audit
-- **Status**: pending
+- **Status**: review
 - **Files**: `docs/portfolio-visual-truth.md`, `e2e/visual-truth.spec.ts`, `tools/scripts/visual-audit.script.ts`
 - **Gate**: e2e
 - acceptance:
@@ -52,12 +52,14 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "The audit names failures with preset, route, theme, viewport and device class instead of relying on screenshots alone."
   - "No visual state is accepted merely because unit tests or build pass."
   - "Documented baselines distinguish real imagery, owned art and procedural/artist-impression visuals."
-  - "The executable matrix covers six viewports (1440×900, 1024×768, 768×1024, 1024×600, 390×844 and 320×568 coarse touch), all eight themes and all 20 locales; named captures include all 30 globe presets and every route."
+  - "The executable matrix covers six viewports (1440×900, 1024×768, 768×1024, 1024×600, 390×844 and 320×568 coarse touch), all eight themes and all 20 locales; named captures include all 34 globe presets and every route."
   - "Every interactive state is exercised with pointer, keyboard and native touch as applicable, including hover/focus/press, loading/error/success, reset, reduced motion and fullscreen exit."
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S2 — Make globe textures and 3D objects visually truthful
 - **Status**: pending
-- **Files**: `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/earth-globe.renderer.spec.ts`, `src/core/rendering/shaders/earth-globe.frag.glsl`, `src/pages/home/earth-globe/earth-globe.component.ts`, `src/pages/home/earth-globe/earth-globe.component.html`, `src/pages/home/earth-globe/earth-globe.component.scss`, `public/images/globe/**`, `public/images/ATTRIBUTION.md`
+- **Files**: `src/domain/types.interface.ts`, `src/core/rendering/gltf-model.loader.ts`, `src/core/rendering/gltf-model.renderer.ts`, `src/core/rendering/gltf-model-renderer.spec.ts`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/earth-globe-renderer.spec.ts`, `src/core/rendering/shaders/**`, `src/pages/home/earth-globe/**`, `src/pages/home/hero-monitor/earth-texture.catalog.ts`, `src/pages/home/hero-monitor/earth-texture-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/lang/types.interface.ts`, `src/lang/en.translation.ts`, `src/lang/es.translation.ts`, `src/lang/fr.translation.ts`, `src/lang/de.translation.ts`, `src/lang/secondary-locales.types.ts`, `src/lang/secondary-priority.overlays.ts`, `src/lang/secondary-locales/*.translation.ts`, `e2e/portfolio.spec.ts`, `e2e/visual-truth.spec.ts`, `tools/scripts/visual-audit.script.ts`, `tools/check-file-naming.script.ts`, `docs/portfolio-visual-truth.md`, `public/images/globe/**`, `public/images/ATTRIBUTION.md`
 - **Gate**: e2e
 - acceptance:
   - "Each planet, sports ball, brand wrap and exoplanet is immediately recognisable at its displayed size."
@@ -77,7 +79,7 @@ The accepted proposal history and automated evidence did not fully satisfy the h
 
 ### S3 — Refine monitor hierarchy, controls and interaction choreography
 - **Status**: pending
-- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`
+- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`
 - **Gate**: e2e
 - acceptance:
   - "The home introduction uses concise commercial copy centred on 'show me examples' as proof, with the portfolio positioned as evidence rather than a generic slogan."
@@ -220,7 +222,7 @@ The earlier implementation improved test volume and structure, but human review 
   - "The matrix proves header/footer hidden, unrelated elements inert, focus exit visible and zero deformation for every fullscreen owner."
   - "Named browser evidence checks every Demos/Lab control, search results, locale rows, Approach transitions and Docker hovers."
   - "A green build alone never closes visual slices; named route/theme/device outcomes remain required."
-  - "Final acceptance records all 20 locales, all eight themes, six viewports, all 30 figure presets, the new 3D game and every route-specific animation; only i00002 S2 deployment remains open afterwards."
+  - "Final acceptance records all 20 locales, all eight themes, six viewports, all 34 figure presets, the new 3D game and every route-specific animation; only i00002 S2 deployment remains open afterwards."
 
 ## exhaustive human brief — 2026-11-27 expansion
 

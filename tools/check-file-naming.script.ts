@@ -4,7 +4,7 @@ import { join, relative } from 'node:path';
 const ROOTS = ['src', 'config', 'tools', 'plugins', 'e2e'] as const;
 const ROLES = new Set([
 	'adapter', 'barrel', 'browser', 'catalog', 'component', 'config', 'connector', 'constant',
-	'content', 'data', 'directive', 'entrypoint', 'facade', 'helper', 'interface', 'locale', 'model', 'overlays', 'page',
+	'content', 'data', 'directive', 'entrypoint', 'facade', 'helper', 'interface', 'loader', 'locale', 'model', 'overlays', 'page',
 	'pipe', 'plugin', 'parser', 'registry', 'renderer', 'routes', 'routing', 'script', 'seo', 'server',
 	'service', 'spec', 'theme', 'tool', 'translation', 'translations', 'types', 'visuals',
 ]);

@@ -16,7 +16,7 @@ export type ITranslationOverlay<T = ITranslationMap> = T extends object
 export interface IEarthLocalLabels {
 	readonly categories: Readonly<Record<IEarthTextureCategory, string>>;
 	readonly presets: Partial<Readonly<Record<IEarthTextureStyle, string>>>;
-	readonly origins: Readonly<Record<IEarthTextureOrigin, string>>;
+	readonly origins: Partial<Readonly<Record<IEarthTextureOrigin, string>>>;
 	readonly closeSphere: string;
 }
 

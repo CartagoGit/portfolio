@@ -13,11 +13,14 @@ import {
 	viewChild,
 } from '@angular/core';
 import { destroyEarthRenderer, renderEarthFrame } from '../../../core/rendering/earth-globe.renderer';
+import { destroyGltfRenderer, renderGltfFrame } from '../../../core/rendering/gltf-model.renderer';
+import { type IGltfModelData, loadGltfModel } from '../../../core/rendering/gltf-model.loader';
 import type { IEarthDepth, IEarthTextureStyle } from '../../../domain/types.interface';
+import { TranslatePipe } from '../../../lang/translate.pipe';
 
 type IQuaternion = readonly [x: number, y: number, z: number, w: number];
 
-const TEXTURE_SOURCES: Readonly<Record<IEarthTextureStyle, string>> = {
+const TEXTURE_SOURCES: Partial<Readonly<Record<IEarthTextureStyle, string>>> = {
 	clouds: '/images/globe/earth-clouds-4k.webp',
 	natural: '/images/globe/earth-blue-marble-4k.webp',
 	night: '/images/globe/earth-night-4k.webp',
@@ -50,6 +53,13 @@ const TEXTURE_SOURCES: Readonly<Record<IEarthTextureStyle, string>> = {
 	portrait: '/images/profile/mario-cabrero-sf.png',
 };
 
+const GLTF_MODEL_SOURCES: Partial<Readonly<Record<IEarthTextureStyle, string>>> = {
+	'model-gamepad': '/images/globe/models/gamepad/gamepad_1k.gltf',
+	'model-football': '/images/globe/models/american-football/american_football_1k.gltf',
+	'model-elephant': '/images/globe/models/carved-elephant/carved_wooden_elephant_1k.gltf',
+	'model-moon-rock': '/images/globe/models/moon-rock/moon_rock_02_1k.gltf',
+};
+
 function quaternionFromAxis(
 	axis: readonly [x: number, y: number, z: number],
 	angle: number
@@ -75,12 +85,33 @@ function normalizeQuaternion(value: IQuaternion): IQuaternion {
 	return [value[0] / length, value[1] / length, value[2] / length, value[3] / length];
 }
 
+const MODEL_PRESENTATION_ROTATIONS: Partial<Readonly<Record<IEarthTextureStyle, IQuaternion>>> = {
+	'model-gamepad': normalizeQuaternion(multiplyQuaternion(
+		quaternionFromAxis([0, 1, 0], -0.32),
+		quaternionFromAxis([1, 0, 0], 1.14),
+	)),
+	'model-football': normalizeQuaternion(multiplyQuaternion(
+		quaternionFromAxis([0, 1, 0], -0.38),
+		quaternionFromAxis([0, 0, 1], -0.24),
+	)),
+	'model-elephant': quaternionFromAxis([0, 1, 0], -0.42),
+	'model-moon-rock': quaternionFromAxis([0, 1, 0], -0.28),
+};
+
 @Component({
 	selector: 'app-earth-globe',
+	imports: [TranslatePipe],
 	templateUrl: './earth-globe.component.html',
 	styleUrl: './earth-globe.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
+		'[attr.data-depth]': 'depth()',
+		'[attr.tabindex]': 'depth() === "front" ? 0 : -1',
+		'[attr.role]': 'depth() === "front" ? "application" : null',
+		'[attr.aria-label]': 'interactionLabel()',
+		'[attr.data-render-state]': 'renderState()',
+		'[attr.aria-busy]': 'renderState() === "loading" ? "true" : null',
+		'(keydown)': 'handleKeydown($event)',
 		'(pointerdown)': 'beginDrag($event)',
 		'(pointermove)': 'rotateFromDrag($event)',
 		'(pointerup)': 'endDrag($event)',
@@ -91,14 +122,20 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	readonly depth = input.required<IEarthDepth>();
 	readonly preview = input(false);
 	readonly textureStyle = input<IEarthTextureStyle>('clouds');
+	readonly interactionLabel = input('Interactive 3D figure');
 	private readonly _document = inject(DOCUMENT);
 	private readonly _platformId = inject(PLATFORM_ID);
 	private _canvas?: HTMLCanvasElement;
 	private _texture?: HTMLCanvasElement;
+	private _model?: IGltfModelData;
 	private readonly _textures = new Map<IEarthTextureStyle, HTMLCanvasElement>();
+	private readonly _models = new Map<IEarthTextureStyle, IGltfModelData>();
 	private _textureOrder: IEarthTextureStyle[] = [];
+	private _modelOrder: IEarthTextureStyle[] = [];
 	private readonly _loadingTextures = new Set<IEarthTextureStyle>();
+	private readonly _loadingModels = new Set<IEarthTextureStyle>();
 	private _destroyed = false;
+	private _preparedStyle?: IEarthTextureStyle;
 	private _frame?: number;
 	private _lastAt?: number;
 	private _spinning = false;
@@ -113,6 +150,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		radius: number;
 	};
 	readonly active = signal(false);
+	readonly renderState = signal<'idle' | 'loading' | 'ready' | 'error'>('idle');
 	readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 	private readonly _depthSync = effect(() => {
 		if (this.depth() === 'front-ready' || this.depth() === 'front' || this.preview())
@@ -133,9 +171,8 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	start(): void {
 		if (!isPlatformBrowser(this._platformId) || this._destroyed) return;
 		this._spinning = true;
-		this.active.set(true);
 		this._prepare(this.textureStyle());
-		if (this._texture && this._frame === undefined)
+		if ((this._texture || this._model) && this._frame === undefined)
 			this._animate(performance.now());
 	}
 
@@ -218,9 +255,15 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		this.stop();
 		this._drag = undefined;
 		this._textures.clear();
+		this._models.clear();
 		this._texture = undefined;
+		this._model = undefined;
 		this._loadingTextures.clear();
-		if (this._canvas) destroyEarthRenderer(this._canvas);
+		this._loadingModels.clear();
+		if (this._canvas) {
+			destroyEarthRenderer(this._canvas);
+			destroyGltfRenderer(this._canvas);
+		}
 		this._depthSync.destroy();
 		this._textureStyleSync.destroy();
 	}
@@ -228,6 +271,7 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 	onContextLost(event: Event): void {
 		event.preventDefault();
 		this.stop();
+		this.renderState.set('loading');
 	}
 
 	onContextRestored(): void {
@@ -237,21 +281,41 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 
 	private _prepare(style: IEarthTextureStyle): void {
 		if (!isPlatformBrowser(this._platformId) || this._destroyed) return;
+		if (this._preparedStyle !== style) {
+			this._preparedStyle = style;
+			this._rotation = [0, 0, 0, 1];
+			this._angularVelocity = { x: 0, y: this._idleSpeed };
+		}
+		const modelSource = GLTF_MODEL_SOURCES[style];
+		if (modelSource) {
+			this._prepareModel(style, modelSource);
+			return;
+		}
+		this._model = undefined;
 		const cached = this._textures.get(style);
 		if (cached) {
 			this._texture = cached;
 			this._textureOrder = [...this._textureOrder.filter((item) => item !== style), style];
-			this.active.set(true);
+			this.renderState.set('loading');
+			this.active.set(false);
 			this._resumeAnimation();
 			return;
 		}
-		if (this._loadingTextures.has(style)) return;
 		this._texture = undefined;
 		this.active.set(false);
+		this.renderState.set('loading');
+		if (this._loadingTextures.has(style)) return;
 		this._loadTexture(style);
 	}
 
 	private _loadTexture(style: IEarthTextureStyle): void {
+		const sourceUrl = TEXTURE_SOURCES[style];
+		if (!sourceUrl) {
+			this.active.set(false);
+			this.renderState.set('error');
+			console.error(`Missing globe texture source: ${style}`);
+			return;
+		}
 		this._loadingTextures.add(style);
 		const image = new Image();
 		image.decoding = 'async';
@@ -263,7 +327,11 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 			source.width = isOwned ? 2048 : image.naturalWidth;
 			source.height = isOwned ? 2048 : image.naturalHeight;
 			const context = source.getContext('2d');
-			if (!context) return;
+			if (!context) {
+				this._loadingTextures.delete(style);
+				if (this.textureStyle() === style) this.renderState.set('error');
+				return;
+			}
 			context.imageSmoothingEnabled = true;
 			context.imageSmoothingQuality = 'high';
 			if (isOwned) this._drawOwnedTexture(context, { style, image, size: 2048 });
@@ -276,19 +344,67 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 			}
 			if (this.textureStyle() === style) {
 				this._texture = source;
-				this.active.set(true);
+				this.renderState.set('loading');
+				this.active.set(false);
 				this._resumeAnimation();
 			}
 		};
 		image.onerror = () => {
 			this._loadingTextures.delete(style);
-			console.error(`Unable to load globe texture: ${TEXTURE_SOURCES[style]}`);
+			if (this.textureStyle() === style) this.renderState.set('error');
+			console.error(`Unable to load globe texture: ${sourceUrl}`);
 		};
-		image.src = TEXTURE_SOURCES[style];
+		image.src = sourceUrl;
+	}
+
+	private _prepareModel(style: IEarthTextureStyle, source: string): void {
+		const cached = this._models.get(style);
+		if (cached) {
+			this._model = cached;
+			this._texture = undefined;
+			this._modelOrder = [...this._modelOrder.filter((item) => item !== style), style];
+			this.renderState.set('loading');
+			this.active.set(false);
+			this._resumeAnimation();
+			return;
+		}
+		if (this._loadingModels.has(style)) return;
+		this._model = undefined;
+		this._texture = undefined;
+		this.active.set(false);
+		this.renderState.set('loading');
+		void this._loadModel(style, source);
+	}
+
+	private async _loadModel(style: IEarthTextureStyle, source: string): Promise<void> {
+		this._loadingModels.add(style);
+		try {
+			const model = await loadGltfModel(source);
+			if (this._destroyed) return;
+			this._models.set(style, model);
+			this._modelOrder = [...this._modelOrder.filter((item) => item !== style), style];
+			while (this._modelOrder.length > 2) {
+				const expired = this._modelOrder.shift();
+				if (expired) this._models.delete(expired);
+			}
+			if (this.textureStyle() === style) {
+				this._model = model;
+				this._texture = undefined;
+				this._resumeAnimation();
+			}
+		} catch (error) {
+			if (this.textureStyle() === style) {
+				this.active.set(false);
+				this.renderState.set('error');
+			}
+			console.error(`Unable to load 3D figure: ${source}`, error);
+		} finally {
+			this._loadingModels.delete(style);
+		}
 	}
 
 	private _resumeAnimation(): void {
-		if (this._spinning && this._texture && this._frame === undefined)
+		if (this._spinning && (this._texture || this._model) && this._frame === undefined)
 			this._animate(performance.now());
 	}
 
@@ -310,8 +426,26 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 			);
 			this._rotation = normalizeQuaternion(multiplyQuaternion(rotationDelta, this._rotation));
 		}
-		if (this._canvas && this._texture)
-			renderEarthFrame({
+		if (this._canvas && this._model) {
+			const rendered = renderGltfFrame({
+				canvas: this._canvas,
+				model: this._model,
+				frame: {
+					rotation: normalizeQuaternion(multiplyQuaternion(
+						this._rotation,
+						MODEL_PRESENTATION_ROTATIONS[this.textureStyle()] ?? [0, 0, 0, 1],
+					)),
+				},
+			});
+			if (rendered) {
+				if (this.renderState() !== 'ready') this.renderState.set('ready');
+				if (!this.active()) this.active.set(true);
+			} else {
+				this.renderState.set('error');
+				this.active.set(false);
+			}
+		} else if (this._canvas && this._texture) {
+			const rendered = renderEarthFrame({
 				canvas: this._canvas,
 				image: this._texture,
 				frame: {
@@ -324,6 +458,14 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 					foreground: ['front-ready', 'front', 'out-front'].includes(this.depth()),
 				},
 			});
+			if (rendered) {
+				if (this.renderState() !== 'ready') this.renderState.set('ready');
+				if (!this.active()) this.active.set(true);
+			} else {
+				this.renderState.set('error');
+				this.active.set(false);
+			}
+		}
 		this._frame = requestAnimationFrame((time) => this._animate(time));
 	}
 
@@ -351,5 +493,28 @@ export class EarthGlobeComponent implements AfterViewInit, OnDestroy {
 		const width = image.naturalWidth * scale;
 		const height = image.naturalHeight * scale;
 		context.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+	}
+
+	handleKeydown(event: KeyboardEvent): void {
+		if (!this._isInteractive()) return;
+		let pitch = 0;
+		let yaw = 0;
+		if (event.key === 'ArrowUp') pitch = -0.14;
+		else if (event.key === 'ArrowDown') pitch = 0.14;
+		else if (event.key === 'ArrowLeft') yaw = -0.14;
+		else if (event.key === 'ArrowRight') yaw = 0.14;
+		else return;
+		event.preventDefault();
+		event.stopPropagation();
+		this._rotation = normalizeQuaternion(multiplyQuaternion(
+			multiplyQuaternion(
+				quaternionFromAxis([1, 0, 0], pitch),
+				quaternionFromAxis([0, 1, 0], yaw),
+			),
+			this._rotation,
+		));
+		this._angularVelocity.x = 0;
+		this._angularVelocity.y = this._idleSpeed;
+		this.start();
 	}
 }

@@ -62,9 +62,9 @@ describe('HeroMonitorComponent', () => {
 
 		expect(component.chartOptions).toHaveLength(14);
 		expect(element.querySelectorAll('.hero-monitor__chart-switcher button span')).toHaveLength(14);
-		expect(component.earthTextureOptions).toHaveLength(30);
+		expect(component.earthTextureOptions).toHaveLength(34);
 		expect(component.earthTextureOptions.map(({ id }) => id)).toEqual(
-			expect.arrayContaining(['bathymetry', 'rugby', 'volleyball'])
+			expect.arrayContaining(['bathymetry', 'rugby', 'volleyball', 'model-gamepad', 'model-elephant', 'portrait'])
 		);
 		expect(
 			new Set(component.earthTextureOptions.map(({ category }) => category))

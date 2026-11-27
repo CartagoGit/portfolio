@@ -148,6 +148,8 @@ export const en: ITranslationMap = {
 			earthTextureTerrain: 'Terrain',
 			earthTextureInfrared: 'Infrared',
 			earthDragHint: 'Drag and release to keep the globe moving.',
+			earthModelLoading: 'Loading 3D figure…',
+			earthModelError: 'The 3D figure could not be rendered. Choose another figure.',
 			monitorChoose: 'Choose a project for verified scope and status. Use the display controls to inspect the visual demo.',
 			monitorOpen: 'Open destination ↗',
 			monitorProjectStatus: 'Public open-source project',

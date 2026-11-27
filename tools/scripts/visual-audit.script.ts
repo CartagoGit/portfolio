@@ -61,12 +61,13 @@ const PRIORITY_LOCALE_ROUTES = [
 	'docker',
 	'contact',
 ] as const;
+const MODEL_OPTIONS = EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'));
 const EXPECTED_CAPTURE_COUNT =
 	ROUTES.length * VIEWPORTS.length +
-	THEMES.length +
+	THEMES.length * (1 + MODEL_OPTIONS.length) +
 	EARTH_TEXTURE_OPTIONS.length * VIEWPORTS.length +
 	LOCALES.length * PRIORITY_LOCALE_ROUTES.length +
-	1;
+	2;
 
 async function pngFiles(directory: string): Promise<string[]> {
 	const entries = await readdir(directory, { withFileTypes: true });

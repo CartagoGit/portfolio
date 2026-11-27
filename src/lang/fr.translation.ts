@@ -121,6 +121,8 @@ export const fr: ITranslationMap = {
 			earthTextureTerrain: 'Relief',
 			earthTextureInfrared: 'Infrarouge',
 			earthDragHint: 'Faites glisser puis relâchez pour conserver le mouvement du globe.',
+			earthModelLoading: 'Chargement de la figure 3D…',
+			earthModelError: 'La figure 3D n’a pas pu être rendue. Choisissez une autre figure.',
 			monitorChoose: 'Choisissez un projet pour voir sa portée et son état vérifiés. Utilisez les contrôles pour explorer la démo visuelle.',
 			monitorOpen: 'Ouvrir la destination ↗',
 			monitorProjectStatus: 'Projet public en code libre',

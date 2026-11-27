@@ -145,6 +145,8 @@ export const es: ITranslationMap = {
 			earthTextureTerrain: 'Relieve',
 			earthTextureInfrared: 'Infrarrojo',
 			earthDragHint: 'Arrastra y suelta para mantener la esfera en movimiento.',
+			earthModelLoading: 'Cargando figura 3D…',
+			earthModelError: 'No se pudo renderizar la figura 3D. Elige otra figura.',
 			monitorChoose: 'Elige un proyecto para ver su alcance y estado verificados. Usa los controles de visualización para explorar la demo.',
 			monitorOpen: 'Abrir destino ↗',
 			monitorProjectStatus: 'Proyecto público de código abierto',
