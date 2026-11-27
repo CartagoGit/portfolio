@@ -35,13 +35,15 @@ The component or feature remains the ownership boundary. CSS nesting expresses t
 - global_gate: lint + typecheck + all tests + production/SSR build + responsive browser audit
 
 ### S1 — Define and enforce the SCSS architecture contract
-- **Status**: pending
+- **Status**: review
 - **Files**: `src/styles/**`, `tools/check-bem-boundaries.script.ts`, `tools/check-bem-boundaries.baseline.json`, `package.json`, `docs/architecture-s17.md`
 - **Gate**: type
 - acceptance:
   - "One documented nesting contract is used: app/component owner → BEM block → `&__element` / `&--modifier`; keyframes and token definitions remain root-owned."
   - "A deterministic checker rejects flat BEM declarations outside a BEM owner, invalid mixed selectors, duplicate selectors in the same effective block and unapproved feature-style leakage into shell SCSS."
   - "The checker runs through strict/package quality gates and reports file plus line with a concrete rewrite hint."
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S2 — Normalize app shell and shared UI styles
 - **Status**: pending
