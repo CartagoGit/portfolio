@@ -65,8 +65,9 @@ import { FullscreenCoordinatorService } from '../../../core/platform/fullscreen-
 	host: {
 		'(document:pointerdown)': '_onDocumentDown($event)',
 		'(window:resize)': '_syncMonitorFullscreenScale()',
-		'[class.hero-monitor-host--earth-front]': 'earthBlocksMonitor()',
-		'[class.hero-monitor-host--fullscreen]': 'monitorFullscreen()',
+		'[class.app-hero-monitor--earth-front]': 'earthBlocksMonitor()',
+		'[class.app-hero-monitor--fullscreen]': 'monitorFullscreen()',
+		'[attr.data-earth-front]': 'earthBlocksMonitor() ? "" : null',
 		'[style.--monitor-fullscreen-scale]': 'monitorFullscreenScale()',
 	},
 })
@@ -174,6 +175,7 @@ export class HeroMonitorComponent implements OnDestroy {
 			!this._monitorHovered
 		)
 			this._queueMonitorClose();
+		if (this.earthDepth() === 'behind') this._resetEarthPreset();
 	});
 
 	readonly chartOptions = CHART_OPTIONS;
@@ -232,7 +234,6 @@ export class HeroMonitorComponent implements OnDestroy {
 		const target = event.target as Element | null;
 		if (!target) return;
 		if (target.closest('app-hero-monitor')) return;
-		if (this.earthBlocksMonitor()) this._resetEarthPreset();
 		this._earth.returnBehind(target);
 	};
 
@@ -279,7 +280,6 @@ export class HeroMonitorComponent implements OnDestroy {
 
 	dismissEarth(event: MouseEvent): void {
 		event.stopPropagation();
-		this._resetEarthPreset();
 		this._earth.returnBehind(event.currentTarget);
 	}
 
@@ -324,7 +324,11 @@ export class HeroMonitorComponent implements OnDestroy {
 				{ label: link.label }
 			),
 			href: link.href,
-			status: link.group === 'platform' ? 'Public platform' : 'Featured project',
+			status: this._translate.instant(
+				link.group === 'platform'
+					? 'pages.home.monitorPlatformStatus'
+					: 'pages.home.monitorProjectStatus',
+			),
 			stack: link.group === 'platform'
 				? [this._translate.instant('pages.home.monitorPublicProfile')]
 				: [this._translate.instant('pages.home.monitorOpenSource')],

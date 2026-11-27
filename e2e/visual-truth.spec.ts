@@ -15,6 +15,7 @@ const VIEWPORTS = [
 ] as const;
 const THEMES = ['dark', 'light', 'midnight', 'ocean', 'forest', 'sunset', 'solar', 'mono'] as const;
 const CAPTURE_ROOT = '.cache/visual-audit';
+const E2E_BASE_URL = `http://localhost:${process.env['PORTFOLIO_E2E_PORT'] ?? '4410'}`;
 
 async function captureVisual(page: Page, name: string): Promise<void> {
 	if (process.env['VISUAL_AUDIT_CAPTURE'] !== '1') return;
@@ -98,42 +99,64 @@ for (const viewport of VIEWPORTS) {
 	});
 }
 
-test('visual truth: all themes keep monitor and globe controls in the active token system', async ({ page }) => {
-	test.setTimeout(180_000);
-	await page.setViewportSize({ width: 1280, height: 900 });
+test('visual truth: all themes keep monitor and globe controls in the active token system', async ({ browser }) => {
+	test.setTimeout(360_000);
 	const themeTokens = new Set<string>();
 	for (const theme of THEMES) {
-		await page.addInitScript((id) => localStorage.setItem('cartago-theme', id), theme);
-		await openRoute(page);
-		await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-		const activeTokens = await page.evaluate(() => {
-			const root = getComputedStyle(document.documentElement);
-			const control = getComputedStyle(document.querySelector('.hero-monitor__technology-toggle')!);
-			return {
-				primary: root.getPropertyValue('--cyan').trim(),
-				surface: root.getPropertyValue('--surface').trim(),
-				controlColor: control.color,
-				controlBackground: control.backgroundColor,
-			};
+		const context = await browser.newContext({
+			baseURL: E2E_BASE_URL,
+			viewport: { width: 1280, height: 900 },
 		});
-		expect(activeTokens.primary).not.toBe('');
-		expect(activeTokens.surface).not.toBe('');
-		expect(activeTokens.controlColor).not.toBe('rgba(0, 0, 0, 0)');
-		expect(activeTokens.controlBackground).not.toBe('rgba(0, 0, 0, 0)');
-		themeTokens.add(`${activeTokens.primary}/${activeTokens.surface}`);
-		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
-		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
-		await expectContained(page, `${theme}/globe`);
-		await captureVisual(page, `theme-${theme}-globe`);
-		await page.getByRole('tab', { name: earthCategoryLabel('es', 'figures'), exact: true }).click();
-		for (const option of EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'))) {
-			await page.getByRole('button', { name: earthTextureLabel('es', option.id), exact: true }).click();
-			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
-			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
-			await expect(page.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
-			await captureVisual(page, `theme-${theme}-${option.id}`);
+		const themePage = await context.newPage();
+		try {
+			await themePage.addInitScript((id) => localStorage.setItem('cartago-theme', id), theme);
+			await openRoute(themePage);
+			await expect(themePage.locator('html')).toHaveAttribute('data-theme', theme);
+			const activeTokens = await themePage.evaluate(() => {
+				const root = getComputedStyle(document.documentElement);
+				const control = getComputedStyle(document.querySelector('.hero-monitor__technology-toggle')!);
+				const chrome = getComputedStyle(document.querySelector('.hero-monitor__chrome')!);
+				const probe = document.createElement('span');
+				probe.style.backgroundColor = root.getPropertyValue('--surface-2').trim();
+				document.body.append(probe);
+				const expectedSurface = getComputedStyle(probe).backgroundColor;
+				probe.remove();
+				return {
+					primary: root.getPropertyValue('--cyan').trim(),
+					surface: root.getPropertyValue('--surface').trim(),
+					controlColor: control.color,
+					controlBackground: control.backgroundColor,
+					chromeBackground: chrome.backgroundColor,
+					expectedSurface,
+				};
+			});
+			expect(activeTokens.primary).not.toBe('');
+			expect(activeTokens.surface).not.toBe('');
+			expect(activeTokens.controlColor).not.toBe('rgba(0, 0, 0, 0)');
+			expect(activeTokens.controlBackground).not.toBe('rgba(0, 0, 0, 0)');
+			expect(activeTokens.chromeBackground).toBe(activeTokens.expectedSurface);
+			themeTokens.add(`${activeTokens.primary}/${activeTokens.surface}`);
+			await themePage.locator('.hero-monitor__selector button').filter({ hasText: 'DelendAI' }).click();
+			await expect(themePage.locator('.hero-monitor__preview h3')).toHaveText('DelendAI');
+			await captureVisual(themePage, `theme-${theme}-monitor`);
+			await themePage.getByRole('button', { name: 'Gráficas', exact: true }).click();
+			await themePage.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
+			await expect(themePage.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
+			const figuresTab = themePage.getByRole('tab', { name: earthCategoryLabel('es', 'figures'), exact: true });
+			await figuresTab.click();
+			await expect(figuresTab).toHaveAttribute('aria-selected', 'true');
+			await expect(themePage.getByRole('button', { name: 'Mando 3D', exact: true })).toHaveCount(1);
+			for (const option of EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'))) {
+				await themePage.getByRole('button', { name: earthTextureLabel('es', option.id), exact: true }).click();
+				await expect(themePage.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
+				await expect(themePage.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+				await expect(themePage.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
+				await captureVisual(themePage, `theme-${theme}-${option.id}`);
+			}
+			await themePage.locator('.hero-monitor__earth-close').click();
+		} finally {
+			await context.close();
 		}
-		await page.locator('.hero-monitor__earth-close').click();
 	}
 	expect(themeTokens.size).toBe(THEMES.length);
 });
@@ -171,7 +194,7 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	await openRoute(page);
 	await expect(page.locator('.hero-monitor__fullscreen')).toHaveCount(1);
 	await page.locator('.hero-monitor__fullscreen').click();
-	await expect(page.locator('app-hero-monitor')).toHaveClass(/hero-monitor-host--fullscreen/);
+	await expect(page.locator('app-hero-monitor')).toHaveClass(/app-hero-monitor--fullscreen/);
 	await expect(page.locator('.hero-monitor__fullscreen')).toHaveAttribute('aria-pressed', 'true');
 	await expectAspectRatio(page.locator('.hero-monitor__interface'), 8 / 5);
 	const monitorLogicalSize = await page.locator('.hero-monitor__interface').evaluate((element) => ({
@@ -209,7 +232,7 @@ test('visual truth: interactive product surfaces keep an explicit fullscreen exi
 	const closeBox = await closeButton.boundingBox();
 	expect(closeBox ? closeBox.y + closeBox.height : 900).toBeLessThanOrEqual(844);
 	await page.keyboard.press('Escape');
-	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/hero-monitor-host--fullscreen/);
+	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/app-hero-monitor--fullscreen/);
 	await expect(page.locator('app-shell-header')).not.toHaveCSS('visibility', 'hidden');
 	await page.locator('.hero-monitor__fullscreen').click();
 	await page.locator('.hero-monitor__fullscreen').click();
@@ -293,7 +316,7 @@ test('S16-01 mobile monitor and globe controls are readable and touchable', asyn
 test('visual truth: coarse touch input remains direct at 320px', async ({ browser }) => {
 	test.setTimeout(120_000);
 	const context = await browser.newContext({
-		baseURL: 'http://localhost:4410',
+		baseURL: E2E_BASE_URL,
 		viewport: { width: 320, height: 568 },
 		hasTouch: true,
 		isMobile: true,
@@ -304,11 +327,15 @@ test('visual truth: coarse touch input remains direct at 320px', async ({ browse
 		await openRoute(page);
 		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).tap();
 		await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
-		await page.getByRole('tab', { name: 'Figuras', exact: true }).tap();
-		await page.getByRole('button', { name: 'Mando 3D', exact: true }).tap();
-		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'model-gamepad');
-		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
-		await expect(page.locator('app-earth-globe canvas')).toHaveCSS('opacity', '1');
+		const figuresTab = page.getByRole('tab', { name: earthCategoryLabel('es', 'figures'), exact: true });
+		await figuresTab.click();
+		await expect(figuresTab).toHaveAttribute('aria-selected', 'true');
+		await expect(page.getByRole('button', { name: 'Mando 3D', exact: true })).toHaveCount(1);
+		for (const option of EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'))) {
+			await page.getByRole('button', { name: earthTextureLabel('es', option.id), exact: true }).tap();
+			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', option.id);
+			await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
+		}
 		const figureBox = await page.locator('app-earth-globe').boundingBox();
 		expect(figureBox).not.toBeNull();
 		const touch = await context.newCDPSession(page);
@@ -319,6 +346,8 @@ test('visual truth: coarse touch input remains direct at 320px', async ({ browse
 		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-render-state', 'ready');
 		await captureVisual(page, 'coarse-touch-320-globe-model');
 		await page.locator('.hero-monitor__earth-close').tap();
+		await expect(page.locator('app-hero-monitor')).not.toHaveClass(/hero-monitor-host--earth-front/, { timeout: 2_000 });
+		await expect(page.locator('app-earth-globe')).toHaveAttribute('data-texture-style', 'clouds');
 		await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).tap();
 		await page.getByRole('tab', { name: 'Planetas', exact: true }).tap();
 		await page.getByRole('button', { name: 'Saturno', exact: true }).tap();

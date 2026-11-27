@@ -64,7 +64,7 @@ const PRIORITY_LOCALE_ROUTES = [
 const MODEL_OPTIONS = EARTH_TEXTURE_OPTIONS.filter(({ id }) => id.startsWith('model-'));
 const EXPECTED_CAPTURE_COUNT =
 	ROUTES.length * VIEWPORTS.length +
-	THEMES.length * (1 + MODEL_OPTIONS.length) +
+	THEMES.length * (2 + MODEL_OPTIONS.length) +
 	EARTH_TEXTURE_OPTIONS.length * VIEWPORTS.length +
 	LOCALES.length * PRIORITY_LOCALE_ROUTES.length +
 	2;

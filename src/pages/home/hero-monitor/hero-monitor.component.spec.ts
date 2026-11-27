@@ -79,6 +79,33 @@ describe('HeroMonitorComponent', () => {
 		expect(component.earthTextureCategory()).toBe('planets');
 	});
 
+	it('keeps the selected figure during exit and resets after the globe parks', async () => {
+		vi.useFakeTimers();
+		try {
+			await TestBed.configureTestingModule({ imports: [HeroMonitorComponent] }).compileComponents();
+			const fixture = TestBed.createComponent(HeroMonitorComponent);
+			fixture.componentRef.setInput('locale', 'es');
+			fixture.componentRef.setInput('technologies', []);
+			fixture.detectChanges();
+			const component = fixture.componentInstance;
+			component.selectEarthTexture('model-elephant', new Event('click'));
+			component.showEarthInFront(new MouseEvent('click'));
+			vi.runAllTimers();
+			fixture.detectChanges();
+			expect(component.earthDepth()).toBe('front');
+			component.dismissEarth(new MouseEvent('click'));
+			expect(component.earthTexture()).toBe('model-elephant');
+			vi.runAllTimers();
+			fixture.detectChanges();
+			expect(component.earthDepth()).toBe('behind');
+			expect(component.earthTexture()).toBe('clouds');
+			expect(component.earthTextureCategory()).toBe('earth');
+			fixture.destroy();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
 	it('keeps the curated technology definition in the preview', async () => {
 		await TestBed.configureTestingModule({
 			imports: [HeroMonitorComponent],
@@ -112,7 +139,7 @@ describe('HeroMonitorComponent', () => {
 			?.click();
 		fixture.detectChanges();
 		expect(fixture.componentInstance.monitorFullscreen()).toBe(true);
-		expect((fixture.nativeElement as HTMLElement).classList.contains('hero-monitor-host--fullscreen')).toBe(true);
+		expect((fixture.nativeElement as HTMLElement).classList.contains('app-hero-monitor--fullscreen')).toBe(true);
 		expect(fixture.componentInstance.monitorExpanded()).toBe(true);
 	});
 });

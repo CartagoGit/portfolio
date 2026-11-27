@@ -51,7 +51,7 @@ test('S14-02 globe catalogue, token theme, stacking and return are stable', asyn
 	await page.addInitScript(() => localStorage.setItem('cartago-theme', 'light'));
 	await openSpanishRoute(page);
 	await page.getByRole('button', { name: 'Abrir la Tierra interactiva' }).click();
-	await expect(page.locator('app-hero-monitor')).toHaveClass(/hero-monitor-host--earth-front/);
+	await expect(page.locator('app-hero-monitor')).toHaveClass(/app-hero-monitor--earth-front/);
 	await expect(page.locator('.hero-monitor__earth-controls')).toHaveClass(/is-active/);
 
 	await expect(page.getByRole('tab')).toHaveCount(6);
@@ -76,7 +76,7 @@ test('S14-02 globe catalogue, token theme, stacking and return are stable', asyn
 
 	await page.locator('.hero-monitor__earth-close').click();
 	await expect(page.locator('.hero-monitor__earth-controls')).not.toHaveClass(/is-active/, { timeout: 2_000 });
-	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/hero-monitor-host--earth-front/, { timeout: 2_000 });
+	await expect(page.locator('app-hero-monitor')).not.toHaveClass(/app-hero-monitor--earth-front/, { timeout: 2_000 });
 });
 
 test('S14-03 Work exposes project identity, distinct visual modes and iconized chips', async ({ page }) => {

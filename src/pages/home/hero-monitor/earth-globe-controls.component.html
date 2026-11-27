@@ -7,6 +7,7 @@
 	<div
 		class="hero-monitor__earth-categories"
 		role="tablist"
+		id="earth-texture-tabs"
 		[attr.aria-label]="'pages.home.earthTextureLabel' | translate">
 		@for (item of categories; track item) {
 			<button
@@ -14,21 +15,29 @@
 				role="tab"
 				[class.is-active]="category() === item"
 				[attr.aria-selected]="category() === item"
-				(click)="selectCategory(item, $event)">
+				[attr.tabindex]="category() === item ? 0 : -1"
+				aria-controls="earth-texture-options"
+				(keydown)="navigateCategory($event)"
+				(click)="selectCategory(item, $event)"
+				[attr.id]="'earth-texture-tab-' + item">
 				{{ categoryLabel(item) }}
 			</button>
 		}
 	</div>
 	<div
 		class="hero-monitor__earth-textures"
-		role="group"
+		id="earth-texture-options"
+		role="tabpanel"
+		[attr.aria-labelledby]="'earth-texture-tab-' + category()"
 		[attr.aria-label]="categoryLabel(category())">
 		@for (texture of options(); track texture.id) {
 			<button
 				type="button"
 				[class.is-active]="textureStyle() === texture.id"
 				[attr.aria-pressed]="textureStyle() === texture.id"
+				[attr.tabindex]="textureTabIndex(texture.id)"
 				[attr.title]="textureLabel(texture.id)"
+				(keydown)="navigateTexture($event)"
 				(click)="selectTexture(texture.id, $event)">
 				{{ textureLabel(texture.id) }}
 			</button>

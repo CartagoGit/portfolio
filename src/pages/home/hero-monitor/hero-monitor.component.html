@@ -17,11 +17,12 @@
 		[attr.aria-label]="closeSphereLabel()"></button>
 	<div
 		class="hero-monitor__orb hero-monitor__orb--one"
-		[class.hero-monitor--out-behind]="earthDepth() === 'out-behind'"
-		[class.hero-monitor--front-ready]="earthDepth() === 'front-ready'"
-		[class.hero-monitor--front]="earthDepth() === 'front'"
-		[class.hero-monitor--out-front]="earthDepth() === 'out-front'"
-		[class.hero-monitor--behind-ready]="earthDepth() === 'behind-ready'"
+		[attr.data-depth]="earthDepth()"
+		[class.hero-monitor__orb--out-behind]="earthDepth() === 'out-behind'"
+		[class.hero-monitor__orb--front-ready]="earthDepth() === 'front-ready'"
+		[class.hero-monitor__orb--front]="earthDepth() === 'front'"
+		[class.hero-monitor__orb--out-front]="earthDepth() === 'out-front'"
+		[class.hero-monitor__orb--behind-ready]="earthDepth() === 'behind-ready'"
 		(mouseenter)="enterOrb()"
 		(mouseleave)="leaveOrb()"
 		(focusin)="enterOrb()"
@@ -123,6 +124,7 @@
 						type="button"
 						[class.is-active]="activeSection() === 'technologies'"
 						[attr.aria-pressed]="activeSection() === 'technologies'"
+						aria-controls="hero-monitor-selector"
 						[attr.aria-label]="(activeSection() === 'technologies' ? 'pages.home.monitorProjects' : 'pages.home.monitorTechnologies') | translate"
 						(click)="selectSection(activeSection() === 'technologies' ? 'projects' : 'technologies')">
 						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.7 6.3 3 12l5.7 5.7 1.4-1.4L5.8 12l4.3-4.3-1.4-1.4Zm6.6 0-1.4 1.4 4.3 4.3-4.3 4.3 1.4 1.4L21 12l-5.7-5.7ZM13.6 3l-5 18h2.1l5-18h-2.1Z" fill="currentColor" /></svg>
@@ -145,12 +147,13 @@
 		</div>
 		<div class="hero-monitor__body">
 			<div
+				id="hero-monitor-selector"
 				class="hero-monitor__selector"
 				[attr.data-section]="activeSection()"
 				[attr.aria-label]="'pages.home.monitorSelectorAria' | translate">
 				@if (activeSection() === 'projects') {
 					@for (panel of panels; track panel.id) {
-						<button type="button" [class.is-active]="activePreview()?.label === panel.label" (click)="previewProject(panel.id)">
+						<button type="button" [class.is-active]="activePreview()?.label === panel.label" [attr.aria-pressed]="activePreview()?.label === panel.label" (click)="previewProject(panel.id)">
 							@if (panel.iconAsset) {
 								<img class="core-icon" [src]="panel.iconAsset" alt="" />
 							} @else {
@@ -161,7 +164,7 @@
 					}
 				} @else if (activeSection() === 'technologies') {
 					@for (technology of technologies(); track technology.label) {
-						<button type="button" [class.is-active]="activePreview()?.label === technology.label" (click)="previewTechnology(technology, $event)">
+						<button type="button" [class.is-active]="activePreview()?.label === technology.label" [attr.aria-pressed]="activePreview()?.label === technology.label" (click)="previewTechnology(technology, $event)">
 							<svg class="core-icon" viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="technology.iconPath" [attr.fill]="technology.color" /></svg>
 							<span>{{ technology.label }}</span>
 						</button>
@@ -233,7 +236,7 @@
 									[attr.data-chart]="chartType()"
 									[attr.data-palette]="palette()">
 									@for (bar of chartBars(); track $index) {
-										<span [style.height.%]="bar" [style.background]="hero.gradient(bar)"></span>
+										<span [style.height.%]="bar"></span>
 									}
 									<svg viewBox="0 0 360 120" preserveAspectRatio="none" [attr.aria-label]="'pages.home.monitorChartAria' | translate">
 										<path [attr.d]="chartPath()" />

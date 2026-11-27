@@ -58,7 +58,7 @@ The accepted proposal history and automated evidence did not fully satisfy the h
 - review-implementer: microsoft-mai-code-2
 
 ### S2 — Make globe textures and 3D objects visually truthful
-- **Status**: pending
+- **Status**: review
 - **Files**: `src/domain/types.interface.ts`, `src/core/rendering/gltf-model.loader.ts`, `src/core/rendering/gltf-model.renderer.ts`, `src/core/rendering/gltf-model-renderer.spec.ts`, `src/core/rendering/earth-globe.renderer.ts`, `src/core/rendering/earth-globe-renderer.spec.ts`, `src/core/rendering/shaders/**`, `src/pages/home/earth-globe/**`, `src/pages/home/hero-monitor/earth-texture.catalog.ts`, `src/pages/home/hero-monitor/earth-texture-catalog.spec.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/lang/types.interface.ts`, `src/lang/en.translation.ts`, `src/lang/es.translation.ts`, `src/lang/fr.translation.ts`, `src/lang/de.translation.ts`, `src/lang/secondary-locales.types.ts`, `src/lang/secondary-priority.overlays.ts`, `src/lang/secondary-locales/*.translation.ts`, `e2e/portfolio.spec.ts`, `e2e/visual-truth.spec.ts`, `tools/scripts/visual-audit.script.ts`, `tools/check-file-naming.script.ts`, `docs/portfolio-visual-truth.md`, `public/images/globe/**`, `public/images/ATTRIBUTION.md`
 - **Gate**: e2e
 - acceptance:
@@ -76,10 +76,12 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "Saturn includes coherent rings, correct relative scale and shared orientation/rotation."
   - "Procedural or artist-impression presets are labelled honestly and never masquerade as observed imagery."
   - "Context loss, restoration, destroy and repeated entry remain leak-free."
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S3 — Refine monitor hierarchy, controls and interaction choreography
 - **Status**: pending
-- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`
+- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/_home-refinement.scss`, `src/pages/home/hero-monitor/_console-header-final.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `e2e/visual-truth.spec.ts`, `tools/scripts/visual-audit.script.ts`
 - **Gate**: e2e
 - acceptance:
   - "The home introduction uses concise commercial copy centred on 'show me examples' as proof, with the portfolio positioned as evidence rather than a generic slogan."
