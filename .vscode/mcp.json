@@ -1,6 +1,6 @@
 {
 	"servers": {
-		"delendai": {
+		"DelendAI:Portfolio": {
 			"type": "stdio",
 			"command": "delendai",
 			"args": [
