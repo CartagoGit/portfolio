@@ -80,8 +80,8 @@ The accepted proposal history and automated evidence did not fully satisfy the h
 - review-implementer: microsoft-mai-code-2
 
 ### S3 — Refine monitor hierarchy, controls and interaction choreography
-- **Status**: pending
-- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/_home-refinement.scss`, `src/pages/home/hero-monitor/_console-header-final.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `e2e/visual-truth.spec.ts`, `tools/scripts/visual-audit.script.ts`
+- **Status**: review
+- **Files**: `src/pages/home/hero-monitor/hero-monitor.component.ts`, `src/pages/home/hero-monitor/hero-monitor.component.html`, `src/pages/home/hero-monitor/hero-monitor.component.scss`, `src/pages/home/hero-monitor/hero-monitor.component.spec.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.ts`, `src/pages/home/hero-monitor/earth-globe-controls.component.html`, `src/pages/home/hero-monitor/earth-globe-controls.component.spec.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.helper.ts`, `src/pages/home/hero-monitor/hero-monitor-motion.spec.ts`, `src/pages/home/hero-monitor/_monitor-accessibility-final.scss`, `src/pages/home/hero-monitor/_home-refinement.scss`, `src/pages/home/hero-monitor/_console-header-final.scss`, `src/pages/home/hero-monitor/_monitor-laptop-final.scss`, `e2e/portfolio.spec.ts`, `e2e/visual-truth.spec.ts`, `playwright.config.ts`, `tools/scripts/visual-audit.script.ts`
 - **Gate**: e2e
 - acceptance:
   - "The home introduction uses concise commercial copy centred on 'show me examples' as proof, with the portfolio positioned as evidence rather than a generic slogan."
@@ -95,6 +95,8 @@ The accepted proposal history and automated evidence did not fully satisfy the h
   - "Every control has purposeful hover, focus, press, selection and transition behaviour with reduced-motion parity."
   - "Opening, changing and closing the globe preserves layout and orientation without jumps."
   - "Desktop pointer affordances degrade into explicit touch controls instead of becoming dead interactions."
+- review-state: in_review
+- review-implementer: microsoft-mai-code-2
 
 ### S4 — Build premium interactive showcases and a purposeful mini-game arcade
 - **Status**: pending
